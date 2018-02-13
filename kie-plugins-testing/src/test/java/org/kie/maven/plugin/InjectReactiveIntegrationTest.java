@@ -15,7 +15,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class InjectReactiveIntegrationTest extends KieMavenPluginBaseIntegrationTest {
 
@@ -56,13 +56,13 @@ public class InjectReactiveIntegrationTest extends KieMavenPluginBaseIntegration
         ClassLoader cl = new URLClassLoader(classloadingURLs.toArray(new URL[]{}),
                                             null);
 
-        assertTrue(looksLikeInstrumentedClass(cl.loadClass("org.drools.compiler.xpath.tobeinstrumented.model.Adult")));
-        assertTrue(looksLikeInstrumentedClass(cl.loadClass("org.drools.compiler.xpath.tobeinstrumented.model.UsingADependencyClass")));
-        assertTrue(looksLikeInstrumentedClass(cl.loadClass("org.drools.compiler.xpath.tobeinstrumented.model.UsingSpecializedList")));
-        assertTrue(looksLikeInstrumentedClass(cl.loadClass("org.drools.compiler.xpath.tobeinstrumented.model.TMFile")));
-        assertTrue(looksLikeInstrumentedClass(cl.loadClass("org.drools.compiler.xpath.tobeinstrumented.model.TMFileSet")));
-        assertFalse(looksLikeInstrumentedClass(cl.loadClass("org.drools.compiler.xpath.tobeinstrumented.model.ImmutablePojo")));
-        assertFalse(looksLikeInstrumentedClass(cl.loadClass("org.drools.compiler.xpath.tobeinstrumented.model.FieldIsNotListInterface")));
+        assertThat(looksLikeInstrumentedClass(cl.loadClass("org.drools.compiler.xpath.tobeinstrumented.model.Adult"))).isTrue();
+        assertThat(looksLikeInstrumentedClass(cl.loadClass("org.drools.compiler.xpath.tobeinstrumented.model.UsingADependencyClass"))).isTrue();
+        assertThat(looksLikeInstrumentedClass(cl.loadClass("org.drools.compiler.xpath.tobeinstrumented.model.UsingSpecializedList"))).isTrue();
+        assertThat(looksLikeInstrumentedClass(cl.loadClass("org.drools.compiler.xpath.tobeinstrumented.model.TMFile"))).isTrue();
+        assertThat(looksLikeInstrumentedClass(cl.loadClass("org.drools.compiler.xpath.tobeinstrumented.model.TMFileSet"))).isTrue();
+        assertThat(looksLikeInstrumentedClass(cl.loadClass("org.drools.compiler.xpath.tobeinstrumented.model.ImmutablePojo"))).isFalse();
+        assertThat(looksLikeInstrumentedClass(cl.loadClass("org.drools.compiler.xpath.tobeinstrumented.model.FieldIsNotListInterface"))).isFalse();
     }
 
     @Test
@@ -96,24 +96,24 @@ public class InjectReactiveIntegrationTest extends KieMavenPluginBaseIntegration
         ClassLoader cl = new URLClassLoader(classloadingURLs.toArray(new URL[]{}),
                                             null);
 
-        assertTrue(looksLikeInstrumentedClass(cl.loadClass("org.drools.compiler.xpath.tobeinstrumented.model.Adult")));
-        assertTrue(looksLikeInstrumentedClass(cl.loadClass("org.drools.compiler.xpath.tobeinstrumented.model.UsingADependencyClass")));
-        assertTrue(looksLikeInstrumentedClass(cl.loadClass("org.drools.compiler.xpath.tobeinstrumented.model.UsingSpecializedList")));
-        assertTrue(looksLikeInstrumentedClass(cl.loadClass("org.drools.compiler.xpath.tobeinstrumented.model.TMFile")));
-        assertTrue(looksLikeInstrumentedClass(cl.loadClass("org.drools.compiler.xpath.tobeinstrumented.model.TMFileSet")));
-        assertFalse(looksLikeInstrumentedClass(cl.loadClass("org.drools.compiler.xpath.tobeinstrumented.model.ImmutablePojo")));
-        assertTrue(looksLikeInstrumentedClass(cl.loadClass("to.instrument.Adult")));
-        assertTrue(looksLikeInstrumentedClass(cl.loadClass("to.instrument.UsingADependencyClass")));
-        assertTrue(looksLikeInstrumentedClass(cl.loadClass("to.instrument.UsingSpecializedList")));
-        assertTrue(looksLikeInstrumentedClass(cl.loadClass("to.instrument.TMFile")));
-        assertTrue(looksLikeInstrumentedClass(cl.loadClass("to.instrument.TMFileSet")));
-        assertFalse(looksLikeInstrumentedClass(cl.loadClass("to.instrument.ImmutablePojo")));
-        assertFalse(looksLikeInstrumentedClass(cl.loadClass("to.not.instrument.Adult")));
-        assertFalse(looksLikeInstrumentedClass(cl.loadClass("to.not.instrument.UsingADependencyClass")));
-        assertFalse(looksLikeInstrumentedClass(cl.loadClass("to.not.instrument.UsingSpecializedList")));
-        assertFalse(looksLikeInstrumentedClass(cl.loadClass("to.not.instrument.TMFile")));
-        assertFalse(looksLikeInstrumentedClass(cl.loadClass("to.not.instrument.TMFileSet")));
-        assertFalse(looksLikeInstrumentedClass(cl.loadClass("to.not.instrument.ImmutablePojo")));
+        assertThat(looksLikeInstrumentedClass(cl.loadClass("org.drools.compiler.xpath.tobeinstrumented.model.Adult"))).isTrue();
+        assertThat(looksLikeInstrumentedClass(cl.loadClass("org.drools.compiler.xpath.tobeinstrumented.model.UsingADependencyClass"))).isTrue();
+        assertThat(looksLikeInstrumentedClass(cl.loadClass("org.drools.compiler.xpath.tobeinstrumented.model.UsingSpecializedList"))).isTrue();
+        assertThat(looksLikeInstrumentedClass(cl.loadClass("org.drools.compiler.xpath.tobeinstrumented.model.TMFile"))).isTrue();
+        assertThat(looksLikeInstrumentedClass(cl.loadClass("org.drools.compiler.xpath.tobeinstrumented.model.TMFileSet"))).isTrue();
+        assertThat(looksLikeInstrumentedClass(cl.loadClass("org.drools.compiler.xpath.tobeinstrumented.model.ImmutablePojo"))).isFalse();
+        assertThat(looksLikeInstrumentedClass(cl.loadClass("to.instrument.Adult"))).isTrue();
+        assertThat(looksLikeInstrumentedClass(cl.loadClass("to.instrument.UsingADependencyClass"))).isTrue();
+        assertThat(looksLikeInstrumentedClass(cl.loadClass("to.instrument.UsingSpecializedList"))).isTrue();
+        assertThat(looksLikeInstrumentedClass(cl.loadClass("to.instrument.TMFile"))).isTrue();
+        assertThat(looksLikeInstrumentedClass(cl.loadClass("to.instrument.TMFileSet"))).isTrue();
+        assertThat(looksLikeInstrumentedClass(cl.loadClass("to.instrument.ImmutablePojo"))).isFalse();
+        assertThat(looksLikeInstrumentedClass(cl.loadClass("to.not.instrument.Adult"))).isFalse();
+        assertThat(looksLikeInstrumentedClass(cl.loadClass("to.not.instrument.UsingADependencyClass"))).isFalse();
+        assertThat(looksLikeInstrumentedClass(cl.loadClass("to.not.instrument.UsingSpecializedList"))).isFalse();
+        assertThat(looksLikeInstrumentedClass(cl.loadClass("to.not.instrument.TMFile"))).isFalse();
+        assertThat(looksLikeInstrumentedClass(cl.loadClass("to.not.instrument.TMFileSet"))).isFalse();
+        assertThat(looksLikeInstrumentedClass(cl.loadClass("to.not.instrument.ImmutablePojo"))).isFalse();
     }
 
     private boolean looksLikeInstrumentedClass(Class<?> personClass) {

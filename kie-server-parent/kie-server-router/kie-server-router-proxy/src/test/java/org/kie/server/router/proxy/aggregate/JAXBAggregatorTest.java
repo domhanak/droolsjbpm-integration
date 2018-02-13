@@ -15,7 +15,7 @@
 
 package org.kie.server.router.proxy.aggregate;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.ArrayList;
@@ -50,15 +50,15 @@ public class JAXBAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         NodeList processes = xml.getElementsByTagName("process-definitions");
-        assertNotNull(processes);
-        assertEquals(1, processes.getLength());
+        assertThat(processes).isNotNull();
+        assertThat(processes.getLength()).isEqualTo(1);
 
         NodeList processDefs = xml.getElementsByTagName("processes");
-        assertNotNull(processDefs);
-        assertEquals(5, processDefs.getLength());
+        assertThat(processDefs).isNotNull();
+        assertThat(processDefs.getLength()).isEqualTo(5);
     }
 
     @Test
@@ -75,15 +75,15 @@ public class JAXBAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         NodeList processes = xml.getElementsByTagName("process-definitions");
-        assertNotNull(processes);
-        assertEquals(1, processes.getLength());
+        assertThat(processes).isNotNull();
+        assertThat(processes.getLength()).isEqualTo(1);
 
         NodeList processDefs = xml.getElementsByTagName("processes");
-        assertNotNull(processDefs);
-        assertEquals(2, processDefs.getLength());
+        assertThat(processDefs).isNotNull();
+        assertThat(processDefs.getLength()).isEqualTo(2);
     }
 
     @Test
@@ -100,15 +100,15 @@ public class JAXBAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         NodeList processes = xml.getElementsByTagName("process-definitions");
-        assertNotNull(processes);
-        assertEquals(1, processes.getLength());
+        assertThat(processes).isNotNull();
+        assertThat(processes.getLength()).isEqualTo(1);
 
         NodeList processDefs = xml.getElementsByTagName("processes");
-        assertNotNull(processDefs);
-        assertEquals(3, processDefs.getLength());
+        assertThat(processDefs).isNotNull();
+        assertThat(processDefs.getLength()).isEqualTo(3);
     }
 
     @Test
@@ -125,15 +125,15 @@ public class JAXBAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         NodeList processes = xml.getElementsByTagName("process-definitions");
-        assertNotNull(processes);
-        assertEquals(1, processes.getLength());
+        assertThat(processes).isNotNull();
+        assertThat(processes.getLength()).isEqualTo(1);
 
         NodeList processDefs = xml.getElementsByTagName("processes");
-        assertNotNull(processDefs);
-        assertEquals(0, processDefs.getLength());
+        assertThat(processDefs).isNotNull();
+        assertThat(processDefs.getLength()).isEqualTo(0);
     }
 
     @Test
@@ -150,15 +150,15 @@ public class JAXBAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         NodeList processes = xml.getElementsByTagName("process-instance-list");
-        assertNotNull(processes);
-        assertEquals(1, processes.getLength());
+        assertThat(processes).isNotNull();
+        assertThat(processes.getLength()).isEqualTo(1);
 
         NodeList processInstances = xml.getElementsByTagName("process-instance");
-        assertNotNull(processInstances);
-        assertEquals(4, processInstances.getLength());
+        assertThat(processInstances).isNotNull();
+        assertThat(processInstances.getLength()).isEqualTo(4);
     }
 
     @Test
@@ -175,15 +175,15 @@ public class JAXBAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         NodeList processes = xml.getElementsByTagName("process-instance-list");
-        assertNotNull(processes);
-        assertEquals(1, processes.getLength());
+        assertThat(processes).isNotNull();
+        assertThat(processes.getLength()).isEqualTo(1);
 
         NodeList processInstances = xml.getElementsByTagName("process-instance");
-        assertNotNull(processInstances);
-        assertEquals(1, processInstances.getLength());
+        assertThat(processInstances).isNotNull();
+        assertThat(processInstances.getLength()).isEqualTo(1);
     }
 
     @Test
@@ -200,15 +200,15 @@ public class JAXBAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         NodeList processes = xml.getElementsByTagName("process-instance-list");
-        assertNotNull(processes);
-        assertEquals(1, processes.getLength());
+        assertThat(processes).isNotNull();
+        assertThat(processes.getLength()).isEqualTo(1);
 
         NodeList processInstances = xml.getElementsByTagName("process-instance");
-        assertNotNull(processInstances);
-        assertEquals(3, processInstances.getLength());
+        assertThat(processInstances).isNotNull();
+        assertThat(processInstances.getLength()).isEqualTo(3);
     }
 
     @Test
@@ -225,15 +225,15 @@ public class JAXBAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         NodeList processes = xml.getElementsByTagName("process-instance-list");
-        assertNotNull(processes);
-        assertEquals(1, processes.getLength());
+        assertThat(processes).isNotNull();
+        assertThat(processes.getLength()).isEqualTo(1);
 
         NodeList processInstances = xml.getElementsByTagName("process-instance");
-        assertNotNull(processInstances);
-        assertEquals(0, processInstances.getLength());
+        assertThat(processInstances).isNotNull();
+        assertThat(processInstances.getLength()).isEqualTo(0);
     }
 
     @Test
@@ -250,15 +250,15 @@ public class JAXBAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         NodeList processes = xml.getElementsByTagName("task-summary-list");
-        assertNotNull(processes);
-        assertEquals(1, processes.getLength());
+        assertThat(processes).isNotNull();
+        assertThat(processes.getLength()).isEqualTo(1);
 
         NodeList processInstances = xml.getElementsByTagName("task-summary");
-        assertNotNull(processInstances);
-        assertEquals(5, processInstances.getLength());
+        assertThat(processInstances).isNotNull();
+        assertThat(processInstances.getLength()).isEqualTo(5);
     }
 
     @Test
@@ -275,15 +275,15 @@ public class JAXBAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         NodeList processes = xml.getElementsByTagName("task-summary-list");
-        assertNotNull(processes);
-        assertEquals(1, processes.getLength());
+        assertThat(processes).isNotNull();
+        assertThat(processes.getLength()).isEqualTo(1);
 
         NodeList processInstances = xml.getElementsByTagName("task-summary");
-        assertNotNull(processInstances);
-        assertEquals(3, processInstances.getLength());
+        assertThat(processInstances).isNotNull();
+        assertThat(processInstances.getLength()).isEqualTo(3);
     }
 
     @Test
@@ -300,15 +300,15 @@ public class JAXBAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         NodeList processes = xml.getElementsByTagName("task-summary-list");
-        assertNotNull(processes);
-        assertEquals(1, processes.getLength());
+        assertThat(processes).isNotNull();
+        assertThat(processes.getLength()).isEqualTo(1);
 
         NodeList processInstances = xml.getElementsByTagName("task-summary");
-        assertNotNull(processInstances);
-        assertEquals(2, processInstances.getLength());
+        assertThat(processInstances).isNotNull();
+        assertThat(processInstances.getLength()).isEqualTo(2);
     }
 
     @Test
@@ -325,15 +325,15 @@ public class JAXBAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         NodeList processes = xml.getElementsByTagName("task-summary-list");
-        assertNotNull(processes);
-        assertEquals(1, processes.getLength());
+        assertThat(processes).isNotNull();
+        assertThat(processes.getLength()).isEqualTo(1);
 
         NodeList processInstances = xml.getElementsByTagName("task-summary");
-        assertNotNull(processInstances);
-        assertEquals(0, processInstances.getLength());
+        assertThat(processInstances).isNotNull();
+        assertThat(processInstances.getLength()).isEqualTo(0);
     }
 
     @Test
@@ -350,24 +350,24 @@ public class JAXBAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         NodeList processes = xml.getElementsByTagName("process-definitions");
-        assertNotNull(processes);
-        assertEquals(1, processes.getLength());
+        assertThat(processes).isNotNull();
+        assertThat(processes.getLength()).isEqualTo(1);
 
         NodeList processDefs = xml.getElementsByTagName("processes");
-        assertNotNull(processDefs);
-        assertEquals(2, processDefs.getLength());
+        assertThat(processDefs).isNotNull();
+        assertThat(processDefs.getLength()).isEqualTo(2);
 
         NodeList processDefIds = xml.getElementsByTagName("process-id");
-        assertNotNull(processDefIds);
-        assertEquals(2, processDefIds.getLength());
+        assertThat(processDefIds).isNotNull();
+        assertThat(processDefIds.getLength()).isEqualTo(2);
         // make sure it's properly sorted and paged
         String value1 = processDefIds.item(0).getFirstChild().getNodeValue();
-        assertEquals("1", value1);
+        assertThat(value1).isEqualTo("1");
         String value2 = processDefIds.item(1).getFirstChild().getNodeValue();
-        assertEquals("2", value2);
+        assertThat(value2).isEqualTo("2");
     }
 
     @Test
@@ -384,24 +384,24 @@ public class JAXBAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         NodeList processes = xml.getElementsByTagName("process-definitions");
-        assertNotNull(processes);
-        assertEquals(1, processes.getLength());
+        assertThat(processes).isNotNull();
+        assertThat(processes.getLength()).isEqualTo(1);
 
         NodeList processDefs = xml.getElementsByTagName("processes");
-        assertNotNull(processDefs);
-        assertEquals(2, processDefs.getLength());
+        assertThat(processDefs).isNotNull();
+        assertThat(processDefs.getLength()).isEqualTo(2);
 
         NodeList processDefIds = xml.getElementsByTagName("process-id");
-        assertNotNull(processDefIds);
-        assertEquals(2, processDefIds.getLength());
+        assertThat(processDefIds).isNotNull();
+        assertThat(processDefIds.getLength()).isEqualTo(2);
         // make sure it's properly sorted and paged
         String value1 = processDefIds.item(0).getFirstChild().getNodeValue();
-        assertEquals("5", value1);
+        assertThat(value1).isEqualTo("5");
         String value2 = processDefIds.item(1).getFirstChild().getNodeValue();
-        assertEquals("4", value2);
+        assertThat(value2).isEqualTo("4");
     }
 
     @Test
@@ -418,24 +418,24 @@ public class JAXBAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         NodeList processes = xml.getElementsByTagName("process-definitions");
-        assertNotNull(processes);
-        assertEquals(1, processes.getLength());
+        assertThat(processes).isNotNull();
+        assertThat(processes.getLength()).isEqualTo(1);
 
         NodeList processDefs = xml.getElementsByTagName("processes");
-        assertNotNull(processDefs);
-        assertEquals(2, processDefs.getLength());
+        assertThat(processDefs).isNotNull();
+        assertThat(processDefs.getLength()).isEqualTo(2);
 
         NodeList processDefIds = xml.getElementsByTagName("process-id");
-        assertNotNull(processDefIds);
-        assertEquals(2, processDefIds.getLength());
+        assertThat(processDefIds).isNotNull();
+        assertThat(processDefIds.getLength()).isEqualTo(2);
         // make sure it's properly sorted and paged
         String value1 = processDefIds.item(0).getFirstChild().getNodeValue();
-        assertEquals("3", value1);
+        assertThat(value1).isEqualTo("3");
         String value2 = processDefIds.item(1).getFirstChild().getNodeValue();
-        assertEquals("4", value2);
+        assertThat(value2).isEqualTo("4");
     }
 
     @Test
@@ -452,24 +452,24 @@ public class JAXBAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         NodeList processes = xml.getElementsByTagName("process-definitions");
-        assertNotNull(processes);
-        assertEquals(1, processes.getLength());
+        assertThat(processes).isNotNull();
+        assertThat(processes.getLength()).isEqualTo(1);
 
         NodeList processDefs = xml.getElementsByTagName("processes");
-        assertNotNull(processDefs);
-        assertEquals(2, processDefs.getLength());
+        assertThat(processDefs).isNotNull();
+        assertThat(processDefs.getLength()).isEqualTo(2);
 
         NodeList processDefIds = xml.getElementsByTagName("process-id");
-        assertNotNull(processDefIds);
-        assertEquals(2, processDefIds.getLength());
+        assertThat(processDefIds).isNotNull();
+        assertThat(processDefIds.getLength()).isEqualTo(2);
         // make sure it's properly sorted and paged
         String value1 = processDefIds.item(0).getFirstChild().getNodeValue();
-        assertEquals("3", value1);
+        assertThat(value1).isEqualTo("3");
         String value2 = processDefIds.item(1).getFirstChild().getNodeValue();
-        assertEquals("2", value2);
+        assertThat(value2).isEqualTo("2");
     }
 
     @Test
@@ -486,15 +486,15 @@ public class JAXBAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         NodeList processes = xml.getElementsByTagName("process-definitions");
-        assertNotNull(processes);
-        assertEquals(1, processes.getLength());
+        assertThat(processes).isNotNull();
+        assertThat(processes.getLength()).isEqualTo(1);
 
         NodeList processDefs = xml.getElementsByTagName("processes");
-        assertNotNull(processDefs);
-        assertEquals(0, processDefs.getLength());
+        assertThat(processDefs).isNotNull();
+        assertThat(processDefs.getLength()).isEqualTo(0);
     }
 
     @Test
@@ -511,19 +511,19 @@ public class JAXBAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         NodeList processes = xml.getElementsByTagName("response");
-        assertNotNull(processes);
-        assertEquals(1, processes.getLength());
+        assertThat(processes).isNotNull();
+        assertThat(processes.getLength()).isEqualTo(1);
 
         NodeList wrapper = xml.getElementsByTagName("kie-containers");
-        assertNotNull(wrapper);
-        assertEquals(1, wrapper.getLength());
+        assertThat(wrapper).isNotNull();
+        assertThat(wrapper.getLength()).isEqualTo(1);
 
         NodeList containers = xml.getElementsByTagName("kie-container");
-        assertNotNull(containers);
-        assertEquals(6, containers.getLength());
+        assertThat(containers).isNotNull();
+        assertThat(containers.getLength()).isEqualTo(6);
     }
 
     @Test
@@ -540,11 +540,11 @@ public class JAXBAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         NodeList processes = xml.getElementsByTagName("value");
-        assertNotNull(processes);
-        assertEquals(5, processes.getLength());
+        assertThat(processes).isNotNull();
+        assertThat(processes.getLength()).isEqualTo(5);
 
     }
 
@@ -562,17 +562,17 @@ public class JAXBAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         XPath xPath = XPathFactory.newInstance().newXPath();
         NodeList evaluate = (NodeList) xPath.evaluate("/list-type/items/items", xml, XPathConstants.NODESET);
-        assertEquals(5, evaluate.getLength());
+        assertThat(evaluate.getLength()).isEqualTo(5);
 
         NamedNodeMap firstNodeAttributes = evaluate.item(0).getAttributes();
-        assertEquals("xmlns:xsi", firstNodeAttributes.item(0).getNodeName());
-        assertEquals("http://www.w3.org/2001/XMLSchema-instance", firstNodeAttributes.item(0).getNodeValue());
-        assertEquals("xsi:type", firstNodeAttributes.item(1).getNodeName());
-        assertEquals("jaxbList", firstNodeAttributes.item(1).getNodeValue());
+        assertThat(firstNodeAttributes.item(0).getNodeName()).isEqualTo("xmlns:xsi");
+        assertThat(firstNodeAttributes.item(0).getNodeValue()).isEqualTo("http://www.w3.org/2001/XMLSchema-instance");
+        assertThat(firstNodeAttributes.item(1).getNodeName()).isEqualTo("xsi:type");
+        assertThat(firstNodeAttributes.item(1).getNodeValue()).isEqualTo("jaxbList");
 
     }
 
@@ -590,11 +590,11 @@ public class JAXBAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         NodeList processes = xml.getElementsByTagName("value");
-        assertNotNull(processes);
-        assertEquals(2, processes.getLength());
+        assertThat(processes).isNotNull();
+        assertThat(processes.getLength()).isEqualTo(2);
     }
 
     @Test
@@ -611,17 +611,17 @@ public class JAXBAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         XPath xPath = XPathFactory.newInstance().newXPath();
         NodeList evaluate = (NodeList) xPath.evaluate("/list-type/items/items", xml, XPathConstants.NODESET);
-        assertEquals(2, evaluate.getLength());
+        assertThat(evaluate.getLength()).isEqualTo(2);
 
         NamedNodeMap firstNodeAttributes = evaluate.item(0).getAttributes();
-        assertEquals("xmlns:xsi", firstNodeAttributes.item(0).getNodeName());
-        assertEquals("http://www.w3.org/2001/XMLSchema-instance", firstNodeAttributes.item(0).getNodeValue());
-        assertEquals("xsi:type", firstNodeAttributes.item(1).getNodeName());
-        assertEquals("jaxbList", firstNodeAttributes.item(1).getNodeValue());
+        assertThat(firstNodeAttributes.item(0).getNodeName()).isEqualTo("xmlns:xsi");
+        assertThat(firstNodeAttributes.item(0).getNodeValue()).isEqualTo("http://www.w3.org/2001/XMLSchema-instance");
+        assertThat(firstNodeAttributes.item(1).getNodeName()).isEqualTo("xsi:type");
+        assertThat(firstNodeAttributes.item(1).getNodeValue()).isEqualTo("jaxbList");
     }
 }
 

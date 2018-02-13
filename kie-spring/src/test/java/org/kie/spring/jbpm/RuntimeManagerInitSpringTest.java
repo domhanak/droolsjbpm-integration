@@ -15,7 +15,7 @@
 
 package org.kie.spring.jbpm;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -80,11 +80,11 @@ public class RuntimeManagerInitSpringTest extends AbstractJbpmSpringParameterize
         System.out.println("Process started");
         AuditLogService logService = getLogService();
         ProcessInstanceLog log = logService.findProcessInstance(processInstance.getId());
-        assertNotNull(log);
+        assertThat(log).isNotNull();
 
         List<TaskSummary> tasks = taskService.getTasksAssignedAsPotentialOwner(USER_JOHN, "en-UK");
         System.out.println("Found " + tasks.size() + " task(s) for user '"+USER_JOHN+"'");
-        assertEquals(1, tasks.size());
+        assertThat(tasks).hasSize(1);
 
         long taskId = tasks.get(0).getId();
         taskService.start(taskId, USER_JOHN);
@@ -92,14 +92,14 @@ public class RuntimeManagerInitSpringTest extends AbstractJbpmSpringParameterize
 
         tasks = taskService.getTasksAssignedAsPotentialOwner(USER_MARY, "en-UK");
         System.out.println("Found " + tasks.size() + " task(s) for user '"+USER_MARY+"'");
-        assertEquals(1, tasks.size());
+        assertThat(tasks).hasSize(1);
 
         taskId = tasks.get(0).getId();
         taskService.start(taskId, USER_MARY);
         taskService.complete(taskId, USER_MARY, null);
 
         processInstance = ksession.getProcessInstance(processInstance.getId());
-        assertNull(processInstance);
+        assertThat(processInstance).isNull();
         System.out.println("Process instance completed");
 
         manager.disposeRuntimeEngine(engine);
@@ -122,15 +122,15 @@ public class RuntimeManagerInitSpringTest extends AbstractJbpmSpringParameterize
 
         processInstance = ksession.getProcessInstance(processInstanceId);
 
-        assertNull("Process instance not rolled back", processInstance);
+        assertThat(processInstance).as("Process instance not rolled back").isNull();
         System.out.println("Process instance rolled back");
 
         List<TaskSummary> tasks = getTaskService().getTasksAssignedAsPotentialOwner(USER_JOHN, "en-UK");
         System.out.println("Found " + tasks.size() + " task(s) for user '"+USER_JOHN+"'");
-        assertEquals(0, tasks.size());
+        assertThat(tasks).isEmpty();
 
         ProcessInstanceLog log = logService.findProcessInstance(processInstanceId);
-        assertNull(log);
+        assertThat(log).isNull();
 
         manager.disposeRuntimeEngine(engine);
     }

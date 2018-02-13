@@ -15,7 +15,7 @@
  */
 package org.kie.server.services.impl.storage.file;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.kie.server.api.KieServerConstants.KIE_SERVER_CONTAINER_DEPLOYMENT;
 import static org.kie.server.api.KieServerConstants.KIE_SERVER_ID;
 import static org.kie.server.api.KieServerConstants.KIE_SERVER_STATE_REPO;
@@ -92,26 +92,26 @@ public class KieServerStateFileInitTest {
         KieServerState serverState = repository.load(getServerId(serverStateFile));
 
         KieServerConfig config = serverState.getConfiguration();
-        assertEquals(serverRepo, config.getConfigItem(KIE_SERVER_STATE_REPO).getValue());
-        assertEquals(serverId, config.getConfigItem(KIE_SERVER_ID).getValue());
-        assertEquals(serverContainerDeployment, config.getConfigItem(KIE_SERVER_CONTAINER_DEPLOYMENT).getValue());
+        assertThat(config.getConfigItem(KIE_SERVER_STATE_REPO).getValue()).isEqualTo(serverRepo);
+        assertThat(config.getConfigItem(KIE_SERVER_ID).getValue()).isEqualTo(serverId);
+        assertThat(config.getConfigItem(KIE_SERVER_CONTAINER_DEPLOYMENT).getValue()).isEqualTo(serverContainerDeployment);
 
         Iterator<KieContainerResource> containers = serverState.getContainers().iterator();
 
         KieContainerResource exampleContainer = containers.next();
-        assertEquals(example, exampleContainer.getContainerId());
-        assertEquals(gav7.toExternalForm(), exampleContainer.getReleaseId().toExternalForm());
-        assertEquals(STARTED, exampleContainer.getStatus());
+        assertThat(exampleContainer.getContainerId()).isEqualTo(example);
+        assertThat(exampleContainer.getReleaseId().toExternalForm()).isEqualTo(gav7.toExternalForm());
+        assertThat(exampleContainer.getStatus()).isEqualTo(STARTED);
 
         KieContainerResource lettersContainer = containers.next();
-        assertEquals(letters, lettersContainer.getContainerId());
-        assertEquals(gav0.toExternalForm(), lettersContainer.getReleaseId().toExternalForm());
-        assertEquals(STARTED, lettersContainer.getStatus());
+        assertThat(lettersContainer.getContainerId()).isEqualTo(letters);
+        assertThat(lettersContainer.getReleaseId().toExternalForm()).isEqualTo(gav0.toExternalForm());
+        assertThat(lettersContainer.getStatus()).isEqualTo(STARTED);
 
         KieContainerResource testContainer = containers.next();
-        assertEquals(test, testContainer.getContainerId());
-        assertEquals(gav5.toExternalForm(), testContainer.getReleaseId().toExternalForm());
-        assertEquals(STARTED, testContainer.getStatus());
+        assertThat(testContainer.getContainerId()).isEqualTo(test);
+        assertThat(testContainer.getReleaseId().toExternalForm()).isEqualTo(gav5.toExternalForm());
+        assertThat(testContainer.getStatus()).isEqualTo(STARTED);
     }
 
     private String getServerRepo(File serverStateFile) throws Exception {

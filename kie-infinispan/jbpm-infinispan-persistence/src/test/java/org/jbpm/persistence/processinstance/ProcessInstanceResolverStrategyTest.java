@@ -76,7 +76,7 @@ public class ProcessInstanceResolverStrategyTest {
 
         // create session
         ksession = InfinispanKnowledgeService.newStatefulKnowledgeSession(kbase, null, env);
-        Assert.assertTrue("Valid KnowledgeSession could not be created.", ksession != null && ksession.getIdentifier() > 0);
+        Assert.assertThat(ksession != null && ksession.getIdentifier() > 0).as("Valid KnowledgeSession could not be created.").isTrue();
     }
     
     private KieBase loadKnowledgeBase() { 
@@ -117,9 +117,9 @@ public class ProcessInstanceResolverStrategyTest {
         ProcessInstance processInstance = ksession.startProcess(PROCESS_ID, params);
 
         // Test resuls
-        Assert.assertEquals(ProcessInstance.STATE_ACTIVE, processInstance.getState());
+        Assert.assertThat(processInstance.getState()).isEqualTo(ProcessInstance.STATE_ACTIVE);
         processVar = (NonSerializableClass) ((WorkflowProcessInstance) processInstance).getVariable(VAR_NAME);
-        Assert.assertNotNull(processVar);
+        Assert.assertThat(processVar).isNotNull();
     }
 
     @Test
@@ -142,8 +142,8 @@ public class ProcessInstanceResolverStrategyTest {
         // Create process,
         ProcessInstance processInstance = ksession.createProcessInstance(PROCESS_ID, params);
         long processInstanceId = processInstance.getId();
-        Assert.assertTrue(processInstanceId > 0);
-        Assert.assertEquals(ProcessInstance.STATE_PENDING, processInstance.getState());
+        Assert.assertThat(processInstanceId > 0).isTrue();
+        Assert.assertThat(processInstance.getState()).isEqualTo(ProcessInstance.STATE_PENDING);
 
         // insert process,
         ut.begin();
@@ -156,9 +156,9 @@ public class ProcessInstanceResolverStrategyTest {
     
         // Test results
         processInstance = ksession.getProcessInstance(processInstanceId);
-        Assert.assertEquals(ProcessInstance.STATE_ACTIVE, processInstance.getState());
+        Assert.assertThat(processInstance.getState()).isEqualTo(ProcessInstance.STATE_ACTIVE);
         processVar = (NonSerializableClass) ((WorkflowProcessInstance) processInstance).getVariable(VAR_NAME);
-        Assert.assertNotNull(processVar);
+        Assert.assertThat(processVar).isNotNull();
     }
 
 }

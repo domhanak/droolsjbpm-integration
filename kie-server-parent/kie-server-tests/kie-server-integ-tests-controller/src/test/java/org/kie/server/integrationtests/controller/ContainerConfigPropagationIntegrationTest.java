@@ -41,7 +41,7 @@ import org.kie.server.integrationtests.shared.KieServerDeployer;
 import org.kie.server.integrationtests.shared.KieServerSynchronization;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeThat;
 
@@ -87,15 +87,15 @@ public class ContainerConfigPropagationIntegrationTest extends KieControllerMana
         KieServerSynchronization.waitForKieServerSynchronization(client, 1);
 
         ServiceResponse<KieContainerResource> containerInfo = client.getContainerInfo(CONTAINER_ID);
-        assertEquals(ServiceResponse.ResponseType.SUCCESS, containerInfo.getType());
-        assertEquals(CONTAINER_ID, containerInfo.getResult().getContainerId());
-        assertEquals(KieContainerStatus.STARTED, containerInfo.getResult().getStatus());
+        assertThat(containerInfo.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
+        assertThat(containerInfo.getResult().getContainerId()).isEqualTo(CONTAINER_ID);
+        assertThat(containerInfo.getResult().getStatus()).isEqualTo(KieContainerStatus.STARTED);
 
-        assertEquals(4, containerInfo.getResult().getConfigItems().size());
-        assertTrue(containsConfigItem(containerInfo.getResult(), KieServerConstants.PCFG_RUNTIME_STRATEGY, "PER_PROCESS_INSTANCE", KieServerConstants.CAPABILITY_BPM));
-        assertTrue(containsConfigItem(containerInfo.getResult(), KieServerConstants.PCFG_KIE_BASE, "kieBase", KieServerConstants.CAPABILITY_BPM));
-        assertTrue(containsConfigItem(containerInfo.getResult(), KieServerConstants.PCFG_KIE_SESSION, "kieSession", KieServerConstants.CAPABILITY_BPM));
-        assertTrue(containsConfigItem(containerInfo.getResult(), KieServerConstants.PCFG_MERGE_MODE, "MERGE_COLLECTION", KieServerConstants.CAPABILITY_BPM));
+        assertThat(containerInfo.getResult().getConfigItems()).hasSize(4);
+        assertThat(containsConfigItem(containerInfo.getResult(), KieServerConstants.PCFG_RUNTIME_STRATEGY, "PER_PROCESS_INSTANCE", KieServerConstants.CAPABILITY_BPM)).isTrue();
+        assertThat(containsConfigItem(containerInfo.getResult(), KieServerConstants.PCFG_KIE_BASE, "kieBase", KieServerConstants.CAPABILITY_BPM)).isTrue();
+        assertThat(containsConfigItem(containerInfo.getResult(), KieServerConstants.PCFG_KIE_SESSION, "kieSession", KieServerConstants.CAPABILITY_BPM)).isTrue();
+        assertThat(containsConfigItem(containerInfo.getResult(), KieServerConstants.PCFG_MERGE_MODE, "MERGE_COLLECTION", KieServerConstants.CAPABILITY_BPM)).isTrue();
     }
 
     private ServerTemplate createServerTemplate() {
@@ -116,12 +116,12 @@ public class ContainerConfigPropagationIntegrationTest extends KieControllerMana
 
     private void assertContainerInfoWithScanner(ReleaseId releaseId, Long pollInterval) {
         ServiceResponse<KieContainerResource> containerInfo = client.getContainerInfo(CONTAINER_ID);
-        assertEquals(ServiceResponse.ResponseType.SUCCESS, containerInfo.getType());
-        assertEquals(CONTAINER_ID, containerInfo.getResult().getContainerId());
-        assertEquals(KieContainerStatus.STARTED, containerInfo.getResult().getStatus());
-        assertEquals(releaseId, containerInfo.getResult().getResolvedReleaseId());
+        assertThat(containerInfo.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
+        assertThat(containerInfo.getResult().getContainerId()).isEqualTo(CONTAINER_ID);
+        assertThat(containerInfo.getResult().getStatus()).isEqualTo(KieContainerStatus.STARTED);
+        assertThat(containerInfo.getResult().getResolvedReleaseId()).isEqualTo(releaseId);
 
-        assertEquals(pollInterval, containerInfo.getResult().getScanner().getPollInterval());
-        assertEquals(KieScannerStatus.STARTED, containerInfo.getResult().getScanner().getStatus());
+        assertThat(containerInfo.getResult().getScanner().getPollInterval()).isEqualTo(pollInterval);
+        assertThat(containerInfo.getResult().getScanner().getStatus()).isEqualTo(KieScannerStatus.STARTED);
     }
 }

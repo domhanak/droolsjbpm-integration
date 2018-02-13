@@ -52,7 +52,7 @@ public class KieComponentIntegrationTest extends BaseKieComponentTest {
         assertMockEndpointsSatisfied();
 
         KieServerInfo result = getResultMessage(mockEndpoint.getExchanges().get(0)).getBody(KieServerInfo.class);
-        assertEquals("Server version", "1.2.3", result.getVersion());
+        assertThat(result.getVersion()).as("Server version").isEqualTo("1.2.3");
     }
 
     @Test
@@ -67,7 +67,7 @@ public class KieComponentIntegrationTest extends BaseKieComponentTest {
         assertMockEndpointsSatisfied();
 
         KieContainerResourceList result = getResultMessage( mockEndpoint.getExchanges().get( 0 ) ).getBody( KieContainerResourceList.class );
-        assertEquals("Number of listed containers", 2, result.getContainers().size());
+        assertThat(result.getContainers()).as("Number of listed containers").hasSize(2);
     }
 
     @Test
@@ -86,7 +86,7 @@ public class KieComponentIntegrationTest extends BaseKieComponentTest {
         assertMockEndpointsSatisfied();
 
         KieContainerResourceList result = getResultMessage( mockEndpoint.getExchanges().get( 0 ) ).getBody( KieContainerResourceList.class );
-        assertEquals("Number of listed containers", 2, result.getContainers().size());
+        assertThat(result.getContainers()).as("Number of listed containers").hasSize(2);
     }
 
     @Test
@@ -101,7 +101,7 @@ public class KieComponentIntegrationTest extends BaseKieComponentTest {
         assertMockEndpointsSatisfied();
 
         KieServerInfo result = getResultMessage(mockEndpoint.getExchanges().get(0)).getBody(KieServerInfo.class);
-        assertEquals("Server version", "1.2.3", result.getVersion());
+        assertThat(result.getVersion()).as("Server version").isEqualTo("1.2.3");
     }
 
     @Test
@@ -118,7 +118,7 @@ public class KieComponentIntegrationTest extends BaseKieComponentTest {
         assertMockEndpointsSatisfied();
 
         String result = getResultMessage(mockEndpoint.getExchanges().get(0)).getBody(String.class);
-        assertNull(result);
+        assertThat(result).isNull();
     }
 
     @Test
@@ -161,7 +161,7 @@ public class KieComponentIntegrationTest extends BaseKieComponentTest {
         assertMockEndpointsSatisfied();
 
         DMNResult result = getResultMessage(mockEndpoint.getExchanges().get(0)).getBody(DMNResult.class);
-        assertEquals(1, result.getDecisionResults().size());
+        assertThat(result.getDecisionResults()).hasSize(1);
     }
 
     @Override

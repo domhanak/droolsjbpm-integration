@@ -24,7 +24,7 @@ import org.kie.sample.model.Fire;
 import org.kie.sample.model.Room;
 import org.kie.sample.model.Sprinkler;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class KProjectTest {
 

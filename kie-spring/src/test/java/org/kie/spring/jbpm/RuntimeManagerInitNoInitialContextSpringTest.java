@@ -15,7 +15,7 @@
 
 package org.kie.spring.jbpm;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -90,16 +90,16 @@ public class RuntimeManagerInitNoInitialContextSpringTest extends AbstractJbpmSp
         System.out.println("Process started");
 
         ProcessInstanceLog instanceLog = logService.findProcessInstance(processInstance.getId());
-        assertNotNull(instanceLog);
-        assertEquals(ProcessInstance.STATE_ACTIVE, instanceLog.getStatus().intValue());
+        assertThat(instanceLog).isNotNull();
+        assertThat(instanceLog.getStatus().intValue()).isEqualTo(ProcessInstance.STATE_ACTIVE);
 
         ksession.abortProcessInstance(processInstance.getId());
 
         System.out.println("Process instance aborted");
 
         instanceLog = logService.findProcessInstance(processInstance.getId());
-        assertNotNull(instanceLog);
-        assertEquals(ProcessInstance.STATE_ABORTED, instanceLog.getStatus().intValue());
+        assertThat(instanceLog).isNotNull();
+        assertThat(instanceLog.getStatus().intValue()).isEqualTo(ProcessInstance.STATE_ABORTED);
 
         manager.disposeRuntimeEngine(engine);
     }

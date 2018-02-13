@@ -35,7 +35,7 @@ import org.kie.server.integrationtests.shared.KieServerAssert;
 import org.kie.server.integrationtests.shared.KieServerDeployer;
 import org.kie.server.integrationtests.shared.KieServerReflections;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class RollingUpdateContainerIntegrationTest extends DroolsKieServerBaseIntegrationTest {
     private static final ReleaseId kjar1 = new ReleaseId("org.kie.server.testing", "container-isolation-kjar1",
@@ -95,7 +95,7 @@ public class RollingUpdateContainerIntegrationTest extends DroolsKieServerBaseIn
         ExecutionResults result1 = response1.getResult();
 
         Object outcome = result1.getValue(PERSON_OUT_IDENTIFIER);
-        assertEquals("Person's id should be 'Person from kjar1'!", "Person from kjar1", KieServerReflections.valueOf(outcome, "id"));
+        assertThat(KieServerReflections.valueOf(outcome).as("Person's id should be 'Person from kjar1'!").isCloseTo("Person from kjar1", within("id")));
 
         createExtraContainer();
 
@@ -111,6 +111,6 @@ public class RollingUpdateContainerIntegrationTest extends DroolsKieServerBaseIn
         ExecutionResults result2 = response2.getResult();
 
         Object outcome2 = result2.getValue(PERSON_OUT_IDENTIFIER);
-        assertEquals("Person's id should be 'Person from kjar101'!", "Person from kjar101", KieServerReflections.valueOf(outcome2, "id"));
+        assertThat(KieServerReflections.valueOf(outcome2).as("Person's id should be 'Person from kjar101'!").isCloseTo("Person from kjar101", within("id")));
     }
 }

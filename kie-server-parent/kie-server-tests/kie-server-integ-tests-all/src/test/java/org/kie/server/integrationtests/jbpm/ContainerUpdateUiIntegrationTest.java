@@ -15,7 +15,7 @@
 
 package org.kie.server.integrationtests.jbpm;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -57,25 +57,25 @@ public class ContainerUpdateUiIntegrationTest extends JbpmKieServerBaseIntegrati
     @Test
     public void testGetProcessFormAfterContainerUpdate() throws Exception {
         String result = uiServicesClient.getProcessForm(CONTAINER_ID, HIRING_PROCESS_ID, "en");
-        assertNotNull(result);
-        assertTrue("Form doesn't contain original label!", result.contains("Candidate Name"));
+        assertThat(result).isNotNull();
+        assertThat(result.contains("Candidate Name")).as("Form doesn't contain original label!").isTrue();
 
         // Update container to new version.
         KieServerAssert.assertSuccess(client.updateReleaseId(CONTAINER_ID, releaseId101));
 
         result = uiServicesClient.getProcessForm(CONTAINER_ID, HIRING_PROCESS_ID, "en");
-        assertNotNull(result);
-        assertTrue("Form doesn't contain updated label!", result.contains("Candidate First Name And Surname"));
+        assertThat(result).isNotNull();
+        assertThat(result.contains("Candidate First Name And Surname")).as("Form doesn't contain updated label!").isTrue();
     }
 
     @Test
     public void testGetTaskFormAfterContainerUpdate() throws Exception {
         long processInstanceId = processClient.startProcess(CONTAINER_ID, HIRING_PROCESS_ID);
-        assertTrue(processInstanceId > 0);
+        assertThat(processInstanceId > 0).isTrue();
         try {
             String result = getFirstTaskForm(processInstanceId);
-            assertNotNull(result);
-            assertTrue("Form doesn't contain original label!", result.contains("Candidate Name"));
+            assertThat(result).isNotNull();
+            assertThat(result.contains("Candidate Name")).as("Form doesn't contain original label!").isTrue();
 
             // Update container to new version and restart process.
             processClient.abortProcessInstance(CONTAINER_ID, processInstanceId);
@@ -83,8 +83,8 @@ public class ContainerUpdateUiIntegrationTest extends JbpmKieServerBaseIntegrati
             processInstanceId = processClient.startProcess(CONTAINER_ID, HIRING_PROCESS_ID);
 
             result = getFirstTaskForm(processInstanceId);
-            assertNotNull(result);
-            assertTrue("Form doesn't contain updated label!", result.contains("Candidate Whole Name"));
+            assertThat(result).isNotNull();
+            assertThat(result.contains("Candidate Whole Name")).as("Form doesn't contain updated label!").isTrue();
         } finally {
             processClient.abortProcessInstance(CONTAINER_ID, processInstanceId);
         }
@@ -93,26 +93,26 @@ public class ContainerUpdateUiIntegrationTest extends JbpmKieServerBaseIntegrati
     @Test
     public void testGetProcessImageViaUIClientTest() throws Exception {
         String originalResult = uiServicesClient.getProcessImage(CONTAINER_ID, HIRING_PROCESS_ID);
-        assertNotNull(originalResult);
-        assertFalse(originalResult.isEmpty());
+        assertThat(originalResult).isNotNull();
+        assertThat(originalResult.isEmpty()).isFalse();
 
         // Update container to new version.
         KieServerAssert.assertSuccess(client.updateReleaseId(CONTAINER_ID, releaseId101));
 
         String updatedResult = uiServicesClient.getProcessImage(CONTAINER_ID, HIRING_PROCESS_ID);
-        assertNotNull(updatedResult);
-        assertFalse(updatedResult.isEmpty());
+        assertThat(updatedResult).isNotNull();
+        assertThat(updatedResult.isEmpty()).isFalse();
         assertNotEquals("Process image wasn't updated!", originalResult, updatedResult);
     }
 
     @Test
     public void testGetProcessInstanceImageViaUIClientTest() throws Exception {
         long processInstanceId = processClient.startProcess(CONTAINER_ID, HIRING_PROCESS_ID);
-        assertTrue(processInstanceId > 0);
+        assertThat(processInstanceId > 0).isTrue();
         try {
             String originalResult = uiServicesClient.getProcessInstanceImage(CONTAINER_ID, processInstanceId);
-            assertNotNull(originalResult);
-            assertFalse(originalResult.isEmpty());
+            assertThat(originalResult).isNotNull();
+            assertThat(originalResult.isEmpty()).isFalse();
 
             // Update container to new version and restart process.
             processClient.abortProcessInstance(CONTAINER_ID, processInstanceId);
@@ -120,8 +120,8 @@ public class ContainerUpdateUiIntegrationTest extends JbpmKieServerBaseIntegrati
             processInstanceId = processClient.startProcess(CONTAINER_ID, HIRING_PROCESS_ID);
 
             String updatedResult = uiServicesClient.getProcessInstanceImage(CONTAINER_ID, processInstanceId);
-            assertNotNull(updatedResult);
-            assertFalse(updatedResult.isEmpty());
+            assertThat(updatedResult).isNotNull();
+            assertThat(updatedResult.isEmpty()).isFalse();
             assertNotEquals("Process instance image wasn't updated!", originalResult, updatedResult);
         } finally {
             processClient.abortProcessInstance(CONTAINER_ID, processInstanceId);
@@ -130,8 +130,8 @@ public class ContainerUpdateUiIntegrationTest extends JbpmKieServerBaseIntegrati
 
     private String getFirstTaskForm(long processInstanceId) {
         List<TaskSummary> tasks = taskClient.findTasksByStatusByProcessInstanceId(processInstanceId, null, 0, 10);
-        assertNotNull(tasks);
-        assertEquals(1, tasks.size());
+        assertThat(tasks).isNotNull();
+        assertThat(tasks).hasSize(1);
 
         Long taskId = tasks.get(0).getId();
         return uiServicesClient.getTaskForm(CONTAINER_ID, taskId, "en");

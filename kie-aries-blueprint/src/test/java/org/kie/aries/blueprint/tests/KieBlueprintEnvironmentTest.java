@@ -38,7 +38,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class KieBlueprintEnvironmentTest {
 
@@ -53,110 +53,110 @@ public class KieBlueprintEnvironmentTest {
 
     @Test
     public void testCtxNotNull() throws Exception {
-        assertNotNull(container);
+        assertThat(container).isNotNull();
     }
 
     @Test
     public void testEnvRef() throws Exception {
         Environment environment = (Environment) container.getComponentInstance("drools-env");
-        assertNotNull(environment);
+        assertThat(environment).isNotNull();
     }
 
     @Test
     public void testEnvRefTransManager() throws Exception {
         Environment environment = (Environment) container.getComponentInstance("drools-env");
-        assertNotNull(environment);
+        assertThat(environment).isNotNull();
 
-        assertNotNull(environment.get(EnvironmentName.TRANSACTION_MANAGER));
-        assertTrue(environment.get(EnvironmentName.TRANSACTION_MANAGER) instanceof MockJpaTransactionManager);
+        assertThat(environment.get(EnvironmentName.TRANSACTION_MANAGER)).isNotNull();
+        assertThat(environment.get(EnvironmentName.TRANSACTION_MANAGER) instanceof MockJpaTransactionManager).isTrue();
     }
 
     @Test
     public void testEnvRefEMF() throws Exception {
         Environment environment = (Environment) container.getComponentInstance("drools-env");
-        assertNotNull(environment);
+        assertThat(environment).isNotNull();
 
-        assertNotNull(environment.get(EnvironmentName.ENTITY_MANAGER_FACTORY));
-        assertTrue(environment.get(EnvironmentName.ENTITY_MANAGER_FACTORY) instanceof MockEntityManager);
+        assertThat(environment.get(EnvironmentName.ENTITY_MANAGER_FACTORY)).isNotNull();
+        assertThat(environment.get(EnvironmentName.ENTITY_MANAGER_FACTORY) instanceof MockEntityManager).isTrue();
     }
 
     @Test
     public void testEnvRefGlobals() throws Exception {
         Environment environment = (Environment) container.getComponentInstance("drools-env");
-        assertNotNull(environment);
+        assertThat(environment).isNotNull();
 
-        assertNotNull(environment.get(EnvironmentName.GLOBALS));
-        assertTrue(environment.get(EnvironmentName.GLOBALS) instanceof MapGlobalResolver);
+        assertThat(environment.get(EnvironmentName.GLOBALS)).isNotNull();
+        assertThat(environment.get(EnvironmentName.GLOBALS) instanceof MapGlobalResolver).isTrue();
     }
 
     @Test
     public void testEnvRefCalendars() throws Exception {
         Environment environment = (Environment) container.getComponentInstance("drools-env");
-        assertNotNull(environment);
+        assertThat(environment).isNotNull();
 
-        assertNotNull(environment.get(EnvironmentName.CALENDARS));
-        assertTrue(environment.get(EnvironmentName.CALENDARS) instanceof CalendarsImpl);
+        assertThat(environment.get(EnvironmentName.CALENDARS)).isNotNull();
+        assertThat(environment.get(EnvironmentName.CALENDARS) instanceof CalendarsImpl).isTrue();
     }
 
     @Test
     public void testEnvRefUserTransaction() throws Exception {
         Environment environment = (Environment) container.getComponentInstance("drools-env");
-        assertNotNull(environment);
+        assertThat(environment).isNotNull();
 
-        assertNotNull(environment.get(EnvironmentName.TRANSACTION));
-        assertTrue(environment.get(EnvironmentName.TRANSACTION) instanceof MockJpaTransactionManager);
+        assertThat(environment.get(EnvironmentName.TRANSACTION)).isNotNull();
+        assertThat(environment.get(EnvironmentName.TRANSACTION) instanceof MockJpaTransactionManager).isTrue();
     }
 
     @Test
     public void testEnvRefTransactionSyncRegistry() throws Exception {
         Environment environment = (Environment) container.getComponentInstance("drools-env");
-        assertNotNull(environment);
+        assertThat(environment).isNotNull();
 
-        assertNotNull(environment.get(EnvironmentName.TRANSACTION_SYNCHRONIZATION_REGISTRY));
-        assertTrue(environment.get(EnvironmentName.TRANSACTION) instanceof MockJpaTransactionManager);
+        assertThat(environment.get(EnvironmentName.TRANSACTION_SYNCHRONIZATION_REGISTRY)).isNotNull();
+        assertThat(environment.get(EnvironmentName.TRANSACTION) instanceof MockJpaTransactionManager).isTrue();
     }
 
     @Test
     public void testEmptyEnvRef() throws Exception {
         Environment environment = (Environment) container.getComponentInstance("drools-empty-env");
-        assertNotNull(environment);
+        assertThat(environment).isNotNull();
     }
 
     @Test
     public void testEnvCustomMarshallerRef() throws Exception {
         Environment environment = (Environment) container.getComponentInstance("drools-env-custom-marshaller-ref");
-        assertNotNull(environment);
+        assertThat(environment).isNotNull();
 
         ObjectMarshallingStrategy[] objectMarshallingStrategies = (ObjectMarshallingStrategy[]) environment.get(EnvironmentName.OBJECT_MARSHALLING_STRATEGIES);
-        assertEquals(1, objectMarshallingStrategies.length);
-        assertEquals(objectMarshallingStrategies[0].getClass().getName(), "org.kie.aries.blueprint.mocks.MockObjectMarshallingStrategy");
+        assertThat(objectMarshallingStrategies.length).isEqualTo(1);
+        assertThat("org.kie.aries.blueprint.mocks.MockObjectMarshallingStrategy").isEqualTo(objectMarshallingStrategies[0].getClass().getName());
     }
 
     @Test
     public void testEnvMarshallerOrder() throws Exception {
         Environment environment = (Environment) container.getComponentInstance("drools-env");
-        assertNotNull(environment);
+        assertThat(environment).isNotNull();
 
         ObjectMarshallingStrategy[] objectMarshallingStrategies = (ObjectMarshallingStrategy[]) environment.get(EnvironmentName.OBJECT_MARSHALLING_STRATEGIES);
-        assertEquals(4, objectMarshallingStrategies.length);
-        assertTrue(objectMarshallingStrategies[0] instanceof SerializablePlaceholderResolverStrategy);
-        assertTrue(objectMarshallingStrategies[1] instanceof IdentityPlaceholderResolverStrategy);
-        assertTrue(objectMarshallingStrategies[2] instanceof JPAPlaceholderResolverStrategy);
-        assertTrue(objectMarshallingStrategies[3] instanceof ProcessInstanceResolverStrategy);
+        assertThat(objectMarshallingStrategies.length).isEqualTo(4);
+        assertThat(objectMarshallingStrategies[0] instanceof SerializablePlaceholderResolverStrategy).isTrue();
+        assertThat(objectMarshallingStrategies[1] instanceof IdentityPlaceholderResolverStrategy).isTrue();
+        assertThat(objectMarshallingStrategies[2] instanceof JPAPlaceholderResolverStrategy).isTrue();
+        assertThat(objectMarshallingStrategies[3] instanceof ProcessInstanceResolverStrategy).isTrue();
     }
 
     @Test
     public void testEnvMarshallerOrderWithCustom() throws Exception {
         Environment environment = (Environment) container.getComponentInstance("drools-env-custom-marshaller-mixed");
-        assertNotNull(environment);
+        assertThat(environment).isNotNull();
 
         ObjectMarshallingStrategy[] objectMarshallingStrategies = (ObjectMarshallingStrategy[]) environment.get(EnvironmentName.OBJECT_MARSHALLING_STRATEGIES);
-        assertEquals(5, objectMarshallingStrategies.length);
-        assertTrue(objectMarshallingStrategies[0] instanceof SerializablePlaceholderResolverStrategy);
-        assertTrue(objectMarshallingStrategies[1] instanceof IdentityPlaceholderResolverStrategy);
-        assertTrue(objectMarshallingStrategies[2] instanceof JPAPlaceholderResolverStrategy);
-        assertTrue(objectMarshallingStrategies[3] instanceof MockObjectMarshallingStrategy);
-        assertTrue(objectMarshallingStrategies[4] instanceof ProcessInstanceResolverStrategy);
+        assertThat(objectMarshallingStrategies.length).isEqualTo(5);
+        assertThat(objectMarshallingStrategies[0] instanceof SerializablePlaceholderResolverStrategy).isTrue();
+        assertThat(objectMarshallingStrategies[1] instanceof IdentityPlaceholderResolverStrategy).isTrue();
+        assertThat(objectMarshallingStrategies[2] instanceof JPAPlaceholderResolverStrategy).isTrue();
+        assertThat(objectMarshallingStrategies[3] instanceof MockObjectMarshallingStrategy).isTrue();
+        assertThat(objectMarshallingStrategies[4] instanceof ProcessInstanceResolverStrategy).isTrue();
     }
 
     @AfterClass

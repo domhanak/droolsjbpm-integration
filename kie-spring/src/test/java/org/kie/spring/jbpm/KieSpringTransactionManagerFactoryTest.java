@@ -53,8 +53,8 @@ public class KieSpringTransactionManagerFactoryTest extends AbstractJbpmSpringPa
     @Test
     public void testTransactionManagerSet() throws Exception {
         Object txManager = context.getBean("jbpmTxManager");
-        assertNotNull(txManager);
-        assertTrue(txManager instanceof JtaTransactionManager);
+        assertThat(txManager).isNotNull();
+        assertThat(txManager instanceof JtaTransactionManager).isTrue();
 
         JtaTransactionManager jtaManager = (JtaTransactionManager) txManager;
 
@@ -63,15 +63,15 @@ public class KieSpringTransactionManagerFactoryTest extends AbstractJbpmSpringPa
                 jtaManager);
         KieSpringTransactionManagerFactory factory = new KieSpringTransactionManagerFactory();
         Object springTxManager = factory.newTransactionManager(env);
-        assertNotNull(springTxManager);
-        assertTrue(springTxManager instanceof KieSpringTransactionManager);
+        assertThat(springTxManager).isNotNull();
+        assertThat(springTxManager instanceof KieSpringTransactionManager).isTrue();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testTransactionManagerNotSet() throws Exception {
         Object txManager = context.getBean("jbpmTxManager");
-        assertNotNull(txManager);
-        assertTrue(txManager instanceof JtaTransactionManager);
+        assertThat(txManager).isNotNull();
+        assertThat(txManager instanceof JtaTransactionManager).isTrue();
 
         JtaTransactionManager jtaManager = (JtaTransactionManager) txManager;
 

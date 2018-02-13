@@ -15,7 +15,7 @@
 
 package org.kie.spring.jbpm;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
@@ -75,15 +75,15 @@ public class PerProcessInstanceWithExternalTXSpringTest extends AbstractJbpmSpri
         ksession = engine.getKieSession();
         TaskService taskService = engine.getTaskService();
 
-        assertEquals(ksessionId, ksession.getIdentifier());
+        assertThat(ksession.getIdentifier()).isEqualTo(ksessionId);
 
         // Process can continue with new task service
         ProcessInstanceLog log = getLogService().findProcessInstance(processInstance.getId());
-        assertNotNull(log);
+        assertThat(log).isNotNull();
 
         List<TaskSummary> tasks = taskService.getTasksAssignedAsPotentialOwner(USER_JOHN, "en-UK");
         System.out.println("Found " + tasks.size() + " task(s) for user '"+USER_JOHN+"'");
-        assertEquals(1, tasks.size());
+        assertThat(tasks).hasSize(1);
         
         manager.disposeRuntimeEngine(engine);
 
@@ -129,7 +129,7 @@ public class PerProcessInstanceWithExternalTXSpringTest extends AbstractJbpmSpri
 
         tasks = taskService.getTasksAssignedAsPotentialOwner(USER_MARY, "en-UK");
         System.out.println("Found " + tasks.size() + " task(s) for user '"+USER_MARY+"'");
-        assertEquals(1, tasks.size());
+        assertThat(tasks).hasSize(1);
         
         final Long secondTaskId = tasks.get(0).getId();
         
@@ -170,7 +170,7 @@ public class PerProcessInstanceWithExternalTXSpringTest extends AbstractJbpmSpri
             engine = manager.getRuntimeEngine(ProcessInstanceIdContext.get(processInstance.getId()));
             ksession = engine.getKieSession();
             processInstance = ksession.getProcessInstance(processInstance.getId());
-            assertNull(processInstance);
+            assertThat(processInstance).isNull();
             System.out.println("Process instance completed");
         } catch (SessionNotFoundException e) {
             

@@ -40,41 +40,41 @@ public class ScannedInjectionTest {
 
     @Test
     public void testContext() throws Exception {
-        assertNotNull(context);
+        assertThat(context).isNotNull();
     }
 
     @Test
     public void testKieBase() throws Exception {
         KieBase kbase = (KieBase) context.getBean("drl_kiesample3");
-        assertNotNull(kbase);
+        assertThat(kbase).isNotNull();
         AnnotatedKieBean sampleBean = (AnnotatedKieBean) context.getBean("annotatedKieBean");
-        assertNotNull(sampleBean);
-        assertNotNull(sampleBean.getKieBase() );
-        assertTrue(sampleBean.getKieBase() instanceof KieBase );
+        assertThat(sampleBean).isNotNull();
+        assertThat(sampleBean.getKieBase() ).isNotNull();
+        assertThat(sampleBean.getKieBase() instanceof KieBase ).isTrue();
     }
 
     @Test
     public void testSetterKieBase() throws Exception {
         AnnotatedKieBean sampleBean = (AnnotatedKieBean) context.getBean("annotatedKieBean");
-        assertNotNull(sampleBean);
-        assertNotNull(sampleBean.getKieBase2() );
-        assertTrue(sampleBean.getKieBase2() instanceof KieBase );
+        assertThat(sampleBean).isNotNull();
+        assertThat(sampleBean.getKieBase2() ).isNotNull();
+        assertThat(sampleBean.getKieBase2() instanceof KieBase ).isTrue();
     }
 
     @Test
     public void testStatelessKSessionInjection() throws Exception {
         AnnotatedKieBean sampleBean = (AnnotatedKieBean) context.getBean("annotatedKieBean");
-        assertNotNull(sampleBean);
-        assertNotNull(sampleBean.getKieSession() );
-        assertTrue(sampleBean.getKieSession() instanceof StatelessKieSession);
+        assertThat(sampleBean).isNotNull();
+        assertThat(sampleBean.getKieSession() ).isNotNull();
+        assertThat(sampleBean.getKieSession() instanceof StatelessKieSession).isTrue();
     }
 
     @Test
     public void testStatefulKSessionInjection() throws Exception {
         AnnotatedKieBean sampleBean = (AnnotatedKieBean) context.getBean("annotatedKieBean");
-        assertNotNull(sampleBean);
-        assertNotNull(sampleBean.getStatefulSession() );
-        assertTrue(sampleBean.getStatefulSession() instanceof KieSession);
+        assertThat(sampleBean).isNotNull();
+        assertThat(sampleBean.getStatefulSession() ).isNotNull();
+        assertThat(sampleBean.getStatefulSession() instanceof KieSession).isTrue();
     }
 
     @AfterClass

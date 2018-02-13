@@ -21,7 +21,7 @@ import org.kie.server.api.KieServerConstants;
 import org.kie.server.api.model.KieServerConfig;
 import org.kie.server.api.model.KieServerConfigItem;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.kie.server.common.KeyStoreHelperUtil.loadControllerPassword;
 
 public class KeyStoreHelperUtilTest {
@@ -30,14 +30,14 @@ public class KeyStoreHelperUtilTest {
     public void testDefaultPassword(){
         final String defaultPassword = "default";
         final String password = loadControllerPassword(defaultPassword);
-        assertEquals(defaultPassword, password);
+        assertThat(password).isEqualTo(defaultPassword);
     }
 
     @Test
     public void testConfigDefaultPassword(){
         final KieServerConfig serverConfig = new KieServerConfig();
         final String password = loadControllerPassword(serverConfig);
-        assertEquals("kieserver1!", password);
+        assertThat(password).isEqualTo("kieserver1!");
     }
 
     @Test
@@ -46,7 +46,7 @@ public class KeyStoreHelperUtilTest {
         final String defaultPassword = "default";
         serverConfig.addConfigItem(new KieServerConfigItem(KieServerConstants.CFG_KIE_CONTROLLER_PASSWORD, defaultPassword, null));
         final String password = loadControllerPassword(serverConfig);
-        assertEquals(defaultPassword, password);
+        assertThat(password).isEqualTo(defaultPassword);
     }
 
 }

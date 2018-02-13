@@ -45,11 +45,11 @@ public class KieServerTypePermissionTest {
         
         KieServerTypePermission permission = new KieServerTypePermission(new HashSet<>());
         
-        assertTrue(permission.allows(KieContainerResource.class));
-        assertTrue(permission.allows(ProcessDefinition.class));
-        assertTrue(permission.allows(EmailNotification.class));
-        assertTrue(permission.allows(CaseDefinition.class));
-        assertTrue(permission.allows(DMNModelInfo.class));
+        assertThat(permission.allows(KieContainerResource.class)).isTrue();
+        assertThat(permission.allows(ProcessDefinition.class)).isTrue();
+        assertThat(permission.allows(EmailNotification.class)).isTrue();
+        assertThat(permission.allows(CaseDefinition.class)).isTrue();
+        assertThat(permission.allows(DMNModelInfo.class)).isTrue();
     }
     
     @Test
@@ -57,7 +57,7 @@ public class KieServerTypePermissionTest {
         
         KieServerTypePermission permission = new KieServerTypePermission(new HashSet<>());
         
-        assertFalse(permission.allows(Top.class));
+        assertThat(permission.allows(Top.class)).isFalse();
         
     }
     
@@ -67,7 +67,7 @@ public class KieServerTypePermissionTest {
         classes.add(Top.class);
         KieServerTypePermission permission = new KieServerTypePermission(classes);
         
-        assertTrue(permission.allows(Top.class));
+        assertThat(permission.allows(Top.class)).isTrue();
         
     }
     
@@ -78,8 +78,8 @@ public class KieServerTypePermissionTest {
         Set<Class<?>> classes = new HashSet<>();    
         KieServerTypePermission permission = new KieServerTypePermission(classes);
         
-        assertTrue(permission.allows(Top.class));
-        assertTrue(permission.allows(Message.class));
-        assertFalse(permission.allows(AnotherMessage.class));
+        assertThat(permission.allows(Top.class)).isTrue();
+        assertThat(permission.allows(Message.class)).isTrue();
+        assertThat(permission.allows(AnotherMessage.class)).isFalse();
     }
 }

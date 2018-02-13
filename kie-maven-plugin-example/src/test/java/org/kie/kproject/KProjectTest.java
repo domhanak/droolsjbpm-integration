@@ -25,7 +25,7 @@ import org.kie.firealarm.Fire;
 import org.kie.firealarm.Room;
 import org.kie.firealarm.Sprinkler;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class KProjectTest {
 
@@ -43,10 +43,10 @@ public class KProjectTest {
         FactHandle fireFH = kSession.insert(fire);
 
         int rules = kSession.fireAllRules();
-        assertEquals(2, rules);
+        assertThat(rules).isEqualTo(2);
 
         kSession.delete(fireFH);
         rules = kSession.fireAllRules();
-        assertEquals(3, rules);
+        assertThat(rules).isEqualTo(3);
     }
 }

@@ -45,7 +45,7 @@ import org.kie.maven.plugin.BytecodeInjectReactive;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class XPathTest {
 
@@ -187,8 +187,8 @@ public class XPathTest {
 
         assertEquals(2,
                      list.size());
-        assertTrue(list.contains("car"));
-        assertTrue(list.contains("ball"));
+        assertThat(list.contains("car")).isTrue();
+        assertThat(list.contains("ball")).isTrue();
 
         list.clear();
         debbie.setAge(11);
@@ -196,7 +196,7 @@ public class XPathTest {
 
         assertEquals(1,
                      list.size());
-        assertTrue(list.contains("doll"));
+        assertThat(list.contains("doll")).isTrue();
     }
 
     /**
@@ -255,9 +255,9 @@ public class XPathTest {
 
         assertEquals(3,
                      list.size());
-        assertTrue(list.contains("car"));
-        assertTrue(list.contains("ball"));
-        assertTrue(list.contains("doll"));
+        assertThat(list.contains("car")).isTrue();
+        assertThat(list.contains("ball")).isTrue();
+        assertThat(list.contains("doll")).isTrue();
 
         TupleMemory tupleMemory = betaMemory.getLeftTupleMemory();
         assertEquals(2,
@@ -265,7 +265,7 @@ public class XPathTest {
         Iterator<LeftTuple> it = tupleMemory.iterator();
         for (LeftTuple next = it.next(); next != null; next = it.next()) {
             Object obj = next.getFactHandle().getObject();
-            assertTrue(obj == charlie || obj == debbie);
+            assertThat(obj == charlie || obj == debbie).isTrue();
         }
 
         list.clear();
@@ -280,7 +280,7 @@ public class XPathTest {
         it = tupleMemory.iterator();
         for (LeftTuple next = it.next(); next != null; next = it.next()) {
             Object obj = next.getFactHandle().getObject();
-            assertTrue(obj == charlie);
+            assertThat(obj == charlie).isTrue();
         }
     }
 
@@ -332,8 +332,8 @@ public class XPathTest {
 
         assertEquals(2,
                      list.size());
-        assertTrue(list.contains("car"));
-        assertTrue(list.contains("ball"));
+        assertThat(list.contains("car")).isTrue();
+        assertThat(list.contains("ball")).isTrue();
 
         list.clear();
         debbie.setAge(11);
@@ -341,7 +341,7 @@ public class XPathTest {
 
         assertEquals(1,
                      list.size());
-        assertTrue(list.contains("doll"));
+        assertThat(list.contains("doll")).isTrue();
     }
 
     /**
@@ -406,12 +406,12 @@ public class XPathTest {
 
         assertEquals(2,
                      toyList.size());
-        assertTrue(toyList.contains("car"));
-        assertTrue(toyList.contains("ball"));
+        assertThat(toyList.contains("car")).isTrue();
+        assertThat(toyList.contains("ball")).isTrue();
 
         assertEquals(1,
                      teenagers.size());
-        assertTrue(teenagers.contains("Charles"));
+        assertThat(teenagers.contains("Charles")).isTrue();
 
         toyList.clear();
         debbie.setAge(13);
@@ -419,12 +419,12 @@ public class XPathTest {
 
         assertEquals(1,
                      toyList.size());
-        assertTrue(toyList.contains("doll"));
+        assertThat(toyList.contains("doll")).isTrue();
 
         assertEquals(2,
                      teenagers.size());
-        assertTrue(teenagers.contains("Charles"));
-        assertTrue(teenagers.contains("Debbie"));
+        assertThat(teenagers.contains("Charles")).isTrue();
+        assertThat(teenagers.contains("Debbie")).isTrue();
     }
 
     /**
@@ -455,28 +455,28 @@ public class XPathTest {
         school.addChild(charlie);
         ksession.insert(school);
         ksession.fireAllRules();
-        assertTrue(ksession.getObjects().contains(charlie));
-        assertFalse(ksession.getObjects().contains(debbie));
+        assertThat(ksession.getObjects().contains(charlie)).isTrue();
+        assertThat(ksession.getObjects().contains(debbie)).isFalse();
 
         school.addChild(debbie);
         ksession.fireAllRules();
-        assertTrue(ksession.getObjects().contains(charlie));
-        assertTrue(ksession.getObjects().contains(debbie));
+        assertThat(ksession.getObjects().contains(charlie)).isTrue();
+        assertThat(ksession.getObjects().contains(debbie)).isTrue();
 
         school.removeChild(debbie);
         ksession.fireAllRules();
-        assertTrue(ksession.getObjects().contains(charlie));
-        assertFalse(ksession.getObjects().contains(debbie));
+        assertThat(ksession.getObjects().contains(charlie)).isTrue();
+        assertThat(ksession.getObjects().contains(debbie)).isFalse();
 
         school.addChild(debbie);
         ksession.fireAllRules();
-        assertTrue(ksession.getObjects().contains(charlie));
-        assertTrue(ksession.getObjects().contains(debbie));
+        assertThat(ksession.getObjects().contains(charlie)).isTrue();
+        assertThat(ksession.getObjects().contains(debbie)).isTrue();
 
         debbie.setAge(20);
         ksession.fireAllRules();
-        assertTrue(ksession.getObjects().contains(charlie));
-        assertFalse(ksession.getObjects().contains(debbie));
+        assertThat(ksession.getObjects().contains(charlie)).isTrue();
+        assertThat(ksession.getObjects().contains(debbie)).isFalse();
     }
 
     private List<?> factsCollection(KieSession ksession) {
@@ -510,10 +510,10 @@ public class XPathTest {
         ksession.insert(x);
         ksession.insert(y);
         ksession.fireAllRules();
-        assertFalse(factsCollection(ksession).contains("X.File0"));
-        assertFalse(factsCollection(ksession).contains("X.File1"));
-        assertFalse(factsCollection(ksession).contains("Y.File0"));
-        assertFalse(factsCollection(ksession).contains("Y.File1"));
+        assertThat(factsCollection(ksession).contains("X.File0")).isFalse();
+        assertThat(factsCollection(ksession).contains("X.File1")).isFalse();
+        assertThat(factsCollection(ksession).contains("Y.File0")).isFalse();
+        assertThat(factsCollection(ksession).contains("Y.File1")).isFalse();
 
         TMFile file0 = new TMFile("File0",
                                   47);
@@ -527,40 +527,40 @@ public class XPathTest {
         y.getFiles().add(file0);
         y.getFiles().add(file1);
         ksession.fireAllRules();
-        assertFalse(factsCollection(ksession).contains("X.File0"));
-        assertFalse(factsCollection(ksession).contains("X.File1"));
-        assertFalse(factsCollection(ksession).contains("X.File2"));
-        assertFalse(factsCollection(ksession).contains("Y.File0"));
-        assertFalse(factsCollection(ksession).contains("Y.File1"));
-        assertFalse(factsCollection(ksession).contains("Y.File2"));
+        assertThat(factsCollection(ksession).contains("X.File0")).isFalse();
+        assertThat(factsCollection(ksession).contains("X.File1")).isFalse();
+        assertThat(factsCollection(ksession).contains("X.File2")).isFalse();
+        assertThat(factsCollection(ksession).contains("Y.File0")).isFalse();
+        assertThat(factsCollection(ksession).contains("Y.File1")).isFalse();
+        assertThat(factsCollection(ksession).contains("Y.File2")).isFalse();
 
         file0.setSize(999);
         ksession.fireAllRules();
-        assertTrue(factsCollection(ksession).contains("X.File0"));
-        assertFalse(factsCollection(ksession).contains("X.File1"));
-        assertFalse(factsCollection(ksession).contains("X.File2"));
-        assertTrue(factsCollection(ksession).contains("Y.File0"));
-        assertFalse(factsCollection(ksession).contains("Y.File1"));
-        assertFalse(factsCollection(ksession).contains("Y.File2"));
+        assertThat(factsCollection(ksession).contains("X.File0")).isTrue();
+        assertThat(factsCollection(ksession).contains("X.File1")).isFalse();
+        assertThat(factsCollection(ksession).contains("X.File2")).isFalse();
+        assertThat(factsCollection(ksession).contains("Y.File0")).isTrue();
+        assertThat(factsCollection(ksession).contains("Y.File1")).isFalse();
+        assertThat(factsCollection(ksession).contains("Y.File2")).isFalse();
 
         y.getFiles().remove(file1); // removing File1 from Y
         file1.setSize(999);
         ksession.fireAllRules();
-        assertTrue(factsCollection(ksession).contains("X.File0"));
-        assertTrue(factsCollection(ksession).contains("X.File1"));
-        assertFalse(factsCollection(ksession).contains("X.File2"));
-        assertTrue(factsCollection(ksession).contains("Y.File0"));
-        assertFalse(factsCollection(ksession).contains("Y.File1"));
-        assertFalse(factsCollection(ksession).contains("Y.File2"));
+        assertThat(factsCollection(ksession).contains("X.File0")).isTrue();
+        assertThat(factsCollection(ksession).contains("X.File1")).isTrue();
+        assertThat(factsCollection(ksession).contains("X.File2")).isFalse();
+        assertThat(factsCollection(ksession).contains("Y.File0")).isTrue();
+        assertThat(factsCollection(ksession).contains("Y.File1")).isFalse();
+        assertThat(factsCollection(ksession).contains("Y.File2")).isFalse();
 
         file2.setSize(999);
         ksession.fireAllRules();
-        assertTrue(factsCollection(ksession).contains("X.File0"));
-        assertTrue(factsCollection(ksession).contains("X.File1"));
-        assertTrue(factsCollection(ksession).contains("X.File2"));
-        assertTrue(factsCollection(ksession).contains("Y.File0"));
-        assertFalse(factsCollection(ksession).contains("Y.File1"));
-        assertTrue(factsCollection(ksession).contains("Y.File2"));
+        assertThat(factsCollection(ksession).contains("X.File0")).isTrue();
+        assertThat(factsCollection(ksession).contains("X.File1")).isTrue();
+        assertThat(factsCollection(ksession).contains("X.File2")).isTrue();
+        assertThat(factsCollection(ksession).contains("Y.File0")).isTrue();
+        assertThat(factsCollection(ksession).contains("Y.File1")).isFalse();
+        assertThat(factsCollection(ksession).contains("Y.File2")).isTrue();
     }
 
     /**
@@ -588,10 +588,10 @@ public class XPathTest {
         ksession.insert(x);
         ksession.insert(y);
         ksession.fireAllRules();
-        assertFalse(factsCollection(ksession).contains("X.File0"));
-        assertFalse(factsCollection(ksession).contains("X.File1"));
-        assertFalse(factsCollection(ksession).contains("Y.File0"));
-        assertFalse(factsCollection(ksession).contains("Y.File1"));
+        assertThat(factsCollection(ksession).contains("X.File0")).isFalse();
+        assertThat(factsCollection(ksession).contains("X.File1")).isFalse();
+        assertThat(factsCollection(ksession).contains("Y.File0")).isFalse();
+        assertThat(factsCollection(ksession).contains("Y.File1")).isFalse();
 
         TMFile file0 = new TMFile("File0",
                                   47);
@@ -609,52 +609,52 @@ public class XPathTest {
         y.getFiles().add(1,
                          file1);
         ksession.fireAllRules();
-        assertFalse(factsCollection(ksession).contains("X.File0"));
-        assertFalse(factsCollection(ksession).contains("X.File1"));
-        assertFalse(factsCollection(ksession).contains("X.File2"));
-        assertFalse(factsCollection(ksession).contains("Y.File0"));
-        assertFalse(factsCollection(ksession).contains("Y.File1"));
-        assertFalse(factsCollection(ksession).contains("Y.File2"));
+        assertThat(factsCollection(ksession).contains("X.File0")).isFalse();
+        assertThat(factsCollection(ksession).contains("X.File1")).isFalse();
+        assertThat(factsCollection(ksession).contains("X.File2")).isFalse();
+        assertThat(factsCollection(ksession).contains("Y.File0")).isFalse();
+        assertThat(factsCollection(ksession).contains("Y.File1")).isFalse();
+        assertThat(factsCollection(ksession).contains("Y.File2")).isFalse();
 
         file0.setSize(999);
         ksession.fireAllRules();
-        assertTrue(factsCollection(ksession).contains("X.File0"));
-        assertFalse(factsCollection(ksession).contains("X.File1"));
-        assertFalse(factsCollection(ksession).contains("X.File2"));
-        assertTrue(factsCollection(ksession).contains("Y.File0"));
-        assertFalse(factsCollection(ksession).contains("Y.File1"));
-        assertFalse(factsCollection(ksession).contains("Y.File2"));
+        assertThat(factsCollection(ksession).contains("X.File0")).isTrue();
+        assertThat(factsCollection(ksession).contains("X.File1")).isFalse();
+        assertThat(factsCollection(ksession).contains("X.File2")).isFalse();
+        assertThat(factsCollection(ksession).contains("Y.File0")).isTrue();
+        assertThat(factsCollection(ksession).contains("Y.File1")).isFalse();
+        assertThat(factsCollection(ksession).contains("Y.File2")).isFalse();
 
         y.getFiles().remove(1); // removing File1 from Y
         file1.setSize(999);
         ksession.fireAllRules();
-        assertTrue(factsCollection(ksession).contains("X.File0"));
-        assertTrue(factsCollection(ksession).contains("X.File1"));
-        assertFalse(factsCollection(ksession).contains("X.File2"));
-        assertTrue(factsCollection(ksession).contains("Y.File0"));
-        assertFalse(factsCollection(ksession).contains("Y.File1"));
-        assertFalse(factsCollection(ksession).contains("Y.File2"));
+        assertThat(factsCollection(ksession).contains("X.File0")).isTrue();
+        assertThat(factsCollection(ksession).contains("X.File1")).isTrue();
+        assertThat(factsCollection(ksession).contains("X.File2")).isFalse();
+        assertThat(factsCollection(ksession).contains("Y.File0")).isTrue();
+        assertThat(factsCollection(ksession).contains("Y.File1")).isFalse();
+        assertThat(factsCollection(ksession).contains("Y.File2")).isFalse();
 
         file2.setSize(999);
         ksession.fireAllRules();
-        assertTrue(factsCollection(ksession).contains("X.File0"));
-        assertTrue(factsCollection(ksession).contains("X.File1"));
-        assertTrue(factsCollection(ksession).contains("X.File2"));
-        assertTrue(factsCollection(ksession).contains("Y.File0"));
-        assertFalse(factsCollection(ksession).contains("Y.File1"));
-        assertTrue(factsCollection(ksession).contains("Y.File2"));
+        assertThat(factsCollection(ksession).contains("X.File0")).isTrue();
+        assertThat(factsCollection(ksession).contains("X.File1")).isTrue();
+        assertThat(factsCollection(ksession).contains("X.File2")).isTrue();
+        assertThat(factsCollection(ksession).contains("Y.File0")).isTrue();
+        assertThat(factsCollection(ksession).contains("Y.File1")).isFalse();
+        assertThat(factsCollection(ksession).contains("Y.File2")).isTrue();
 
         TMFile file0R = new TMFile("File0R",
                                    999);
         x.getFiles().set(0,
                          file0R);
         ksession.fireAllRules();
-        assertFalse(factsCollection(ksession).contains("X.File0"));
-        assertTrue(factsCollection(ksession).contains("X.File0R"));
-        assertTrue(factsCollection(ksession).contains("X.File1"));
-        assertTrue(factsCollection(ksession).contains("X.File2"));
-        assertTrue(factsCollection(ksession).contains("Y.File0"));
-        assertFalse(factsCollection(ksession).contains("Y.File1"));
-        assertTrue(factsCollection(ksession).contains("Y.File2"));
+        assertThat(factsCollection(ksession).contains("X.File0")).isFalse();
+        assertThat(factsCollection(ksession).contains("X.File0R")).isTrue();
+        assertThat(factsCollection(ksession).contains("X.File1")).isTrue();
+        assertThat(factsCollection(ksession).contains("X.File2")).isTrue();
+        assertThat(factsCollection(ksession).contains("Y.File0")).isTrue();
+        assertThat(factsCollection(ksession).contains("Y.File1")).isFalse();
+        assertThat(factsCollection(ksession).contains("Y.File2")).isTrue();
     }
 }

@@ -76,22 +76,22 @@ public class KieSpringScannerTest extends AbstractKieSpringDynamicModuleTest {
 
     protected void createSpringContext() throws Exception {
         context = new ClassPathXmlApplicationContext("org/kie/spring/kie-scanner.xml");
-        assertNotNull(context);
+        assertThat(context).isNotNull();
     }
 
     protected void lookupNamedKieBase() throws Exception {
         KieBase kieBase = context.getBean("KBase1", KieBase.class);
-        assertNotNull(kieBase);
+        assertThat(kieBase).isNotNull();
     }
 
     protected void lookupReleaseId() throws Exception {
         ReleaseId releaseId = context.getBean("spring-scanner-releaseId", ReleaseId.class);
-        assertNotNull(releaseId);
+        assertThat(releaseId).isNotNull();
     }
 
     protected void lookupReleaseIdScanner() throws Exception {
         KieScanner releaseIdScanner = context.getBean("spring-scanner-releaseId#scanner", KieScanner.class);
-        assertNotNull(releaseIdScanner);
+        assertThat(releaseIdScanner).isNotNull();
     }
 
     protected void reinstallModule( KieMavenRepository repository, KieServices ks ) throws IOException {
@@ -108,7 +108,7 @@ public class KieSpringScannerTest extends AbstractKieSpringDynamicModuleTest {
         ksession.setGlobal( "list", list );
         ksession.fireAllRules();
         ksession.dispose();
-        assertTrue("Expected:<" + value + "> but was:<" + list.get(0)  + ">", list.get(0) == value);
+        assertThat(list.get(0) == value).as("Expected:<" + value + "> but was:<" + list.get(0)  + ">").isTrue();
     }
 
 }

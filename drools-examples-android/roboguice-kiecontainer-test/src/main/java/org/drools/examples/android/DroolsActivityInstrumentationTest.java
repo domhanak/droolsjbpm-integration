@@ -28,13 +28,13 @@ public class DroolsActivityInstrumentationTest extends ActivityInstrumentationTe
     @MediumTest
     public void testPreconditions() throws Throwable {
         final DroolsActivity a = getActivity();
-        assertNotNull(a);
-        assertNotNull("kiecontainer", a.mContainer);
-        assertNotNull("kiebase", a.mKieBase);
-        assertNotNull("kiesession", a.kSession);
+        assertThat(a).isNotNull();
+        assertThat(a.mContainer).as("kiecontainer").isNotNull();
+        assertThat(a.mKieBase).as("kiebase").isNotNull();
+        assertThat(a.kSession).as("kiesession").isNotNull();
 
         final Button fireRulesButton = (Button) a.findViewById(R.id.fireRules);
-        assertNotNull("fireRulesButton", fireRulesButton);
+        assertThat(fireRulesButton).as("fireRulesButton").isNotNull();
         runTestOnUiThread(new Runnable() {
             @Override
             public void run() {

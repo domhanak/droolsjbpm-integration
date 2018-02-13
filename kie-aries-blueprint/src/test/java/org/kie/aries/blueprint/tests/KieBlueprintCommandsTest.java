@@ -30,7 +30,7 @@ import org.kie.api.runtime.KieSession;
 import org.kie.aries.blueprint.KieBlueprintContainer;
 import org.kie.aries.blueprint.beans.Person;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class KieBlueprintCommandsTest {
 
@@ -47,20 +47,20 @@ public class KieBlueprintCommandsTest {
     @Test
     public void testKieBase() throws Exception {
         KieBase kbase = (KieBase) container.getComponentInstance("drl_kiesample");
-        assertNotNull(kbase);
+        assertThat(kbase).isNotNull();
     }
 
     @Test
     public void testInsertObject() throws Exception {
         KieSession ksession = (KieSession) container.getComponentInstance("ksession2");
-        assertNotNull(ksession);
+        assertThat(ksession).isNotNull();
 
-        assertEquals(1, ksession.getObjects().size());
-        assertTrue(ksession.getObjects().toArray()[0] instanceof Person);
+        assertThat(ksession.getObjects()).hasSize(1);
+        assertThat(ksession.getObjects().toArray()[0] instanceof Person).isTrue();
 
         for (Object object : ksession.getObjects()) {
             if (object instanceof Person) {
-                assertFalse(((Person) object).isHappy());
+                assertThat(((Person) object).isHappy()).isFalse();
             }
         }
 
@@ -69,7 +69,7 @@ public class KieBlueprintCommandsTest {
         //if the rules have fired, then the setHappy(true) should have been called
         for (Object object : ksession.getObjects()) {
             if (object instanceof Person) {
-                assertTrue(((Person) object).isHappy());
+                assertThat(((Person) object).isHappy()).isTrue();
             }
         }
     }
@@ -77,15 +77,15 @@ public class KieBlueprintCommandsTest {
     @Test
     public void testInsertObjectAndFireAll() throws Exception {
         KieSession ksession = (KieSession) container.getComponentInstance("ksessionForCommands");
-        assertNotNull(ksession);
+        assertThat(ksession).isNotNull();
 
-        assertEquals(1, ksession.getObjects().size());
-        assertTrue(ksession.getObjects().toArray()[0] instanceof Person);
+        assertThat(ksession.getObjects()).hasSize(1);
+        assertThat(ksession.getObjects().toArray()[0] instanceof Person).isTrue();
 
         //if the rules should have fired without any invoke of fireAllRules, then the setHappy(true) should have been called
         for (Object object : ksession.getObjects()) {
             if (object instanceof Person) {
-                assertTrue(((Person) object).isHappy());
+                assertThat(((Person) object).isHappy()).isTrue();
             }
         }
     }
@@ -93,26 +93,26 @@ public class KieBlueprintCommandsTest {
     @Test
     public void testSetGlobals() throws Exception {
         KieSession ksession = (KieSession) container.getComponentInstance("ksessionForCommands");
-        assertNotNull(ksession);
+        assertThat(ksession).isNotNull();
 
-        assertEquals(1, ksession.getObjects().size());
-        assertTrue(ksession.getObjects().toArray()[0] instanceof Person);
+        assertThat(ksession.getObjects()).hasSize(1);
+        assertThat(ksession.getObjects().toArray()[0] instanceof Person).isTrue();
         Person p1 = (Person) ksession.getObjects().toArray()[0];
-        assertNotNull(p1);
+        assertThat(p1).isNotNull();
         //if the rules should have fired without any invoke of fireAllRules, then the setHappy(true) should have been called
         for (Object object : ksession.getObjects()) {
             if (object instanceof Person) {
-                assertTrue(((Person) object).isHappy());
+                assertThat(((Person) object).isHappy()).isTrue();
             }
         }
 
         Object list = ksession.getGlobal("persons");
-        assertNotNull(list);
-        assertTrue(list instanceof ArrayList);
-        assertEquals(1, ((ArrayList) list).size());
+        assertThat(list).isNotNull();
+        assertThat(list instanceof ArrayList).isTrue();
+        assertThat(((ArrayList) list)).hasSize(1);
         Person p = (Person) ((ArrayList) list).get(0);
-        assertNotNull(p);
-        assertEquals(p, p1);
+        assertThat(p).isNotNull();
+        assertThat(p1).isEqualTo(p);
     }
 
     @AfterClass

@@ -15,7 +15,7 @@
 
 package org.kie.server.integrationtests.jbpm;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -69,12 +69,12 @@ public class PerProcessInstanceIntegrationTest extends JbpmKieServerBaseIntegrat
     @Test
     public void testProcessWithBusinessRuleTask() throws Exception {
         Long processInstanceId1 = processClient.startProcess(CONTAINER_ID, PROCESS_ID);
-        assertNotNull(processInstanceId1);
-        assertTrue(processInstanceId1.longValue() > 0);
+        assertThat(processInstanceId1).isNotNull();
+        assertThat(processInstanceId1.longValue() > 0).isTrue();
 
         Long processInstanceId2 = processClient.startProcess(CONTAINER_ID, PROCESS_ID);
-        assertNotNull(processInstanceId2);
-        assertTrue(processInstanceId2.longValue() > 0);
+        assertThat(processInstanceId2).isNotNull();
+        assertThat(processInstanceId2.longValue() > 0).isTrue();
 
         try {
             // use container id as ksession id to use ksession from jBPM extension
@@ -115,12 +115,12 @@ public class PerProcessInstanceIntegrationTest extends JbpmKieServerBaseIntegrat
         commands.add(commandsFactory.newGetObjects(personListOutputId));
 
         ServiceResponse<ExecutionResults> reply = ruleClient.executeCommandsWithResults(CONTAINER_ID, executionCommand);
-        assertEquals(ServiceResponse.ResponseType.SUCCESS, reply.getType());
+        assertThat(reply.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
 
         ExecutionResults actualData = reply.getResult();
-        assertNotNull(actualData);
+        assertThat(actualData).isNotNull();
         ArrayList<Object> personList = (ArrayList<Object>) actualData.getValue(personListOutputId);
-        assertEquals(1, personList.size());
-        assertEquals(KieServerReflections.valueOf(person, PERSON_NAME_FIELD), KieServerReflections.valueOf(personList.get(0), PERSON_NAME_FIELD));
+        assertThat(personList).hasSize(1);
+        assertThat(KieServerReflections.valueOf(personList.get(0)).isCloseTo(KieServerReflections.valueOf(person, PERSON_NAME_FIELD), within(PERSON_NAME_FIELD)));
     }
 }

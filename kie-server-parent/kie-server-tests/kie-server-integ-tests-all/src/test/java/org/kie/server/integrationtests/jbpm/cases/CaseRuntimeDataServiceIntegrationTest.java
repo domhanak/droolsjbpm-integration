@@ -16,13 +16,13 @@ package org.kie.server.integrationtests.jbpm.cases;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.assertj.core.api.Assertions.fail;
 import static org.kie.api.runtime.process.ProcessInstance.STATE_ABORTED;
 import static org.kie.api.runtime.process.ProcessInstance.STATE_ACTIVE;
 import static org.kie.api.runtime.process.ProcessInstance.STATE_COMPLETED;
@@ -128,46 +128,46 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
     @Test
     public void testGetCaseDefinitionsByNotExistingContainer() {
         List<CaseDefinition> definitions = caseClient.getCaseDefinitionsByContainer("not-existing-container", 0, 10);
-        assertNotNull(definitions);
-        assertEquals(0, definitions.size());
+        assertThat(definitions).isNotNull();
+        assertThat(definitions).isEmpty();
     }
 
     @Test
     public void testGetCaseDefinitionsByContainer() {
         List<CaseDefinition> definitions = caseClient.getCaseDefinitionsByContainer(CONTAINER_ID, 0, 10);
-        assertNotNull(definitions);
-        assertEquals(2, definitions.size());
+        assertThat(definitions).isNotNull();
+        assertThat(definitions).hasSize(2);
 
         List<String> mappedDefinitions = definitions.stream().map(CaseDefinition::getIdentifier).collect(Collectors.toList());
-        assertTrue(mappedDefinitions.contains(CASE_HR_DEF_ID));
-        assertTrue(mappedDefinitions.contains(CLAIM_CASE_DEF_ID));
+        assertThat(mappedDefinitions.contains(CASE_HR_DEF_ID)).isTrue();
+        assertThat(mappedDefinitions.contains(CLAIM_CASE_DEF_ID)).isTrue();
 
         definitions = caseClient.getCaseDefinitionsByContainer(CONTAINER_ID, 0, 1);
-        assertNotNull(definitions);
-        assertEquals(1, definitions.size());
+        assertThat(definitions).isNotNull();
+        assertThat(definitions).hasSize(1);
         assertHrCaseDefinition(definitions.get(0));
 
         definitions = caseClient.getCaseDefinitionsByContainer(CONTAINER_ID, 1, 1);
-        assertNotNull(definitions);
-        assertEquals(1, definitions.size());
+        assertThat(definitions).isNotNull();
+        assertThat(definitions).hasSize(1);
         assertCarInsuranceCaseDefinition(definitions.get(0));
     }
 
     @Test
     public void testGetCaseDefinitionsByContainerSorting() {
         List<CaseDefinition> definitions = caseClient.getCaseDefinitionsByContainer(CONTAINER_ID, 0, 1, CaseServicesClient.SORT_BY_CASE_DEFINITION_ID, true);
-        assertNotNull(definitions);
-        assertEquals(1, definitions.size());
+        assertThat(definitions).isNotNull();
+        assertThat(definitions).hasSize(1);
         assertHrCaseDefinition(definitions.get(0));
 
         definitions = caseClient.getCaseDefinitionsByContainer(CONTAINER_ID, 1, 1, CaseServicesClient.SORT_BY_CASE_DEFINITION_ID, true);
-        assertNotNull(definitions);
-        assertEquals(1, definitions.size());
+        assertThat(definitions).isNotNull();
+        assertThat(definitions).hasSize(1);
         assertCarInsuranceCaseDefinition(definitions.get(0));
 
         definitions = caseClient.getCaseDefinitionsByContainer(CONTAINER_ID, 0, 10, CaseServicesClient.SORT_BY_CASE_DEFINITION_ID, false);
-        assertNotNull(definitions);
-        assertEquals(2, definitions.size());
+        assertThat(definitions).isNotNull();
+        assertThat(definitions).hasSize(2);
         assertCarInsuranceCaseDefinition(definitions.get(0));
         assertHrCaseDefinition(definitions.get(1));
     }
@@ -201,39 +201,39 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
     @Test
     public void testGetCaseDefinitions() {
         List<CaseDefinition> definitions = caseClient.getCaseDefinitions(0, 10);
-        assertNotNull(definitions);
-        assertEquals(2, definitions.size());
+        assertThat(definitions).isNotNull();
+        assertThat(definitions).hasSize(2);
 
         List<String> mappedDefinitions = definitions.stream().map(CaseDefinition::getIdentifier).collect(Collectors.toList());
-        assertTrue(mappedDefinitions.contains(CASE_HR_DEF_ID));
-        assertTrue(mappedDefinitions.contains(CLAIM_CASE_DEF_ID));
+        assertThat(mappedDefinitions.contains(CASE_HR_DEF_ID)).isTrue();
+        assertThat(mappedDefinitions.contains(CLAIM_CASE_DEF_ID)).isTrue();
 
         definitions = caseClient.getCaseDefinitions(0, 1);
-        assertNotNull(definitions);
-        assertEquals(1, definitions.size());
+        assertThat(definitions).isNotNull();
+        assertThat(definitions).hasSize(1);
         assertHrCaseDefinition(definitions.get(0));
 
         definitions = caseClient.getCaseDefinitions(1, 1);
-        assertNotNull(definitions);
-        assertEquals(1, definitions.size());
+        assertThat(definitions).isNotNull();
+        assertThat(definitions).hasSize(1);
         assertCarInsuranceCaseDefinition(definitions.get(0));
     }
 
     @Test
     public void testGetCaseDefinitionsSorting() {
         List<CaseDefinition> definitions = caseClient.getCaseDefinitions(0, 1, CaseServicesClient.SORT_BY_CASE_DEFINITION_ID, true);
-        assertNotNull(definitions);
-        assertEquals(1, definitions.size());
+        assertThat(definitions).isNotNull();
+        assertThat(definitions).hasSize(1);
         assertHrCaseDefinition(definitions.get(0));
 
         definitions = caseClient.getCaseDefinitions(1, 1, CaseServicesClient.SORT_BY_CASE_DEFINITION_ID, true);
-        assertNotNull(definitions);
-        assertEquals(1, definitions.size());
+        assertThat(definitions).isNotNull();
+        assertThat(definitions).hasSize(1);
         assertCarInsuranceCaseDefinition(definitions.get(0));
 
         definitions = caseClient.getCaseDefinitions(0, 10, CaseServicesClient.SORT_BY_CASE_DEFINITION_ID, false);
-        assertNotNull(definitions);
-        assertEquals(2, definitions.size());
+        assertThat(definitions).isNotNull();
+        assertThat(definitions).hasSize(2);
         assertCarInsuranceCaseDefinition(definitions.get(0));
         assertHrCaseDefinition(definitions.get(1));
     }
@@ -241,8 +241,8 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
     @Test
     public void testGetCaseDefinitionsSortingByCaseName() {
         List<CaseDefinition> definitions = caseClient.getCaseDefinitions(0, 10, CaseServicesClient.SORT_BY_CASE_DEFINITION_NAME, true);
-        assertNotNull(definitions);
-        assertEquals(2, definitions.size());
+        assertThat(definitions).isNotNull();
+        assertThat(definitions).hasSize(2);
         assertCarInsuranceCaseDefinition(definitions.get(0));
         assertHrCaseDefinition(definitions.get(1));
     }
@@ -252,12 +252,12 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
         createContainer(CONTAINER_ID2, releaseId);
 
         List<CaseDefinition> definitions = caseClient.getCaseDefinitions(0, 10, CaseServicesClient.SORT_BY_CASE_DEFINITION_DEPLOYMENT_ID, true);
-        assertNotNull(definitions);
-        assertEquals(4, definitions.size());
-        assertEquals(definitions.get(0).getContainerId(), CONTAINER_ID);
-        assertEquals(definitions.get(1).getContainerId(), CONTAINER_ID);
-        assertEquals(definitions.get(2).getContainerId(), CONTAINER_ID2);
-        assertEquals(definitions.get(3).getContainerId(), CONTAINER_ID2);
+        assertThat(definitions).isNotNull();
+        assertThat(definitions).hasSize(4);
+        assertThat(CONTAINER_ID).isEqualTo(definitions.get(0).getContainerId());
+        assertThat(CONTAINER_ID).isEqualTo(definitions.get(1).getContainerId());
+        assertThat(CONTAINER_ID2).isEqualTo(definitions.get(2).getContainerId());
+        assertThat(CONTAINER_ID2).isEqualTo(definitions.get(3).getContainerId());
 
         KieServerAssert.assertSuccess(client.disposeContainer(CONTAINER_ID2));
     }
@@ -265,30 +265,30 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
     @Test
     public void testGetCaseDefinitionsWithFilter() {
         List<CaseDefinition> definitions = caseClient.getCaseDefinitions("User", 0, 10);
-        assertNotNull(definitions);
-        assertEquals(1, definitions.size());
+        assertThat(definitions).isNotNull();
+        assertThat(definitions).hasSize(1);
         assertHrCaseDefinition(definitions.get(0));
 
         definitions = caseClient.getCaseDefinitions("User", 1, 10);
-        assertNotNull(definitions);
-        assertEquals(0, definitions.size());
+        assertThat(definitions).isNotNull();
+        assertThat(definitions).isEmpty();
     }
 
     @Test
     public void testGetCaseDefinitionsWithFilterSorting() {
         List<CaseDefinition> definitions = caseClient.getCaseDefinitions("Case", 0, 1, CaseServicesClient.SORT_BY_CASE_DEFINITION_ID, true);
-        assertNotNull(definitions);
-        assertEquals(1, definitions.size());
+        assertThat(definitions).isNotNull();
+        assertThat(definitions).hasSize(1);
         assertHrCaseDefinition(definitions.get(0));
 
         definitions = caseClient.getCaseDefinitions("Case", 1, 1, CaseServicesClient.SORT_BY_CASE_DEFINITION_ID, true);
-        assertNotNull(definitions);
-        assertEquals(1, definitions.size());
+        assertThat(definitions).isNotNull();
+        assertThat(definitions).hasSize(1);
         assertCarInsuranceCaseDefinition(definitions.get(0));
 
         definitions = caseClient.getCaseDefinitions("Case", 0, 10, CaseServicesClient.SORT_BY_CASE_DEFINITION_ID, false);
-        assertNotNull(definitions);
-        assertEquals(2, definitions.size());
+        assertThat(definitions).isNotNull();
+        assertThat(definitions).hasSize(2);
         assertCarInsuranceCaseDefinition(definitions.get(0));
         assertHrCaseDefinition(definitions.get(1));
     }
@@ -319,10 +319,10 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
 
         CaseInstance caseInstance = caseClient.getCaseInstance(CONTAINER_ID, caseId);
         assertHrCaseInstance(caseInstance, caseId, USER_YODA);
-        assertNull(caseInstance.getCaseFile());
-        assertNull(caseInstance.getRoleAssignments());
-        assertNull(caseInstance.getMilestones());
-        assertNull(caseInstance.getStages());
+        assertThat(caseInstance.getCaseFile()).isNull();
+        assertThat(caseInstance.getRoleAssignments()).isNull();
+        assertThat(caseInstance.getMilestones()).isNull();
+        assertThat(caseInstance.getStages()).isNull();
     }
 
     @Test
@@ -337,47 +337,47 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
         KieServerAssert.assertNullOrEmpty("Stages should be empty.", caseInstance.getStages());
 
         // Assert case file
-        assertNotNull(caseInstance.getCaseFile());
-        assertEquals("first case started", caseInstance.getCaseFile().getData().get("s"));
+        assertThat(caseInstance.getCaseFile()).isNotNull();
+        assertThat(caseInstance.getCaseFile().getData().get("s")).isEqualTo("first case started");
 
         // Assert role assignments
-        assertNotNull(caseInstance.getRoleAssignments());
-        assertEquals(3, caseInstance.getRoleAssignments().size());
+        assertThat(caseInstance.getRoleAssignments()).isNotNull();
+        assertThat(caseInstance.getRoleAssignments()).hasSize(3);
 
         CaseRoleAssignment ownerRole = caseInstance.getRoleAssignments().get(0);
-        assertEquals("owner", ownerRole.getName());
-        assertEquals(1, ownerRole.getUsers().size());
-        assertEquals(USER_YODA, ownerRole.getUsers().get(0));
+        assertThat(ownerRole.getName()).isEqualTo("owner");
+        assertThat(ownerRole.getUsers()).hasSize(1);
+        assertThat(ownerRole.getUsers().get(0)).isEqualTo(USER_YODA);
         KieServerAssert.assertNullOrEmpty("Groups should be empty.", ownerRole.getGroups());
 
         CaseRoleAssignment contactRole = caseInstance.getRoleAssignments().get(1);
-        assertEquals("contact", contactRole.getName());
-        assertEquals(1, contactRole.getUsers().size());
-        assertEquals(USER_JOHN, contactRole.getUsers().get(0));
+        assertThat(contactRole.getName()).isEqualTo("contact");
+        assertThat(contactRole.getUsers()).hasSize(1);
+        assertThat(contactRole.getUsers().get(0)).isEqualTo(USER_JOHN);
         KieServerAssert.assertNullOrEmpty("Groups should be empty.", contactRole.getGroups());
 
         CaseRoleAssignment participantRole = caseInstance.getRoleAssignments().get(2);
-        assertEquals("participant", participantRole.getName());
+        assertThat(participantRole.getName()).isEqualTo("participant");
         KieServerAssert.assertNullOrEmpty("Users should be empty.", participantRole.getUsers());
         KieServerAssert.assertNullOrEmpty("Groups should be empty.", participantRole.getGroups());
 
         // Assert milestones
-        assertNotNull(caseInstance.getMilestones());
-        assertEquals(2, caseInstance.getMilestones().size());
+        assertThat(caseInstance.getMilestones()).isNotNull();
+        assertThat(caseInstance.getMilestones()).hasSize(2);
 
         CaseMilestone milestone = caseInstance.getMilestones().get(0);
-        assertEquals("2", milestone.getIdentifier());
-        assertEquals("Milestone1", milestone.getName());
-        assertEquals("Completed", milestone.getStatus());
-        assertNotNull(milestone.getAchievedAt());
-        assertTrue(milestone.isAchieved());
+        assertThat(milestone.getIdentifier()).isEqualTo("2");
+        assertThat(milestone.getName()).isEqualTo("Milestone1");
+        assertThat(milestone.getStatus()).isEqualTo("Completed");
+        assertThat(milestone.getAchievedAt()).isNotNull();
+        assertThat(milestone.isAchieved()).isTrue();
 
         milestone = caseInstance.getMilestones().get(1);
-        assertNotNull(milestone.getIdentifier());
-        assertEquals("Milestone2", milestone.getName());
-        assertEquals("Available", milestone.getStatus());
-        assertNull(milestone.getAchievedAt());
-        assertFalse(milestone.isAchieved());
+        assertThat(milestone.getIdentifier()).isNotNull();
+        assertThat(milestone.getName()).isEqualTo("Milestone2");
+        assertThat(milestone.getStatus()).isEqualTo("Available");
+        assertThat(milestone.getAchievedAt()).isNull();
+        assertThat(milestone.isAchieved()).isFalse();
     }
 
     @Test
@@ -390,76 +390,76 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
         KieServerAssert.assertNullOrEmpty("Milestones should be empty.", caseInstance.getMilestones());
 
         // Assert case file
-        assertNotNull(caseInstance.getCaseFile());
-        assertEquals("first case started", caseInstance.getCaseFile().getData().get("s"));
+        assertThat(caseInstance.getCaseFile()).isNotNull();
+        assertThat(caseInstance.getCaseFile().getData().get("s")).isEqualTo("first case started");
 
         // Assert role assignments
-        assertNotNull(caseInstance.getRoleAssignments());
-        assertEquals(4, caseInstance.getRoleAssignments().size());
+        assertThat(caseInstance.getRoleAssignments()).isNotNull();
+        assertThat(caseInstance.getRoleAssignments()).hasSize(4);
 
         CaseRoleAssignment ownerRole = caseInstance.getRoleAssignments().get(0);
-        assertEquals("owner", ownerRole.getName());
-        assertEquals(1, ownerRole.getUsers().size());
-        assertEquals(USER_YODA, ownerRole.getUsers().get(0));
+        assertThat(ownerRole.getName()).isEqualTo("owner");
+        assertThat(ownerRole.getUsers()).hasSize(1);
+        assertThat(ownerRole.getUsers().get(0)).isEqualTo(USER_YODA);
         KieServerAssert.assertNullOrEmpty("Groups should be empty.", ownerRole.getGroups());
 
         CaseRoleAssignment insuredRole = caseInstance.getRoleAssignments().get(1);
-        assertEquals("insured", insuredRole.getName());
-        assertEquals(1, insuredRole.getUsers().size());
-        assertEquals(USER_YODA, insuredRole.getUsers().get(0));
+        assertThat(insuredRole.getName()).isEqualTo("insured");
+        assertThat(insuredRole.getUsers()).hasSize(1);
+        assertThat(insuredRole.getUsers().get(0)).isEqualTo(USER_YODA);
         KieServerAssert.assertNullOrEmpty("Groups should be empty.", insuredRole.getGroups());
 
         CaseRoleAssignment assessorRole = caseInstance.getRoleAssignments().get(2);
-        assertEquals("assessor", assessorRole.getName());
-        assertEquals(USER_YODA, assessorRole.getUsers().get(0));
+        assertThat(assessorRole.getName()).isEqualTo("assessor");
+        assertThat(assessorRole.getUsers().get(0)).isEqualTo(USER_YODA);
         KieServerAssert.assertNullOrEmpty("Groups should be empty.", assessorRole.getGroups());
 
         CaseRoleAssignment insuranceRepresentativeRole = caseInstance.getRoleAssignments().get(3);
-        assertEquals("insuranceRepresentative", insuranceRepresentativeRole.getName());
-        assertEquals(1, insuranceRepresentativeRole.getUsers().size());
-        assertEquals(USER_JOHN, insuranceRepresentativeRole.getUsers().get(0));
+        assertThat(insuranceRepresentativeRole.getName()).isEqualTo("insuranceRepresentative");
+        assertThat(insuranceRepresentativeRole.getUsers()).hasSize(1);
+        assertThat(insuranceRepresentativeRole.getUsers().get(0)).isEqualTo(USER_JOHN);
         KieServerAssert.assertNullOrEmpty("Groups should be empty.", insuranceRepresentativeRole.getGroups());
 
         // Assert stages
-        assertNotNull(caseInstance.getStages());
-        assertEquals(1, caseInstance.getStages().size());
+        assertThat(caseInstance.getStages()).isNotNull();
+        assertThat(caseInstance.getStages()).hasSize(1);
 
         CaseStage stage = caseInstance.getStages().get(0);
-        assertNotNull(stage.getIdentifier());
-        assertEquals("Build claim report", stage.getName());
-        assertEquals("Active", stage.getStatus());
+        assertThat(stage.getIdentifier()).isNotNull();
+        assertThat(stage.getName()).isEqualTo("Build claim report");
+        assertThat(stage.getStatus()).isEqualTo("Active");
 
         List<NodeInstance> activeNodes = stage.getActiveNodes();
-        assertEquals(1, activeNodes.size());
-        assertEquals("Provide accident information", activeNodes.get(0).getName());
-        assertEquals("HumanTaskNode", activeNodes.get(0).getNodeType());
+        assertThat(activeNodes).hasSize(1);
+        assertThat(activeNodes.get(0).getName()).isEqualTo("Provide accident information");
+        assertThat(activeNodes.get(0).getNodeType()).isEqualTo("HumanTaskNode");
 
-        assertEquals(2, stage.getAdHocFragments().size());
+        assertThat(stage.getAdHocFragments()).hasSize(2);
     }
 
     @Test
     public void testGetCaseInstances() {
         List<CaseInstance> caseInstances = caseClient.getCaseInstances(0, 10);
-        assertNotNull(caseInstances);
-        assertEquals(0, caseInstances.size());
+        assertThat(caseInstances).isNotNull();
+        assertThat(caseInstances).isEmpty();
 
         String caseId = startUserTaskCase(USER_YODA, USER_JOHN);
         String caseId2 = startCarInsuranceClaimCase(USER_YODA, USER_JOHN, USER_YODA);
         assertNotEquals(caseId, caseId2);
 
         caseInstances = caseClient.getCaseInstances(0, 10);
-        assertEquals(2, caseInstances.size());
+        assertThat(caseInstances).hasSize(2);
 
         List<String> mappedInstances = caseInstances.stream().map(CaseInstance::getCaseId).collect(Collectors.toList());
-        assertTrue(mappedInstances.contains(caseId));
-        assertTrue(mappedInstances.contains(caseId2));
+        assertThat(mappedInstances.contains(caseId)).isTrue();
+        assertThat(mappedInstances.contains(caseId2)).isTrue();
 
         caseInstances = caseClient.getCaseInstances(0, 1);
-        assertEquals(1, caseInstances.size());
+        assertThat(caseInstances).hasSize(1);
         assertCarInsuranceCaseInstance(caseInstances.get(0), caseId2, USER_YODA);
 
         caseInstances = caseClient.getCaseInstances(1, 1);
-        assertEquals(1, caseInstances.size());
+        assertThat(caseInstances).hasSize(1);
         assertHrCaseInstance(caseInstances.get(0), caseId, USER_YODA);
     }
 
@@ -470,36 +470,36 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
         assertNotEquals(hrCaseId, claimCaseId);
 
         List<CaseInstance> caseInstances = caseClient.getCaseInstances(0, 1, CaseServicesClient.SORT_BY_CASE_INSTANCE_ID, true);
-        assertEquals(1, caseInstances.size());
-        assertEquals(claimCaseId, caseInstances.get(0).getCaseId());
+        assertThat(caseInstances).hasSize(1);
+        assertThat(caseInstances.get(0).getCaseId()).isEqualTo(claimCaseId);
 
         caseInstances = caseClient.getCaseInstances(1, 1, CaseServicesClient.SORT_BY_CASE_INSTANCE_ID, true);
-        assertEquals(1, caseInstances.size());
-        assertEquals(hrCaseId, caseInstances.get(0).getCaseId());
+        assertThat(caseInstances).hasSize(1);
+        assertThat(caseInstances.get(0).getCaseId()).isEqualTo(hrCaseId);
 
         caseInstances = caseClient.getCaseInstances(0, 10, CaseServicesClient.SORT_BY_CASE_INSTANCE_ID, false);
-        assertEquals(2, caseInstances.size());
-        assertEquals(hrCaseId, caseInstances.get(0).getCaseId());
-        assertEquals(claimCaseId, caseInstances.get(1).getCaseId());
+        assertThat(caseInstances).hasSize(2);
+        assertThat(caseInstances.get(0).getCaseId()).isEqualTo(hrCaseId);
+        assertThat(caseInstances.get(1).getCaseId()).isEqualTo(claimCaseId);
     }
 
     @Test
     public void testGetCaseInstancesByStatus() {
         List<CaseInstance> caseInstances = caseClient.getCaseInstances(Arrays.asList(CaseStatus.CANCELLED.getName()), 0, 1000);
-        assertNotNull(caseInstances);
+        assertThat(caseInstances).isNotNull();
         int abortedCaseInstanceCount = caseInstances.size();
 
         String caseId = startUserTaskCase(USER_YODA, USER_JOHN);
 
         caseInstances = caseClient.getCaseInstances(Arrays.asList(CaseStatus.OPEN.getName()), 0, 10);
-        assertEquals(1, caseInstances.size());
+        assertThat(caseInstances).hasSize(1);
         assertHrCaseInstance(caseInstances.get(0), caseId, USER_YODA);
 
         caseClient.cancelCaseInstance(CONTAINER_ID, caseId);
 
         caseInstances = caseClient.getCaseInstances(Arrays.asList(CaseStatus.CANCELLED.getName()), 0, 1000);
-        assertNotNull(caseInstances);
-        assertEquals(abortedCaseInstanceCount + 1, caseInstances.size());
+        assertThat(caseInstances).isNotNull();
+        assertThat(caseInstances.size()).isEqualTo(abortedCaseInstanceCount + 1);
     }
 
     @Test
@@ -509,43 +509,43 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
         assertNotEquals(hrCaseId, claimCaseId);
 
         List<CaseInstance> caseInstances = caseClient.getCaseInstances(Arrays.asList(CaseStatus.OPEN.getName()), 0, 1, CaseServicesClient.SORT_BY_CASE_INSTANCE_ID, true);
-        assertEquals(1, caseInstances.size());
-        assertEquals(claimCaseId, caseInstances.get(0).getCaseId());
+        assertThat(caseInstances).hasSize(1);
+        assertThat(caseInstances.get(0).getCaseId()).isEqualTo(claimCaseId);
 
         caseInstances = caseClient.getCaseInstances(Arrays.asList(CaseStatus.OPEN.getName()), 1, 1, CaseServicesClient.SORT_BY_CASE_INSTANCE_ID, true);
-        assertEquals(1, caseInstances.size());
-        assertEquals(hrCaseId, caseInstances.get(0).getCaseId());
+        assertThat(caseInstances).hasSize(1);
+        assertThat(caseInstances.get(0).getCaseId()).isEqualTo(hrCaseId);
 
         caseInstances = caseClient.getCaseInstances(Arrays.asList(CaseStatus.OPEN.getName()), 0, 10, CaseServicesClient.SORT_BY_CASE_INSTANCE_ID, false);
-        assertEquals(2, caseInstances.size());
-        assertEquals(hrCaseId, caseInstances.get(0).getCaseId());
-        assertEquals(claimCaseId, caseInstances.get(1).getCaseId());
+        assertThat(caseInstances).hasSize(2);
+        assertThat(caseInstances.get(0).getCaseId()).isEqualTo(hrCaseId);
+        assertThat(caseInstances.get(1).getCaseId()).isEqualTo(claimCaseId);
     }
 
     @Test
     public void testGetCaseInstancesByNotExistingContainer() {
         List<CaseInstance> caseInstances = caseClient.getCaseInstancesByContainer("not-existing-container", Arrays.asList(CaseStatus.OPEN.getName()), 0, 10);
-        assertNotNull(caseInstances);
-        assertEquals(0, caseInstances.size());
+        assertThat(caseInstances).isNotNull();
+        assertThat(caseInstances).isEmpty();
     }
 
     @Test
     public void testGetCaseInstancesByContainer() {
         List<CaseInstance> caseInstances = caseClient.getCaseInstancesByContainer(CONTAINER_ID, Arrays.asList(CaseStatus.OPEN.getName()), 0, 10);
-        assertNotNull(caseInstances);
-        assertEquals(0, caseInstances.size());
+        assertThat(caseInstances).isNotNull();
+        assertThat(caseInstances).isEmpty();
 
         String caseId = startUserTaskCase(USER_YODA, USER_JOHN);
         String caseId2 = startCarInsuranceClaimCase(USER_YODA, USER_JOHN, USER_YODA);
 
         caseInstances = caseClient.getCaseInstancesByContainer(CONTAINER_ID, Arrays.asList(CaseStatus.OPEN.getName()), 0, 1);
-        assertNotNull(caseInstances);
-        assertEquals(1, caseInstances.size());
+        assertThat(caseInstances).isNotNull();
+        assertThat(caseInstances).hasSize(1);
         assertCarInsuranceCaseInstance(caseInstances.get(0), caseId2, USER_YODA);
 
         caseInstances = caseClient.getCaseInstancesByContainer(CONTAINER_ID, Arrays.asList(CaseStatus.OPEN.getName()), 1, 1);
-        assertNotNull(caseInstances);
-        assertEquals(1, caseInstances.size());
+        assertThat(caseInstances).isNotNull();
+        assertThat(caseInstances).hasSize(1);
         assertHrCaseInstance(caseInstances.get(0), caseId, USER_YODA);
     }
 
@@ -555,18 +555,18 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
         String caseId2 = startCarInsuranceClaimCase(USER_YODA, USER_JOHN, USER_YODA);
 
         List<CaseInstance> caseInstances = caseClient.getCaseInstancesByContainer(CONTAINER_ID, Arrays.asList(CaseStatus.OPEN.getName()), 0, 1, CaseServicesClient.SORT_BY_CASE_INSTANCE_ID, true);
-        assertNotNull(caseInstances);
-        assertEquals(1, caseInstances.size());
+        assertThat(caseInstances).isNotNull();
+        assertThat(caseInstances).hasSize(1);
         assertCarInsuranceCaseInstance(caseInstances.get(0), caseId2, USER_YODA);
 
         caseInstances = caseClient.getCaseInstancesByContainer(CONTAINER_ID, Arrays.asList(CaseStatus.OPEN.getName()), 1, 1, CaseServicesClient.SORT_BY_CASE_INSTANCE_ID, true);
-        assertNotNull(caseInstances);
-        assertEquals(1, caseInstances.size());
+        assertThat(caseInstances).isNotNull();
+        assertThat(caseInstances).hasSize(1);
         assertHrCaseInstance(caseInstances.get(0), caseId, USER_YODA);
 
         caseInstances = caseClient.getCaseInstancesByContainer(CONTAINER_ID, Arrays.asList(CaseStatus.OPEN.getName()), 0, 10, CaseServicesClient.SORT_BY_CASE_INSTANCE_ID, false);
-        assertNotNull(caseInstances);
-        assertEquals(2, caseInstances.size());
+        assertThat(caseInstances).isNotNull();
+        assertThat(caseInstances).hasSize(2);
         assertHrCaseInstance(caseInstances.get(0), caseId, USER_YODA);
         assertCarInsuranceCaseInstance(caseInstances.get(1), caseId2, USER_YODA);
     }
@@ -574,39 +574,39 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
     @Test
     public void testGetCaseInstancesByDefinitionNotExistingContainer() {
         List<CaseInstance> caseInstances = caseClient.getCaseInstancesByDefinition("not-existing-container", CASE_HR_DEF_ID, Arrays.asList(CaseStatus.OPEN.getName()), 0, 10);
-        assertNotNull(caseInstances);
-        assertEquals(0, caseInstances.size());
+        assertThat(caseInstances).isNotNull();
+        assertThat(caseInstances).isEmpty();
     }
 
     @Test
     public void testGetCaseInstancesByNotExistingDefinition() {
         List<CaseInstance> caseInstances = caseClient.getCaseInstancesByDefinition(CONTAINER_ID, "not-existing-case", Arrays.asList(CaseStatus.OPEN.getName()), 0, 10);
-        assertNotNull(caseInstances);
-        assertEquals(0, caseInstances.size());
+        assertThat(caseInstances).isNotNull();
+        assertThat(caseInstances).isEmpty();
     }
 
     @Test
     public void testGetCaseInstancesByDefinition() {
         List<CaseInstance> caseInstances = caseClient.getCaseInstancesByDefinition(CONTAINER_ID, CASE_HR_DEF_ID, Arrays.asList(CaseStatus.OPEN.getName()), 0, 10);
-        assertNotNull(caseInstances);
-        assertEquals(0, caseInstances.size());
+        assertThat(caseInstances).isNotNull();
+        assertThat(caseInstances).isEmpty();
 
         String caseId = startUserTaskCase(USER_YODA, USER_JOHN);
         String caseId2 = startCarInsuranceClaimCase(USER_JOHN, USER_YODA, USER_YODA);
 
         caseInstances = caseClient.getCaseInstancesByDefinition(CONTAINER_ID, CASE_HR_DEF_ID, Arrays.asList(CaseStatus.OPEN.getName()), 0, 1);
-        assertNotNull(caseInstances);
-        assertEquals(1, caseInstances.size());
+        assertThat(caseInstances).isNotNull();
+        assertThat(caseInstances).hasSize(1);
         assertHrCaseInstance(caseInstances.get(0), caseId, USER_YODA);
 
         caseInstances = caseClient.getCaseInstancesByDefinition(CONTAINER_ID, CLAIM_CASE_DEF_ID, Arrays.asList(CaseStatus.OPEN.getName()), 0, 1);
-        assertNotNull(caseInstances);
-        assertEquals(1, caseInstances.size());
+        assertThat(caseInstances).isNotNull();
+        assertThat(caseInstances).hasSize(1);
         assertCarInsuranceCaseInstance(caseInstances.get(0), caseId2, USER_YODA);
 
         caseInstances = caseClient.getCaseInstancesByDefinition(CONTAINER_ID, CLAIM_CASE_DEF_ID, Arrays.asList(CaseStatus.OPEN.getName()), 1, 1);
-        assertNotNull(caseInstances);
-        assertEquals(0, caseInstances.size());
+        assertThat(caseInstances).isNotNull();
+        assertThat(caseInstances).isEmpty();
     }
 
     @Test
@@ -615,18 +615,18 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
         String caseId2 = startUserTaskCase(USER_YODA, USER_JOHN);
 
         List<CaseInstance> caseInstances = caseClient.getCaseInstancesByDefinition(CONTAINER_ID, CASE_HR_DEF_ID, Arrays.asList(CaseStatus.OPEN.getName()), 0, 1, CaseServicesClient.SORT_BY_CASE_INSTANCE_ID, true);
-        assertNotNull(caseInstances);
-        assertEquals(1, caseInstances.size());
+        assertThat(caseInstances).isNotNull();
+        assertThat(caseInstances).hasSize(1);
         assertHrCaseInstance(caseInstances.get(0), caseId, USER_YODA);
 
         caseInstances = caseClient.getCaseInstancesByDefinition(CONTAINER_ID, CASE_HR_DEF_ID, Arrays.asList(CaseStatus.OPEN.getName()), 1, 1, CaseServicesClient.SORT_BY_CASE_INSTANCE_ID, true);
-        assertNotNull(caseInstances);
-        assertEquals(1, caseInstances.size());
+        assertThat(caseInstances).isNotNull();
+        assertThat(caseInstances).hasSize(1);
         assertHrCaseInstance(caseInstances.get(0), caseId2, USER_YODA);
 
         caseInstances = caseClient.getCaseInstancesByDefinition(CONTAINER_ID, CASE_HR_DEF_ID, Arrays.asList(CaseStatus.OPEN.getName()), 0, 10, CaseServicesClient.SORT_BY_CASE_INSTANCE_ID, false);
-        assertNotNull(caseInstances);
-        assertEquals(2, caseInstances.size());
+        assertThat(caseInstances).isNotNull();
+        assertThat(caseInstances).hasSize(2);
         assertHrCaseInstance(caseInstances.get(0), caseId2, USER_YODA);
         assertHrCaseInstance(caseInstances.get(1), caseId, USER_YODA);
     }
@@ -634,8 +634,8 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
     @Test
     public void testGetCaseInstancesOwnedByNotExistingUser() throws Exception {
         List<CaseInstance> caseInstances = caseClient.getCaseInstancesOwnedBy("not-existing-user", Arrays.asList(CaseStatus.OPEN.getName()), 0, 10);
-        assertNotNull(caseInstances);
-        assertEquals(0, caseInstances.size());
+        assertThat(caseInstances).isNotNull();
+        assertThat(caseInstances).isEmpty();
     }
 
     @Test
@@ -644,8 +644,8 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
         Assume.assumeFalse(TestConfig.isLocalServer());
 
         List<CaseInstance> caseInstances = caseClient.getCaseInstancesOwnedBy(USER_YODA, Arrays.asList(CaseStatus.OPEN.getName()), 0, 10);
-        assertNotNull(caseInstances);
-        assertEquals(0, caseInstances.size());
+        assertThat(caseInstances).isNotNull();
+        assertThat(caseInstances).isEmpty();
 
         try {
             changeUser(USER_YODA);
@@ -655,18 +655,18 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
 
             changeUser(USER_YODA);
             caseInstances = caseClient.getCaseInstancesOwnedBy(USER_YODA, Arrays.asList(CaseStatus.OPEN.getName()), 0, 1);
-            assertNotNull(caseInstances);
-            assertEquals(1, caseInstances.size());
+            assertThat(caseInstances).isNotNull();
+            assertThat(caseInstances).hasSize(1);
             assertHrCaseInstance(caseInstances.get(0), caseId, USER_YODA);
 
             caseInstances = caseClient.getCaseInstancesOwnedBy(USER_YODA, Arrays.asList(CaseStatus.OPEN.getName()), 1, 1);
-            assertNotNull(caseInstances);
-            assertEquals(0, caseInstances.size());
+            assertThat(caseInstances).isNotNull();
+            assertThat(caseInstances).isEmpty();
 
             changeUser(USER_JOHN);
             caseInstances = caseClient.getCaseInstancesOwnedBy(USER_JOHN, Arrays.asList(CaseStatus.OPEN.getName()), 0, 10);
-            assertNotNull(caseInstances);
-            assertEquals(1, caseInstances.size());
+            assertThat(caseInstances).isNotNull();
+            assertThat(caseInstances).hasSize(1);
             assertCarInsuranceCaseInstance(caseInstances.get(0), caseId2, USER_JOHN);
         } finally {
             changeUser(TestConfig.getUsername());
@@ -679,18 +679,18 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
         String claimCaseId = startCarInsuranceClaimCase(USER_JOHN, USER_YODA, USER_YODA);
 
         List<CaseInstance> caseInstances = caseClient.getCaseInstancesOwnedBy(USER_YODA, Arrays.asList(CaseStatus.OPEN.getName()), 0, 1, CaseServicesClient.SORT_BY_CASE_INSTANCE_ID, true);
-        assertNotNull(caseInstances);
-        assertEquals(1, caseInstances.size());
+        assertThat(caseInstances).isNotNull();
+        assertThat(caseInstances).hasSize(1);
         assertCarInsuranceCaseInstance(caseInstances.get(0), claimCaseId, USER_YODA);
 
         caseInstances = caseClient.getCaseInstancesOwnedBy(USER_YODA, Arrays.asList(CaseStatus.OPEN.getName()), 1, 1, CaseServicesClient.SORT_BY_CASE_INSTANCE_ID, true);
-        assertNotNull(caseInstances);
-        assertEquals(1, caseInstances.size());
+        assertThat(caseInstances).isNotNull();
+        assertThat(caseInstances).hasSize(1);
         assertHrCaseInstance(caseInstances.get(0), hrCaseId, USER_YODA);
 
         caseInstances = caseClient.getCaseInstancesOwnedBy(USER_YODA, Arrays.asList(CaseStatus.OPEN.getName()), 0, 10, CaseServicesClient.SORT_BY_CASE_INSTANCE_ID, false);
-        assertNotNull(caseInstances);
-        assertEquals(2, caseInstances.size());
+        assertThat(caseInstances).isNotNull();
+        assertThat(caseInstances).hasSize(2);
         assertHrCaseInstance(caseInstances.get(0), hrCaseId, USER_YODA);
         assertCarInsuranceCaseInstance(caseInstances.get(1), claimCaseId, USER_YODA);
     }
@@ -700,15 +700,15 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
         String caseId = startUserTaskCase(USER_YODA, USER_JOHN);
 
         List<CaseAdHocFragment> caseAdHocFragments = caseClient.getAdHocFragments(CONTAINER_ID, caseId);
-        assertEquals(3, caseAdHocFragments.size());
+        assertThat(caseAdHocFragments).hasSize(3);
 
         Map<String, CaseAdHocFragment> mappedAdHocFragments = caseAdHocFragments.stream().collect(Collectors.toMap(CaseAdHocFragment::getName, d -> d));
-        assertTrue(mappedAdHocFragments.containsKey("Milestone1"));
-        assertTrue(mappedAdHocFragments.containsKey("Milestone2"));
-        assertTrue(mappedAdHocFragments.containsKey("Hello2"));
-        assertEquals("MilestoneNode", mappedAdHocFragments.get("Milestone1").getType());
-        assertEquals("MilestoneNode", mappedAdHocFragments.get("Milestone2").getType());
-        assertEquals("HumanTaskNode", mappedAdHocFragments.get("Hello2").getType());
+        assertThat(mappedAdHocFragments.containsKey("Milestone1")).isTrue();
+        assertThat(mappedAdHocFragments.containsKey("Milestone2")).isTrue();
+        assertThat(mappedAdHocFragments.containsKey("Hello2")).isTrue();
+        assertThat(mappedAdHocFragments.get("Milestone1").getType()).isEqualTo("MilestoneNode");
+        assertThat(mappedAdHocFragments.get("Milestone2").getType()).isEqualTo("MilestoneNode");
+        assertThat(mappedAdHocFragments.get("Hello2").getType()).isEqualTo("HumanTaskNode");
     }
 
     @Test
@@ -737,43 +737,43 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
         String carInsuranceClaimCase = startCarInsuranceClaimCase(USER_JOHN, USER_YODA, USER_YODA);
 
         List<ProcessInstance> processInstances = caseClient.getProcessInstances(CONTAINER_ID, userTaskCase, Arrays.asList(STATE_ACTIVE), 0, 1);
-        assertNotNull(processInstances);
-        assertEquals(1, processInstances.size());
+        assertThat(processInstances).isNotNull();
+        assertThat(processInstances).hasSize(1);
         assertHrProcessInstance(processInstances.get(0), userTaskCase);
 
         processInstances = caseClient.getProcessInstances(CONTAINER_ID, userTaskCase, Arrays.asList(STATE_ACTIVE), 1, 1);
-        assertNotNull(processInstances);
-        assertEquals(0, processInstances.size());
+        assertThat(processInstances).isNotNull();
+        assertThat(processInstances).isEmpty();
 
         processInstances = caseClient.getProcessInstances(CONTAINER_ID, carInsuranceClaimCase, Arrays.asList(STATE_ACTIVE), 0, 10);
-        assertNotNull(processInstances);
-        assertEquals(1, processInstances.size());
+        assertThat(processInstances).isNotNull();
+        assertThat(processInstances).hasSize(1);
         assertCarInsuranceProcessInstance(processInstances.get(0), carInsuranceClaimCase);
 
         caseClient.cancelCaseInstance(CONTAINER_ID, userTaskCase);
 
         processInstances = caseClient.getProcessInstances(CONTAINER_ID, userTaskCase, Arrays.asList(STATE_ACTIVE), 0, 10);
-        assertNotNull(processInstances);
-        assertEquals(0, processInstances.size());
+        assertThat(processInstances).isNotNull();
+        assertThat(processInstances).isEmpty();
 
         processInstances = caseClient.getProcessInstances(CONTAINER_ID, userTaskCase, Arrays.asList(STATE_ABORTED), 0, 10);
-        assertNotNull(processInstances);
-        assertEquals(1, processInstances.size());
+        assertThat(processInstances).isNotNull();
+        assertThat(processInstances).hasSize(1);
         assertHrProcessInstance(processInstances.get(0), userTaskCase, STATE_ABORTED);
     }
 
     @Test
     public void testGetProcessInstancesNotExistingCase() {
         List<ProcessInstance> processInstances = caseClient.getProcessInstances(CONTAINER_ID, "not-existing-case", Arrays.asList(STATE_ACTIVE), 0, 10);
-        assertNotNull(processInstances);
-        assertEquals(0, processInstances.size());
+        assertThat(processInstances).isNotNull();
+        assertThat(processInstances).isEmpty();
     }
 
     @Test
     public void testGetProcessInstancesNotExistingContainer() {
         List<ProcessInstance> processInstances = caseClient.getProcessInstances("not-existing-container", CASE_HR_DEF_ID, Arrays.asList(STATE_ACTIVE), 0, 10);
-        assertNotNull(processInstances);
-        assertEquals(0, processInstances.size());
+        assertThat(processInstances).isNotNull();
+        assertThat(processInstances).isEmpty();
     }
 
     @Test
@@ -782,20 +782,20 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
         caseClient.addDynamicSubProcess(CONTAINER_ID, carInsuranceClaimCase, DATA_VERIFICATION_DEF_ID, new HashMap<>());
 
         List<ProcessInstance> processInstances = caseClient.getProcessInstances(CONTAINER_ID, carInsuranceClaimCase, Arrays.asList(STATE_ACTIVE, STATE_COMPLETED), 0, 1, CaseServicesClient.SORT_BY_PROCESS_INSTANCE_ID, true);
-        assertNotNull(processInstances);
-        assertEquals(1, processInstances.size());
-        assertEquals(processInstances.get(0).getProcessId(), CLAIM_CASE_DEF_ID);
+        assertThat(processInstances).isNotNull();
+        assertThat(processInstances).hasSize(1);
+        assertThat(CLAIM_CASE_DEF_ID).isEqualTo(processInstances.get(0).getProcessId());
 
         processInstances = caseClient.getProcessInstances(CONTAINER_ID, carInsuranceClaimCase, Arrays.asList(STATE_ACTIVE, STATE_COMPLETED), 1, 1, CaseServicesClient.SORT_BY_PROCESS_INSTANCE_ID, true);
-        assertNotNull(processInstances);
-        assertEquals(1, processInstances.size());
-        assertEquals(processInstances.get(0).getProcessId(), DATA_VERIFICATION_DEF_ID);
+        assertThat(processInstances).isNotNull();
+        assertThat(processInstances).hasSize(1);
+        assertThat(DATA_VERIFICATION_DEF_ID).isEqualTo(processInstances.get(0).getProcessId());
 
         processInstances = caseClient.getProcessInstances(CONTAINER_ID, carInsuranceClaimCase, Arrays.asList(STATE_ACTIVE, STATE_COMPLETED), 0, 10, CaseServicesClient.SORT_BY_PROCESS_INSTANCE_ID, false);
-        assertNotNull(processInstances);
-        assertEquals(2, processInstances.size());
-        assertEquals(processInstances.get(0).getProcessId(), DATA_VERIFICATION_DEF_ID);
-        assertEquals(processInstances.get(1).getProcessId(), CLAIM_CASE_DEF_ID);
+        assertThat(processInstances).isNotNull();
+        assertThat(processInstances).hasSize(2);
+        assertThat(DATA_VERIFICATION_DEF_ID).isEqualTo(processInstances.get(0).getProcessId());
+        assertThat(CLAIM_CASE_DEF_ID).isEqualTo(processInstances.get(1).getProcessId());
     }
 
     @Test
@@ -804,38 +804,38 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
         String carInsuranceClaimCase = startCarInsuranceClaimCase(USER_JOHN, USER_YODA, USER_YODA);
 
         List<ProcessInstance> processInstances = caseClient.getActiveProcessInstances(CONTAINER_ID, userTaskCase, 0, 1);
-        assertNotNull(processInstances);
-        assertEquals(1, processInstances.size());
+        assertThat(processInstances).isNotNull();
+        assertThat(processInstances).hasSize(1);
         assertHrProcessInstance(processInstances.get(0), userTaskCase);
 
         processInstances = caseClient.getActiveProcessInstances(CONTAINER_ID, userTaskCase, 1, 1);
-        assertNotNull(processInstances);
-        assertEquals(0, processInstances.size());
+        assertThat(processInstances).isNotNull();
+        assertThat(processInstances).isEmpty();
 
         processInstances = caseClient.getActiveProcessInstances(CONTAINER_ID, carInsuranceClaimCase, 0, 10);
-        assertNotNull(processInstances);
-        assertEquals(1, processInstances.size());
+        assertThat(processInstances).isNotNull();
+        assertThat(processInstances).hasSize(1);
         assertCarInsuranceProcessInstance(processInstances.get(0), carInsuranceClaimCase);
 
         caseClient.cancelCaseInstance(CONTAINER_ID, userTaskCase);
 
         processInstances = caseClient.getActiveProcessInstances(CONTAINER_ID, userTaskCase, 0, 1);
-        assertNotNull(processInstances);
-        assertEquals(0, processInstances.size());
+        assertThat(processInstances).isNotNull();
+        assertThat(processInstances).isEmpty();
     }
 
     @Test
     public void testGetActiveProcessInstancesNotExistingCase() {
         List<ProcessInstance> processInstances = caseClient.getActiveProcessInstances(CONTAINER_ID, "not-existing-case", 0, 10);
-        assertNotNull(processInstances);
-        assertEquals(0, processInstances.size());
+        assertThat(processInstances).isNotNull();
+        assertThat(processInstances).isEmpty();
     }
 
     @Test
     public void testGetActiveProcessInstancesNotExistingContainer() {
         List<ProcessInstance> processInstances = caseClient.getActiveProcessInstances("not-existing-container", CASE_HR_DEF_ID, 0, 10);
-        assertNotNull(processInstances);
-        assertEquals(0, processInstances.size());
+        assertThat(processInstances).isNotNull();
+        assertThat(processInstances).isEmpty();
     }
 
     @Test
@@ -851,7 +851,7 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
 
         processInstances = caseClient.getActiveProcessInstances(CONTAINER_ID, caseId, 0, 10,
                 CaseServicesClient.SORT_BY_PROCESS_INSTANCE_ID, false);
-        assertNotNull(processInstances);
+        assertThat(processInstances).isNotNull();
         Assertions.assertThat(processInstances).isNotNull().hasSize(2);
         Assertions.assertThat(processInstances).extracting(ProcessInstance::getProcessId)
                 .containsExactly(USER_TASK_DEF_ID, CLAIM_CASE_DEF_ID);
@@ -875,74 +875,74 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
     public void testGetActiveProcessInstancesSortingNotExistingCase() {
         List<ProcessInstance> processInstances = caseClient.getActiveProcessInstances(CONTAINER_ID, "not-existing-case", 0, 10,
                 CaseServicesClient.SORT_BY_CASE_INSTANCE_ID, true);
-        assertNotNull(processInstances);
-        assertEquals(0, processInstances.size());
+        assertThat(processInstances).isNotNull();
+        assertThat(processInstances).isEmpty();
     }
 
     @Test
     public void testGetActiveProcessInstancesSortingNotExistingContainer() {
         List<ProcessInstance> processInstances = caseClient.getActiveProcessInstances("not-existing-container",
                 CASE_HR_DEF_ID, 0, 10, CaseServicesClient.SORT_BY_CASE_INSTANCE_ID, true);
-        assertNotNull(processInstances);
-        assertEquals(0, processInstances.size());
+        assertThat(processInstances).isNotNull();
+        assertThat(processInstances).isEmpty();
     }
 
     @Test
     public void testCreateCaseWithCaseFileAndTriggerMilestones() {
         String caseId = startUserTaskCase(USER_YODA, USER_JOHN);
 
-        assertNotNull(caseId);
-        assertTrue(caseId.startsWith(CASE_HR_ID_PREFIX));
+        assertThat(caseId).isNotNull();
+        assertThat(caseId.startsWith(CASE_HR_ID_PREFIX)).isTrue();
 
         CaseInstance caseInstance = caseClient.getCaseInstance(CONTAINER_ID, caseId);
         assertHrCaseInstance(caseInstance, caseId, USER_YODA);
 
         List<CaseInstance> caseInstances = caseClient.getCaseInstancesOwnedBy(USER_YODA, null, 0, 10);
-        assertEquals(1, caseInstances.size());
+        assertThat(caseInstances).hasSize(1);
 
         List<CaseMilestone> milestones = caseClient.getMilestones(CONTAINER_ID, caseId, true, 0, 10);
-        assertNotNull(milestones);
-        assertEquals(0, milestones.size());
+        assertThat(milestones).isNotNull();
+        assertThat(milestones).isEmpty();
 
         caseClient.triggerAdHocFragment(CONTAINER_ID, caseId, "Milestone1", null);
 
         milestones = caseClient.getMilestones(CONTAINER_ID, caseId, true, 0, 10);
-        assertNotNull(milestones);
-        assertEquals(1, milestones.size());
+        assertThat(milestones).isNotNull();
+        assertThat(milestones).hasSize(1);
 
         CaseMilestone milestone = milestones.get(0);
-        assertNotNull(milestone);
-        assertEquals("Milestone1", milestone.getName());
-        assertEquals(true, milestone.isAchieved());
-        assertEquals("2", milestone.getIdentifier());
-        assertNotNull(milestone.getAchievedAt());
+        assertThat(milestone).isNotNull();
+        assertThat(milestone.getName()).isEqualTo("Milestone1");
+        assertThat(milestone.isAchieved()).isEqualTo(true);
+        assertThat(milestone.getIdentifier()).isEqualTo("2");
+        assertThat(milestone.getAchievedAt()).isNotNull();
 
         caseClient.triggerAdHocFragment(CONTAINER_ID, caseId, "Milestone2", null);
         milestones = caseClient.getMilestones(CONTAINER_ID, caseId, true, 0, 10);
-        assertNotNull(milestones);
-        assertEquals(1, milestones.size());
+        assertThat(milestones).isNotNull();
+        assertThat(milestones).hasSize(1);
 
         milestones = caseClient.getMilestones(CONTAINER_ID, caseId, false, 0, 10);
-        assertNotNull(milestones);
-        assertEquals(2, milestones.size());
+        assertThat(milestones).isNotNull();
+        assertThat(milestones).hasSize(2);
 
         Map<String, CaseMilestone> mappedMilestones = milestones.stream().collect(Collectors.toMap(CaseMilestone::getName, d -> d));
-        assertTrue(mappedMilestones.containsKey("Milestone1"));
-        assertTrue(mappedMilestones.containsKey("Milestone2"));
+        assertThat(mappedMilestones.containsKey("Milestone1")).isTrue();
+        assertThat(mappedMilestones.containsKey("Milestone2")).isTrue();
 
-        assertTrue(mappedMilestones.get("Milestone1").isAchieved());
-        assertFalse(mappedMilestones.get("Milestone2").isAchieved());
+        assertThat(mappedMilestones.get("Milestone1").isAchieved()).isTrue();
+        assertThat(mappedMilestones.get("Milestone2").isAchieved()).isFalse();
 
         caseInstances = caseClient.getCaseInstances(0, 10);
-        assertEquals(1, caseInstances.size());
+        assertThat(caseInstances).hasSize(1);
 
         assertHrCaseInstance(caseInstances.get(0), caseId, USER_YODA);
 
         // now auto complete milestone by inserting data
         caseClient.putCaseInstanceData(CONTAINER_ID, caseId, "dataComplete", true);
         milestones = caseClient.getMilestones(CONTAINER_ID, caseId, true, 0, 10);
-        assertNotNull(milestones);
-        assertEquals(2, milestones.size());
+        assertThat(milestones).isNotNull();
+        assertThat(milestones).hasSize(2);
     }
 
     @Test
@@ -969,28 +969,28 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
     public void testCreateCaseWithCaseFileAndDynamicActivities() {
         String caseId = startUserTaskCase(USER_JOHN, USER_YODA);
 
-        assertNotNull(caseId);
-        assertTrue(caseId.startsWith(CASE_HR_ID_PREFIX));
+        assertThat(caseId).isNotNull();
+        assertThat(caseId.startsWith(CASE_HR_ID_PREFIX)).isTrue();
 
         List<NodeInstance> activeNodes = caseClient.getActiveNodes(CONTAINER_ID, caseId, 0, 10);
-        assertNotNull(activeNodes);
-        assertEquals(1, activeNodes.size());
+        assertThat(activeNodes).isNotNull();
+        assertThat(activeNodes).hasSize(1);
 
         NodeInstance activeNode = activeNodes.get(0);
-        assertNotNull(activeNode);
-        assertEquals("Hello1", activeNode.getName());
+        assertThat(activeNode).isNotNull();
+        assertThat(activeNode.getName()).isEqualTo("Hello1");
 
         List<NodeInstance> completedNodes = caseClient.getCompletedNodes(CONTAINER_ID, caseId, 0, 10);
-        assertNotNull(completedNodes);
-        assertEquals(0, completedNodes.size());
+        assertThat(completedNodes).isNotNull();
+        assertThat(completedNodes).isEmpty();
 
         List<ProcessInstance> instances = caseClient.getActiveProcessInstances(CONTAINER_ID, caseId, 0, 10);
-        assertNotNull(instances);
-        assertEquals(1, instances.size());
+        assertThat(instances).isNotNull();
+        assertThat(instances).hasSize(1);
 
         ProcessInstance pi = instances.get(0);
-        assertEquals(CASE_HR_DEF_ID, pi.getProcessId());
-        assertEquals(caseId, pi.getCorrelationKey());
+        assertThat(pi.getProcessId()).isEqualTo(CASE_HR_DEF_ID);
+        assertThat(pi.getCorrelationKey()).isEqualTo(caseId);
 
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("input", "text data");
@@ -998,82 +998,82 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
         caseClient.addDynamicUserTask(CONTAINER_ID, caseId, "dynamic task", "simple description", USER_YODA, null, parameters);
 
         List<TaskSummary> tasks = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-        assertEquals(1, tasks.size());
+        assertThat(tasks).hasSize(1);
         TaskSummary task = tasks.get(0);
-        assertEquals("dynamic task", task.getName());
-        assertEquals("simple description", task.getDescription());
-        assertEquals(Status.Reserved.toString(), task.getStatus());
-        assertEquals(USER_YODA, task.getActualOwner());
+        assertThat(task.getName()).isEqualTo("dynamic task");
+        assertThat(task.getDescription()).isEqualTo("simple description");
+        assertThat(task.getStatus()).isEqualTo(Status.Reserved.toString());
+        assertThat(task.getActualOwner()).isEqualTo(USER_YODA);
 
         activeNodes = caseClient.getActiveNodes(CONTAINER_ID, caseId, 0, 10);
-        assertNotNull(activeNodes);
-        assertEquals(2, activeNodes.size());
+        assertThat(activeNodes).isNotNull();
+        assertThat(activeNodes).hasSize(2);
 
         List<String> nodeNames = activeNodes.stream().map(n -> n.getName()).collect(toList());
-        assertTrue(nodeNames.contains("[Dynamic] dynamic task"));
-        assertTrue(nodeNames.contains("Hello1"));
+        assertThat(nodeNames.contains("[Dynamic] dynamic task")).isTrue();
+        assertThat(nodeNames.contains("Hello1")).isTrue();
 
         taskClient.completeAutoProgress(CONTAINER_ID, task.getId(), USER_YODA, null);
 
         completedNodes = caseClient.getCompletedNodes(CONTAINER_ID, caseId, 0, 10);
-        assertNotNull(completedNodes);
-        assertEquals(1, completedNodes.size());
+        assertThat(completedNodes).isNotNull();
+        assertThat(completedNodes).hasSize(1);
 
         NodeInstance completedNode = completedNodes.get(0);
-        assertNotNull(completedNode);
-        assertEquals("[Dynamic] dynamic task", completedNode.getName());
+        assertThat(completedNode).isNotNull();
+        assertThat(completedNode.getName()).isEqualTo("[Dynamic] dynamic task");
 
         caseClient.addDynamicSubProcess(CONTAINER_ID, caseId, "DataVerification", parameters);
 
         instances = caseClient.getProcessInstances(CONTAINER_ID, caseId, Arrays.asList(1, 2, 3), 0, 10);
-        assertNotNull(instances);
-        assertEquals(2, instances.size());
+        assertThat(instances).isNotNull();
+        assertThat(instances).hasSize(2);
     }
 
     @Test
     public void testCreateCaseWithCaseFileWithComments() {
         String caseId = startUserTaskCase(USER_YODA, USER_JOHN);
 
-        assertNotNull(caseId);
-        assertTrue(caseId.startsWith(CASE_HR_ID_PREFIX));
+        assertThat(caseId).isNotNull();
+        assertThat(caseId.startsWith(CASE_HR_ID_PREFIX)).isTrue();
 
         List<CaseComment> comments = caseClient.getComments(CONTAINER_ID, caseId, 0, 10);
-        assertNotNull(comments);
-        assertEquals(0, comments.size());
+        assertThat(comments).isNotNull();
+        assertThat(comments).isEmpty();
 
         String commentId = caseClient.addComment(CONTAINER_ID, caseId, USER_YODA, "first comment");
-        assertNotNull(commentId);
+        assertThat(commentId).isNotNull();
         
         comments = caseClient.getComments(CONTAINER_ID, caseId, 0, 10);
-        assertNotNull(comments);
-        assertEquals(1, comments.size());
+        assertThat(comments).isNotNull();
+        assertThat(comments).hasSize(1);
 
         CaseComment comment = comments.get(0);
-        assertNotNull(comment);
-        assertEquals(USER_YODA, comment.getAuthor());
-        assertEquals("first comment", comment.getText());
-        assertNotNull(comment.getAddedAt());
-        assertNotNull(comment.getId());
+        assertThat(comment).isNotNull();
+        assertThat(comment.getAuthor()).isEqualTo(USER_YODA);
+        assertThat(comment.getText()).isEqualTo("first comment");
+        assertThat(comment.getAddedAt()).isNotNull();
+        assertThat(comment.getId()).isNotNull();
         
-        assertEquals(commentId, comment.getId());
+        assertThat(comment.getId()).isEqualTo(commentId);
 
         caseClient.updateComment(CONTAINER_ID, caseId, comment.getId(), USER_YODA, "updated comment");
         comments = caseClient.getComments(CONTAINER_ID, caseId, 0, 10);
-        assertNotNull(comments);
-        assertEquals(1, comments.size());
+        assertThat(comments).isNotNull();
+        assertThat(comments).hasSize(1);
 
         comment = comments.get(0);
-        assertNotNull(comment);
-        assertEquals(USER_YODA, comment.getAuthor());
-        assertEquals("updated comment", comment.getText());
-        assertNotNull(comment.getAddedAt());
-        assertNotNull(comment.getId());
+        assertThat(comment).isNotNull();
+        assertThat(comment.getAuthor()).isEqualTo(USER_YODA);
+        assertThat(comment.getText()).isEqualTo("updated comment");
+        assertThat(comment.getAddedAt()).isNotNull();
+        assertThat(comment.getId()).isNotNull();
 
         caseClient.removeComment(CONTAINER_ID, caseId, comment.getId());
 
         comments = caseClient.getComments(CONTAINER_ID, caseId, 0, 10);
-        assertNotNull(comments);
-        assertEquals(0, comments.size());
+        assertThat(comments).isNotNull();
+        assertThat(comments).isEmpty();
     }
 
     @Test
@@ -1081,32 +1081,32 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
         int pageSize = 20;
 
         String caseId = startUserTaskCase(USER_YODA, USER_JOHN);
-        assertNotNull(caseId);
-        assertTrue(caseId.startsWith(CASE_HR_ID_PREFIX));
+        assertThat(caseId).isNotNull();
+        assertThat(caseId.startsWith(CASE_HR_ID_PREFIX)).isTrue();
 
         for (int i = 0; i < 55; i++) {
             caseClient.addComment(CONTAINER_ID, caseId, USER_YODA, "comment" + i);
         }
 
         List<CaseComment> firstPage = caseClient.getComments(CONTAINER_ID, caseId, 0, pageSize);
-        assertNotNull(firstPage);
-        assertEquals(20, firstPage.size());
+        assertThat(firstPage).isNotNull();
+        assertThat(firstPage).hasSize(20);
         Iterator<CaseComment> firstPageIter = firstPage.iterator();
         for (int i = 0; firstPageIter.hasNext(); i++) {
             assertComment(firstPageIter.next(), USER_YODA, "comment" + i);
         }
 
         List<CaseComment> secondPage = caseClient.getComments(CONTAINER_ID, caseId, 1, pageSize);
-        assertNotNull(secondPage);
-        assertEquals(20, secondPage.size());
+        assertThat(secondPage).isNotNull();
+        assertThat(secondPage).hasSize(20);
         Iterator<CaseComment> secondPageIter = secondPage.iterator();
         for (int i = 20; secondPageIter.hasNext(); i++) {
             assertComment(secondPageIter.next(), USER_YODA, "comment" + i);
         }
 
         List<CaseComment> thirdPage = caseClient.getComments(CONTAINER_ID, caseId, 2, pageSize);
-        assertNotNull(thirdPage);
-        assertEquals(15, thirdPage.size());
+        assertThat(thirdPage).isNotNull();
+        assertThat(thirdPage).hasSize(15);
         Iterator<CaseComment> thirdPageIter = thirdPage.iterator();
         for (int i = 40; thirdPageIter.hasNext(); i++) {
             assertComment(thirdPageIter.next(), USER_YODA, "comment" + i);
@@ -1223,70 +1223,70 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
 
         String caseClaimId = startCarInsuranceClaimCase(USER_JOHN, USER_YODA, USER_YODA);
 
-        assertNotNull(caseId);
-        assertTrue(caseId.startsWith(CASE_HR_ID_PREFIX));
+        assertThat(caseId).isNotNull();
+        assertThat(caseId.startsWith(CASE_HR_ID_PREFIX)).isTrue();
 
-        assertNotNull(caseClaimId);
-        assertTrue(caseClaimId.startsWith(CLAIM_CASE_ID_PREFIX));
+        assertThat(caseClaimId).isNotNull();
+        assertThat(caseClaimId.startsWith(CLAIM_CASE_ID_PREFIX)).isTrue();
 
         List<CaseInstance> caseInstances = caseClient.getCaseInstancesByContainer(CONTAINER_ID, Arrays.asList(CaseStatus.OPEN.getName()), 0, 10);
-        assertEquals(2, caseInstances.size());
+        assertThat(caseInstances).hasSize(2);
 
         List<String> caseDefs = caseInstances.stream().map(c -> c.getCaseDefinitionId()).collect(toList());
-        assertTrue(caseDefs.contains(CASE_HR_DEF_ID));
-        assertTrue(caseDefs.contains(CLAIM_CASE_DEF_ID));
+        assertThat(caseDefs.contains(CASE_HR_DEF_ID)).isTrue();
+        assertThat(caseDefs.contains(CLAIM_CASE_DEF_ID)).isTrue();
 
         caseInstances = caseClient.getCaseInstancesByDefinition(CONTAINER_ID, CLAIM_CASE_DEF_ID, Arrays.asList(CaseStatus.OPEN.getName()), 0, 10);
-        assertEquals(1, caseInstances.size());
+        assertThat(caseInstances).hasSize(1);
 
         List<CaseStage> stages = caseClient.getStages(CONTAINER_ID, caseClaimId, true, 0, 10);
-        assertEquals(1, stages.size());
+        assertThat(stages).hasSize(1);
         CaseStage caseStage = stages.get(0);
-        assertEquals("Build claim report", caseStage.getName());
-        assertEquals(2, caseStage.getAdHocFragments().size());
+        assertThat(caseStage.getName()).isEqualTo("Build claim report");
+        assertThat(caseStage.getAdHocFragments()).hasSize(2);
 
         List<CaseRoleAssignment> roles = caseClient.getRoleAssignments(CONTAINER_ID, caseClaimId);
-        assertEquals(4, roles.size());
+        assertThat(roles).hasSize(4);
 
         Map<String, CaseRoleAssignment> mappedRoles = roles.stream().collect(toMap(CaseRoleAssignment::getName, r -> r));
-        assertTrue(mappedRoles.containsKey(CASE_OWNER_ROLE));
-        assertTrue(mappedRoles.containsKey(CASE_INSURED_ROLE));
-        assertTrue(mappedRoles.containsKey(CASE_INS_REP_ROLE));
-        assertTrue(mappedRoles.containsKey(CASE_ASSESSOR_ROLE));
+        assertThat(mappedRoles.containsKey(CASE_OWNER_ROLE)).isTrue();
+        assertThat(mappedRoles.containsKey(CASE_INSURED_ROLE)).isTrue();
+        assertThat(mappedRoles.containsKey(CASE_INS_REP_ROLE)).isTrue();
+        assertThat(mappedRoles.containsKey(CASE_ASSESSOR_ROLE)).isTrue();
 
         CaseRoleAssignment ownerRole = mappedRoles.get(CASE_OWNER_ROLE);
-        assertTrue(ownerRole.getUsers().contains(USER_YODA));
+        assertThat(ownerRole.getUsers().contains(USER_YODA)).isTrue();
         KieServerAssert.assertNullOrEmpty("Groups should be empty", ownerRole.getGroups());
 
         CaseRoleAssignment insuredRole = mappedRoles.get(CASE_INSURED_ROLE);
-        assertTrue(insuredRole.getUsers().contains(USER_JOHN));
+        assertThat(insuredRole.getUsers().contains(USER_JOHN)).isTrue();
         KieServerAssert.assertNullOrEmpty("Groups should be empty", insuredRole.getGroups());
 
         CaseRoleAssignment insRepRole = mappedRoles.get(CASE_INS_REP_ROLE);
-        assertTrue(insRepRole.getUsers().contains(USER_YODA));
+        assertThat(insRepRole.getUsers().contains(USER_YODA)).isTrue();
         KieServerAssert.assertNullOrEmpty("Groups should be empty", insRepRole.getGroups());
 
         CaseRoleAssignment assessorRole = mappedRoles.get(CASE_ASSESSOR_ROLE);
-        assertTrue(assessorRole.getUsers().contains(USER_YODA));
+        assertThat(assessorRole.getUsers().contains(USER_YODA)).isTrue();
         KieServerAssert.assertNullOrEmpty("Groups should be empty", assessorRole.getGroups());
 
         caseClient.assignUserToRole(CONTAINER_ID, caseClaimId, CASE_ASSESSOR_ROLE, USER_MARY);
         caseClient.assignGroupToRole(CONTAINER_ID, caseClaimId, CASE_ASSESSOR_ROLE, "managers");
 
         roles = caseClient.getRoleAssignments(CONTAINER_ID, caseClaimId);
-        assertEquals(4, roles.size());
+        assertThat(roles).hasSize(4);
         mappedRoles = roles.stream().collect(toMap(CaseRoleAssignment::getName, r -> r));
 
         assessorRole = mappedRoles.get(CASE_ASSESSOR_ROLE);
-        assertTrue(assessorRole.getUsers().contains(USER_MARY));
-        assertTrue(assessorRole.getGroups().contains("managers"));
+        assertThat(assessorRole.getUsers().contains(USER_MARY)).isTrue();
+        assertThat(assessorRole.getGroups().contains("managers")).isTrue();
 
         caseClient.removeUserFromRole(CONTAINER_ID, caseClaimId, CASE_ASSESSOR_ROLE, USER_MARY);
         caseClient.removeUserFromRole(CONTAINER_ID, caseClaimId, CASE_ASSESSOR_ROLE, USER_YODA);
         caseClient.removeGroupFromRole(CONTAINER_ID, caseClaimId, CASE_ASSESSOR_ROLE, "managers");
 
         roles = caseClient.getRoleAssignments(CONTAINER_ID, caseClaimId);
-        assertEquals(4, roles.size());
+        assertThat(roles).hasSize(4);
         mappedRoles = roles.stream().collect(toMap(CaseRoleAssignment::getName, r -> r));
 
         assessorRole = mappedRoles.get(CASE_ASSESSOR_ROLE);
@@ -1341,7 +1341,7 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
                 .build();
 
         String caseId = caseClient.startCase(CONTAINER_ID, CLAIM_CASE_DEF_ID, caseFile);
-        assertNotNull(caseId);
+        assertThat(caseId).isNotNull();
         
         // Try to add second user to insured role with cardinality 1
         assertClientException(
@@ -1353,46 +1353,46 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
     @Test
     public void testGetCaseStages() {
         String caseClaimId = startCarInsuranceClaimCase(USER_YODA, USER_JOHN, USER_YODA);
-        assertNotNull(caseClaimId);
+        assertThat(caseClaimId).isNotNull();
 
         List<CaseStage> stages = caseClient.getStages(CONTAINER_ID, caseClaimId, true, 0, 10);
-        assertEquals(1, stages.size());
+        assertThat(stages).hasSize(1);
         assertBuildClaimReportCaseStage(stages.iterator().next(), "Active");
 
         stages = caseClient.getStages(CONTAINER_ID, caseClaimId, true, 0, 10);
-        assertEquals(1, stages.size());
+        assertThat(stages).hasSize(1);
         assertBuildClaimReportCaseStage(stages.iterator().next(), "Active");
 
         caseClient.putCaseInstanceData(CONTAINER_ID, caseClaimId, "claimReportDone", Boolean.TRUE);
 
         stages = caseClient.getStages(CONTAINER_ID, caseClaimId, false, 0, 10);
-        assertEquals(3, stages.size());
+        assertThat(stages).hasSize(3);
         assertBuildClaimReportCaseStage(stages.get(0), "Completed");
         assertClaimAssesmentCaseStage(stages.get(1), "Active");
         assertEscalateRejectedClaimCaseStage(stages.get(2), "Available");
 
         stages = caseClient.getStages(CONTAINER_ID, caseClaimId, true, 0, 10);
-        assertEquals(1, stages.size());
+        assertThat(stages).hasSize(1);
         assertClaimAssesmentCaseStage(stages.iterator().next(), "Active");
     }
 
     @Test
     public void testCompleteCaseStageAndAbort() {
         List<TaskSummary> tasks = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-        assertEquals(0, tasks.size());
+        assertThat(tasks).isEmpty();
 
         String caseClaimId = startCarInsuranceClaimCase(USER_YODA, USER_JOHN, USER_YODA);
-        assertNotNull(caseClaimId);
+        assertThat(caseClaimId).isNotNull();
 
         caseClient.putCaseInstanceData(CONTAINER_ID, caseClaimId, "claimReportDone", Boolean.TRUE);
 
         tasks = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-        assertEquals(1, tasks.size());
+        assertThat(tasks).hasSize(1);
 
         caseClient.cancelCaseInstance(CONTAINER_ID, caseClaimId);
 
         tasks = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-        assertEquals(0, tasks.size());
+        assertThat(tasks).isEmpty();
     }
 
     @Test
@@ -1419,29 +1419,29 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
     public void testGetCaseTasksAsPotOwner() {
         String caseId = startUserTaskCase(USER_YODA, USER_JOHN);
 
-        assertNotNull(caseId);
-        assertTrue(caseId.startsWith(CASE_HR_ID_PREFIX));
+        assertThat(caseId).isNotNull();
+        assertThat(caseId.startsWith(CASE_HR_ID_PREFIX)).isTrue();
 
         List<TaskSummary> instances = caseClient.findCaseTasksAssignedAsPotentialOwner(caseId, USER_YODA, 0, 10);
-        assertNotNull(instances);
-        assertEquals(1, instances.size());
+        assertThat(instances).isNotNull();
+        assertThat(instances).hasSize(1);
 
         instances = caseClient.findCaseTasksAssignedAsPotentialOwner(caseId, USER_YODA, 0, 10, "t.name", true);
-        assertNotNull(instances);
-        assertEquals(1, instances.size());
+        assertThat(instances).isNotNull();
+        assertThat(instances).hasSize(1);
 
         String caseId2 = startUserTaskCase(USER_YODA, USER_JOHN);
 
-        assertNotNull(caseId2);
-        assertTrue(caseId2.startsWith(CASE_HR_ID_PREFIX));
+        assertThat(caseId2).isNotNull();
+        assertThat(caseId2.startsWith(CASE_HR_ID_PREFIX)).isTrue();
 
         instances = caseClient.findCaseTasksAssignedAsPotentialOwner(caseId, USER_YODA, Arrays.asList(Status.Ready.toString(), Status.Reserved.toString()), 0, 10);
-        assertNotNull(instances);
-        assertEquals(1, instances.size());
+        assertThat(instances).isNotNull();
+        assertThat(instances).hasSize(1);
 
         instances = caseClient.findCaseTasksAssignedAsPotentialOwner(caseId2, USER_YODA, Arrays.asList(Status.Ready.toString(), Status.Reserved.toString()), 0, 10, "t.name", true);
-        assertNotNull(instances);
-        assertEquals(1, instances.size());
+        assertThat(instances).isNotNull();
+        assertThat(instances).hasSize(1);
 
         caseClient.destroyCaseInstance(CONTAINER_ID, caseId);
         caseClient.destroyCaseInstance(CONTAINER_ID, caseId2);
@@ -1553,28 +1553,28 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
     public void testGetCaseTasksAsBusinessAdmin() throws Exception {
         String caseId = startUserTaskCase(USER_YODA, USER_JOHN);
 
-        assertNotNull(caseId);
-        assertTrue(caseId.startsWith(CASE_HR_ID_PREFIX));
+        assertThat(caseId).isNotNull();
+        assertThat(caseId.startsWith(CASE_HR_ID_PREFIX)).isTrue();
 
         changeUser(USER_ADMINISTRATOR);
         List<TaskSummary> instances = caseClient.findCaseTasksAssignedAsBusinessAdministrator(caseId, USER_ADMINISTRATOR, 0, 10);
-        assertNotNull(instances);
-        assertEquals(1, instances.size());
+        assertThat(instances).isNotNull();
+        assertThat(instances).hasSize(1);
 
         changeUser(USER_YODA);
         String caseId2 = startUserTaskCase(USER_YODA, USER_JOHN);
 
-        assertNotNull(caseId2);
-        assertTrue(caseId2.startsWith(CASE_HR_ID_PREFIX));
+        assertThat(caseId2).isNotNull();
+        assertThat(caseId2.startsWith(CASE_HR_ID_PREFIX)).isTrue();
 
         changeUser(USER_ADMINISTRATOR);
         instances = caseClient.findCaseTasksAssignedAsBusinessAdministrator(caseId, USER_ADMINISTRATOR, Arrays.asList(Status.Ready.toString(), Status.Reserved.toString()), 0, 10);
-        assertNotNull(instances);
-        assertEquals(1, instances.size());
+        assertThat(instances).isNotNull();
+        assertThat(instances).hasSize(1);
 
         instances = caseClient.findCaseTasksAssignedAsBusinessAdministrator(caseId2, USER_ADMINISTRATOR, Arrays.asList(Status.Ready.toString(), Status.Reserved.toString()), 0, 10, "t.name", true);
-        assertNotNull(instances);
-        assertEquals(1, instances.size());
+        assertThat(instances).isNotNull();
+        assertThat(instances).hasSize(1);
 
         changeUser(USER_YODA);
         caseClient.destroyCaseInstance(CONTAINER_ID, caseId);
@@ -1587,8 +1587,8 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
         Assume.assumeFalse(TestConfig.isLocalServer());
         String caseId = startUserTaskCase(USER_JOHN, USER_YODA);
 
-        assertNotNull(caseId);
-        assertTrue(caseId.startsWith(CASE_HR_ID_PREFIX));
+        assertThat(caseId).isNotNull();
+        assertThat(caseId.startsWith(CASE_HR_ID_PREFIX)).isTrue();
 
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("input", "text data");
@@ -1597,26 +1597,26 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
         caseClient.addDynamicUserTask(CONTAINER_ID, caseId, "dynamic task", "simple description", USER_JOHN, null, parameters);
 
         List<TaskSummary> tasks = caseClient.findCaseTasksAssignedAsStakeholder(caseId, USER_YODA, 0, 10);
-        assertEquals(1, tasks.size());
+        assertThat(tasks).hasSize(1);
         TaskSummary task = tasks.get(0);
-        assertEquals("dynamic task", task.getName());
-        assertEquals("simple description", task.getDescription());
-        assertEquals(Status.Reserved.toString(), task.getStatus());
-        assertEquals(USER_JOHN, task.getActualOwner());
+        assertThat(task.getName()).isEqualTo("dynamic task");
+        assertThat(task.getDescription()).isEqualTo("simple description");
+        assertThat(task.getStatus()).isEqualTo(Status.Reserved.toString());
+        assertThat(task.getActualOwner()).isEqualTo(USER_JOHN);
 
         // start another case
         String caseId2 = startUserTaskCase(USER_JOHN, USER_YODA);
-        assertNotNull(caseId2);
-        assertTrue(caseId2.startsWith(CASE_HR_ID_PREFIX));
+        assertThat(caseId2).isNotNull();
+        assertThat(caseId2.startsWith(CASE_HR_ID_PREFIX)).isTrue();
         caseClient.addDynamicUserTask(CONTAINER_ID, caseId2, "dynamic task", "simple description", USER_JOHN, null, parameters);
 
         tasks = caseClient.findCaseTasksAssignedAsStakeholder(caseId, USER_YODA, Arrays.asList(Status.Ready.toString(), Status.Reserved.toString()), 0, 10);
-        assertNotNull(tasks);
-        assertEquals(1, tasks.size());
+        assertThat(tasks).isNotNull();
+        assertThat(tasks).hasSize(1);
 
         tasks = caseClient.findCaseTasksAssignedAsStakeholder(caseId2, USER_YODA, Arrays.asList(Status.Ready.toString(), Status.Reserved.toString()), 0, 10, "t.name", true);
-        assertNotNull(tasks);
-        assertEquals(1, tasks.size());
+        assertThat(tasks).isNotNull();
+        assertThat(tasks).hasSize(1);
 
         changeUser(USER_JOHN);
         caseClient.destroyCaseInstance(CONTAINER_ID, caseId);
@@ -1626,36 +1626,36 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
     public void testGetTriggerTask() throws Exception {
         String caseId = startUserTaskCase(USER_YODA, USER_JOHN);
 
-        assertNotNull(caseId);
-        assertTrue(caseId.startsWith(CASE_HR_ID_PREFIX));
+        assertThat(caseId).isNotNull();
+        assertThat(caseId.startsWith(CASE_HR_ID_PREFIX)).isTrue();
 
         changeUser(USER_JOHN);
         List<TaskSummary> caseTasks = caseClient.findCaseTasksAssignedAsPotentialOwner(caseId, USER_JOHN, 0, 10);
-        assertNotNull(caseTasks);
-        assertEquals(0, caseTasks.size());
+        assertThat(caseTasks).isNotNull();
+        assertThat(caseTasks).isEmpty();
 
         changeUser(USER_YODA);
         caseClient.triggerAdHocFragment(CONTAINER_ID, caseId, HELLO_2_TASK, Collections.EMPTY_MAP);
 
         changeUser(USER_JOHN);
         caseTasks = caseClient.findCaseTasksAssignedAsPotentialOwner(caseId, USER_JOHN, 0, 10);
-        assertNotNull(caseTasks);
-        assertEquals(1, caseTasks.size());
+        assertThat(caseTasks).isNotNull();
+        assertThat(caseTasks).hasSize(1);
 
         TaskSummary task = caseTasks.get(0);
-        assertNotNull(task);
-        assertEquals(HELLO_2_TASK, task.getName());
-        assertEquals(USER_JOHN, task.getActualOwner());
+        assertThat(task).isNotNull();
+        assertThat(task.getName()).isEqualTo(HELLO_2_TASK);
+        assertThat(task.getActualOwner()).isEqualTo(USER_JOHN);
 
         changeUser(USER_YODA);
         caseTasks = caseClient.findCaseTasksAssignedAsPotentialOwner(caseId, USER_YODA, 0, 10);
-        assertNotNull(caseTasks);
-        assertEquals(1, caseTasks.size());
+        assertThat(caseTasks).isNotNull();
+        assertThat(caseTasks).hasSize(1);
 
         task = caseTasks.get(0);
-        assertNotNull(task);
-        assertEquals(HELLO_1_TASK, task.getName());
-        assertEquals(USER_YODA, task.getActualOwner());
+        assertThat(task).isNotNull();
+        assertThat(task.getName()).isEqualTo(HELLO_1_TASK);
+        assertThat(task.getActualOwner()).isEqualTo(USER_YODA);
 
         caseClient.destroyCaseInstance(CONTAINER_ID, caseId);
     }
@@ -1664,38 +1664,38 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
     @Test
     public void testTriggerTaskIntoStage() throws Exception {
         String caseClaimId = startCarInsuranceClaimCase(USER_YODA, USER_JOHN, USER_YODA);
-        assertNotNull(caseClaimId);
+        assertThat(caseClaimId).isNotNull();
 
         List<CaseStage> stages = caseClient.getStages(CONTAINER_ID, caseClaimId, true, 0, 10);
-        assertEquals(1, stages.size());
+        assertThat(stages).hasSize(1);
         CaseStage stage = stages.iterator().next();
         assertBuildClaimReportCaseStage(stage, "Active");
 
         List<TaskSummary> tasks = caseClient.findCaseTasksAssignedAsPotentialOwner(caseClaimId, USER_YODA, 0, 10);
-        assertNotNull(tasks);
+        assertThat(tasks).isNotNull();
         int countOfTaskBefore = tasks.size();
 
-        assertNotNull(stage.getIdentifier());
+        assertThat(stage.getIdentifier()).isNotNull();
         caseClient.triggerAdHocFragmentInStage(CONTAINER_ID, caseClaimId, stage.getIdentifier(), SUBMIT_POLICE_REPORT_TASK, Collections.EMPTY_MAP);
 
         tasks = caseClient.findCaseTasksAssignedAsPotentialOwner(caseClaimId, USER_YODA, 0, 10);
-        assertNotNull(tasks);
-        assertEquals(countOfTaskBefore + 1, tasks.size());
+        assertThat(tasks).isNotNull();
+        assertThat(tasks.size()).isEqualTo(countOfTaskBefore + 1);
 
         TaskSummary task = tasks.get(0);
-        assertNotNull(task);
-        assertEquals(SUBMIT_POLICE_REPORT_TASK, task.getName());
+        assertThat(task).isNotNull();
+        assertThat(task.getName()).isEqualTo(SUBMIT_POLICE_REPORT_TASK);
 
         caseClient.putCaseInstanceData(CONTAINER_ID, caseClaimId, "claimReportDone", Boolean.TRUE);
         stages = caseClient.getStages(CONTAINER_ID, caseClaimId, false, 0, 10);
-        assertEquals(3, stages.size());
+        assertThat(stages).hasSize(3);
         assertBuildClaimReportCaseStage(stages.get(0), "Completed");
         assertClaimAssesmentCaseStage(stages.get(1), "Active");
         assertEscalateRejectedClaimCaseStage(stages.get(2), "Available");
 
         tasks = caseClient.findCaseTasksAssignedAsPotentialOwner(caseClaimId, USER_YODA, 0, 10);
-        assertNotNull(tasks);
-        assertEquals(1, tasks.size());
+        assertThat(tasks).isNotNull();
+        assertThat(tasks).hasSize(1);
         task = tasks.get(0);
         assertNotEquals(SUBMIT_POLICE_REPORT_TASK, task.getName());
 
@@ -1711,12 +1711,12 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
     public void testTriggerTaskInCanceledCase() throws Exception {
         String caseId = startUserTaskCase(USER_YODA, USER_JOHN);
 
-        assertNotNull(caseId);
-        assertTrue(caseId.startsWith(CASE_HR_ID_PREFIX));
+        assertThat(caseId).isNotNull();
+        assertThat(caseId.startsWith(CASE_HR_ID_PREFIX)).isTrue();
 
         List<TaskSummary> caseTasks = caseClient.findCaseTasksAssignedAsPotentialOwner(caseId, USER_YODA, 0, 10);
-        assertNotNull(caseTasks);
-        assertEquals(1, caseTasks.size());
+        assertThat(caseTasks).isNotNull();
+        assertThat(caseTasks).hasSize(1);
 
         caseClient.cancelCaseInstance(CONTAINER_ID, caseId);
 
@@ -1733,8 +1733,8 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
     public void testCaseInstanceAuthorization() throws Exception {
         String caseId = startUserTaskCase(USER_YODA, USER_JOHN);
 
-        assertNotNull(caseId);
-        assertTrue(caseId.startsWith(CASE_HR_ID_PREFIX));
+        assertThat(caseId).isNotNull();
+        assertThat(caseId.startsWith(CASE_HR_ID_PREFIX)).isTrue();
 
         changeUser(USER_JOHN);
 
@@ -1743,14 +1743,14 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
             fail("User john is not an owner so is not allowed to cancel case instance");
         } catch (KieServicesException e) {
             String errorMessage = e.getMessage();
-            assertTrue(errorMessage.contains("User " + USER_JOHN + " is not authorized"));
+            assertThat(errorMessage.contains("User " + USER_JOHN + " is not authorized")).isTrue();
         }
         try {
             caseClient.destroyCaseInstance(CONTAINER_ID, caseId);
             fail("User john is not an owner so is not allowed to destroy case instance");
         } catch (KieServicesException e) {
             String errorMessage = e.getMessage();
-            assertTrue(errorMessage.contains("User " + USER_JOHN + " is not authorized"));
+            assertThat(errorMessage.contains("User " + USER_JOHN + " is not authorized")).isTrue();
         }
 
         changeUser(USER_YODA);
@@ -1763,66 +1763,66 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
     @Test
     public void testGetProcessDefinitionsByContainer() {
         List<ProcessDefinition> definitions = caseClient.findProcessesByContainerId(CONTAINER_ID, 0, 10);
-        assertNotNull(definitions);
-        assertEquals(3, definitions.size());
+        assertThat(definitions).isNotNull();
+        assertThat(definitions).hasSize(3);
 
         List<String> mappedDefinitions = definitions.stream().map(ProcessDefinition::getId).collect(Collectors.toList());
-        assertTrue(mappedDefinitions.contains("DataVerification"));
-        assertTrue(mappedDefinitions.contains("hiring"));
+        assertThat(mappedDefinitions.contains("DataVerification")).isTrue();
+        assertThat(mappedDefinitions.contains("hiring")).isTrue();
 
         definitions = caseClient.findProcessesByContainerId(CONTAINER_ID, 0, 1);
-        assertNotNull(definitions);
-        assertEquals(1, definitions.size());
-        assertEquals("DataVerification", definitions.get(0).getId());
+        assertThat(definitions).isNotNull();
+        assertThat(definitions).hasSize(1);
+        assertThat(definitions.get(0).getId()).isEqualTo("DataVerification");
 
         definitions = caseClient.findProcessesByContainerId(CONTAINER_ID, 1, 1);
-        assertNotNull(definitions);
-        assertEquals(1, definitions.size());
-        assertEquals(USER_TASK_DEF_ID, definitions.get(0).getId());
+        assertThat(definitions).isNotNull();
+        assertThat(definitions).hasSize(1);
+        assertThat(definitions.get(0).getId()).isEqualTo(USER_TASK_DEF_ID);
 
         definitions = caseClient.findProcessesByContainerId(CONTAINER_ID, 0, 1, CaseServicesClient.SORT_BY_PROCESS_NAME, false);
-        assertNotNull(definitions);
-        assertEquals(1, definitions.size());
-        assertEquals("hiring", definitions.get(0).getId());
+        assertThat(definitions).isNotNull();
+        assertThat(definitions).hasSize(1);
+        assertThat(definitions.get(0).getId()).isEqualTo("hiring");
     }
 
     @Test
     public void testGetProcessDefinitions() {
         List<ProcessDefinition> definitions = caseClient.findProcesses("hir", 0, 10);
-        assertNotNull(definitions);
-        assertEquals(1, definitions.size());
-        assertEquals("hiring", definitions.get(0).getId());
+        assertThat(definitions).isNotNull();
+        assertThat(definitions).hasSize(1);
+        assertThat(definitions.get(0).getId()).isEqualTo("hiring");
 
         definitions = caseClient.findProcesses(0, 1, CaseServicesClient.SORT_BY_PROCESS_NAME, false);
-        assertNotNull(definitions);
-        assertEquals(1, definitions.size());
-        assertEquals("hiring", definitions.get(0).getId());
+        assertThat(definitions).isNotNull();
+        assertThat(definitions).hasSize(1);
+        assertThat(definitions.get(0).getId()).isEqualTo("hiring");
 
         definitions = caseClient.findProcesses(0, 10);
-        assertNotNull(definitions);
-        assertEquals(3, definitions.size());
+        assertThat(definitions).isNotNull();
+        assertThat(definitions).hasSize(3);
 
         List<String> mappedDefinitions = definitions.stream().map(ProcessDefinition::getId).collect(Collectors.toList());
-        assertTrue(mappedDefinitions.contains("DataVerification"));
-        assertTrue(mappedDefinitions.contains("hiring"));
+        assertThat(mappedDefinitions.contains("DataVerification")).isTrue();
+        assertThat(mappedDefinitions.contains("hiring")).isTrue();
     }
 
     @Test
     public void testTriggerNotExistingAdHocFragments() {
         String caseId = startUserTaskCase(USER_YODA, USER_JOHN);
 
-        assertNotNull(caseId);
-        assertTrue(caseId.startsWith(CASE_HR_ID_PREFIX));
+        assertThat(caseId).isNotNull();
+        assertThat(caseId.startsWith(CASE_HR_ID_PREFIX)).isTrue();
 
         CaseInstance caseInstance = caseClient.getCaseInstance(CONTAINER_ID, caseId);
         assertHrCaseInstance(caseInstance, caseId, USER_YODA);
 
         List<CaseInstance> caseInstances = caseClient.getCaseInstancesOwnedBy(USER_YODA, null, 0, 10);
-        assertEquals(1, caseInstances.size());
+        assertThat(caseInstances).hasSize(1);
 
         List<CaseMilestone> milestones = caseClient.getMilestones(CONTAINER_ID, caseId, true, 0, 10);
-        assertNotNull(milestones);
-        assertEquals(0, milestones.size());
+        assertThat(milestones).isNotNull();
+        assertThat(milestones).isEmpty();
         try {
             caseClient.triggerAdHocFragment(CONTAINER_ID, caseId, "not existing", null);
             fail("Should have failed because of not existing comment Id.");
@@ -1834,95 +1834,95 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
     @Test
     public void testGetCaseInstanceDataItems() {
         String caseClaimId = startCarInsuranceClaimCase(USER_YODA, USER_JOHN, USER_YODA);
-        assertNotNull(caseClaimId);
+        assertThat(caseClaimId).isNotNull();
 
         List<CaseFileDataItem> dataItems = caseClient.getCaseInstanceDataItems(caseClaimId, 0, 10);
-        assertNotNull(dataItems);
-        assertEquals(0, dataItems.size());
+        assertThat(dataItems).isNotNull();
+        assertThat(dataItems).isEmpty();
 
         List<CaseStage> stages = caseClient.getStages(CONTAINER_ID, caseClaimId, true, 0, 10);
-        assertEquals(1, stages.size());
+        assertThat(stages).hasSize(1);
         assertBuildClaimReportCaseStage(stages.iterator().next(), "Active");
 
         stages = caseClient.getStages(CONTAINER_ID, caseClaimId, true, 0, 10);
-        assertEquals(1, stages.size());
+        assertThat(stages).hasSize(1);
         assertBuildClaimReportCaseStage(stages.iterator().next(), "Active");
 
         caseClient.putCaseInstanceData(CONTAINER_ID, caseClaimId, "claimReportDone", Boolean.TRUE);
 
         dataItems = caseClient.getCaseInstanceDataItems(caseClaimId, 0, 10);
-        assertNotNull(dataItems);
-        assertEquals(1, dataItems.size());
+        assertThat(dataItems).isNotNull();
+        assertThat(dataItems).hasSize(1);
 
         CaseFileDataItem dataItem = dataItems.get(0);
-        assertEquals(caseClaimId, dataItem.getCaseId());
-        assertEquals("claimReportDone", dataItem.getName());
-        assertEquals("true", dataItem.getValue());
-        assertEquals(Boolean.class.getName(), dataItem.getType());
-        assertEquals(USER_YODA, dataItem.getLastModifiedBy());
+        assertThat(dataItem.getCaseId()).isEqualTo(caseClaimId);
+        assertThat(dataItem.getName()).isEqualTo("claimReportDone");
+        assertThat(dataItem.getValue()).isEqualTo("true");
+        assertThat(dataItem.getType()).isEqualTo(Boolean.class.getName());
+        assertThat(dataItem.getLastModifiedBy()).isEqualTo(USER_YODA);
 
         dataItems = caseClient.getCaseInstanceDataItemsByType(caseClaimId, Arrays.asList(Boolean.class.getName()), 0, 10);
-        assertNotNull(dataItems);
-        assertEquals(1, dataItems.size());
+        assertThat(dataItems).isNotNull();
+        assertThat(dataItems).hasSize(1);
 
         dataItems = caseClient.getCaseInstanceDataItemsByType(caseClaimId, Arrays.asList(String.class.getName()), 0, 10);
-        assertNotNull(dataItems);
-        assertEquals(0, dataItems.size());
+        assertThat(dataItems).isNotNull();
+        assertThat(dataItems).isEmpty();
 
         dataItems = caseClient.getCaseInstanceDataItemsByName(caseClaimId, Arrays.asList("claimReportDone"), 0, 10);
-        assertNotNull(dataItems);
-        assertEquals(1, dataItems.size());
+        assertThat(dataItems).isNotNull();
+        assertThat(dataItems).hasSize(1);
 
         dataItems = caseClient.getCaseInstanceDataItemsByName(caseClaimId, Arrays.asList("notExisting"), 0, 10);
-        assertNotNull(dataItems);
-        assertEquals(0, dataItems.size());
+        assertThat(dataItems).isNotNull();
+        assertThat(dataItems).isEmpty();
 
         stages = caseClient.getStages(CONTAINER_ID, caseClaimId, false, 0, 10);
-        assertEquals(3, stages.size());
+        assertThat(stages).hasSize(3);
         assertBuildClaimReportCaseStage(stages.get(0), "Completed");
         assertClaimAssesmentCaseStage(stages.get(1), "Active");
         assertEscalateRejectedClaimCaseStage(stages.get(2), "Available");
 
         stages = caseClient.getStages(CONTAINER_ID, caseClaimId, true, 0, 10);
-        assertEquals(1, stages.size());
+        assertThat(stages).hasSize(1);
         assertClaimAssesmentCaseStage(stages.iterator().next(), "Active");
     }
 
     @Test
     public void testGetCaseInstanceByData() {
         String caseClaimId = startCarInsuranceClaimCase(USER_YODA, USER_JOHN, USER_YODA);
-        assertNotNull(caseClaimId);
+        assertThat(caseClaimId).isNotNull();
 
         List<CaseStage> stages = caseClient.getStages(CONTAINER_ID, caseClaimId, true, 0, 10);
-        assertEquals(1, stages.size());
+        assertThat(stages).hasSize(1);
         assertBuildClaimReportCaseStage(stages.iterator().next(), "Active");
 
         stages = caseClient.getStages(CONTAINER_ID, caseClaimId, true, 0, 10);
-        assertEquals(1, stages.size());
+        assertThat(stages).hasSize(1);
         assertBuildClaimReportCaseStage(stages.iterator().next(), "Active");
 
         List<CaseInstance> caseInstances = caseClient.getCaseInstancesByData("claimReportDone", Arrays.asList(CaseStatus.OPEN.getName()), 0, 10);
-        assertEquals(0, caseInstances.size());
+        assertThat(caseInstances).isEmpty();
 
         caseClient.putCaseInstanceData(CONTAINER_ID, caseClaimId, "claimReportDone", Boolean.TRUE);
 
         caseInstances = caseClient.getCaseInstancesByData("claimReportDone", Arrays.asList(CaseStatus.OPEN.getName()), 0, 10);
-        assertEquals(1, caseInstances.size());
+        assertThat(caseInstances).hasSize(1);
 
         caseInstances = caseClient.getCaseInstancesByData("claimReportDone", "false", Arrays.asList(CaseStatus.OPEN.getName()), 0, 10);
-        assertEquals(0, caseInstances.size());
+        assertThat(caseInstances).isEmpty();
 
         caseInstances = caseClient.getCaseInstancesByData("claimReportDone", "true", Arrays.asList(CaseStatus.OPEN.getName()), 0, 10);
-        assertEquals(1, caseInstances.size());
+        assertThat(caseInstances).hasSize(1);
 
         stages = caseClient.getStages(CONTAINER_ID, caseClaimId, false, 0, 10);
-        assertEquals(3, stages.size());
+        assertThat(stages).hasSize(3);
         assertBuildClaimReportCaseStage(stages.get(0), "Completed");
         assertClaimAssesmentCaseStage(stages.get(1), "Active");
         assertEscalateRejectedClaimCaseStage(stages.get(2), "Available");
 
         stages = caseClient.getStages(CONTAINER_ID, caseClaimId, true, 0, 10);
-        assertEquals(1, stages.size());
+        assertThat(stages).hasSize(1);
         assertClaimAssesmentCaseStage(stages.iterator().next(), "Active");
     }
 
@@ -1976,14 +1976,14 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
     public void testCreateCaseWithCaseFileWithCommentsSorted() throws Exception {
         String caseId = startUserTaskCase(USER_YODA, USER_JOHN);
 
-        assertNotNull(caseId);
-        assertTrue(caseId.startsWith(CASE_HR_ID_PREFIX));
+        assertThat(caseId).isNotNull();
+        assertThat(caseId.startsWith(CASE_HR_ID_PREFIX)).isTrue();
 
         caseClient.assignUserToRole(CONTAINER_ID, caseId, CASE_CONTACT_ROLE, USER_MARY);
 
         List<CaseComment> comments = caseClient.getComments(CONTAINER_ID, caseId, 0, 10);
-        assertNotNull(comments);
-        assertEquals(0, comments.size());
+        assertThat(comments).isNotNull();
+        assertThat(comments).isEmpty();
         try {
             caseClient.addComment(CONTAINER_ID, caseId, USER_YODA, "yoda's comment");
             changeUser(USER_JOHN);
@@ -1992,79 +1992,79 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
             caseClient.addComment(CONTAINER_ID, caseId, USER_MARY, "mary's comment");
 
             comments = caseClient.getComments(CONTAINER_ID, caseId, 0, 10);
-            assertNotNull(comments);
-            assertEquals(3, comments.size());
+            assertThat(comments).isNotNull();
+            assertThat(comments).hasSize(3);
 
             CaseComment comment = comments.get(0);
-            assertNotNull(comment);
-            assertEquals(USER_YODA, comment.getAuthor());
-            assertEquals("yoda's comment", comment.getText());
-            assertNotNull(comment.getAddedAt());
-            assertNotNull(comment.getId());
+            assertThat(comment).isNotNull();
+            assertThat(comment.getAuthor()).isEqualTo(USER_YODA);
+            assertThat(comment.getText()).isEqualTo("yoda's comment");
+            assertThat(comment.getAddedAt()).isNotNull();
+            assertThat(comment.getId()).isNotNull();
 
             comment = comments.get(1);
-            assertNotNull(comment);
-            assertEquals(USER_JOHN, comment.getAuthor());
-            assertEquals("john's comment", comment.getText());
-            assertNotNull(comment.getAddedAt());
-            assertNotNull(comment.getId());
+            assertThat(comment).isNotNull();
+            assertThat(comment.getAuthor()).isEqualTo(USER_JOHN);
+            assertThat(comment.getText()).isEqualTo("john's comment");
+            assertThat(comment.getAddedAt()).isNotNull();
+            assertThat(comment.getId()).isNotNull();
 
             comment = comments.get(2);
-            assertNotNull(comment);
-            assertEquals(USER_MARY, comment.getAuthor());
-            assertEquals("mary's comment", comment.getText());
-            assertNotNull(comment.getAddedAt());
-            assertNotNull(comment.getId());
+            assertThat(comment).isNotNull();
+            assertThat(comment.getAuthor()).isEqualTo(USER_MARY);
+            assertThat(comment.getText()).isEqualTo("mary's comment");
+            assertThat(comment.getAddedAt()).isNotNull();
+            assertThat(comment.getId()).isNotNull();
 
             comments = caseClient.getComments(CONTAINER_ID, caseId, CaseServicesClient.COMMENT_SORT_BY_AUTHOR, 0, 10);
-            assertNotNull(comments);
-            assertEquals(3, comments.size());
+            assertThat(comments).isNotNull();
+            assertThat(comments).hasSize(3);
 
             comment = comments.get(0);
-            assertNotNull(comment);
-            assertEquals(USER_JOHN, comment.getAuthor());
-            assertEquals("john's comment", comment.getText());
-            assertNotNull(comment.getAddedAt());
-            assertNotNull(comment.getId());
+            assertThat(comment).isNotNull();
+            assertThat(comment.getAuthor()).isEqualTo(USER_JOHN);
+            assertThat(comment.getText()).isEqualTo("john's comment");
+            assertThat(comment.getAddedAt()).isNotNull();
+            assertThat(comment.getId()).isNotNull();
 
             comment = comments.get(1);
-            assertNotNull(comment);
-            assertEquals(USER_MARY, comment.getAuthor());
-            assertEquals("mary's comment", comment.getText());
-            assertNotNull(comment.getAddedAt());
-            assertNotNull(comment.getId());
+            assertThat(comment).isNotNull();
+            assertThat(comment.getAuthor()).isEqualTo(USER_MARY);
+            assertThat(comment.getText()).isEqualTo("mary's comment");
+            assertThat(comment.getAddedAt()).isNotNull();
+            assertThat(comment.getId()).isNotNull();
 
             comment = comments.get(2);
-            assertNotNull(comment);
-            assertEquals(USER_YODA, comment.getAuthor());
-            assertEquals("yoda's comment", comment.getText());
-            assertNotNull(comment.getAddedAt());
-            assertNotNull(comment.getId());
+            assertThat(comment).isNotNull();
+            assertThat(comment.getAuthor()).isEqualTo(USER_YODA);
+            assertThat(comment.getText()).isEqualTo("yoda's comment");
+            assertThat(comment.getAddedAt()).isNotNull();
+            assertThat(comment.getId()).isNotNull();
 
             comments = caseClient.getComments(CONTAINER_ID, caseId, CaseServicesClient.COMMENT_SORT_BY_DATE, 0, 10);
-            assertNotNull(comments);
-            assertEquals(3, comments.size());
+            assertThat(comments).isNotNull();
+            assertThat(comments).hasSize(3);
 
             comment = comments.get(0);
-            assertNotNull(comment);
-            assertEquals(USER_YODA, comment.getAuthor());
-            assertEquals("yoda's comment", comment.getText());
-            assertNotNull(comment.getAddedAt());
-            assertNotNull(comment.getId());
+            assertThat(comment).isNotNull();
+            assertThat(comment.getAuthor()).isEqualTo(USER_YODA);
+            assertThat(comment.getText()).isEqualTo("yoda's comment");
+            assertThat(comment.getAddedAt()).isNotNull();
+            assertThat(comment.getId()).isNotNull();
 
             comment = comments.get(1);
-            assertNotNull(comment);
-            assertEquals(USER_JOHN, comment.getAuthor());
-            assertEquals("john's comment", comment.getText());
-            assertNotNull(comment.getAddedAt());
-            assertNotNull(comment.getId());
+            assertThat(comment).isNotNull();
+            assertThat(comment.getAuthor()).isEqualTo(USER_JOHN);
+            assertThat(comment.getText()).isEqualTo("john's comment");
+            assertThat(comment.getAddedAt()).isNotNull();
+            assertThat(comment.getId()).isNotNull();
 
             comment = comments.get(2);
-            assertNotNull(comment);
-            assertEquals(USER_MARY, comment.getAuthor());
-            assertEquals("mary's comment", comment.getText());
-            assertNotNull(comment.getAddedAt());
-            assertNotNull(comment.getId());
+            assertThat(comment).isNotNull();
+            assertThat(comment.getAuthor()).isEqualTo(USER_MARY);
+            assertThat(comment.getText()).isEqualTo("mary's comment");
+            assertThat(comment.getAddedAt()).isNotNull();
+            assertThat(comment.getId()).isNotNull();
         } finally {
             changeUser(USER_YODA);
         }
@@ -2091,7 +2091,7 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
                 .build();
 
         String caseId = caseClient.startCase(CONTAINER_ID, CLAIM_CASE_DEF_ID, caseFile);
-        assertNotNull(caseId);
+        assertThat(caseId).isNotNull();
 
         assertClientException(() -> caseClient.addDynamicSubProcess(CONTAINER_ID, caseId, invalidProcessId, null),
                 404,
@@ -2105,12 +2105,12 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
         // add a contact role to yoda so it can access a case once owner role is removed
         caseClient.assignUserToRole(CONTAINER_ID, caseId, CASE_CONTACT_ROLE, USER_YODA);
 
-        assertNotNull(caseId);
-        assertTrue(caseId.startsWith(CASE_HR_ID_PREFIX));
+        assertThat(caseId).isNotNull();
+        assertThat(caseId.startsWith(CASE_HR_ID_PREFIX)).isTrue();
 
         List<CaseComment> comments = caseClient.getComments(CONTAINER_ID, caseId, 0, 10);
-        assertNotNull(comments);
-        assertEquals(0, comments.size());
+        assertThat(comments).isNotNull();
+        assertThat(comments).isEmpty();
 
         List<String> restrictions = new ArrayList<>();
         restrictions.add(CASE_OWNER_ROLE);
@@ -2118,22 +2118,22 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
         caseClient.addComment(CONTAINER_ID, caseId, USER_YODA, "first comment", restrictions);
 
         comments = caseClient.getComments(CONTAINER_ID, caseId, 0, 10);
-        assertNotNull(comments);
-        assertEquals(1, comments.size());
+        assertThat(comments).isNotNull();
+        assertThat(comments).hasSize(1);
 
         CaseComment comment = comments.get(0);
-        assertNotNull(comment);
-        assertEquals(USER_YODA, comment.getAuthor());
-        assertEquals("first comment", comment.getText());
-        assertNotNull(comment.getAddedAt());
-        assertNotNull(comment.getId());
+        assertThat(comment).isNotNull();
+        assertThat(comment.getAuthor()).isEqualTo(USER_YODA);
+        assertThat(comment.getText()).isEqualTo("first comment");
+        assertThat(comment.getAddedAt()).isNotNull();
+        assertThat(comment.getId()).isNotNull();
         
         // remove yoda from owner role to simulate lack of access
         caseClient.removeUserFromRole(CONTAINER_ID, caseId, CASE_OWNER_ROLE, USER_YODA);
         
         comments = caseClient.getComments(CONTAINER_ID, caseId, 0, 10);
-        assertNotNull(comments);
-        assertEquals(0, comments.size());
+        assertThat(comments).isNotNull();
+        assertThat(comments).isEmpty();
 
         final String commentId = comment.getId();
         assertClientException(() -> caseClient.updateComment(CONTAINER_ID, caseId, commentId, USER_YODA, "updated comment"), 403, "");
@@ -2143,15 +2143,15 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
         
         caseClient.updateComment(CONTAINER_ID, caseId, comment.getId(), USER_YODA, "updated comment");
         comments = caseClient.getComments(CONTAINER_ID, caseId, 0, 10);
-        assertNotNull(comments);
-        assertEquals(1, comments.size());
+        assertThat(comments).isNotNull();
+        assertThat(comments).hasSize(1);
 
         comment = comments.get(0);
-        assertNotNull(comment);
-        assertEquals(USER_YODA, comment.getAuthor());
-        assertEquals("updated comment", comment.getText());
-        assertNotNull(comment.getAddedAt());
-        assertNotNull(comment.getId());
+        assertThat(comment).isNotNull();
+        assertThat(comment.getAuthor()).isEqualTo(USER_YODA);
+        assertThat(comment.getText()).isEqualTo("updated comment");
+        assertThat(comment.getAddedAt()).isNotNull();
+        assertThat(comment.getId()).isNotNull();
 
         final String updatedCommentId = comment.getId();
         // remove yoda from owner role to simulate lack of access
@@ -2164,8 +2164,8 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
         
         caseClient.removeComment(CONTAINER_ID, caseId, updatedCommentId);
         comments = caseClient.getComments(CONTAINER_ID, caseId, 0, 10);
-        assertNotNull(comments);
-        assertEquals(0, comments.size());
+        assertThat(comments).isNotNull();
+        assertThat(comments).isEmpty();
     }
     
 
@@ -2179,7 +2179,7 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
                 .build();
 
         String caseId = caseClient.startCase(CONTAINER_ID, CASE_HR_DEF_ID, caseFile);
-        assertNotNull(caseId);
+        assertThat(caseId).isNotNull();
         return caseId;
     }
 
@@ -2194,105 +2194,105 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
                 .build();
 
         String caseId = caseClient.startCase(CONTAINER_ID, CLAIM_CASE_DEF_ID, caseFile);
-        assertNotNull(caseId);
+        assertThat(caseId).isNotNull();
         return caseId;
     }
 
     private void assertHrCaseInstance(CaseInstance caseInstance, String caseId, String owner) {
-        assertNotNull(caseInstance);
-        assertEquals(caseId, caseInstance.getCaseId());
-        assertEquals(CASE_HR_DEF_ID, caseInstance.getCaseDefinitionId());
-        assertEquals(CASE_HR_DESRIPTION, caseInstance.getCaseDescription());
-        assertEquals(owner, caseInstance.getCaseOwner());
-        assertEquals(CaseStatus.OPEN.getId(), caseInstance.getCaseStatus().intValue());
-        assertNotNull(caseInstance.getStartedAt());
-        assertNull(caseInstance.getCompletedAt());
-        assertEquals("", caseInstance.getCompletionMessage());
-        assertEquals(CONTAINER_ID, caseInstance.getContainerId());
+        assertThat(caseInstance).isNotNull();
+        assertThat(caseInstance.getCaseId()).isEqualTo(caseId);
+        assertThat(caseInstance.getCaseDefinitionId()).isEqualTo(CASE_HR_DEF_ID);
+        assertThat(caseInstance.getCaseDescription()).isEqualTo(CASE_HR_DESRIPTION);
+        assertThat(caseInstance.getCaseOwner()).isEqualTo(owner);
+        assertThat(caseInstance.getCaseStatus().intValue()).isEqualTo(CaseStatus.OPEN.getId());
+        assertThat(caseInstance.getStartedAt()).isNotNull();
+        assertThat(caseInstance.getCompletedAt()).isNull();
+        assertThat(caseInstance.getCompletionMessage()).isEqualTo("");
+        assertThat(caseInstance.getContainerId()).isEqualTo(CONTAINER_ID);
     }
 
     private void assertCarInsuranceCaseInstance(CaseInstance caseInstance, String caseId, String owner) {
-        assertNotNull(caseInstance);
-        assertEquals(caseId, caseInstance.getCaseId());
-        assertEquals(CLAIM_CASE_DEF_ID, caseInstance.getCaseDefinitionId());
-        assertEquals(CLAIM_CASE_DESRIPTION, caseInstance.getCaseDescription());
-        assertEquals(owner, caseInstance.getCaseOwner());
-        assertEquals(CaseStatus.OPEN.getId(), caseInstance.getCaseStatus().intValue());
-        assertNotNull(caseInstance.getStartedAt());
-        assertNull(caseInstance.getCompletedAt());
-        assertEquals("", caseInstance.getCompletionMessage());
-        assertEquals(CONTAINER_ID, caseInstance.getContainerId());
+        assertThat(caseInstance).isNotNull();
+        assertThat(caseInstance.getCaseId()).isEqualTo(caseId);
+        assertThat(caseInstance.getCaseDefinitionId()).isEqualTo(CLAIM_CASE_DEF_ID);
+        assertThat(caseInstance.getCaseDescription()).isEqualTo(CLAIM_CASE_DESRIPTION);
+        assertThat(caseInstance.getCaseOwner()).isEqualTo(owner);
+        assertThat(caseInstance.getCaseStatus().intValue()).isEqualTo(CaseStatus.OPEN.getId());
+        assertThat(caseInstance.getStartedAt()).isNotNull();
+        assertThat(caseInstance.getCompletedAt()).isNull();
+        assertThat(caseInstance.getCompletionMessage()).isEqualTo("");
+        assertThat(caseInstance.getContainerId()).isEqualTo(CONTAINER_ID);
     }
 
     private void assertHrCaseDefinition(CaseDefinition caseDefinition) {
-        assertNotNull(caseDefinition);
-        assertEquals(CASE_HR_DEF_ID, caseDefinition.getIdentifier());
-        assertEquals(CASE_HR_NAME, caseDefinition.getName());
-        assertEquals(CASE_HR_ID_PREFIX, caseDefinition.getCaseIdPrefix());
-        assertEquals(CASE_HR_VERSION, caseDefinition.getVersion());
-        assertEquals(3, caseDefinition.getAdHocFragments().size());
+        assertThat(caseDefinition).isNotNull();
+        assertThat(caseDefinition.getIdentifier()).isEqualTo(CASE_HR_DEF_ID);
+        assertThat(caseDefinition.getName()).isEqualTo(CASE_HR_NAME);
+        assertThat(caseDefinition.getCaseIdPrefix()).isEqualTo(CASE_HR_ID_PREFIX);
+        assertThat(caseDefinition.getVersion()).isEqualTo(CASE_HR_VERSION);
+        assertThat(caseDefinition.getAdHocFragments()).hasSize(3);
         KieServerAssert.assertNullOrEmpty("Stages should be empty", caseDefinition.getCaseStages());
-        assertEquals(CONTAINER_ID, caseDefinition.getContainerId());
+        assertThat(caseDefinition.getContainerId()).isEqualTo(CONTAINER_ID);
 
         // Milestones checks
-        assertEquals(2, caseDefinition.getMilestones().size());
-        assertEquals("Milestone1", caseDefinition.getMilestones().get(0).getName());
-        assertEquals("_SomeID4", caseDefinition.getMilestones().get(0).getIdentifier());
-        assertFalse("Case shouldn't be mandatory.", caseDefinition.getMilestones().get(0).isMandatory());
-        assertEquals("Milestone2", caseDefinition.getMilestones().get(1).getName());
-        assertEquals("_5", caseDefinition.getMilestones().get(1).getIdentifier());
-        assertFalse("Case shouldn't be mandatory.", caseDefinition.getMilestones().get(1).isMandatory());
+        assertThat(caseDefinition.getMilestones()).hasSize(2);
+        assertThat(caseDefinition.getMilestones().get(0).getName()).isEqualTo("Milestone1");
+        assertThat(caseDefinition.getMilestones().get(0).getIdentifier()).isEqualTo("_SomeID4");
+        assertThat(caseDefinition.getMilestones().get(0).isMandatory()).as("Case shouldn't be mandatory.").isFalse();
+        assertThat(caseDefinition.getMilestones().get(1).getName()).isEqualTo("Milestone2");
+        assertThat(caseDefinition.getMilestones().get(1).getIdentifier()).isEqualTo("_5");
+        assertThat(caseDefinition.getMilestones().get(1).isMandatory()).as("Case shouldn't be mandatory.").isFalse();
 
         // Roles check
-        assertEquals(3, caseDefinition.getRoles().size());
-        assertTrue("Role 'owner' is missing.", caseDefinition.getRoles().containsKey("owner"));
-        assertTrue("Role 'contact' is missing.", caseDefinition.getRoles().containsKey("contact"));
-        assertTrue("Role 'participant' is missing.", caseDefinition.getRoles().containsKey("participant"));
+        assertThat(caseDefinition.getRoles()).hasSize(3);
+        assertThat(caseDefinition.getRoles().containsKey("owner")).as("Role 'owner' is missing.").isTrue();
+        assertThat(caseDefinition.getRoles().containsKey("contact")).as("Role 'contact' is missing.").isTrue();
+        assertThat(caseDefinition.getRoles().containsKey("participant")).as("Role 'participant' is missing.").isTrue();
     }
 
     private void assertCarInsuranceCaseDefinition(CaseDefinition caseDefinition) {
-        assertNotNull(caseDefinition);
-        assertEquals(CLAIM_CASE_DEF_ID, caseDefinition.getIdentifier());
-        assertEquals(CLAIM_CASE_NAME, caseDefinition.getName());
-        assertEquals(CLAIM_CASE_ID_PREFIX, caseDefinition.getCaseIdPrefix());
-        assertEquals(CLAIM_CASE_VERSION, caseDefinition.getVersion());
-        assertEquals(1, caseDefinition.getAdHocFragments().size());
+        assertThat(caseDefinition).isNotNull();
+        assertThat(caseDefinition.getIdentifier()).isEqualTo(CLAIM_CASE_DEF_ID);
+        assertThat(caseDefinition.getName()).isEqualTo(CLAIM_CASE_NAME);
+        assertThat(caseDefinition.getCaseIdPrefix()).isEqualTo(CLAIM_CASE_ID_PREFIX);
+        assertThat(caseDefinition.getVersion()).isEqualTo(CLAIM_CASE_VERSION);
+        assertThat(caseDefinition.getAdHocFragments()).hasSize(1);
         KieServerAssert.assertNullOrEmpty("Milestones should be empty.", caseDefinition.getMilestones());
-        assertEquals(CONTAINER_ID, caseDefinition.getContainerId());
+        assertThat(caseDefinition.getContainerId()).isEqualTo(CONTAINER_ID);
 
         // Stages check
-        assertEquals(3, caseDefinition.getCaseStages().size());
-        assertEquals("Build claim report", caseDefinition.getCaseStages().get(0).getName());
-        assertNotNull(caseDefinition.getCaseStages().get(0).getIdentifier());
-        assertEquals("Claim assesment", caseDefinition.getCaseStages().get(1).getName());
-        assertNotNull(caseDefinition.getCaseStages().get(1).getIdentifier());
-        assertEquals("Escalate rejected claim", caseDefinition.getCaseStages().get(2).getName());
-        assertNotNull(caseDefinition.getCaseStages().get(2).getIdentifier());
+        assertThat(caseDefinition.getCaseStages()).hasSize(3);
+        assertThat(caseDefinition.getCaseStages().get(0).getName()).isEqualTo("Build claim report");
+        assertThat(caseDefinition.getCaseStages().get(0).getIdentifier()).isNotNull();
+        assertThat(caseDefinition.getCaseStages().get(1).getName()).isEqualTo("Claim assesment");
+        assertThat(caseDefinition.getCaseStages().get(1).getIdentifier()).isNotNull();
+        assertThat(caseDefinition.getCaseStages().get(2).getName()).isEqualTo("Escalate rejected claim");
+        assertThat(caseDefinition.getCaseStages().get(2).getIdentifier()).isNotNull();
 
         List<CaseAdHocFragment> buildClaimFragments = caseDefinition.getCaseStages().get(0).getAdHocFragments();
-        assertEquals(2, buildClaimFragments.size());
-        assertEquals("Provide accident information", buildClaimFragments.get(0).getName());
-        assertEquals("HumanTaskNode", buildClaimFragments.get(0).getType());
-        assertEquals("Submit police report", buildClaimFragments.get(1).getName());
-        assertEquals("HumanTaskNode", buildClaimFragments.get(1).getType());
+        assertThat(buildClaimFragments).hasSize(2);
+        assertThat(buildClaimFragments.get(0).getName()).isEqualTo("Provide accident information");
+        assertThat(buildClaimFragments.get(0).getType()).isEqualTo("HumanTaskNode");
+        assertThat(buildClaimFragments.get(1).getName()).isEqualTo("Submit police report");
+        assertThat(buildClaimFragments.get(1).getType()).isEqualTo("HumanTaskNode");
 
         List<CaseAdHocFragment> claimAssesmentFragments = caseDefinition.getCaseStages().get(1).getAdHocFragments();
-        assertEquals(2, claimAssesmentFragments.size());
-        assertEquals("Classify claim", claimAssesmentFragments.get(0).getName());
-        assertEquals("RuleSetNode", claimAssesmentFragments.get(0).getType());
-        assertEquals("Calculate claim", claimAssesmentFragments.get(1).getName());
-        assertEquals("WorkItemNode", claimAssesmentFragments.get(1).getType());
+        assertThat(claimAssesmentFragments).hasSize(2);
+        assertThat(claimAssesmentFragments.get(0).getName()).isEqualTo("Classify claim");
+        assertThat(claimAssesmentFragments.get(0).getType()).isEqualTo("RuleSetNode");
+        assertThat(claimAssesmentFragments.get(1).getName()).isEqualTo("Calculate claim");
+        assertThat(claimAssesmentFragments.get(1).getType()).isEqualTo("WorkItemNode");
 
         List<CaseAdHocFragment> escalateRejectedClaimFragments = caseDefinition.getCaseStages().get(2).getAdHocFragments();
-        assertEquals(1, escalateRejectedClaimFragments.size());
-        assertEquals("Negotiation meeting", escalateRejectedClaimFragments.get(0).getName());
-        assertEquals("HumanTaskNode", escalateRejectedClaimFragments.get(0).getType());
+        assertThat(escalateRejectedClaimFragments).hasSize(1);
+        assertThat(escalateRejectedClaimFragments.get(0).getName()).isEqualTo("Negotiation meeting");
+        assertThat(escalateRejectedClaimFragments.get(0).getType()).isEqualTo("HumanTaskNode");
 
         // Roles check
-        assertEquals(3, caseDefinition.getRoles().size());
-        assertTrue("Role 'insured' is missing.", caseDefinition.getRoles().containsKey("insured"));
-        assertTrue("Role 'insuranceRepresentative' is missing.", caseDefinition.getRoles().containsKey("insuranceRepresentative"));
-        assertTrue("Role 'assessor' is missing.", caseDefinition.getRoles().containsKey("assessor"));
+        assertThat(caseDefinition.getRoles()).hasSize(3);
+        assertThat(caseDefinition.getRoles().containsKey("insured")).as("Role 'insured' is missing.").isTrue();
+        assertThat(caseDefinition.getRoles().containsKey("insuranceRepresentative")).as("Role 'insuranceRepresentative' is missing.").isTrue();
+        assertThat(caseDefinition.getRoles().containsKey("assessor")).as("Role 'assessor' is missing.").isTrue();
     }
 
     private void assertHrProcessInstance(ProcessInstance processInstance, String caseId) {
@@ -2300,97 +2300,97 @@ public class CaseRuntimeDataServiceIntegrationTest extends JbpmKieServerBaseInte
     }
 
     private void assertHrProcessInstance(ProcessInstance processInstance, String caseId, long processInstanceState) {
-        assertNotNull(processInstance);
-        assertNotNull(processInstance.getId());
-        assertEquals(caseId, processInstance.getCorrelationKey());
-        assertEquals(processInstanceState, processInstance.getState().intValue());
-        assertEquals(CASE_HR_DEF_ID, processInstance.getProcessId());
-        assertEquals(CASE_HR_NAME, processInstance.getProcessName());
-        assertEquals(CASE_HR_VERSION, processInstance.getProcessVersion());
-        assertEquals(CONTAINER_ID, processInstance.getContainerId());
-        assertEquals(CASE_HR_DESRIPTION, processInstance.getProcessInstanceDescription());
-        assertEquals(USER_YODA, processInstance.getInitiator());
-        assertEquals(-1L, processInstance.getParentId().longValue());
-        assertNotNull(processInstance.getCorrelationKey());
-        assertNotNull(processInstance.getDate());
+        assertThat(processInstance).isNotNull();
+        assertThat(processInstance.getId()).isNotNull();
+        assertThat(processInstance.getCorrelationKey()).isEqualTo(caseId);
+        assertThat(processInstance.getState().intValue()).isEqualTo(processInstanceState);
+        assertThat(processInstance.getProcessId()).isEqualTo(CASE_HR_DEF_ID);
+        assertThat(processInstance.getProcessName()).isEqualTo(CASE_HR_NAME);
+        assertThat(processInstance.getProcessVersion()).isEqualTo(CASE_HR_VERSION);
+        assertThat(processInstance.getContainerId()).isEqualTo(CONTAINER_ID);
+        assertThat(processInstance.getProcessInstanceDescription()).isEqualTo(CASE_HR_DESRIPTION);
+        assertThat(processInstance.getInitiator()).isEqualTo(USER_YODA);
+        assertThat(processInstance.getParentId().longValue()).isEqualTo(-1L);
+        assertThat(processInstance.getCorrelationKey()).isNotNull();
+        assertThat(processInstance.getDate()).isNotNull();
     }
 
     private void assertCarInsuranceProcessInstance(ProcessInstance processInstance, String caseId) {
-        assertNotNull(processInstance);
-        assertNotNull(processInstance.getId());
-        assertEquals(caseId, processInstance.getCorrelationKey());
-        assertEquals(STATE_ACTIVE, processInstance.getState().intValue());
-        assertEquals(CLAIM_CASE_DEF_ID, processInstance.getProcessId());
-        assertEquals(CLAIM_CASE_NAME, processInstance.getProcessName());
-        assertEquals(CLAIM_CASE_VERSION, processInstance.getProcessVersion());
-        assertEquals(CONTAINER_ID, processInstance.getContainerId());
-        assertEquals(CLAIM_CASE_DESRIPTION, processInstance.getProcessInstanceDescription());
-        assertEquals(USER_YODA, processInstance.getInitiator());
-        assertEquals(-1L, processInstance.getParentId().longValue());
-        assertNotNull(processInstance.getCorrelationKey());
-        assertNotNull(processInstance.getDate());
+        assertThat(processInstance).isNotNull();
+        assertThat(processInstance.getId()).isNotNull();
+        assertThat(processInstance.getCorrelationKey()).isEqualTo(caseId);
+        assertThat(processInstance.getState().intValue()).isEqualTo(STATE_ACTIVE);
+        assertThat(processInstance.getProcessId()).isEqualTo(CLAIM_CASE_DEF_ID);
+        assertThat(processInstance.getProcessName()).isEqualTo(CLAIM_CASE_NAME);
+        assertThat(processInstance.getProcessVersion()).isEqualTo(CLAIM_CASE_VERSION);
+        assertThat(processInstance.getContainerId()).isEqualTo(CONTAINER_ID);
+        assertThat(processInstance.getProcessInstanceDescription()).isEqualTo(CLAIM_CASE_DESRIPTION);
+        assertThat(processInstance.getInitiator()).isEqualTo(USER_YODA);
+        assertThat(processInstance.getParentId().longValue()).isEqualTo(-1L);
+        assertThat(processInstance.getCorrelationKey()).isNotNull();
+        assertThat(processInstance.getDate()).isNotNull();
     }
 
     private void assertBuildClaimReportCaseStage(CaseStage stage, String status) {
-        assertEquals("Build claim report", stage.getName());
-        assertNotNull(stage.getIdentifier());
-        assertEquals(status, stage.getStatus());
+        assertThat(stage.getName()).isEqualTo("Build claim report");
+        assertThat(stage.getIdentifier()).isNotNull();
+        assertThat(stage.getStatus()).isEqualTo(status);
 
         if (status.endsWith("Active")) {
             List<NodeInstance> activeNodes = stage.getActiveNodes();
-            assertEquals(1, activeNodes.size());
-            assertEquals("Provide accident information", activeNodes.get(0).getName());
-            assertEquals("HumanTaskNode", activeNodes.get(0).getNodeType());
+            assertThat(activeNodes).hasSize(1);
+            assertThat(activeNodes.get(0).getName()).isEqualTo("Provide accident information");
+            assertThat(activeNodes.get(0).getNodeType()).isEqualTo("HumanTaskNode");
         } else {
             KieServerAssert.assertNullOrEmpty("Active nodes should be null or empty.", stage.getActiveNodes());
         }
 
         List<CaseAdHocFragment> adHocFragments = stage.getAdHocFragments();
-        assertEquals(2, adHocFragments.size());
-        assertEquals("Provide accident information", adHocFragments.get(0).getName());
-        assertEquals("HumanTaskNode", adHocFragments.get(0).getType());
-        assertEquals("Submit police report", adHocFragments.get(1).getName());
-        assertEquals("HumanTaskNode", adHocFragments.get(1).getType());
+        assertThat(adHocFragments).hasSize(2);
+        assertThat(adHocFragments.get(0).getName()).isEqualTo("Provide accident information");
+        assertThat(adHocFragments.get(0).getType()).isEqualTo("HumanTaskNode");
+        assertThat(adHocFragments.get(1).getName()).isEqualTo("Submit police report");
+        assertThat(adHocFragments.get(1).getType()).isEqualTo("HumanTaskNode");
     }
 
     private void assertClaimAssesmentCaseStage(CaseStage stage, String status) {
-        assertEquals("Claim assesment", stage.getName());
-        assertNotNull(stage.getIdentifier());
-        assertEquals(status, stage.getStatus());
+        assertThat(stage.getName()).isEqualTo("Claim assesment");
+        assertThat(stage.getIdentifier()).isNotNull();
+        assertThat(stage.getStatus()).isEqualTo(status);
 
         if (status.endsWith("Active")) {
             List<NodeInstance> activeNodes = stage.getActiveNodes();
-            assertEquals(1, activeNodes.size());
-            assertEquals("Assessor evaluation", activeNodes.get(0).getName());
-            assertEquals("HumanTaskNode", activeNodes.get(0).getNodeType());
+            assertThat(activeNodes).hasSize(1);
+            assertThat(activeNodes.get(0).getName()).isEqualTo("Assessor evaluation");
+            assertThat(activeNodes.get(0).getNodeType()).isEqualTo("HumanTaskNode");
         } else {
             KieServerAssert.assertNullOrEmpty("Active nodes should be null or empty.", stage.getActiveNodes());
         }
 
         List<CaseAdHocFragment> adHocFragments = stage.getAdHocFragments();
-        assertEquals(2, adHocFragments.size());
-        assertEquals("Classify claim", adHocFragments.get(0).getName());
-        assertEquals("RuleSetNode", adHocFragments.get(0).getType());
-        assertEquals("Calculate claim", adHocFragments.get(1).getName());
-        assertEquals("WorkItemNode", adHocFragments.get(1).getType());
+        assertThat(adHocFragments).hasSize(2);
+        assertThat(adHocFragments.get(0).getName()).isEqualTo("Classify claim");
+        assertThat(adHocFragments.get(0).getType()).isEqualTo("RuleSetNode");
+        assertThat(adHocFragments.get(1).getName()).isEqualTo("Calculate claim");
+        assertThat(adHocFragments.get(1).getType()).isEqualTo("WorkItemNode");
     }
 
     private void assertEscalateRejectedClaimCaseStage(CaseStage stage, String status) {
-        assertEquals("Escalate rejected claim", stage.getName());
-        assertNotNull(stage.getIdentifier());
-        assertEquals(status, stage.getStatus());
+        assertThat(stage.getName()).isEqualTo("Escalate rejected claim");
+        assertThat(stage.getIdentifier()).isNotNull();
+        assertThat(stage.getStatus()).isEqualTo(status);
 
         KieServerAssert.assertNullOrEmpty("Active nodes should be null or empty.", stage.getActiveNodes());
 
         List<CaseAdHocFragment> adHocFragments = stage.getAdHocFragments();
-        assertEquals(1, adHocFragments.size());
-        assertEquals("Negotiation meeting", adHocFragments.get(0).getName());
-        assertEquals("HumanTaskNode", adHocFragments.get(0).getType());
+        assertThat(adHocFragments).hasSize(1);
+        assertThat(adHocFragments.get(0).getName()).isEqualTo("Negotiation meeting");
+        assertThat(adHocFragments.get(0).getType()).isEqualTo("HumanTaskNode");
     }
 
     private void assertComment(CaseComment comment, String author, String text) {
-        assertNotNull(comment);
-        assertEquals(comment.getAuthor(), author);
-        assertEquals(comment.getText(), text);
+        assertThat(comment).isNotNull();
+        assertThat(author).isEqualTo(comment.getAuthor());
+        assertThat(text).isEqualTo(comment.getText());
     }
 }

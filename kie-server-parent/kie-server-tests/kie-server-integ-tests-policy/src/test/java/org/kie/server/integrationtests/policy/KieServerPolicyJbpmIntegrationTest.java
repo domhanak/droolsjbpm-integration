@@ -35,7 +35,7 @@ import org.kie.server.integrationtests.shared.KieServerAssert;
 import org.kie.server.integrationtests.shared.KieServerDeployer;
 import org.kie.server.integrationtests.shared.KieServerSynchronization;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class KieServerPolicyJbpmIntegrationTest extends KieServerPolicyBaseIntegrationTest {
 
@@ -98,21 +98,21 @@ public class KieServerPolicyJbpmIntegrationTest extends KieServerPolicyBaseInteg
 
         Long processInstanceIdV1 = processClient.startProcess(CONTAINER_ALIAS, PROCESS_ID_EVALUATION, parameters);
 
-        assertNotNull(processInstanceIdV1);
-        assertTrue(processInstanceIdV1.longValue() > 0);
+        assertThat(processInstanceIdV1).isNotNull();
+        assertThat(processInstanceIdV1.longValue() > 0).isTrue();
 
         ProcessInstance processInstance = processClient.getProcessInstance(CONTAINER_ALIAS, processInstanceIdV1);
-        assertNotNull(processInstance);
-        assertEquals(CONTAINER_ID, processInstance.getContainerId());
+        assertThat(processInstance).isNotNull();
+        assertThat(processInstance.getContainerId()).isEqualTo(CONTAINER_ID);
 
         List<TaskSummary> tasks = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-        assertEquals(1, tasks.size());
+        assertThat(tasks).hasSize(1);
 
         ServiceResponse<KieContainerResourceList> containersResponse = client.listContainers();
         KieServerAssert.assertSuccess(containersResponse);
 
         List<KieContainerResource> containerResources = containersResponse.getResult().getContainers();
-        assertEquals(1, containerResources.size());
+        assertThat(containerResources).hasSize(1);
 
         createExtraContainer();
 
@@ -121,15 +121,15 @@ public class KieServerPolicyJbpmIntegrationTest extends KieServerPolicyBaseInteg
 
         Long processInstanceIdV2 = processClient.startProcess(CONTAINER_ALIAS, PROCESS_ID_EVALUATION_2, parameters);
 
-        assertNotNull(processInstanceIdV2);
-        assertTrue(processInstanceIdV2.longValue() > 0);
+        assertThat(processInstanceIdV2).isNotNull();
+        assertThat(processInstanceIdV2.longValue() > 0).isTrue();
 
         processInstance = processClient.getProcessInstance(CONTAINER_ALIAS, processInstanceIdV2);
-        assertNotNull(processInstance);
-        assertEquals(CONTAINER_ID_101, processInstance.getContainerId());
+        assertThat(processInstance).isNotNull();
+        assertThat(processInstance.getContainerId()).isEqualTo(CONTAINER_ID_101);
 
         tasks = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-        assertEquals(2, tasks.size());
+        assertThat(tasks).hasSize(2);
 
         // there are instances in both containers thus the older one cannot be disposed
         processClient.abortProcessInstance(CONTAINER_ALIAS, processInstanceIdV1);
@@ -149,10 +149,10 @@ public class KieServerPolicyJbpmIntegrationTest extends KieServerPolicyBaseInteg
         KieServerAssert.assertSuccess(containersResponse);
 
         containerResources = containersResponse.getResult().getContainers();
-        assertEquals(1, containerResources.size());
+        assertThat(containerResources).hasSize(1);
 
         ReleaseId latestContainerReleaseId = containerResources.get(0).getReleaseId();
-        assertEquals(releaseId101, latestContainerReleaseId);
+        assertThat(latestContainerReleaseId).isEqualTo(releaseId101);
 
     }
 }

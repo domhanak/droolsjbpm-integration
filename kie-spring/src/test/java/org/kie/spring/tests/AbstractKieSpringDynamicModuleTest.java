@@ -60,7 +60,7 @@ public class AbstractKieSpringDynamicModuleTest {
         kfs.write("src/main/resources/KBase1/rule1.drl", createDRL(value));
 
         KieBuilder kieBuilder = ks.newKieBuilder(kfs);
-        assertTrue("", kieBuilder.buildAll().getResults().getMessages().isEmpty());
+        assertThat(kieBuilder.buildAll().getResults().getMessages().isEmpty()).as("").isTrue();
         return (InternalKieModule) kieBuilder.getKieModule();
     }
 

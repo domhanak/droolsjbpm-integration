@@ -16,7 +16,7 @@
 
 package org.kie.server.services.jbpm;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -65,7 +65,7 @@ public class QueryDataServiceBaseTest {
         result.add(resultPO);
 
         Object resultQueryBase = queryServiceBase.transform(result, resultMapper);
-        assertNotNull(resultQueryBase); 
+        assertThat(resultQueryBase).isNotNull(); 
     }
 
 }

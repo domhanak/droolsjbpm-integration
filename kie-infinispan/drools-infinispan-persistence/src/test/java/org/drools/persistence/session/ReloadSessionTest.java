@@ -17,9 +17,9 @@ package org.drools.persistence.session;
 
 import static org.drools.persistence.util.PersistenceUtil.DROOLS_PERSISTENCE_UNIT_NAME;
 import static org.drools.persistence.util.PersistenceUtil.createEnvironment;
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.assertj.core.api.Assertions.fail;
 import static org.kie.api.runtime.EnvironmentName.ENTITY_MANAGER_FACTORY;
 
 import java.io.IOException;
@@ -101,7 +101,7 @@ public class ReloadSessionTest {
         Environment env = createEnvironment(context);
         KieBase kbase = initializeKnowledgeBase(simpleRule);
         StatefulKnowledgeSession commandKSession = InfinispanKnowledgeService.newStatefulKnowledgeSession( kbase, null, env );
-        assertTrue("There should be NO facts present in a new (empty) knowledge session.", commandKSession.getFactHandles().isEmpty());
+        assertThat(commandKSession.getFactHandles().isEmpty()).as("There should be NO facts present in a new (empty) knowledge session.").isTrue();
         
         // Persist a facthandle to the database
         Integer integerFact = (new Random()).nextInt(Integer.MAX_VALUE-1) + 1;
@@ -110,9 +110,9 @@ public class ReloadSessionTest {
         // At this point in the code, the fact has been persisted to the database
         //  (within a transaction via the SingleSessionCommandService) 
         Collection<FactHandle> factHandles =  commandKSession.getFactHandles();
-        assertTrue("At least one fact should have been inserted by the ksession.insert() method above.", !factHandles.isEmpty());
+        assertThat(!factHandles.isEmpty()).as("At least one fact should have been inserted by the ksession.insert() method above.").isTrue();
         FactHandle origFactHandle = factHandles.iterator().next();
-        assertTrue("The stored fact should contain the same number as the value inserted (but does not).", 
+        assertThat("The stored fact should contain the same number as the value inserted (but does not).isTrue().", 
                 Integer.parseInt(((DefaultFactHandle) origFactHandle).getObject().toString()) == integerFact.intValue() );
         
         // Save the sessionInfo id in order to retrieve it later
@@ -137,14 +137,14 @@ public class ReloadSessionTest {
         FactHandle retrievedFactHandle = factHandles.iterator().next();
         assertTrue("If the retrieved and original FactHandle object are the same, then the knowledge session has NOT been reloaded!", 
                 origFactHandle != retrievedFactHandle);
-        assertTrue("The retrieved fact should contain the same info as the original (but does not).", 
+        assertThat("The retrieved fact should contain the same info as the original (but does not).isTrue().", 
                 Integer.parseInt(((DefaultFactHandle) retrievedFactHandle).getObject().toString()) == integerFact.intValue() );
         
         // Test to see if the (retrieved) facts can be processed
         ArrayList<Object>list = new ArrayList<Object>();
         newCommandKSession.setGlobal( "list", list );
         newCommandKSession.fireAllRules();
-        assertEquals( 1, list.size() );
+        assertThat(list.size() ).isEqualTo(1);
     }
 
     @Test @Ignore
@@ -157,12 +157,12 @@ public class ReloadSessionTest {
         ksession.addEventListener(new DefaultAgendaEventListener());
         ksession.addEventListener(new DefaultRuleRuntimeEventListener());
 
-        assertEquals(1, ksession.getRuleRuntimeEventListeners().size());
-        assertEquals(1, ksession.getAgendaEventListeners().size());
+        assertThat(ksession.getRuleRuntimeEventListeners()).hasSize(1);
+        assertThat(ksession.getAgendaEventListeners()).hasSize(1);
 
         ksession = InfinispanKnowledgeService.loadStatefulKnowledgeSession(ksession.getIdentifier(), kbase, null, env);
 
-        assertEquals(1, ksession.getRuleRuntimeEventListeners().size());
-        assertEquals(1, ksession.getAgendaEventListeners().size());
+        assertThat(ksession.getRuleRuntimeEventListeners()).hasSize(1);
+        assertThat(ksession.getAgendaEventListeners()).hasSize(1);
     }
 }

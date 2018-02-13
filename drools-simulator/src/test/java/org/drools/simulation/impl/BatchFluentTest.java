@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class BatchFluentTest {
@@ -53,12 +53,12 @@ public class BatchFluentTest {
                 .getBatchExecution();
         // @formatter:on
 
-        assertEquals(4, ((BatchExecutionCommandImpl) cmd).getCommands().size());
+        assertThat(((BatchExecutionCommandImpl) cmd).getCommands()).hasSize(4);
 
         ExecutionResults results = createStatelessSession().execute(cmd);
 
-        assertEquals(2, results.getIdentifiers().size());
-        assertTrue(results.getIdentifiers().containsAll(asList("x", "y")));
+        assertThat(results.getIdentifiers()).hasSize(2);
+        assertThat(results.getIdentifiers().containsAll(asList("x", "y"))).isTrue();
     }
 
     @Test
@@ -76,12 +76,12 @@ public class BatchFluentTest {
                 .getBatchExecution();
         // @formatter:on
 
-        assertEquals(4, ((BatchExecutionCommandImpl) cmd).getCommands().size());
+        assertThat(((BatchExecutionCommandImpl) cmd).getCommands()).hasSize(4);
 
         ExecutionResults results = createStatelessSession().execute(cmd);
 
-        assertEquals(3, results.getIdentifiers().size());
-        assertTrue(results.getIdentifiers().containsAll(asList("myGlobal", "x", "y")));
+        assertThat(results.getIdentifiers()).hasSize(3);
+        assertThat(results.getIdentifiers().containsAll(asList("myGlobal", "x", "y"))).isTrue();
     }
 
     private StatelessKnowledgeSession createStatelessSession() {

@@ -31,7 +31,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -46,20 +46,20 @@ public class KieSpringBasicsDecisionTest {
 
     @Test
     public void testContext() throws Exception {
-        assertNotNull(context);
+        assertThat(context).isNotNull();
     }
 
     @Test
     public void testKieBase() throws Exception {
         KieBase kbase = (KieBase) context.getBean("decisionCSV");
-        assertNotNull(kbase);
+        assertThat(kbase).isNotNull();
     }
 
     @Test
     public void testDecisionTableRules() throws Exception {
         StatelessKieSession ksession = (StatelessKieSession) context.getBean("ksession-table-1");
 
-        assertNotNull(ksession);
+        assertThat(ksession).isNotNull();
 
         // Cheeses selection
         Cheese cheese = new Cheese();
@@ -80,8 +80,8 @@ public class KieSpringBasicsDecisionTest {
         // Execute the list
         ExecutionResults results = ksession.execute(CommandFactory.newBatchExecution(cmds));
         List list = (List) results.getValue("list");
-        assertEquals(1, list.size());
-        assertTrue(list.contains("Young man cheddar"));
+        assertThat(list).hasSize(1);
+        assertThat(list.contains("Young man cheddar")).isTrue();
 
         // Old person
         person = new Person();
@@ -101,8 +101,8 @@ public class KieSpringBasicsDecisionTest {
         // Execute the list
         results = ksession.execute(CommandFactory.newBatchExecution(cmds));
         list = (List) results.getValue("list");
-        assertEquals(1, list.size());
-        assertTrue(list.contains("Old man stilton"));
+        assertThat(list).hasSize(1);
+        assertThat(list.contains("Old man stilton")).isTrue();
 
     }
 

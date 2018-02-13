@@ -43,7 +43,7 @@ import org.kie.server.integrationtests.config.TestConfig;
 import org.kie.server.integrationtests.shared.KieServerAssert;
 import org.kie.server.integrationtests.shared.basetests.RestJmsSharedBaseIntegrationTest;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public abstract class KieServerRouterBaseIntegrationTest extends RestJmsSharedBaseIntegrationTest {
 
@@ -101,7 +101,7 @@ public abstract class KieServerRouterBaseIntegrationTest extends RestJmsSharedBa
         ServiceResponse<KieServerInfo> serviceResponse = client.getServerInfo();
         KieServerAssert.assertSuccess(serviceResponse);
         KieServerInfo serverInfo = serviceResponse.getResult();
-        assertEquals("Not running via KIE Server Router", "kie-server-router", serverInfo.getServerId());
+        assertThat(serverInfo.getServerId()).as("Not running via KIE Server Router").isEqualTo("kie-server-router");
 
         // abort any active process instance
         List<Integer> status = new ArrayList<Integer>();

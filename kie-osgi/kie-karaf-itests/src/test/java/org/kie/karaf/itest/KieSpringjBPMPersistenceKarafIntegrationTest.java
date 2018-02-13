@@ -61,7 +61,7 @@ public class KieSpringjBPMPersistenceKarafIntegrationTest extends AbstractKieSpr
     @Before
     public void init() {
         applicationContext = createApplicationContext();
-        assertNotNull("Should have created a valid spring context", applicationContext);
+        assertThat(applicationContext).as("Should have created a valid spring context").isNotNull();
     }
 
     @Test

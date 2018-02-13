@@ -50,6 +50,6 @@ public class KieSpringListenersOrderTest {
     @Test
     public void testListeners() {
         KieSession session = getSession();
-        assertNotNull(session);
+        assertThat(session).isNotNull();
     }
 }

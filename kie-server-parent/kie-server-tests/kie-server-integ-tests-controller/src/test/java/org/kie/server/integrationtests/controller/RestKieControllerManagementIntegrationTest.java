@@ -17,7 +17,7 @@ package org.kie.server.integrationtests.controller;
 
 import org.kie.server.controller.client.exception.KieServerControllerHTTPClientException;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class RestKieControllerManagementIntegrationTest extends KieControllerManagementIntegrationTest<KieServerControllerHTTPClientException> {
 
@@ -25,13 +25,13 @@ public class RestKieControllerManagementIntegrationTest extends KieControllerMan
     protected void assertNotFoundException(KieServerControllerHTTPClientException e) {
         assertEquals(404,
                      e.getResponseCode());
-        assertNotNull(e.getMessage());
+        assertThat(e.getMessage()).isNotNull();
     }
 
     @Override
     protected void assertBadRequestException(KieServerControllerHTTPClientException e) {
-        assertEquals(400, e.getResponseCode());
-        assertNotNull(e.getMessage());
+        assertThat(e.getResponseCode()).isEqualTo(400);
+        assertThat(e.getMessage()).isNotNull();
     }
 
 }

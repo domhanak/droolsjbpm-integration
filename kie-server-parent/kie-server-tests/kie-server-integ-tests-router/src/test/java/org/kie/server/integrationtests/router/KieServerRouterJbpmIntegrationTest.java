@@ -41,7 +41,7 @@ import org.kie.server.client.QueryServicesClient;
 import org.kie.server.integrationtests.shared.KieServerAssert;
 import org.kie.server.integrationtests.shared.KieServerDeployer;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class KieServerRouterJbpmIntegrationTest extends KieServerRouterBaseIntegrationTest {
 
@@ -82,21 +82,21 @@ public class KieServerRouterJbpmIntegrationTest extends KieServerRouterBaseInteg
 
         Long processInstanceIdV1 = processClient.startProcess(CONTAINER_ALIAS, PROCESS_ID_EVALUATION, parameters);
 
-        assertNotNull(processInstanceIdV1);
-        assertTrue(processInstanceIdV1.longValue() > 0);
+        assertThat(processInstanceIdV1).isNotNull();
+        assertThat(processInstanceIdV1.longValue() > 0).isTrue();
 
         ProcessInstance processInstance = processClient.getProcessInstance(CONTAINER_ALIAS, processInstanceIdV1);
-        assertNotNull(processInstance);
-        assertEquals(CONTAINER_ID, processInstance.getContainerId());
+        assertThat(processInstance).isNotNull();
+        assertThat(processInstance.getContainerId()).isEqualTo(CONTAINER_ID);
 
         List<TaskSummary> tasks = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-        assertEquals(1, tasks.size());
+        assertThat(tasks).hasSize(1);
 
         ServiceResponse<KieContainerResourceList> containersResponse = client.listContainers();
         KieServerAssert.assertSuccess(containersResponse);
 
         List<KieContainerResource> containerResources = containersResponse.getResult().getContainers();
-        assertEquals(1, containerResources.size());
+        assertThat(containerResources).hasSize(1);
     }
 
     @Test
@@ -114,15 +114,15 @@ public class KieServerRouterJbpmIntegrationTest extends KieServerRouterBaseInteg
 
         Long processInstanceIdV1 = processClient.startProcess(CONTAINER_ID, PROCESS_ID_EVALUATION, parameters);
 
-        assertNotNull(processInstanceIdV1);
-        assertTrue(processInstanceIdV1.longValue() > 0);
+        assertThat(processInstanceIdV1).isNotNull();
+        assertThat(processInstanceIdV1.longValue() > 0).isTrue();
 
         ProcessInstance processInstance = processClient.getProcessInstance(CONTAINER_ID, processInstanceIdV1);
-        assertNotNull(processInstance);
-        assertEquals(CONTAINER_ID, processInstance.getContainerId());
+        assertThat(processInstance).isNotNull();
+        assertThat(processInstance.getContainerId()).isEqualTo(CONTAINER_ID);
 
         List<TaskSummary> tasks = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-        assertEquals(1, tasks.size());
+        assertThat(tasks).hasSize(1);
 
         processClient.abortProcessInstance(CONTAINER_ID, processInstanceIdV1);
     }
@@ -150,12 +150,12 @@ public class KieServerRouterJbpmIntegrationTest extends KieServerRouterBaseInteg
 
             Long processInstanceIdV1 = processClient.startProcess(CONTAINER_ID, PROCESS_ID_EVALUATION, parameters);
 
-            assertNotNull(processInstanceIdV1);
-            assertTrue(processInstanceIdV1.longValue() > 0);
+            assertThat(processInstanceIdV1).isNotNull();
+            assertThat(processInstanceIdV1.longValue() > 0).isTrue();
 
             List<ProcessInstance> instances = queryClient.query(query.getName(), QueryServicesClient.QUERY_MAP_PI, 0, 10, ProcessInstance.class);
-            assertNotNull(instances);
-            assertEquals(1, instances.size());
+            assertThat(instances).isNotNull();
+            assertThat(instances).hasSize(1);
 
             queryClient.replaceQuery(query);
 
@@ -165,8 +165,8 @@ public class KieServerRouterJbpmIntegrationTest extends KieServerRouterBaseInteg
 
 
             instances = queryClient.query(query.getName(), QueryServicesClient.QUERY_MAP_PI, filterSpec, 0, 10, ProcessInstance.class);
-            assertNotNull(instances);
-            assertEquals(1, instances.size());
+            assertThat(instances).isNotNull();
+            assertThat(instances).hasSize(1);
 
             processClient.abortProcessInstance(CONTAINER_ID, processInstanceIdV1);
         } catch (Exception e){
@@ -201,15 +201,15 @@ public class KieServerRouterJbpmIntegrationTest extends KieServerRouterBaseInteg
 
             Long processInstanceIdV1 = processClient.startProcess(CONTAINER_ID, PROCESS_ID_EVALUATION, parameters);
 
-            assertNotNull(processInstanceIdV1);
-            assertTrue(processInstanceIdV1.longValue() > 0);
+            assertThat(processInstanceIdV1).isNotNull();
+            assertThat(processInstanceIdV1.longValue() > 0).isTrue();
 
             List<List> instances = queryClient.query(query.getName(), QueryServicesClient.QUERY_MAP_RAW, 0, 10, List.class);
-            assertNotNull(instances);
-            assertEquals(1, instances.size());
+            assertThat(instances).isNotNull();
+            assertThat(instances).hasSize(1);
 
             for (List row : instances) {
-                assertEquals(16, row.size());
+                assertThat(row).hasSize(16);
             }
 
 
@@ -237,13 +237,13 @@ public class KieServerRouterJbpmIntegrationTest extends KieServerRouterBaseInteg
         jobRequestInstance.setScheduledDate(tomorrow.getTime());
 
         Long jobId = jobServicesClient.scheduleRequest(CONTAINER_ID, jobRequestInstance);
-        assertNotNull(jobId);
-        assertTrue( jobId.longValue() > 0);
+        assertThat(jobId).isNotNull();
+        assertThat(jobId.longValue() > 0).isTrue();
 
         RequestInfoInstance jobRequest = jobServicesClient.getRequestById(CONTAINER_ID, jobId, false, false);
         RequestInfoInstance expected = createExpectedRequestInfoInstance(jobId, STATUS.QUEUED);
         assertRequestInfoInstance(expected, jobRequest);
-        assertNotNull(jobRequest.getScheduledDate());
+        assertThat(jobRequest.getScheduledDate()).isNotNull();
 
         jobServicesClient.cancelRequest(CONTAINER_ID, jobId);
 
@@ -253,11 +253,11 @@ public class KieServerRouterJbpmIntegrationTest extends KieServerRouterBaseInteg
     }
     
     private void assertRequestInfoInstance(RequestInfoInstance expected, RequestInfoInstance actual) {
-        assertNotNull(actual);
-        assertEquals(expected.getId(), actual.getId());
-        assertEquals(expected.getBusinessKey(), actual.getBusinessKey());
-        assertEquals(expected.getStatus(), actual.getStatus());
-        assertEquals(expected.getCommandName(), actual.getCommandName());
+        assertThat(actual).isNotNull();
+        assertThat(actual.getId()).isEqualTo(expected.getId());
+        assertThat(actual.getBusinessKey()).isEqualTo(expected.getBusinessKey());
+        assertThat(actual.getStatus()).isEqualTo(expected.getStatus());
+        assertThat(actual.getCommandName()).isEqualTo(expected.getCommandName());
     }
     
     private RequestInfoInstance createExpectedRequestInfoInstance(Long jobId, STATUS expected) {

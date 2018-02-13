@@ -16,13 +16,13 @@
 package org.kie.server.integrationtests.jbpm;
 
 import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.assertj.core.api.Assertions.fail;
 import static org.junit.Assume.assumeFalse;
 import static org.kie.server.integrationtests.jbpm.RuntimeDataServiceIntegrationTest.SORT_BY_TASK_EVENTS_TYPE;
 
@@ -83,15 +83,15 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
     @Category(Smoke.class)
     public void testProcessWithUserTasks() throws Exception {
         Long processInstanceId = processClient.startProcess(CONTAINER_ID, PROCESS_ID_USERTASK);
-        assertNotNull(processInstanceId);
-        assertTrue(processInstanceId.longValue() > 0);
+        assertThat(processInstanceId).isNotNull();
+        assertThat(processInstanceId.longValue() > 0).isTrue();
         try {
             List<TaskSummary> taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             TaskSummary taskSummary = taskList.get(0);
-            assertEquals("First task", taskSummary.getName());
+            assertThat(taskSummary.getName()).isEqualTo("First task");
 
             // startTask and completeTask task
             taskClient.startTask(CONTAINER_ID, taskSummary.getId(), USER_YODA);
@@ -104,19 +104,19 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
 
             // check if task outcomes are properly set as process variables
             Object personVar = processClient.getProcessInstanceVariable(CONTAINER_ID, processInstanceId, "personData");
-            assertNotNull(personVar);
-            assertEquals(USER_MARY, KieServerReflections.valueOf(personVar, "name"));
+            assertThat(personVar).isNotNull();
+            assertThat("name")).isEqualTo(USER_MARY, KieServerReflections.valueOf(personVar);
 
             String stringVar = (String) processClient.getProcessInstanceVariable(CONTAINER_ID, processInstanceId, "stringData");
-            assertNotNull(personVar);
-            assertEquals("my custom data", stringVar);
+            assertThat(personVar).isNotNull();
+            assertThat(stringVar).isEqualTo("my custom data");
 
             taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             taskSummary = taskList.get(0);
-            assertEquals("Second task", taskSummary.getName());
+            assertThat(taskSummary.getName()).isEqualTo("Second task");
 
         } finally {
             processClient.abortProcessInstance(CONTAINER_ID, processInstanceId);
@@ -129,12 +129,12 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
         variables.put("car", "BMW");
 
         Long processInstanceId = processClient.startProcess(CONTAINER_ID, "test1.process1", variables);
-        assertNotNull(processInstanceId);
-        assertTrue(processInstanceId.longValue() > 0);
+        assertThat(processInstanceId).isNotNull();
+        assertThat(processInstanceId.longValue() > 0).isTrue();
 
         List<TaskSummary> taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-        assertNotNull(taskList);
-        assertEquals(1, taskList.size());
+        assertThat(taskList).isNotNull();
+        assertThat(taskList).hasSize(1);
 
         Long taskId = taskList.get(0).getId();
 
@@ -151,7 +151,7 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
             fail("Completing of already completed task should throw an exception.");
 
         } catch(KieServicesHttpException e) {
-            assertEquals(Response.Status.NOT_FOUND.getStatusCode(), e.getHttpCode().intValue());
+            assertThat(e.getHttpCode().intValue()).isEqualTo(Response.Status.NOT_FOUND.getStatusCode());
             // expected for REST
 
         } catch(KieServicesException e) {
@@ -162,15 +162,15 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
     @Test
     public void testAutoProgressComplete() throws Exception {
         Long processInstanceId = processClient.startProcess(CONTAINER_ID, PROCESS_ID_USERTASK);
-        assertNotNull(processInstanceId);
-        assertTrue(processInstanceId.longValue() > 0);
+        assertThat(processInstanceId).isNotNull();
+        assertThat(processInstanceId.longValue() > 0).isTrue();
         try {
             List<TaskSummary> taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             TaskSummary taskSummary = taskList.get(0);
-            assertEquals("First task", taskSummary.getName());
+            assertThat(taskSummary.getName()).isEqualTo("First task");
 
             // release task
             taskClient.releaseTask(CONTAINER_ID, taskSummary.getId(), USER_YODA);
@@ -184,19 +184,19 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
 
             // check if task outcomes are properly set as process variables
             Object personVar = processClient.getProcessInstanceVariable(CONTAINER_ID, processInstanceId, "personData");
-            assertNotNull(personVar);
-            assertEquals(USER_MARY, KieServerReflections.valueOf(personVar, "name"));
+            assertThat(personVar).isNotNull();
+            assertThat("name")).isEqualTo(USER_MARY, KieServerReflections.valueOf(personVar);
 
             String stringVar = (String) processClient.getProcessInstanceVariable(CONTAINER_ID, processInstanceId, "stringData");
-            assertNotNull(personVar);
-            assertEquals("my custom data", stringVar);
+            assertThat(personVar).isNotNull();
+            assertThat(stringVar).isEqualTo("my custom data");
 
             taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             taskSummary = taskList.get(0);
-            assertEquals("Second task", taskSummary.getName());
+            assertThat(taskSummary.getName()).isEqualTo("Second task");
 
         } finally {
             processClient.abortProcessInstance(CONTAINER_ID, processInstanceId);
@@ -206,13 +206,13 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
     @Test
     public void testReleaseAndClaim() throws Exception {
         Long processInstanceId = processClient.startProcess(CONTAINER_ID, PROCESS_ID_USERTASK);
-        assertNotNull(processInstanceId);
-        assertTrue(processInstanceId.longValue() > 0);
+        assertThat(processInstanceId).isNotNull();
+        assertThat(processInstanceId.longValue() > 0).isTrue();
         try {
             List<TaskSummary> taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             TaskSummary taskSummary = taskList.get(0);
             checkTaskNameAndStatus(taskSummary, "First task", Status.Reserved);
 
@@ -220,18 +220,18 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
             taskClient.releaseTask(CONTAINER_ID, taskSummary.getId(), USER_YODA);
 
             taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             taskSummary = taskList.get(0);
             checkTaskNameAndStatus(taskSummary, "First task", Status.Ready);
 
             taskClient.claimTask(CONTAINER_ID, taskSummary.getId(), USER_YODA);
 
             taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             taskSummary = taskList.get(0);
             checkTaskNameAndStatus(taskSummary, "First task", Status.Reserved);
 
@@ -243,13 +243,13 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
     @Test
     public void testStartAndStop() throws Exception {
         Long processInstanceId = processClient.startProcess(CONTAINER_ID, PROCESS_ID_USERTASK);
-        assertNotNull(processInstanceId);
-        assertTrue(processInstanceId.longValue() > 0);
+        assertThat(processInstanceId).isNotNull();
+        assertThat(processInstanceId.longValue() > 0).isTrue();
         try {
             List<TaskSummary> taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             TaskSummary taskSummary = taskList.get(0);
             checkTaskNameAndStatus(taskSummary, "First task", Status.Reserved);
 
@@ -257,18 +257,18 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
             taskClient.startTask(CONTAINER_ID, taskSummary.getId(), USER_YODA);
 
             taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             taskSummary = taskList.get(0);
             checkTaskNameAndStatus(taskSummary, "First task", Status.InProgress);
 
             taskClient.stopTask(CONTAINER_ID, taskSummary.getId(), USER_YODA);
 
             taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             taskSummary = taskList.get(0);
             checkTaskNameAndStatus(taskSummary, "First task", Status.Reserved);
 
@@ -280,13 +280,13 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
     @Test
     public void testSuspendAndResume() throws Exception {
         Long processInstanceId = processClient.startProcess(CONTAINER_ID, PROCESS_ID_USERTASK);
-        assertNotNull(processInstanceId);
-        assertTrue(processInstanceId.longValue() > 0);
+        assertThat(processInstanceId).isNotNull();
+        assertThat(processInstanceId.longValue() > 0).isTrue();
         try {
             List<TaskSummary> taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             TaskSummary taskSummary = taskList.get(0);
             checkTaskNameAndStatus(taskSummary, "First task", Status.Reserved);
 
@@ -294,8 +294,8 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
             taskClient.suspendTask(CONTAINER_ID, taskSummary.getId(), USER_YODA);
 
             taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
-            assertEquals(1, taskList.size());
+            assertThat(taskList).isNotNull();
+            assertThat(taskList).hasSize(1);
             taskSummary = taskList.get(0);
             checkTaskNameAndStatus(taskSummary, "First task", Status.Suspended);
 
@@ -303,9 +303,9 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
             taskClient.resumeTask(CONTAINER_ID, taskSummary.getId(), USER_YODA);
 
             taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             taskSummary = taskList.get(0);
             checkTaskNameAndStatus(taskSummary, "First task", Status.Reserved);
 
@@ -317,15 +317,15 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
     @Test
     public void testFailUserTask() throws Exception {
         Long processInstanceId = processClient.startProcess(CONTAINER_ID, PROCESS_ID_USERTASK);
-        assertNotNull(processInstanceId);
-        assertTrue(processInstanceId.longValue() > 0);
+        assertThat(processInstanceId).isNotNull();
+        assertThat(processInstanceId.longValue() > 0).isTrue();
         try {
             List<TaskSummary> taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             TaskSummary taskSummary = taskList.get(0);
-            assertEquals("First task", taskSummary.getName());
+            assertThat(taskSummary.getName()).isEqualTo("First task");
 
             // startTask and completeTask task
             taskClient.startTask(CONTAINER_ID, taskSummary.getId(), USER_YODA);
@@ -337,11 +337,11 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
             taskClient.failTask(CONTAINER_ID, taskSummary.getId(), USER_YODA, taskOutcome);
 
             taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             taskSummary = taskList.get(0);
-            assertEquals("Second task", taskSummary.getName());
+            assertThat(taskSummary.getName()).isEqualTo("Second task");
 
         } finally {
             processClient.abortProcessInstance(CONTAINER_ID, processInstanceId);
@@ -351,32 +351,32 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
     @Test
     public void testSkipUserTask() throws Exception {
         Long processInstanceId = processClient.startProcess(CONTAINER_ID, PROCESS_ID_USERTASK);
-        assertNotNull(processInstanceId);
-        assertTrue(processInstanceId.longValue() > 0);
+        assertThat(processInstanceId).isNotNull();
+        assertThat(processInstanceId.longValue() > 0).isTrue();
         try {
             List<TaskSummary> taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             TaskSummary taskSummary = taskList.get(0);
-            assertEquals("First task", taskSummary.getName());
-            assertTrue(taskSummary.getSkipable().booleanValue());
+            assertThat(taskSummary.getName()).isEqualTo("First task");
+            assertThat(taskSummary.getSkipable().booleanValue()).isTrue();
 
             taskClient.skipTask(CONTAINER_ID, taskSummary.getId(), USER_YODA);
 
             // find all tasks with Obsolete status - should be only one
             taskList = taskClient.findTasksByStatusByProcessInstanceId(processInstanceId, Arrays.asList("Obsolete"), 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             taskSummary = taskList.get(0);
             checkTaskNameAndStatus(taskSummary, "First task", Status.Obsolete);
 
             // Verify we did skip the task and process moved on
             taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             taskSummary = taskList.get(0);
             checkTaskNameAndStatus(taskSummary, "Second task", Status.Reserved);
 
@@ -392,28 +392,28 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
         parameters.put("personData", createPersonInstance(USER_JOHN));
 
         Long processInstanceId = processClient.startProcess(CONTAINER_ID, PROCESS_ID_USERTASK, parameters);
-        assertNotNull(processInstanceId);
-        assertTrue(processInstanceId.longValue() > 0);
+        assertThat(processInstanceId).isNotNull();
+        assertThat(processInstanceId.longValue() > 0).isTrue();
         try {
             List<TaskSummary> taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             TaskSummary taskSummary = taskList.get(0);
-            assertEquals("First task", taskSummary.getName());
+            assertThat(taskSummary.getName()).isEqualTo("First task");
 
             // start task
             taskClient.startTask(CONTAINER_ID, taskSummary.getId(), USER_YODA);
 
             // first verify task input
             Map<String, Object> taskInput = taskClient.getTaskInputContentByTaskId(CONTAINER_ID, taskSummary.getId());
-            assertNotNull(taskInput);
-            assertEquals(5, taskInput.size());
-            assertTrue(taskInput.containsKey("_string"));
-            assertTrue(taskInput.containsKey("_person"));
+            assertThat(taskInput).isNotNull();
+            assertThat(taskInput).hasSize(5);
+            assertThat(taskInput.containsKey("_string")).isTrue();
+            assertThat(taskInput.containsKey("_person")).isTrue();
 
-            assertEquals("john is working on it", taskInput.get("_string"));
-            assertEquals(USER_JOHN, KieServerReflections.valueOf(taskInput.get("_person"), "name"));
+            assertThat(taskInput.get("_string")).isEqualTo("john is working on it");
+            assertThat("name")).isEqualTo(USER_JOHN, KieServerReflections.valueOf(taskInput.get("_person"));
 
             Map<String, Object> taskOutcome = new HashMap<String, Object>();
             taskOutcome.put("string_", "my custom data");
@@ -422,20 +422,20 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
             Long outputContentId = taskClient.saveTaskContent(CONTAINER_ID, taskSummary.getId(), taskOutcome);
 
             taskInput = taskClient.getTaskOutputContentByTaskId(CONTAINER_ID, taskSummary.getId());
-            assertNotNull(taskInput);
-            assertEquals(2, taskInput.size());
-            assertTrue(taskInput.containsKey("string_"));
-            assertTrue(taskInput.containsKey("person_"));
+            assertThat(taskInput).isNotNull();
+            assertThat(taskInput).hasSize(2);
+            assertThat(taskInput.containsKey("string_")).isTrue();
+            assertThat(taskInput.containsKey("person_")).isTrue();
 
-            assertEquals("my custom data", taskInput.get("string_"));
-            assertEquals(USER_MARY, KieServerReflections.valueOf(taskInput.get("person_"), "name"));
+            assertThat(taskInput.get("string_")).isEqualTo("my custom data");
+            assertThat("name")).isEqualTo(USER_MARY, KieServerReflections.valueOf(taskInput.get("person_"));
 
             // let's delete the content as we won't need it
             taskClient.deleteTaskContent(CONTAINER_ID, taskSummary.getId(), outputContentId);
 
             taskInput = taskClient.getTaskOutputContentByTaskId(CONTAINER_ID, taskSummary.getId());
-            assertNotNull(taskInput);
-            assertEquals(0, taskInput.size());
+            assertThat(taskInput).isNotNull();
+            assertThat(taskInput).isEmpty();
 
             // complete task
             Map<String, Object> taskOutcomeComplete = new HashMap<String, Object>();
@@ -446,19 +446,19 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
 
             // check if task outcomes are properly set as process variables
             Object personVar = processClient.getProcessInstanceVariable(CONTAINER_ID, processInstanceId, "personData");
-            assertNotNull(personVar);
-            assertEquals("peter", KieServerReflections.valueOf(personVar, "name"));
+            assertThat(personVar).isNotNull();
+            assertThat("name")).as("peter").isEqualTo(KieServerReflections.valueOf(personVar);
 
             String stringVar = (String) processClient.getProcessInstanceVariable(CONTAINER_ID, processInstanceId, "stringData");
-            assertNotNull(personVar);
-            assertEquals("my custom data 2", stringVar);
+            assertThat(personVar).isNotNull();
+            assertThat(stringVar).isEqualTo("my custom data 2");
 
             taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             taskSummary = taskList.get(0);
-            assertEquals("Second task", taskSummary.getName());
+            assertThat(taskSummary.getName()).isEqualTo("Second task");
 
         } finally {
             processClient.abortProcessInstance(CONTAINER_ID, processInstanceId);
@@ -468,40 +468,40 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
     @Test
     public void testUserTaskById() throws Exception {
         Long processInstanceId = processClient.startProcess(CONTAINER_ID, PROCESS_ID_USERTASK);
-        assertNotNull(processInstanceId);
-        assertTrue(processInstanceId.longValue() > 0);
+        assertThat(processInstanceId).isNotNull();
+        assertThat(processInstanceId.longValue() > 0).isTrue();
         try {
             List<TaskSummary> taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             TaskSummary taskSummary = taskList.get(0);
-            assertEquals("First task", taskSummary.getName());
+            assertThat(taskSummary.getName()).isEqualTo("First task");
 
             TaskInstance taskInstance = taskClient.getTaskInstance(CONTAINER_ID, taskSummary.getId());
-            assertNotNull(taskInstance);
-            assertEquals("First task", taskInstance.getName());
+            assertThat(taskInstance).isNotNull();
+            assertThat(taskInstance.getName()).isEqualTo("First task");
             KieServerAssert.assertNullOrEmpty(taskInstance.getDescription());
             KieServerAssert.assertNullOrEmpty(taskInstance.getSubject());
-            assertEquals("Reserved", taskInstance.getStatus());
-            assertEquals(0, taskInstance.getPriority().intValue());
-            assertEquals(USER_YODA, taskInstance.getActualOwner());
-            assertEquals(USER_YODA, taskInstance.getCreatedBy());
-            assertEquals(PROCESS_ID_USERTASK, taskInstance.getProcessId());
-            assertEquals(CONTAINER_ID, taskInstance.getContainerId());
-            assertEquals(taskSummary.getId(), taskInstance.getId());
-            assertEquals(-1, taskInstance.getParentId().longValue());
-            assertEquals(true, taskInstance.getSkipable());
-            assertEquals(processInstanceId, taskInstance.getProcessInstanceId());
+            assertThat(taskInstance.getStatus()).isEqualTo("Reserved");
+            assertThat(taskInstance.getPriority().intValue()).isEqualTo(0);
+            assertThat(taskInstance.getActualOwner()).isEqualTo(USER_YODA);
+            assertThat(taskInstance.getCreatedBy()).isEqualTo(USER_YODA);
+            assertThat(taskInstance.getProcessId()).isEqualTo(PROCESS_ID_USERTASK);
+            assertThat(taskInstance.getContainerId()).isEqualTo(CONTAINER_ID);
+            assertThat(taskInstance.getId()).isEqualTo(taskSummary.getId());
+            assertThat(taskInstance.getParentId().longValue()).isEqualTo(-1);
+            assertThat(taskInstance.getSkipable()).isEqualTo(true);
+            assertThat(taskInstance.getProcessInstanceId()).isEqualTo(processInstanceId);
 
-            assertNotNull(taskInstance.getWorkItemId());
-            assertTrue(taskInstance.getWorkItemId().longValue() > 0);
+            assertThat(taskInstance.getWorkItemId()).isNotNull();
+            assertThat(taskInstance.getWorkItemId().longValue() > 0).isTrue();
 
-            assertNull(taskInstance.getExcludedOwners());
-            assertNull(taskInstance.getPotentialOwners());
-            assertNull(taskInstance.getBusinessAdmins());
-            assertNull(taskInstance.getInputData());
-            assertNull(taskInstance.getOutputData());
+            assertThat(taskInstance.getExcludedOwners()).isNull();
+            assertThat(taskInstance.getPotentialOwners()).isNull();
+            assertThat(taskInstance.getBusinessAdmins()).isNull();
+            assertThat(taskInstance.getInputData()).isNull();
+            assertThat(taskInstance.getOutputData()).isNull();
 
         } finally {
             processClient.abortProcessInstance(CONTAINER_ID, processInstanceId);
@@ -520,64 +520,64 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
         parameters.put("personData", createPersonInstance(USER_JOHN));
 
         Long processInstanceId = processClient.startProcess(CONTAINER_ID, PROCESS_ID_USERTASK, parameters);
-        assertNotNull(processInstanceId);
-        assertTrue(processInstanceId.longValue() > 0);
+        assertThat(processInstanceId).isNotNull();
+        assertThat(processInstanceId.longValue() > 0).isTrue();
         try {
             List<TaskSummary> taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             TaskSummary taskSummary = taskList.get(0);
-            assertEquals("First task", taskSummary.getName());
+            assertThat(taskSummary.getName()).isEqualTo("First task");
 
             TaskInstance taskInstance = taskClient.getTaskInstance(CONTAINER_ID, taskSummary.getId(), true, true, true);
-            assertNotNull(taskInstance);
-            assertEquals("First task", taskInstance.getName());
+            assertThat(taskInstance).isNotNull();
+            assertThat(taskInstance.getName()).isEqualTo("First task");
             KieServerAssert.assertNullOrEmpty(taskInstance.getDescription());
             KieServerAssert.assertNullOrEmpty(taskInstance.getSubject());
-            assertEquals("Reserved", taskInstance.getStatus());
-            assertEquals(0, taskInstance.getPriority().intValue());
-            assertEquals(USER_YODA, taskInstance.getActualOwner());
-            assertEquals(USER_YODA, taskInstance.getCreatedBy());
-            assertEquals(PROCESS_ID_USERTASK, taskInstance.getProcessId());
-            assertEquals(CONTAINER_ID, taskInstance.getContainerId());
-            assertEquals(taskSummary.getId(), taskInstance.getId());
-            assertEquals(-1, taskInstance.getParentId().longValue());
-            assertEquals(true, taskInstance.getSkipable());
-            assertEquals(processInstanceId, taskInstance.getProcessInstanceId());
+            assertThat(taskInstance.getStatus()).isEqualTo("Reserved");
+            assertThat(taskInstance.getPriority().intValue()).isEqualTo(0);
+            assertThat(taskInstance.getActualOwner()).isEqualTo(USER_YODA);
+            assertThat(taskInstance.getCreatedBy()).isEqualTo(USER_YODA);
+            assertThat(taskInstance.getProcessId()).isEqualTo(PROCESS_ID_USERTASK);
+            assertThat(taskInstance.getContainerId()).isEqualTo(CONTAINER_ID);
+            assertThat(taskInstance.getId()).isEqualTo(taskSummary.getId());
+            assertThat(taskInstance.getParentId().longValue()).isEqualTo(-1);
+            assertThat(taskInstance.getSkipable()).isEqualTo(true);
+            assertThat(taskInstance.getProcessInstanceId()).isEqualTo(processInstanceId);
 
-            assertNotNull(taskInstance.getWorkItemId());
-            assertTrue(taskInstance.getWorkItemId().longValue() > 0);
+            assertThat(taskInstance.getWorkItemId()).isNotNull();
+            assertThat(taskInstance.getWorkItemId().longValue() > 0).isTrue();
 
-            assertNotNull(taskInstance.getExcludedOwners());
-            assertEquals(0, taskInstance.getExcludedOwners().size());
-            assertNotNull(taskInstance.getPotentialOwners());
-            assertEquals(1, taskInstance.getPotentialOwners().size());
-            assertTrue(taskInstance.getPotentialOwners().contains(USER_YODA));
+            assertThat(taskInstance.getExcludedOwners()).isNotNull();
+            assertThat(taskInstance.getExcludedOwners()).isEmpty();
+            assertThat(taskInstance.getPotentialOwners()).isNotNull();
+            assertThat(taskInstance.getPotentialOwners()).hasSize(1);
+            assertThat(taskInstance.getPotentialOwners().contains(USER_YODA)).isTrue();
 
-            assertNotNull(taskInstance.getBusinessAdmins());
-            assertEquals(2, taskInstance.getBusinessAdmins().size());
-            assertTrue(taskInstance.getBusinessAdmins().contains("Administrator"));
-            assertTrue(taskInstance.getBusinessAdmins().contains("Administrators"));
+            assertThat(taskInstance.getBusinessAdmins()).isNotNull();
+            assertThat(taskInstance.getBusinessAdmins()).hasSize(2);
+            assertThat(taskInstance.getBusinessAdmins().contains("Administrator")).isTrue();
+            assertThat(taskInstance.getBusinessAdmins().contains("Administrators")).isTrue();
 
-            assertNotNull(taskInstance.getInputData());
-            assertEquals(5, taskInstance.getInputData().size());
+            assertThat(taskInstance.getInputData()).isNotNull();
+            assertThat(taskInstance.getInputData()).hasSize(5);
 
             Map<String, Object> inputs = taskInstance.getInputData();
-            assertTrue(inputs.containsKey("ActorId"));
-            assertTrue(inputs.containsKey("_string"));
-            assertTrue(inputs.containsKey("Skippable"));
-            assertTrue(inputs.containsKey("_person"));
-            assertTrue(inputs.containsKey("NodeName"));
+            assertThat(inputs.containsKey("ActorId")).isTrue();
+            assertThat(inputs.containsKey("_string")).isTrue();
+            assertThat(inputs.containsKey("Skippable")).isTrue();
+            assertThat(inputs.containsKey("_person")).isTrue();
+            assertThat(inputs.containsKey("NodeName")).isTrue();
 
-            assertEquals(USER_YODA, inputs.get("ActorId"));
-            assertEquals("john is working on it", inputs.get("_string"));
-            assertEquals("true", inputs.get("Skippable"));
-            assertEquals("First task", inputs.get("NodeName"));
-            assertEquals(USER_JOHN, KieServerReflections.valueOf(inputs.get("_person"), "name"));
+            assertThat(inputs.get("ActorId")).isEqualTo(USER_YODA);
+            assertThat(inputs.get("_string")).isEqualTo("john is working on it");
+            assertThat(inputs.get("Skippable")).isEqualTo("true");
+            assertThat(inputs.get("NodeName")).isEqualTo("First task");
+            assertThat("name")).isEqualTo(USER_JOHN, KieServerReflections.valueOf(inputs.get("_person"));
 
-            assertNotNull(taskInstance.getOutputData());
-            assertEquals(0, taskInstance.getOutputData().size());
+            assertThat(taskInstance.getOutputData()).isNotNull();
+            assertThat(taskInstance.getOutputData()).isEmpty();
 
         } finally {
             processClient.abortProcessInstance(CONTAINER_ID, processInstanceId);
@@ -593,15 +593,15 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
     @Test
     public void testForwardUserTask() throws Exception {
         Long processInstanceId = processClient.startProcess(CONTAINER_ID, PROCESS_ID_USERTASK);
-        assertNotNull(processInstanceId);
-        assertTrue(processInstanceId.longValue() > 0);
+        assertThat(processInstanceId).isNotNull();
+        assertThat(processInstanceId.longValue() > 0).isTrue();
         try {
             List<TaskSummary> taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             TaskSummary taskSummary = taskList.get(0);
-            assertEquals("First task", taskSummary.getName());
+            assertThat(taskSummary.getName()).isEqualTo("First task");
 
             checkTaskStatusAndActualOwner(CONTAINER_ID, taskSummary.getId(), Status.Reserved, USER_YODA);
 
@@ -610,15 +610,15 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
 
             // user yoda has empty task list now
             taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
-            assertEquals(0, taskList.size());
+            assertThat(taskList).isNotNull();
+            assertThat(taskList).isEmpty();
 
             // forwarded task is set to Ready state and is assigned to john as potential owner
             changeUser(USER_JOHN);
             taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_JOHN, 0, 10);
-            assertNotNull(taskList);
-            assertEquals(1, taskList.size());
-            assertEquals(taskSummary.getId(), taskList.get(0).getId());
+            assertThat(taskList).isNotNull();
+            assertThat(taskList).hasSize(1);
+            assertThat(taskList.get(0).getId()).isEqualTo(taskSummary.getId());
 
             checkTaskStatusAndOwners(CONTAINER_ID, taskSummary.getId(), Status.Ready, "", USER_JOHN);
 
@@ -654,15 +654,15 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
     @Test
     public void testDelegateUserTask() throws Exception {
         Long processInstanceId = processClient.startProcess(CONTAINER_ID, PROCESS_ID_USERTASK);
-        assertNotNull(processInstanceId);
-        assertTrue(processInstanceId.longValue() > 0);
+        assertThat(processInstanceId).isNotNull();
+        assertThat(processInstanceId.longValue() > 0).isTrue();
         try {
             List<TaskSummary> taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             TaskSummary taskSummary = taskList.get(0);
-            assertEquals("First task", taskSummary.getName());
+            assertThat(taskSummary.getName()).isEqualTo("First task");
 
             checkTaskStatusAndActualOwner(CONTAINER_ID, taskSummary.getId(), Status.Reserved, USER_YODA);
 
@@ -671,15 +671,15 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
 
             // user yoda has empty task list now
             taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
-            assertEquals(0, taskList.size());
+            assertThat(taskList).isNotNull();
+            assertThat(taskList).isEmpty();
 
             // delegated task stays in Reserved state and is assigned to john as actual owner
             changeUser(USER_JOHN);
             taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_JOHN, 0, 10);
-            assertNotNull(taskList);
-            assertEquals(1, taskList.size());
-            assertEquals(taskSummary.getId(), taskList.get(0).getId());
+            assertThat(taskList).isNotNull();
+            assertThat(taskList).hasSize(1);
+            assertThat(taskList.get(0).getId()).isEqualTo(taskSummary.getId());
 
             checkTaskStatusAndActualOwner(CONTAINER_ID, taskSummary.getId(), Status.Reserved, USER_JOHN);
 
@@ -713,20 +713,20 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
     @Test
     public void testUserTaskSetTaskProperties() throws Exception {
         Long processInstanceId = processClient.startProcess(CONTAINER_ID, PROCESS_ID_USERTASK);
-        assertNotNull(processInstanceId);
-        assertTrue(processInstanceId.longValue() > 0);
+        assertThat(processInstanceId).isNotNull();
+        assertThat(processInstanceId.longValue() > 0).isTrue();
         try {
             List<TaskSummary> taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             TaskSummary taskSummary = taskList.get(0);
 
             // verify current task properties
-            assertEquals(0, taskSummary.getPriority().intValue());
-            assertNull(taskSummary.getExpirationTime());
-            assertTrue(taskSummary.getSkipable().booleanValue());
-            assertEquals("First task", taskSummary.getName());
+            assertThat(taskSummary.getPriority().intValue()).isEqualTo(0);
+            assertThat(taskSummary.getExpirationTime()).isNull();
+            assertThat(taskSummary.getSkipable().booleanValue()).isTrue();
+            assertThat(taskSummary.getName()).isEqualTo("First task");
             KieServerAssert.assertNullOrEmpty(taskSummary.getDescription());
 
             // set task properties
@@ -746,11 +746,11 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
             TaskInstance taskInstance = taskClient.getTaskInstance(CONTAINER_ID, taskSummary.getId());
 
             // verify modified task properties
-            assertEquals(10, taskInstance.getPriority().intValue());
-            assertNotNull(taskInstance.getExpirationDate());
-            assertFalse(taskInstance.getSkipable().booleanValue());
-            assertEquals("Modified name", taskInstance.getName());
-            assertEquals("Simple user task.", taskInstance.getDescription());
+            assertThat(taskInstance.getPriority().intValue()).isEqualTo(10);
+            assertThat(taskInstance.getExpirationDate()).isNotNull();
+            assertThat(taskInstance.getSkipable().booleanValue()).isFalse();
+            assertThat(taskInstance.getName()).isEqualTo("Modified name");
+            assertThat(taskInstance.getDescription()).isEqualTo("Simple user task.");
         } finally {
             processClient.abortProcessInstance(CONTAINER_ID, processInstanceId);
         }
@@ -759,12 +759,12 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
     @Test
     public void testUserTaskComments() throws Exception {
         Long processInstanceId = processClient.startProcess(CONTAINER_ID, PROCESS_ID_USERTASK);
-        assertNotNull(processInstanceId);
-        assertTrue(processInstanceId.longValue() > 0);
+        assertThat(processInstanceId).isNotNull();
+        assertThat(processInstanceId.longValue() > 0).isTrue();
         try {
             List<TaskSummary> taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
-            assertEquals(1, taskList.size());
+            assertThat(taskList).isNotNull();
+            assertThat(taskList).hasSize(1);
             TaskSummary taskSummary = taskList.get(0);
 
             // Adding comment to user task as yoda.
@@ -783,14 +783,14 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
 
             // Verifying first comment returned by getTaskCommentById().
             TaskComment firstTaskComment = taskClient.getTaskCommentById(CONTAINER_ID, taskSummary.getId(), firstCommentId);
-            assertNotNull(firstTaskComment.getAddedAt());
-            assertEquals(USER_YODA, firstTaskComment.getAddedBy());
-            assertEquals(firstCommentId, firstTaskComment.getId());
-            assertEquals(firstComment, firstTaskComment.getText());
+            assertThat(firstTaskComment.getAddedAt()).isNotNull();
+            assertThat(firstTaskComment.getAddedBy()).isEqualTo(USER_YODA);
+            assertThat(firstTaskComment.getId()).isEqualTo(firstCommentId);
+            assertThat(firstTaskComment.getText()).isEqualTo(firstComment);
 
             // Verifying second comment returned by getTaskCommentsByTaskId().
             List<TaskComment> taskComments = taskClient.getTaskCommentsByTaskId(CONTAINER_ID, taskSummary.getId());
-            assertEquals(2, taskComments.size());
+            assertThat(taskComments).hasSize(2);
 
             TaskComment secondTaskComment = null;
             if (secondCommentId.equals(taskComments.get(0).getId())) {
@@ -798,18 +798,18 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
             } else {
                 secondTaskComment = taskComments.get(1);
             }
-            assertNotNull(secondTaskComment.getAddedAt());
-            assertEquals(USER_JOHN, secondTaskComment.getAddedBy());
-            assertEquals(secondCommentId, secondTaskComment.getId());
-            assertEquals(secondComment, secondTaskComment.getText());
+            assertThat(secondTaskComment.getAddedAt()).isNotNull();
+            assertThat(secondTaskComment.getAddedBy()).isEqualTo(USER_JOHN);
+            assertThat(secondTaskComment.getId()).isEqualTo(secondCommentId);
+            assertThat(secondTaskComment.getText()).isEqualTo(secondComment);
 
             // Delete task comment.
             taskClient.deleteTaskComment(CONTAINER_ID, taskSummary.getId(), secondCommentId);
 
             // Now there is just one comment left.
             taskComments = taskClient.getTaskCommentsByTaskId(CONTAINER_ID, taskSummary.getId());
-            assertEquals(1, taskComments.size());
-            assertEquals(firstCommentId, taskComments.get(0).getId());
+            assertThat(taskComments).hasSize(1);
+            assertThat(taskComments.get(0).getId()).isEqualTo(firstCommentId);
         } finally {
             processClient.abortProcessInstance(CONTAINER_ID, processInstanceId);
         }
@@ -818,12 +818,12 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
     @Test
     public void testUserTaskAttachments() throws Exception {
         Long processInstanceId = processClient.startProcess(CONTAINER_ID, PROCESS_ID_USERTASK);
-        assertNotNull(processInstanceId);
-        assertTrue(processInstanceId.longValue() > 0);
+        assertThat(processInstanceId).isNotNull();
+        assertThat(processInstanceId.longValue() > 0).isTrue();
         try {
             List<TaskSummary> taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
-            assertEquals(1, taskList.size());
+            assertThat(taskList).isNotNull();
+            assertThat(taskList).hasSize(1);
             TaskSummary taskSummary = taskList.get(0);
 
             String attachment1Name = "First attachment";
@@ -843,18 +843,18 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
 
             // Verifying first attachment returned by getTaskAttachmentById().
             TaskAttachment firstTaskAttachment = taskClient.getTaskAttachmentById(CONTAINER_ID, taskSummary.getId(), firstAttachmentId);
-            assertNotNull(firstTaskAttachment.getAddedAt());
-            assertEquals(USER_YODA, firstTaskAttachment.getAddedBy());
-            assertNotNull(firstTaskAttachment.getAttachmentContentId());
-            assertEquals(firstAttachmentContent.getClass().getName(), firstTaskAttachment.getContentType());
-            assertEquals(firstAttachmentId, firstTaskAttachment.getId());
-            assertNotNull(firstTaskAttachment.getName());
-            assertEquals(attachment1Name, firstTaskAttachment.getName());
-            assertNotNull(firstTaskAttachment.getSize());
+            assertThat(firstTaskAttachment.getAddedAt()).isNotNull();
+            assertThat(firstTaskAttachment.getAddedBy()).isEqualTo(USER_YODA);
+            assertThat(firstTaskAttachment.getAttachmentContentId()).isNotNull();
+            assertThat(firstTaskAttachment.getContentType()).isEqualTo(firstAttachmentContent.getClass().getName());
+            assertThat(firstTaskAttachment.getId()).isEqualTo(firstAttachmentId);
+            assertThat(firstTaskAttachment.getName()).isNotNull();
+            assertThat(firstTaskAttachment.getName()).isEqualTo(attachment1Name);
+            assertThat(firstTaskAttachment.getSize()).isNotNull();
 
             // Verifying second attachment returned by getTaskAttachmentsByTaskId().
             List<TaskAttachment> taskAttachments = taskClient.getTaskAttachmentsByTaskId(CONTAINER_ID, taskSummary.getId());
-            assertEquals(2, taskAttachments.size());
+            assertThat(taskAttachments).hasSize(2);
 
             TaskAttachment secondTaskAttachment = null;
             if (secondAttachmentId.equals(taskAttachments.get(0).getId())) {
@@ -862,26 +862,26 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
             } else {
                 secondTaskAttachment = taskAttachments.get(1);
             }
-            assertNotNull(secondTaskAttachment.getAddedAt());
-            assertEquals(USER_JOHN, secondTaskAttachment.getAddedBy());
-            assertNotNull(secondTaskAttachment.getAttachmentContentId());
-            assertEquals(String.class.getName(), secondTaskAttachment.getContentType());
-            assertEquals(secondAttachmentId, secondTaskAttachment.getId());
-            assertNotNull(secondTaskAttachment.getName());
-            assertEquals(attachment2Name, secondTaskAttachment.getName());
-            assertNotNull(secondTaskAttachment.getSize());
+            assertThat(secondTaskAttachment.getAddedAt()).isNotNull();
+            assertThat(secondTaskAttachment.getAddedBy()).isEqualTo(USER_JOHN);
+            assertThat(secondTaskAttachment.getAttachmentContentId()).isNotNull();
+            assertThat(secondTaskAttachment.getContentType()).isEqualTo(String.class.getName());
+            assertThat(secondTaskAttachment.getId()).isEqualTo(secondAttachmentId);
+            assertThat(secondTaskAttachment.getName()).isNotNull();
+            assertThat(secondTaskAttachment.getName()).isEqualTo(attachment2Name);
+            assertThat(secondTaskAttachment.getSize()).isNotNull();
 
             // Verifying second attachment content returned by getTaskAttachmentContentById().
             Object taskAttachmentContent = taskClient.getTaskAttachmentContentById(CONTAINER_ID, taskSummary.getId(), secondAttachmentId);
-            assertEquals(secondAttachmentContent, taskAttachmentContent);
+            assertThat(taskAttachmentContent).isEqualTo(secondAttachmentContent);
 
             // Delete task attachment.
             taskClient.deleteTaskAttachment(CONTAINER_ID, taskSummary.getId(), firstAttachmentId);
 
             // Now there is just one attachment left.
             taskAttachments = taskClient.getTaskAttachmentsByTaskId(CONTAINER_ID, taskSummary.getId());
-            assertEquals(1, taskAttachments.size());
-            assertEquals(secondAttachmentId, taskAttachments.get(0).getId());
+            assertThat(taskAttachments).hasSize(1);
+            assertThat(taskAttachments.get(0).getId()).isEqualTo(secondAttachmentId);
         } finally {
             processClient.abortProcessInstance(CONTAINER_ID, processInstanceId);
         }
@@ -890,12 +890,12 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
     @Test
     public void testUserTaskAttachmentsAsByteArray() throws Exception {
         Long processInstanceId = processClient.startProcess(CONTAINER_ID, PROCESS_ID_USERTASK);
-        assertNotNull(processInstanceId);
-        assertTrue(processInstanceId.longValue() > 0);
+        assertThat(processInstanceId).isNotNull();
+        assertThat(processInstanceId.longValue() > 0).isTrue();
         try {
             List<TaskSummary> taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
-            assertEquals(1, taskList.size());
+            assertThat(taskList).isNotNull();
+            assertThat(taskList).hasSize(1);
             TaskSummary taskSummary = taskList.get(0);
 
             // Adding attachments to user task.
@@ -907,7 +907,7 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
 
             // Verifying attachment returned by getTaskAttachmentById().
             Object taskAttachmentContent = taskClient.getTaskAttachmentContentById(CONTAINER_ID, taskSummary.getId(), attachmentId);
-            assertArrayEquals(attachmentContent, (byte[])taskAttachmentContent);
+            assertThat((byte[])taskAttachmentContent).isEqualTo(attachmentContent);
         } finally {
             processClient.abortProcessInstance(CONTAINER_ID, processInstanceId);
         }
@@ -916,15 +916,15 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
     @Test
     public void testExitUserTask() throws Exception {
         Long processInstanceId = processClient.startProcess(CONTAINER_ID, PROCESS_ID_USERTASK);
-        assertNotNull(processInstanceId);
-        assertTrue(processInstanceId.longValue() > 0);
+        assertThat(processInstanceId).isNotNull();
+        assertThat(processInstanceId.longValue() > 0).isTrue();
         try {
             List<TaskSummary> taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             TaskSummary taskSummary = taskList.get(0);
-            assertEquals(Status.Reserved.toString(), taskSummary.getStatus());
+            assertThat(taskSummary.getStatus()).isEqualTo(Status.Reserved.toString());
 
             // exit task
             changeUser(USER_ADMINISTRATOR);
@@ -932,9 +932,9 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
             changeUser(USER_YODA);
 
             TaskInstance task = taskClient.findTaskById(taskSummary.getId());
-            assertNotNull(task);
-            assertEquals(taskSummary.getId(), task.getId());
-            assertEquals(Status.Exited.toString(), task.getStatus());
+            assertThat(task).isNotNull();
+            assertThat(task.getId()).isEqualTo(taskSummary.getId());
+            assertThat(task.getStatus()).isEqualTo(Status.Exited.toString());
         } finally {
             processClient.abortProcessInstance(CONTAINER_ID, processInstanceId);
             changeUser(TestConfig.getUsername());
@@ -948,16 +948,16 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
         String taskName = "Group task";
 
         Long processInstanceId = processClient.startProcess(CONTAINER_ID, PROCESS_ID_GROUPTASK);
-        assertNotNull(processInstanceId);
-        assertTrue(processInstanceId.longValue() > 0);
+        assertThat(processInstanceId).isNotNull();
+        assertThat(processInstanceId.longValue() > 0).isTrue();
         try {
             List<TaskSummary> taskList = taskClient.findTasksByStatusByProcessInstanceId(processInstanceId, null, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             TaskSummary taskSummary = taskList.get(0);
-            assertEquals(taskName, taskSummary.getName());
-            assertEquals(Status.Ready.toString(), taskSummary.getStatus());
+            assertThat(taskSummary.getName()).isEqualTo(taskName);
+            assertThat(taskSummary.getStatus()).isEqualTo(Status.Ready.toString());
 
             // User yoda isn't in group "engineering", can't claim task.
             try {
@@ -973,12 +973,12 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
             taskClient.startTask(CONTAINER_ID, taskSummary.getId(), USER_JOHN);
 
             taskList = taskClient.findTasksOwned(USER_JOHN, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             taskSummary = taskList.get(0);
-            assertEquals(taskName, taskSummary.getName());
-            assertEquals(Status.InProgress.toString(), taskSummary.getStatus());
+            assertThat(taskSummary.getName()).isEqualTo(taskName);
+            assertThat(taskSummary.getStatus()).isEqualTo(Status.InProgress.toString());
 
             // complete task
             Map<String, Object> taskOutcomeComplete = new HashMap<String, Object>();
@@ -1002,20 +1002,20 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
         parameters.put("personData", createPersonInstance(USER_JOHN));
 
         Long processInstanceId = processClient.startProcess(CONTAINER_ID, PROCESS_ID_USERTASK, parameters);
-        assertNotNull(processInstanceId);
-        assertTrue(processInstanceId.longValue() > 0);
+        assertThat(processInstanceId).isNotNull();
+        assertThat(processInstanceId.longValue() > 0).isTrue();
         try {
             List<TaskSummary> taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             TaskSummary taskSummary = taskList.get(0);
-            assertEquals("First task", taskSummary.getName());
+            assertThat(taskSummary.getName()).isEqualTo("First task");
 
             taskList = taskClient.findTasksByVariable(USER_YODA, "_string", null, 0, 10);
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             taskSummary = taskList.get(0);
-            assertEquals("First task", taskSummary.getName());
+            assertThat(taskSummary.getName()).isEqualTo("First task");
 
             // start task
             taskClient.startTask(CONTAINER_ID, taskSummary.getId(), USER_YODA);
@@ -1031,18 +1031,18 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
             inprogressTasks.add(Status.InProgress.toString());
 
             taskList = taskClient.findTasksByVariable(USER_YODA, "string_", inprogressTasks, 0, 10);
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             taskSummary = taskList.get(0);
-            assertEquals("First task", taskSummary.getName());
+            assertThat(taskSummary.getName()).isEqualTo("First task");
 
             taskClient.completeTask(CONTAINER_ID, taskSummary.getId(), USER_YODA, taskOutcomeComplete);
 
             taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             taskSummary = taskList.get(0);
-            assertEquals("Second task", taskSummary.getName());
+            assertThat(taskSummary.getName()).isEqualTo("Second task");
 
         } finally {
             processClient.abortProcessInstance(CONTAINER_ID, processInstanceId);
@@ -1056,20 +1056,20 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
         parameters.put("personData", createPersonInstance(USER_JOHN));
 
         Long processInstanceId = processClient.startProcess(CONTAINER_ID, PROCESS_ID_USERTASK, parameters);
-        assertNotNull(processInstanceId);
-        assertTrue(processInstanceId.longValue() > 0);
+        assertThat(processInstanceId).isNotNull();
+        assertThat(processInstanceId.longValue() > 0).isTrue();
         try {
             List<TaskSummary> taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             TaskSummary taskSummary = taskList.get(0);
-            assertEquals("First task", taskSummary.getName());
+            assertThat(taskSummary.getName()).isEqualTo("First task");
 
             taskList = taskClient.findTasksByVariableAndValue(USER_YODA, "_string", "john is working on it", null, 0, 10);
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             taskSummary = taskList.get(0);
-            assertEquals("First task", taskSummary.getName());
+            assertThat(taskSummary.getName()).isEqualTo("First task");
 
             // start task
             taskClient.startTask(CONTAINER_ID, taskSummary.getId(), USER_YODA);
@@ -1085,18 +1085,18 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
             inprogressTasks.add(Status.InProgress.toString());
 
             taskList = taskClient.findTasksByVariableAndValue(USER_YODA, "string_", "my*", inprogressTasks, 0, 10);
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             taskSummary = taskList.get(0);
-            assertEquals("First task", taskSummary.getName());
+            assertThat(taskSummary.getName()).isEqualTo("First task");
 
             taskClient.completeTask(CONTAINER_ID, taskSummary.getId(), USER_YODA, taskOutcomeComplete);
 
             taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             taskSummary = taskList.get(0);
-            assertEquals("Second task", taskSummary.getName());
+            assertThat(taskSummary.getName()).isEqualTo("Second task");
 
         } finally {
             processClient.abortProcessInstance(CONTAINER_ID, processInstanceId);
@@ -1114,30 +1114,30 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
 
         try {
             List<TaskSummary> taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
-            assertEquals(2, taskList.size());
+            assertThat(taskList).isNotNull();
+            assertThat(taskList).hasSize(2);
 
             List<String> status = new ArrayList<String>();
             status.add(Status.Reserved.toString());
 
             taskList = taskClient.findTasksByVariableAndValue(USER_YODA, "_string", "john is working on it", status, 0, 10, "processInstanceId", true);
-            assertEquals(2, taskList.size());
+            assertThat(taskList).hasSize(2);
             if (processInstanceId < processInstanceId2) {
-                assertEquals(processInstanceId, taskList.get(0).getProcessInstanceId());
-                assertEquals(processInstanceId2, taskList.get(1).getProcessInstanceId());
+                assertThat(taskList.get(0).getProcessInstanceId()).isEqualTo(processInstanceId);
+                assertThat(taskList.get(1).getProcessInstanceId()).isEqualTo(processInstanceId2);
             } else {
-                assertEquals(processInstanceId2, taskList.get(0).getProcessInstanceId());
-                assertEquals(processInstanceId, taskList.get(1).getProcessInstanceId());
+                assertThat(taskList.get(0).getProcessInstanceId()).isEqualTo(processInstanceId2);
+                assertThat(taskList.get(1).getProcessInstanceId()).isEqualTo(processInstanceId);
             }
 
             taskList = taskClient.findTasksByVariableAndValue(USER_YODA, "_string", "john is working on it", status, 0, 10, "processInstanceId", false);
-            assertEquals(2, taskList.size());
+            assertThat(taskList).hasSize(2);
             if (processInstanceId < processInstanceId2) {
-                assertEquals(processInstanceId2, taskList.get(0).getProcessInstanceId());
-                assertEquals(processInstanceId, taskList.get(1).getProcessInstanceId());
+                assertThat(taskList.get(0).getProcessInstanceId()).isEqualTo(processInstanceId2);
+                assertThat(taskList.get(1).getProcessInstanceId()).isEqualTo(processInstanceId);
             } else {
-                assertEquals(processInstanceId, taskList.get(0).getProcessInstanceId());
-                assertEquals(processInstanceId2, taskList.get(1).getProcessInstanceId());
+                assertThat(taskList.get(0).getProcessInstanceId()).isEqualTo(processInstanceId);
+                assertThat(taskList.get(1).getProcessInstanceId()).isEqualTo(processInstanceId2);
             }
         } finally {
             processClient.abortProcessInstance(CONTAINER_ID, processInstanceId);
@@ -1150,28 +1150,28 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
         // Used to load conversation Id.
         client.getContainerInfo(CONTAINER_ID);
         String conversationId = client.getConversationId();
-        assertNotNull(conversationId);
+        assertThat(conversationId).isNotNull();
 
         Long processInstanceId = processClient.startProcess(CONTAINER_ID, PROCESS_ID_USERTASK);
-        assertNotNull(processInstanceId);
-        assertTrue(processInstanceId.longValue() > 0);
+        assertThat(processInstanceId).isNotNull();
+        assertThat(processInstanceId.longValue() > 0).isTrue();
         String afterNextCallConversationId = ((AbstractKieServicesClientImpl)processClient).getConversationId();
-        assertEquals(conversationId, afterNextCallConversationId);
+        assertThat(afterNextCallConversationId).isEqualTo(conversationId);
 
         // complete conversation to start with new one
         client.completeConversation();
 
         try {
             List<TaskSummary> taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             TaskSummary taskSummary = taskList.get(0);
-            assertEquals("First task", taskSummary.getName());
+            assertThat(taskSummary.getName()).isEqualTo("First task");
 
             afterNextCallConversationId = ((AbstractKieServicesClientImpl)taskClient).getConversationId();
             // since there is no container id in the query endpoint no conversation is set
-            assertNull(afterNextCallConversationId);
+            assertThat(afterNextCallConversationId).isNull();
 
             // startTask and completeTask task
             taskClient.startTask(CONTAINER_ID, taskSummary.getId(), USER_YODA);
@@ -1187,36 +1187,36 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
             taskClient.completeTask(CONTAINER_ID, taskSummary.getId(), USER_YODA, taskOutcome);
 
             afterNextCallConversationId = ((AbstractKieServicesClientImpl)taskClient).getConversationId();
-            assertEquals(conversationId, afterNextCallConversationId);
+            assertThat(afterNextCallConversationId).isEqualTo(conversationId);
 
             // complete conversation to start with new one
             client.completeConversation();
 
             // check if task outcomes are properly set as process variables
             Object personVar = processClient.getProcessInstanceVariable(CONTAINER_ID, processInstanceId, "personData");
-            assertNotNull(personVar);
-            assertEquals(USER_MARY, KieServerReflections.valueOf(personVar, "name"));
+            assertThat(personVar).isNotNull();
+            assertThat("name")).isEqualTo(USER_MARY, KieServerReflections.valueOf(personVar);
 
             afterNextCallConversationId = ((AbstractKieServicesClientImpl)processClient).getConversationId();
             assertNotEquals(conversationId, afterNextCallConversationId);
             conversationId = ((AbstractKieServicesClientImpl)processClient).getConversationId();
 
             String stringVar = (String) processClient.getProcessInstanceVariable(CONTAINER_ID, processInstanceId, "stringData");
-            assertNotNull(personVar);
-            assertEquals("my custom data", stringVar);
+            assertThat(personVar).isNotNull();
+            assertThat(stringVar).isEqualTo("my custom data");
 
             afterNextCallConversationId = ((AbstractKieServicesClientImpl)processClient).getConversationId();
-            assertEquals(conversationId, afterNextCallConversationId);
+            assertThat(afterNextCallConversationId).isEqualTo(conversationId);
 
             taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             taskSummary = taskList.get(0);
-            assertEquals("Second task", taskSummary.getName());
+            assertThat(taskSummary.getName()).isEqualTo("Second task");
 
             afterNextCallConversationId = ((AbstractKieServicesClientImpl)taskClient).getConversationId();
-            assertEquals(conversationId, afterNextCallConversationId);
+            assertThat(afterNextCallConversationId).isEqualTo(conversationId);
 
         } finally {
             processClient.abortProcessInstance(CONTAINER_ID, processInstanceId);
@@ -1234,8 +1234,8 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
         try {
 
             List<TaskSummary> tasks = taskClient.findTasksByStatusByProcessInstanceId(processInstanceId, null, 0, 10);
-            assertNotNull(tasks);
-            assertEquals(1, tasks.size());
+            assertThat(tasks).isNotNull();
+            assertThat(tasks).hasSize(1);
 
             TaskSummary taskInstance = tasks.get(0);
 
@@ -1248,15 +1248,15 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
                     .build();
 
             List<TaskEventInstance> events = taskClient.findTaskEvents(CONTAINER_ID, taskInstance.getId(), 0, 10);
-            assertNotNull(events);
-            assertEquals(1, events.size());
+            assertThat(events).isNotNull();
+            assertThat(events).hasSize(1);
             assertTaskEventInstance(expectedTaskEventInstance, events.get(0));
 
             // now let's start it
             taskClient.startTask(CONTAINER_ID, taskInstance.getId(), USER_YODA);
             events = taskClient.findTaskEvents(CONTAINER_ID, taskInstance.getId(), 0, 10);
-            assertNotNull(events);
-            assertEquals(2, events.size());
+            assertThat(events).isNotNull();
+            assertThat(events).hasSize(2);
             assertTaskEventInstance(expectedTaskEventInstance, events.get(0));
             expectedTaskEventInstance.setType(TaskEvent.TaskEventType.STARTED.toString());
             expectedTaskEventInstance.setUserId(USER_YODA);
@@ -1277,12 +1277,12 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
             if(configuration.isRest()) {
                 KieServerAssert.assertResultContainsString(e.getMessage(),  "Could not find task instance with id \"" + invalidId + "\"");
                 KieServicesHttpException httpEx = (KieServicesHttpException) e;
-                assertEquals(Integer.valueOf(404), httpEx.getHttpCode());
+                assertThat(httpEx.getHttpCode()).isEqualTo(Integer.valueOf(404));
             } else {
-                assertTrue(e.getMessage().contains("No task found with id " + invalidId));
+                assertThat(e.getMessage().contains("No task found with id " + invalidId)).isTrue();
             }
         } catch (TaskNotFoundException tnfe) {
-            assertTrue(tnfe.getMessage().contains("No task found with id " + invalidId));
+            assertThat(tnfe.getMessage().contains("No task found with id " + invalidId)).isTrue();
         }
     }
 
@@ -1297,8 +1297,8 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
         try {
 
             List<TaskSummary> tasks = taskClient.findTasksByStatusByProcessInstanceId(processInstanceId, null, 0, 10);
-            assertNotNull(tasks);
-            assertEquals(1, tasks.size());
+            assertThat(tasks).isNotNull();
+            assertThat(tasks).hasSize(1);
 
             TaskSummary taskInstance = tasks.get(0);
 
@@ -1306,29 +1306,29 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
             taskClient.stopTask(CONTAINER_ID, taskInstance.getId(), USER_YODA);
 
             List<TaskEventInstance> events = taskClient.findTaskEvents(CONTAINER_ID, taskInstance.getId(), 0, 3, SORT_BY_TASK_EVENTS_TYPE, true);
-            assertEquals(TaskEvent.TaskEventType.ADDED.toString(), events.get(0).getType());
-            assertEquals(TaskEvent.TaskEventType.STARTED.toString(), events.get(1).getType());
-            assertEquals(TaskEvent.TaskEventType.STOPPED.toString(), events.get(2).getType());
+            assertThat(events.get(0).getType()).isEqualTo(TaskEvent.TaskEventType.ADDED.toString());
+            assertThat(events.get(1).getType()).isEqualTo(TaskEvent.TaskEventType.STARTED.toString());
+            assertThat(events.get(2).getType()).isEqualTo(TaskEvent.TaskEventType.STOPPED.toString());
 
             try {
                 events = taskClient.findTaskEvents(CONTAINER_ID, taskInstance.getId(), 1, 3, SORT_BY_TASK_EVENTS_TYPE, true);
                 KieServerAssert.assertNullOrEmpty("Task events list is not empty.", events);
             } catch (TaskNotFoundException e) {
-                assertTrue(e.getMessage().contains( "No task found with id " + taskInstance.getId() ));
+                assertThat(e.getMessage().contains( "No task found with id " + taskInstance.getId() )).isTrue();
             } catch (KieServicesException ee) {
                 if(configuration.isRest()) {
                     KieServerAssert.assertResultContainsString(ee.getMessage(), "Could not find task instance with id " + taskInstance.getId());
                     KieServicesHttpException httpEx = (KieServicesHttpException) ee;
-                    assertEquals(Integer.valueOf(404), httpEx.getHttpCode());
+                    assertThat(httpEx.getHttpCode()).isEqualTo(Integer.valueOf(404));
                 } else {
-                    assertTrue(ee.getMessage().contains( "No task found with id " + taskInstance.getId() ));
+                    assertThat(ee.getMessage().contains( "No task found with id " + taskInstance.getId() )).isTrue();
                 }
             }
 
             events = taskClient.findTaskEvents(CONTAINER_ID, taskInstance.getId(), 0, 3, SORT_BY_TASK_EVENTS_TYPE, false);
-            assertEquals(TaskEvent.TaskEventType.STOPPED.toString(), events.get(0).getType());
-            assertEquals(TaskEvent.TaskEventType.STARTED.toString(), events.get(1).getType());
-            assertEquals(TaskEvent.TaskEventType.ADDED.toString(), events.get(2).getType());
+            assertThat(events.get(0).getType()).isEqualTo(TaskEvent.TaskEventType.STOPPED.toString());
+            assertThat(events.get(1).getType()).isEqualTo(TaskEvent.TaskEventType.STARTED.toString());
+            assertThat(events.get(2).getType()).isEqualTo(TaskEvent.TaskEventType.ADDED.toString());
         } finally {
             processClient.abortProcessInstance(CONTAINER_ID, processInstanceId);
         }
@@ -1337,19 +1337,19 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
     @Test
     public void testUserTaskUpdate() throws Exception {
         Long processInstanceId = processClient.startProcess(CONTAINER_ID, PROCESS_ID_USERTASK);
-        assertNotNull(processInstanceId);
-        assertTrue(processInstanceId.longValue() > 0);
+        assertThat(processInstanceId).isNotNull();
+        assertThat(processInstanceId.longValue() > 0).isTrue();
         try {
             List<TaskSummary> taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             TaskSummary taskSummary = taskList.get(0);
 
             // verify current task properties
-            assertEquals(0, taskSummary.getPriority().intValue());
-            assertNull(taskSummary.getExpirationTime());
-            assertEquals("First task", taskSummary.getName());
+            assertThat(taskSummary.getPriority().intValue()).isEqualTo(0);
+            assertThat(taskSummary.getExpirationTime()).isNull();
+            assertThat(taskSummary.getName()).isEqualTo("First task");
             KieServerAssert.assertNullOrEmpty(taskSummary.getDescription());
 
             // set task properties
@@ -1370,10 +1370,10 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
             TaskInstance taskInstance = taskClient.getTaskInstance(CONTAINER_ID, taskSummary.getId());
 
             // verify modified task properties
-            assertEquals(10, taskInstance.getPriority().intValue());
-            assertNotNull(taskInstance.getExpirationDate());
-            assertEquals("Modified name", taskInstance.getName());
-            assertEquals("Simple user task.", taskInstance.getDescription());
+            assertThat(taskInstance.getPriority().intValue()).isEqualTo(10);
+            assertThat(taskInstance.getExpirationDate()).isNotNull();
+            assertThat(taskInstance.getName()).isEqualTo("Modified name");
+            assertThat(taskInstance.getDescription()).isEqualTo("Simple user task.");
         } finally {
             processClient.abortProcessInstance(CONTAINER_ID, processInstanceId);
         }
@@ -1382,19 +1382,19 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
     @Test
     public void testUserTaskUpdateWithData() throws Exception {
         Long processInstanceId = processClient.startProcess(CONTAINER_ID, PROCESS_ID_USERTASK);
-        assertNotNull(processInstanceId);
-        assertTrue(processInstanceId.longValue() > 0);
+        assertThat(processInstanceId).isNotNull();
+        assertThat(processInstanceId.longValue() > 0).isTrue();
         try {
             List<TaskSummary> taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             TaskSummary taskSummary = taskList.get(0);
 
             // verify current task properties
-            assertEquals(0, taskSummary.getPriority().intValue());
-            assertNull(taskSummary.getExpirationTime());
-            assertEquals("First task", taskSummary.getName());
+            assertThat(taskSummary.getPriority().intValue()).isEqualTo(0);
+            assertThat(taskSummary.getExpirationTime()).isNull();
+            assertThat(taskSummary.getName()).isEqualTo("First task");
             KieServerAssert.assertNullOrEmpty(taskSummary.getDescription());
 
             // set task properties
@@ -1424,22 +1424,22 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
             TaskInstance taskInstance = taskClient.getTaskInstance(CONTAINER_ID, taskSummary.getId(), true, true, false);
 
             // verify modified task properties
-            assertEquals(10, taskInstance.getPriority().intValue());
-            assertNotNull(taskInstance.getExpirationDate());
-            assertEquals("Modified name", taskInstance.getName());
-            assertEquals("Simple user task.", taskInstance.getDescription());
+            assertThat(taskInstance.getPriority().intValue()).isEqualTo(10);
+            assertThat(taskInstance.getExpirationDate()).isNotNull();
+            assertThat(taskInstance.getName()).isEqualTo("Modified name");
+            assertThat(taskInstance.getDescription()).isEqualTo("Simple user task.");
 
             String inputVar = (String) taskInstance.getInputData().get("added input");
-            assertNotNull(inputVar);
-            assertEquals("test", inputVar);
+            assertThat(inputVar).isNotNull();
+            assertThat(inputVar).isEqualTo("test");
 
             Object personVar = taskInstance.getOutputData().get("person_");
-            assertNotNull(personVar);
-            assertEquals(USER_MARY, KieServerReflections.valueOf(personVar, "name"));
+            assertThat(personVar).isNotNull();
+            assertThat("name")).isEqualTo(USER_MARY, KieServerReflections.valueOf(personVar);
 
             String stringVar = (String) taskInstance.getOutputData().get("string_");
-            assertNotNull(personVar);
-            assertEquals("my custom data", stringVar);
+            assertThat(personVar).isNotNull();
+            assertThat(stringVar).isEqualTo("my custom data");
         } finally {
             processClient.abortProcessInstance(CONTAINER_ID, processInstanceId);
         }
@@ -1448,13 +1448,13 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
     @Test
     public void testStartAndStopWithWrongContainerId() throws Exception {
         Long processInstanceId = processClient.startProcess(CONTAINER_ID, PROCESS_ID_USERTASK);
-        assertNotNull(processInstanceId);
-        assertTrue(processInstanceId.longValue() > 0);
+        assertThat(processInstanceId).isNotNull();
+        assertThat(processInstanceId.longValue() > 0).isTrue();
         try {
             List<TaskSummary> taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             TaskSummary taskSummary = taskList.get(0);
             checkTaskNameAndStatus(taskSummary, "First task", Status.Reserved);
 
@@ -1462,9 +1462,9 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
             taskClient.startTask(CONTAINER_ID, taskSummary.getId(), USER_YODA);
 
             taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             taskSummary = taskList.get(0);
             checkTaskNameAndStatus(taskSummary, "First task", Status.InProgress);
             
@@ -1480,9 +1480,9 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
 
             // task should be still in progress
             taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             taskSummary = taskList.get(0);
             checkTaskNameAndStatus(taskSummary, "First task", Status.InProgress);
 
@@ -1496,33 +1496,33 @@ public class UserTaskServiceIntegrationTest extends JbpmKieServerBaseIntegration
     
     
     private void assertTaskEventInstance(TaskEventInstance expected, TaskEventInstance actual) {
-        assertNotNull(actual);
-        assertEquals(expected.getType(), actual.getType());
-        assertEquals(expected.getProcessInstanceId(), actual.getProcessInstanceId());
-        assertEquals(expected.getTaskId(), actual.getTaskId());
-        assertEquals(expected.getUserId(), actual.getUserId());
-        assertNotNull(actual.getId());
-        assertNotNull(actual.getLogTime());
-        assertNotNull(actual.getWorkItemId());
+        assertThat(actual).isNotNull();
+        assertThat(actual.getType()).isEqualTo(expected.getType());
+        assertThat(actual.getProcessInstanceId()).isEqualTo(expected.getProcessInstanceId());
+        assertThat(actual.getTaskId()).isEqualTo(expected.getTaskId());
+        assertThat(actual.getUserId()).isEqualTo(expected.getUserId());
+        assertThat(actual.getId()).isNotNull();
+        assertThat(actual.getLogTime()).isNotNull();
+        assertThat(actual.getWorkItemId()).isNotNull();
     }
 
     private void checkTaskNameAndStatus(TaskSummary taskSummary, String name, Status status) {
-        assertNotNull(taskSummary);
-        assertEquals(name, taskSummary.getName());
-        assertEquals(status.toString(), taskSummary.getStatus());
+        assertThat(taskSummary).isNotNull();
+        assertThat(taskSummary.getName()).isEqualTo(name);
+        assertThat(taskSummary.getStatus()).isEqualTo(status.toString());
     }
 
     private void checkTaskStatusAndOwners(String containerId, Long taskId, Status status, String actualOwner, String potentialOwner) {
         TaskInstance task = taskClient.getTaskInstance(containerId, taskId, false, false, true);
         checkTaskStatusAndActualOwner(containerId, taskId, status, actualOwner);
-        assertEquals(1, task.getPotentialOwners().size());
-        assertEquals(potentialOwner, task.getPotentialOwners().get(0));
+        assertThat(task.getPotentialOwners()).hasSize(1);
+        assertThat(task.getPotentialOwners().get(0)).isEqualTo(potentialOwner);
     }
 
     private void checkTaskStatusAndActualOwner(String containerId, Long taskId, Status status, String actualOwner) {
         TaskInstance task = taskClient.getTaskInstance(containerId, taskId);
-        assertEquals(taskId, task.getId());
-        assertEquals(status.toString(), task.getStatus());
-        assertEquals(actualOwner, task.getActualOwner());
+        assertThat(task.getId()).isEqualTo(taskId);
+        assertThat(task.getStatus()).isEqualTo(status.toString());
+        assertThat(task.getActualOwner()).isEqualTo(actualOwner);
     }
 }

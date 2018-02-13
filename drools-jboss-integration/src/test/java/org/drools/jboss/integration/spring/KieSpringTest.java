@@ -27,7 +27,7 @@ import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.junit.Test;
 import org.kie.api.KieBase;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 import org.junit.Ignore;
 import org.junit.runner.RunWith;
@@ -67,7 +67,7 @@ public class KieSpringTest {
     public void testDRL() {
         KieBase kbase = getKieBase("kbaseDRL");
 
-        assertNotNull("KieBase should not be null", kbase);
+        assertThat(kbase).as("KieBase should not be null").isNotNull();
         assertEquals("Unexpected number of packages in kbase",
                      1, kbase.getKiePackages().size());
     }

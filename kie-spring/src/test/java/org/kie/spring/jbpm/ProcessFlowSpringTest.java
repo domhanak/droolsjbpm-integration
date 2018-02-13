@@ -15,7 +15,7 @@
 
 package org.kie.spring.jbpm;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -122,7 +122,7 @@ public class ProcessFlowSpringTest extends AbstractJbpmSpringParameterizedTest {
             }
         }
 
-        assertNotNull(task);
+        assertThat(task).isNotNull();
 
         taskService.start(task.getId(), USER_JOHN);
         taskService.complete(task.getId(), USER_JOHN, null);

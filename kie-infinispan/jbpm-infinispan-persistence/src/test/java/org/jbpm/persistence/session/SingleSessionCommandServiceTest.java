@@ -81,7 +81,7 @@ import org.kie.api.runtime.process.ProcessInstance;
 import org.kie.api.runtime.process.WorkItem;
 
 import static org.jbpm.persistence.util.PersistenceUtil.*;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class SingleSessionCommandServiceTest {
 
@@ -148,7 +148,7 @@ public class SingleSessionCommandServiceTest {
 
         TestWorkItemHandler handler = TestWorkItemHandler.getInstance();
         WorkItem workItem = handler.getWorkItem();
-        assertNotNull( workItem );
+        assertThat(workItem ).isNotNull();
         service.dispose();
 
         service = createSingleSessionCommandService( sessionId,
@@ -160,7 +160,7 @@ public class SingleSessionCommandServiceTest {
         GetProcessInstanceCommand getProcessInstanceCommand = new GetProcessInstanceCommand();
         getProcessInstanceCommand.setProcessInstanceId( processInstance.getId() );
         processInstance = service.execute( getProcessInstanceCommand );
-        assertNotNull( processInstance );
+        assertThat(processInstance ).isNotNull();
         service.dispose();
 
         service = createSingleSessionCommandService( sessionId,
@@ -174,7 +174,7 @@ public class SingleSessionCommandServiceTest {
         service.execute( completeWorkItemCommand );
 
         workItem = handler.getWorkItem();
-        assertNotNull( workItem );
+        assertThat(workItem ).isNotNull();
         service.dispose();
 
         service = createSingleSessionCommandService( sessionId,
@@ -186,7 +186,7 @@ public class SingleSessionCommandServiceTest {
         getProcessInstanceCommand = new GetProcessInstanceCommand();
         getProcessInstanceCommand.setProcessInstanceId( processInstance.getId() );
         processInstance = service.execute( getProcessInstanceCommand );
-        assertNotNull( processInstance );
+        assertThat(processInstance ).isNotNull();
         service.dispose();
 
         service = createSingleSessionCommandService( sessionId,
@@ -200,7 +200,7 @@ public class SingleSessionCommandServiceTest {
         service.execute( completeWorkItemCommand );
 
         workItem = handler.getWorkItem();
-        assertNotNull( workItem );
+        assertThat(workItem ).isNotNull();
         service.dispose();
 
         service = createSingleSessionCommandService( sessionId,
@@ -212,7 +212,7 @@ public class SingleSessionCommandServiceTest {
         getProcessInstanceCommand = new GetProcessInstanceCommand();
         getProcessInstanceCommand.setProcessInstanceId( processInstance.getId() );
         processInstance = service.execute( getProcessInstanceCommand );
-        assertNotNull( processInstance );
+        assertThat(processInstance ).isNotNull();
         service.dispose();
 
         service = createSingleSessionCommandService( sessionId,
@@ -226,7 +226,7 @@ public class SingleSessionCommandServiceTest {
         service.execute( completeWorkItemCommand );
 
         workItem = handler.getWorkItem();
-        assertNull( workItem );
+        assertThat(workItem ).isNull();
         service.dispose();
 
         service = createSingleSessionCommandService( sessionId,
@@ -238,7 +238,7 @@ public class SingleSessionCommandServiceTest {
         getProcessInstanceCommand = new GetProcessInstanceCommand();
         getProcessInstanceCommand.setProcessInstanceId( processInstance.getId() );
         processInstance = service.execute( getProcessInstanceCommand );
-        assertNull( processInstance );
+        assertThat(processInstance ).isNull();
         service.dispose();
     }
     
@@ -278,7 +278,7 @@ public class SingleSessionCommandServiceTest {
 
         TestWorkItemHandler handler = TestWorkItemHandler.getInstance();
         WorkItem workItem = handler.getWorkItem();
-        assertNotNull( workItem );
+        assertThat(workItem ).isNotNull();
         service.dispose();
 
         service = createSingleSessionCommandService( sessionId,
@@ -289,7 +289,7 @@ public class SingleSessionCommandServiceTest {
         GetProcessInstanceCommand getProcessInstanceCommand = new GetProcessInstanceCommand();
         getProcessInstanceCommand.setProcessInstanceId( processInstance.getId() );
         processInstance = service.execute( getProcessInstanceCommand );
-        assertNotNull( processInstance );
+        assertThat(processInstance ).isNotNull();
         ut.commit();
         service.dispose();
 
@@ -304,7 +304,7 @@ public class SingleSessionCommandServiceTest {
         ut.commit();
 
         workItem = handler.getWorkItem();
-        assertNotNull( workItem );
+        assertThat(workItem ).isNotNull();
         service.dispose();
 
         service = createSingleSessionCommandService( sessionId,
@@ -316,7 +316,7 @@ public class SingleSessionCommandServiceTest {
         getProcessInstanceCommand.setProcessInstanceId( processInstance.getId() );
         processInstance = service.execute( getProcessInstanceCommand );
         ut.commit();
-        assertNotNull( processInstance );
+        assertThat(processInstance ).isNotNull();
         service.dispose();
 
         service = createSingleSessionCommandService( sessionId,
@@ -330,7 +330,7 @@ public class SingleSessionCommandServiceTest {
         ut.commit();
 
         workItem = handler.getWorkItem();
-        assertNotNull( workItem );
+        assertThat(workItem ).isNotNull();
         service.dispose();
 
         service = createSingleSessionCommandService( sessionId,
@@ -342,7 +342,7 @@ public class SingleSessionCommandServiceTest {
         getProcessInstanceCommand.setProcessInstanceId( processInstance.getId() );
         processInstance = service.execute( getProcessInstanceCommand );
         ut.commit();
-        assertNotNull( processInstance );
+        assertThat(processInstance ).isNotNull();
         service.dispose();
 
         service = createSingleSessionCommandService( sessionId,
@@ -356,7 +356,7 @@ public class SingleSessionCommandServiceTest {
         ut.commit();
 
         workItem = handler.getWorkItem();
-        assertNull( workItem );
+        assertThat(workItem ).isNull();
         service.dispose();
 
         service = createSingleSessionCommandService( sessionId,
@@ -368,7 +368,7 @@ public class SingleSessionCommandServiceTest {
         getProcessInstanceCommand.setProcessInstanceId( processInstance.getId() );
         processInstance = service.execute( getProcessInstanceCommand );
         ut.commit();
-        assertNull( processInstance );
+        assertThat(processInstance ).isNull();
         service.dispose();
     }
 
@@ -473,7 +473,7 @@ public class SingleSessionCommandServiceTest {
 
         TestWorkItemHandler handler = TestWorkItemHandler.getInstance();
         WorkItem workItem = handler.getWorkItem();
-        assertNotNull( workItem );
+        assertThat(workItem ).isNotNull();
         service.dispose();
 
         service = createSingleSessionCommandService( sessionId,
@@ -483,7 +483,7 @@ public class SingleSessionCommandServiceTest {
         GetProcessInstanceCommand getProcessInstanceCommand = new GetProcessInstanceCommand();
         getProcessInstanceCommand.setProcessInstanceId( processInstanceId );
         processInstance = (RuleFlowProcessInstance) service.execute( getProcessInstanceCommand );
-        assertNotNull( processInstance );
+        assertThat(processInstance ).isNotNull();
 
         Collection<NodeInstance> nodeInstances = processInstance.getNodeInstances();
         assertEquals( 1,
@@ -493,7 +493,7 @@ public class SingleSessionCommandServiceTest {
         getProcessInstanceCommand = new GetProcessInstanceCommand();
         getProcessInstanceCommand.setProcessInstanceId( subProcessInstanceId );
         RuleFlowProcessInstance subProcessInstance = (RuleFlowProcessInstance) service.execute( getProcessInstanceCommand );
-        assertNotNull( subProcessInstance );
+        assertThat(subProcessInstance ).isNotNull();
         service.dispose();
 
         service = createSingleSessionCommandService( sessionId,
@@ -512,12 +512,12 @@ public class SingleSessionCommandServiceTest {
         getProcessInstanceCommand = new GetProcessInstanceCommand();
         getProcessInstanceCommand.setProcessInstanceId( subProcessInstanceId );
         subProcessInstance = (RuleFlowProcessInstance) service.execute( getProcessInstanceCommand );
-        assertNull( subProcessInstance );
+        assertThat(subProcessInstance ).isNull();
 
         getProcessInstanceCommand = new GetProcessInstanceCommand();
         getProcessInstanceCommand.setProcessInstanceId( processInstanceId );
         processInstance = (RuleFlowProcessInstance) service.execute( getProcessInstanceCommand );
-        assertNull( processInstance );
+        assertThat(processInstance ).isNull();
         service.dispose();
     }
 
@@ -666,7 +666,7 @@ public class SingleSessionCommandServiceTest {
         GetProcessInstanceCommand getProcessInstanceCommand = new GetProcessInstanceCommand();
         getProcessInstanceCommand.setProcessInstanceId( processInstance.getId() );
         processInstance = service.execute( getProcessInstanceCommand );
-        assertNotNull( processInstance );
+        assertThat(processInstance ).isNotNull();
         service.dispose();
 
         service = createSingleSessionCommandService( sessionId,
@@ -678,7 +678,7 @@ public class SingleSessionCommandServiceTest {
         getProcessInstanceCommand = new GetProcessInstanceCommand();
         getProcessInstanceCommand.setProcessInstanceId( processInstance.getId() );
         processInstance = service.execute( getProcessInstanceCommand );
-        assertNull( processInstance );
+        assertThat(processInstance ).isNull();
     }
 
 	private List<KiePackage> getProcessTimer() {
@@ -769,7 +769,7 @@ public class SingleSessionCommandServiceTest {
         GetProcessInstanceCommand getProcessInstanceCommand = new GetProcessInstanceCommand();
         getProcessInstanceCommand.setProcessInstanceId( processInstance.getId() );
         processInstance = service.execute( getProcessInstanceCommand );
-        assertNull( processInstance );
+        assertThat(processInstance ).isNull();
     }
 
 	private List<KiePackage> getProcessTimer2() {

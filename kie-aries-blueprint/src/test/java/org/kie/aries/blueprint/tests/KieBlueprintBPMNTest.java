@@ -32,7 +32,7 @@ import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.manager.RuntimeManager;
 import org.kie.aries.blueprint.KieBlueprintContainer;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class KieBlueprintBPMNTest {
 
@@ -48,15 +48,15 @@ public class KieBlueprintBPMNTest {
     @Test
     public void testEmptyRuntimeManager() throws Exception {
         Object obj = container.getComponentInstance("emptyRuntimeManager");
-        assertNotNull(obj);
-        assertTrue(obj instanceof RuntimeManager);
+        assertThat(obj).isNotNull();
+        assertThat(obj instanceof RuntimeManager).isTrue();
     }
 
     @Test
     public void testSimpleSession() throws Exception {
         Object obj = container.getComponentInstance("simpleSession");
-        assertNotNull(obj);
-        assertTrue(obj instanceof KieSession);
+        assertThat(obj).isNotNull();
+        assertThat(obj instanceof KieSession).isTrue();
         KieSession ksession = (KieSession)obj;
         ksession.getWorkItemManager().registerWorkItemHandler("Human Task", new SystemOutWorkItemHandler());
         ksession.getWorkItemManager().registerWorkItemHandler("RegisterRequest", new SystemOutWorkItemHandler());

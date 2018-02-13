@@ -15,7 +15,7 @@
 
 package org.kie.server.api.marshalling;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.ArrayList;
@@ -62,9 +62,9 @@ public class ScoresMarshallingTest {
         HardSoftScore score = HardSoftScore.valueOf(10, 20);
         HardSoftScore result = marshallUnmarshallScore(score);
 
-        assertNotNull(result);
-        assertEquals(10, result.getHardScore());
-        assertEquals(20, result.getSoftScore());
+        assertThat(result).isNotNull();
+        assertThat(result.getHardScore()).isEqualTo(10);
+        assertThat(result.getSoftScore()).isEqualTo(20);
     }
 
     @SuppressWarnings("unchecked")

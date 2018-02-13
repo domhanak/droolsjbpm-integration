@@ -36,7 +36,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
 
@@ -123,9 +123,9 @@ public class ProcessServiceBaseTest {
     }
 
     private void verifyProcessInstanceHasActiveTasks( ProcessInstanceDesc pid, org.kie.server.api.model.instance.ProcessInstance pi){
-        assertNotNull(pid);
-        assertNotNull(pi);
-        assertEquals(pid.getActiveTasks().size(), pi.getActiveUserTasks().getItems().size());
+        assertThat(pid).isNotNull();
+        assertThat(pi).isNotNull();
+        assertThat(pi.getActiveUserTasks().getItems().size()).isEqualTo(pid.getActiveTasks().size());
 
         List<org.jbpm.services.api.model.UserTaskInstanceDesc> userTaskInstanceDescsList= pid.getActiveTasks();
         List<TaskSummary> taskSummaryArray = pi.getActiveUserTasks().getItems();
@@ -135,18 +135,18 @@ public class ProcessServiceBaseTest {
     }
 
     private void verifyTaskInstanceEqualsTaskSummary(org.jbpm.services.api.model.UserTaskInstanceDesc taskInstance, TaskSummary taskSummary){
-        assertEquals(taskInstance.getTaskId(), taskSummary.getId());
-        assertEquals(taskInstance.getName(), taskSummary.getName());
-        assertEquals(taskInstance.getDescription(), taskSummary.getDescription());
-        assertEquals(taskInstance.getActivationTime(), taskSummary.getActivationTime());
-        assertEquals(taskInstance.getActualOwner(), taskSummary.getActualOwner());
-        assertEquals(taskInstance.getDeploymentId(), taskSummary.getContainerId());
-        assertEquals(taskInstance.getCreatedBy(), taskSummary.getCreatedBy());
-        assertEquals(taskInstance.getCreatedOn(), taskSummary.getCreatedOn());
-        assertEquals(taskInstance.getPriority(), taskSummary.getPriority());
-        assertEquals(taskInstance.getProcessId(), taskSummary.getProcessId());
-        assertEquals(taskInstance.getProcessInstanceId(), taskSummary.getProcessInstanceId());
-        assertEquals(taskInstance.getStatus(), taskSummary.getStatus());
+        assertThat(taskSummary.getId()).isEqualTo(taskInstance.getTaskId());
+        assertThat(taskSummary.getName()).isEqualTo(taskInstance.getName());
+        assertThat(taskSummary.getDescription()).isEqualTo(taskInstance.getDescription());
+        assertThat(taskSummary.getActivationTime()).isEqualTo(taskInstance.getActivationTime());
+        assertThat(taskSummary.getActualOwner()).isEqualTo(taskInstance.getActualOwner());
+        assertThat(taskSummary.getContainerId()).isEqualTo(taskInstance.getDeploymentId());
+        assertThat(taskSummary.getCreatedBy()).isEqualTo(taskInstance.getCreatedBy());
+        assertThat(taskSummary.getCreatedOn()).isEqualTo(taskInstance.getCreatedOn());
+        assertThat(taskSummary.getPriority()).isEqualTo(taskInstance.getPriority());
+        assertThat(taskSummary.getProcessId()).isEqualTo(taskInstance.getProcessId());
+        assertThat(taskSummary.getProcessInstanceId()).isEqualTo(taskInstance.getProcessInstanceId());
+        assertThat(taskSummary.getStatus()).isEqualTo(taskInstance.getStatus());
     }
 
 

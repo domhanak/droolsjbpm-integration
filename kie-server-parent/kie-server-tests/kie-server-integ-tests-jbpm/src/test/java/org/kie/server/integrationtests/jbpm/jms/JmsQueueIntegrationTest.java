@@ -40,7 +40,7 @@ import org.kie.server.integrationtests.jbpm.JbpmKieServerBaseIntegrationTest;
 import org.kie.server.integrationtests.shared.KieServerDeployer;
 import org.kie.server.integrationtests.shared.KieServerSynchronization;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 @Category({JMSOnly.class, RemotelyControlled.class})
 public class JmsQueueIntegrationTest extends JbpmKieServerBaseIntegrationTest {
@@ -87,8 +87,8 @@ public class JmsQueueIntegrationTest extends JbpmKieServerBaseIntegrationTest {
             fail("Should throw exception about Kie server being unavailable.");
         } catch (Exception e) {
 
-            assertTrue(e instanceof KieServicesException);
-            assertEquals("Response is empty", ((KieServicesException) e).getMessage());
+            assertThat(e instanceof KieServicesException).isTrue();
+            assertThat(((KieServicesException) e).getMessage()).isEqualTo("Response is empty");
         } finally {
             containerRemoteController.deployWarFile(TestConfig.getKieServerContext(), TestConfig.getKieServerWarPath());
         }
@@ -98,11 +98,11 @@ public class JmsQueueIntegrationTest extends JbpmKieServerBaseIntegrationTest {
 
         // Process should be deployed.
         List<ProcessInstance> processInstances = queryClient.findProcessInstances(0, 100);
-        assertEquals(1, processInstances.size());
+        assertThat(processInstances).hasSize(1);
 
         ProcessInstance pi = processInstances.get(0);
-        assertEquals(org.kie.api.runtime.process.ProcessInstance.STATE_ACTIVE, pi.getState().intValue());
-        assertEquals(PROCESS_ID_USERTASK, pi.getProcessId());
+        assertThat(pi.getState().intValue()).isEqualTo(org.kie.api.runtime.process.ProcessInstance.STATE_ACTIVE);
+        assertThat(pi.getProcessId()).isEqualTo(PROCESS_ID_USERTASK);
 
         processClient.abortProcessInstance(CONTAINER_ID, pi.getId());
     }

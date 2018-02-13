@@ -84,10 +84,10 @@ public class CaseServiceRestOnlyIntegrationTest extends RestJbpmBaseIntegrationT
         logger.debug("Start case: [POST] " + clientRequest.getUri());
 
         response = clientRequest.request(getMediaType()).post(caseFile);
-        Assert.assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatus());
+        Assert.assertThat(response.getStatus()).isEqualTo(Response.Status.CREATED.getStatusCode());
 
         String caseId = response.readEntity(JaxbString.class).getValue();
-        assertNotNull(caseId);
+        assertThat(caseId).isNotNull();
     }
 
     @Test
@@ -104,7 +104,7 @@ public class CaseServiceRestOnlyIntegrationTest extends RestJbpmBaseIntegrationT
         logger.debug("Update case: [PUT] " + clientRequest.getUri());
 
         response = clientRequest.request(getMediaType()).put(newComment);
-        Assert.assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
+        Assert.assertThat(response.getStatus()).isEqualTo(Response.Status.NOT_FOUND.getStatusCode());
     }
 
     @Test
@@ -120,7 +120,7 @@ public class CaseServiceRestOnlyIntegrationTest extends RestJbpmBaseIntegrationT
         logger.debug("Remove case: [DELETE] " + clientRequest.getUri());
 
         response = clientRequest.request(getMediaType()).delete();
-        Assert.assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
+        Assert.assertThat(response.getStatus()).isEqualTo(Response.Status.NOT_FOUND.getStatusCode());
     }
 
     @Test
@@ -135,7 +135,7 @@ public class CaseServiceRestOnlyIntegrationTest extends RestJbpmBaseIntegrationT
         logger.debug("Add dynamic work item: [POST] " + clientRequest.getUri());
 
         response = clientRequest.request(getMediaType()).post(Entity.entity("", getMediaType()));
-        Assert.assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+        Assert.assertThat(response.getStatus()).isEqualTo(Response.Status.BAD_REQUEST.getStatusCode());
     }
 
     @Test
@@ -154,7 +154,7 @@ public class CaseServiceRestOnlyIntegrationTest extends RestJbpmBaseIntegrationT
         logger.debug("Add dynamic work item: [POST] " + clientRequest.getUri());
 
         response = clientRequest.request(getMediaType()).post(createEntity(marshaller.marshall(taskSpecMap)));
-        Assert.assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
+        Assert.assertThat(response.getStatus()).isEqualTo(Response.Status.NOT_FOUND.getStatusCode());
     }
 
     private String startUserTaskCase(String owner, String contact) {
@@ -167,7 +167,7 @@ public class CaseServiceRestOnlyIntegrationTest extends RestJbpmBaseIntegrationT
                 .build();
 
         String caseId = caseClient.startCase(CONTAINER_ID, CASE_HR_DEF_ID, caseFile);
-        assertNotNull(caseId);
+        assertThat(caseId).isNotNull();
         return caseId;
     }
 }

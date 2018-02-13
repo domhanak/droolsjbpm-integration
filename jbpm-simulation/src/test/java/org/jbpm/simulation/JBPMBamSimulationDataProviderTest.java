@@ -68,7 +68,7 @@ public class JBPMBamSimulationDataProviderTest {
             
         };
         Map<String, Object> data = provider.getSimulationDataForNode(node);
-        assertNotNull(data);
+        assertThat(data).isNotNull();
     }
     
     @Test

@@ -27,7 +27,7 @@ import org.kie.api.runtime.StatelessKieSession;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @ContextConfiguration(locations = "classpath:springContext.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -76,6 +76,6 @@ public class OrderTest {
 
         orderRulesProcessor.execute(Arrays.asList(order, errors));
 
-        assertEquals(errorCount, errors.size());
+        assertThat(errors.size()).isEqualTo(errorCount);
     }
 }

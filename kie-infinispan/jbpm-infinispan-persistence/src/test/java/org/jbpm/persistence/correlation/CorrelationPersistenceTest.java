@@ -18,7 +18,7 @@ package org.jbpm.persistence.correlation;
 import static org.jbpm.persistence.util.PersistenceUtil.JBPM_PERSISTENCE_UNIT_NAME;
 import static org.jbpm.persistence.util.PersistenceUtil.cleanUp;
 import static org.jbpm.persistence.util.PersistenceUtil.setupWithPoolingDataSource;
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
@@ -96,8 +96,8 @@ public class CorrelationPersistenceTest {
         correlationKey.addProperty(new CorrelationPropertyInfo("", "test123"));
         Long processInstance = new InfinispanProcessPersistenceContext(cache).getProcessInstanceByCorrelationKey(correlationKey);
         
-        assertNotNull(processInstance);
-        assertEquals(correlationKey.getProcessInstanceId(), processInstance.longValue());
+        assertThat(processInstance).isNotNull();
+        assertThat(processInstance.longValue()).isEqualTo(correlationKey.getProcessInstanceId());
     }
     
     @Test
@@ -109,7 +109,7 @@ public class CorrelationPersistenceTest {
         correlationKey.addProperty(new CorrelationPropertyInfo("", "asdf"));
         Long processInstance = new InfinispanProcessPersistenceContext(cache).getProcessInstanceByCorrelationKey(correlationKey);
         
-        assertNull(processInstance);
+        assertThat(processInstance).isNull();
     }
     
     @Test
@@ -125,7 +125,7 @@ public class CorrelationPersistenceTest {
 
         Long processInstance = new InfinispanProcessPersistenceContext(cache).getProcessInstanceByCorrelationKey(correlationKey);
         
-        assertNotNull(processInstance);
-        assertEquals(correlationKey.getProcessInstanceId(), processInstance.longValue());
+        assertThat(processInstance).isNotNull();
+        assertThat(processInstance.longValue()).isEqualTo(correlationKey.getProcessInstanceId());
     }
 }

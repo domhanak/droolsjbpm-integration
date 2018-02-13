@@ -16,7 +16,7 @@
 package org.kie.server.integrationtests.jbpm;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
 import java.net.URI;
@@ -74,9 +74,9 @@ public class ContainerFailureRecoveryIntegrationTest extends JbpmKieServerBaseIn
         KieServerAssert.assertSuccess(response);
         
         KieContainerResource resource = response.getResult();
-        assertEquals("Shound not have any messages", 1, resource.getMessages().size());
+        assertThat(resource.getMessages()).as("Shound not have any messages").hasSize(1);
         Message message = resource.getMessages().get(0);
-        assertEquals("Message should be of type info", Severity.ERROR, message.getSeverity());
+        assertThat(message.getSeverity()).as("Message should be of type info").isEqualTo(Severity.ERROR);
 
         client.disposeContainer(CONTAINER_ID);
         KieServerDeployer.removeLocalArtifact(releaseId);

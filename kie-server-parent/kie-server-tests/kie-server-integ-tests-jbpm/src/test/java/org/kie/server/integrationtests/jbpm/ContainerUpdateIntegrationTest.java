@@ -16,7 +16,7 @@
 package org.kie.server.integrationtests.jbpm;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -67,9 +67,9 @@ public class ContainerUpdateIntegrationTest extends JbpmKieServerBaseIntegration
 
         try {
             List<TaskSummary> tasks = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertEquals(1, tasks.size());
-            assertEquals("First task", tasks.get(0).getName());
-            assertTrue("Task should be skippable.", tasks.get(0).getSkipable().booleanValue());
+            assertThat(tasks).hasSize(1);
+            assertThat(tasks.get(0).getName()).isEqualTo("First task");
+            assertThat(tasks.get(0).getSkipable().booleanValue()).as("Task should be skippable.").isTrue();
 
             // Update container to new version and restart process.
             processClient.abortProcessInstance(CONTAINER_ID, processInstanceId);
@@ -77,9 +77,9 @@ public class ContainerUpdateIntegrationTest extends JbpmKieServerBaseIntegration
             processInstanceId = processClient.startProcess(CONTAINER_ID, PROCESS_ID_USERTASK);
 
             tasks = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertEquals(1, tasks.size());
-            assertEquals("Updated first task", tasks.get(0).getName());
-            assertFalse("Task shouldn't be skippable.", tasks.get(0).getSkipable().booleanValue());
+            assertThat(tasks).hasSize(1);
+            assertThat(tasks.get(0).getName()).isEqualTo("Updated first task");
+            assertThat(tasks.get(0).getSkipable().booleanValue()).as("Task shouldn't be skippable.").isFalse();
         } finally {
             processClient.abortProcessInstance(CONTAINER_ID, processInstanceId);
         }
@@ -88,31 +88,31 @@ public class ContainerUpdateIntegrationTest extends JbpmKieServerBaseIntegration
     @Test
     public void testProcessDefinitionWithUpdatedContainer() throws Exception {
         UserTaskDefinitionList userTaskDefinitions = processClient.getUserTaskDefinitions(CONTAINER_ID, PROCESS_ID_USERTASK);
-        assertEquals(2, userTaskDefinitions.getItems().size());
+        assertThat(userTaskDefinitions.getItems()).hasSize(2);
 
         Map<String, UserTaskDefinition> map = mapByName(userTaskDefinitions.getItems());
 
-        assertTrue(map.containsKey("First task"));
-        assertTrue(map.containsKey("Second task"));
+        assertThat(map.containsKey("First task")).isTrue();
+        assertThat(map.containsKey("Second task")).isTrue();
 
         UserTaskDefinition firstTaskDefinition = map.get("First task");
-        assertEquals("First task", firstTaskDefinition.getName());
-        assertTrue("Task should be skippable.", firstTaskDefinition.isSkippable());
+        assertThat(firstTaskDefinition.getName()).isEqualTo("First task");
+        assertThat(firstTaskDefinition.isSkippable()).as("Task should be skippable.").isTrue();
 
         // Update container to new version.
         KieServerAssert.assertSuccess(client.updateReleaseId(CONTAINER_ID, releaseId101));
 
         userTaskDefinitions = processClient.getUserTaskDefinitions(CONTAINER_ID, PROCESS_ID_USERTASK);
-        assertEquals(2, userTaskDefinitions.getItems().size());
+        assertThat(userTaskDefinitions.getItems()).hasSize(2);
 
         map = mapByName(userTaskDefinitions.getItems());
 
-        assertTrue(map.containsKey("Updated first task"));
-        assertTrue(map.containsKey("Second task"));
+        assertThat(map.containsKey("Updated first task")).isTrue();
+        assertThat(map.containsKey("Second task")).isTrue();
 
         firstTaskDefinition = map.get("Updated first task");
-        assertEquals("Updated first task", firstTaskDefinition.getName());
-        assertFalse("Task shouldn't be skippable.", firstTaskDefinition.isSkippable());
+        assertThat(firstTaskDefinition.getName()).isEqualTo("Updated first task");
+        assertThat(firstTaskDefinition.isSkippable()).as("Task shouldn't be skippable.").isFalse();
     }
 
     @Test
@@ -122,7 +122,7 @@ public class ContainerUpdateIntegrationTest extends JbpmKieServerBaseIntegration
         try {
             ServiceResponse<ReleaseId> updateReleaseId = client.updateReleaseId(CONTAINER_ID, releaseId101);
             KieServerAssert.assertFailure(updateReleaseId);
-            assertEquals("Update of container forbidden - there are active process instances for container " + CONTAINER_ID, updateReleaseId.getMsg());
+            assertThat(updateReleaseId.getMsg()).isEqualTo("Update of container forbidden - there are active process instances for container " + CONTAINER_ID);
         } finally {
             processClient.abortProcessInstance(CONTAINER_ID, processInstanceId);
         }
@@ -134,9 +134,9 @@ public class ContainerUpdateIntegrationTest extends JbpmKieServerBaseIntegration
         KieServerAssert.assertSuccess(response);
         
         KieContainerResource resource = response.getResult();
-        assertEquals("Shound not have any messages", 1, resource.getMessages().size());
+        assertThat(resource.getMessages()).as("Shound not have any messages").hasSize(1);
         Message message = resource.getMessages().get(0);
-        assertEquals("Message should be of type info", Severity.INFO, message.getSeverity());
+        assertThat(message.getSeverity()).as("Message should be of type info").isEqualTo(Severity.INFO);
      
         ServiceResponse<KieContainerResource> createNotExsting = client.createContainer(
                 "broken-project", 
@@ -149,9 +149,9 @@ public class ContainerUpdateIntegrationTest extends JbpmKieServerBaseIntegration
         KieServerAssert.assertSuccess(response);
         
         resource = response.getResult();
-        assertEquals("Shound have one message", 1, resource.getMessages().size());
+        assertThat(resource.getMessages()).as("Shound have one message").hasSize(1);
         message = resource.getMessages().get(0);
-        assertEquals("Message should be of type error", Severity.ERROR, message.getSeverity());
+        assertThat(message.getSeverity()).as("Message should be of type error").isEqualTo(Severity.ERROR);
     }
 
     @Test

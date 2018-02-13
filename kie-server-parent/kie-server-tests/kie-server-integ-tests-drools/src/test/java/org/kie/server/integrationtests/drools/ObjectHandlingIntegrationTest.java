@@ -13,7 +13,7 @@ import org.kie.api.runtime.ExecutionResults;
 import org.kie.server.api.model.ReleaseId;
 import org.kie.server.api.model.ServiceResponse;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 import org.kie.server.integrationtests.shared.KieServerAssert;
 import org.kie.server.integrationtests.shared.KieServerDeployer;
 import org.kie.server.integrationtests.shared.KieServerReflections;
@@ -65,7 +65,7 @@ public class ObjectHandlingIntegrationTest extends DroolsKieServerBaseIntegratio
 
         ExecutionResults actualData = response.getResult();
         List<Object> listOfObjects = (List<Object>) actualData.getValue(GET_OBJECTS_IDENTIFIER);
-        assertEquals(1, listOfObjects.size());
+        assertThat(listOfObjects).hasSize(1);
 
         Object returnedPerson = listOfObjects.get(0);
         assertEquals("Expected surname to be set to 'Vader'",

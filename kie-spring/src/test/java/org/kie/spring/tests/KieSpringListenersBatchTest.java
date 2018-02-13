@@ -50,11 +50,11 @@ public class KieSpringListenersBatchTest {
     @Test
     public void testStatefulWMEventListener() throws Exception {
         KieSession kSession = (KieSession) context.getBean("ksession1");
-        assertTrue(kSession.getRuleRuntimeEventListeners().size() > 0);
+        assertThat(kSession.getRuleRuntimeEventListeners().size() > 0).isTrue();
         final MockIncrementingRuleRuntimeEventListener listener = findMockIncrementingRuleRuntimeEventListener(kSession);
 
         // if a Person is inserted here into the KieSession and fireAllRules called, the assertion succeeds
-        assertEquals("Counter incremented unexpected number of times.", 1, listener.getCounter());
+        assertThat(listener.getCounter()).as("Counter incremented unexpected number of times.").isEqualTo(1);
     }
 
     private MockIncrementingRuleRuntimeEventListener findMockIncrementingRuleRuntimeEventListener(KieSession kieSession) {

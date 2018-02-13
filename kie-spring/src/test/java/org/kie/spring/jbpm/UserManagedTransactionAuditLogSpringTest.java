@@ -21,7 +21,7 @@ import java.util.Collection;
 import javax.naming.InitialContext;
 import javax.transaction.UserTransaction;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import org.drools.persistence.jta.JtaTransactionManager;
 import org.jbpm.process.audit.ProcessInstanceLog;
@@ -65,8 +65,8 @@ public class UserManagedTransactionAuditLogSpringTest extends AbstractJbpmSpring
         ProcessInstance processInstance = ksession.startProcess(SCRIPT_TASK_PROCESS_ID);
 
         ProcessInstanceLog instanceLog = getLogService().findProcessInstance(processInstance.getId());
-        assertNotNull(instanceLog);
-        assertEquals(ProcessInstance.STATE_COMPLETED, instanceLog.getStatus().intValue());
+        assertThat(instanceLog).isNotNull();
+        assertThat(instanceLog.getStatus().intValue()).isEqualTo(ProcessInstance.STATE_COMPLETED);
 
         ut.commit();
 

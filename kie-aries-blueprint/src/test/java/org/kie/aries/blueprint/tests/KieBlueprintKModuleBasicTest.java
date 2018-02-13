@@ -34,7 +34,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class KieBlueprintKModuleBasicTest {
 
@@ -50,51 +50,51 @@ public class KieBlueprintKModuleBasicTest {
     @Test
     public void testReleaseId() throws Exception {
         Object obj = container.getComponentInstance("dummyReleaseId");
-        assertNotNull(obj);
-        assertTrue(obj instanceof ReleaseId);
+        assertThat(obj).isNotNull();
+        assertThat(obj instanceof ReleaseId).isTrue();
     }
 
     @Test
     public void testKieBase() throws Exception {
         KieBase kbase = (KieBase) container.getComponentInstance("drl_kiesample2");
-        assertNotNull(kbase);
+        assertThat(kbase).isNotNull();
     }
 
     @Test
     public void testKieContainer() throws Exception {
         KieContainer kieContainer = (KieContainer) container.getComponentInstance("defaultContainer");
-        assertNotNull(kieContainer);
+        assertThat(kieContainer).isNotNull();
     }
 
     @Test
     public void testKieStore() throws Exception {
         KieStoreServices sampleKstore = (KieStoreServices) container.getComponentInstance("sampleKstore");
-        assertNotNull(sampleKstore);
+        assertThat(sampleKstore).isNotNull();
     }
 
     @Test
     public void testKieSession() throws Exception {
         KieSession ksession = (KieSession) container.getComponentInstance("ksession9");
-        assertNotNull(ksession);
+        assertThat(ksession).isNotNull();
     }
 
     @Test
     public void testKieSessionRef() throws Exception {
         StatelessKieSession ksession = (StatelessKieSession) container.getComponentInstance("ksession99");
-        assertNotNull(ksession);
+        assertThat(ksession).isNotNull();
 //
 //        KieObjectsResolver kieObjectsResolver = new KieObjectsResolver();
 //        Object obj = kieObjectsResolver.resolveKSession("ksession99", null);
-//        assertSame(ksession, obj);
+//        assertThat(obj).isSameAs(ksession);
     }
 
     @Test
     public void testInvalidKieSessionRef() throws Exception {
         try {
             StatelessKieSession ksession = (StatelessKieSession) container.getComponentInstance("should-fail-ksession1");
-            assertNull(ksession);
+            assertThat(ksession).isNull();
         } catch(Exception e){
-            assertTrue(e instanceof NoSuchComponentException);
+            assertThat(e instanceof NoSuchComponentException).isTrue();
             return;
         }
         fail();
@@ -103,14 +103,14 @@ public class KieBlueprintKModuleBasicTest {
     @Test
     public void testKSessionExecution() throws Exception {
         StatelessKieSession ksession = (StatelessKieSession) container.getComponentInstance("ksession99");
-        assertNotNull(ksession);
+        assertThat(ksession).isNotNull();
 
         Person person = (Person) container.getComponentInstance("person1");
-        assertNotNull(person);
-        assertFalse(person.isHappy());
+        assertThat(person).isNotNull();
+        assertThat(person.isHappy()).isFalse();
 
         ksession.execute(person);
-        assertTrue(person.isHappy());
+        assertThat(person.isHappy()).isTrue();
     }
 
     @AfterClass

@@ -41,15 +41,15 @@ public class DroolsActivityActivityTest extends ActivityUnitTestCase<DroolsActiv
         getInstrumentation().callActivityOnStart(activity);
         getInstrumentation().callActivityOnResume(activity);
 
-        assertNotNull("kiecontainer", ((DroolsActivity)activity).mContainer);
-        assertNotNull("kiebase", ((DroolsActivity)activity).mKieBase);
-        assertNotNull("kiesession", ((DroolsActivity)activity).kSession);
+        assertThat(((DroolsActivity)activity).mContainer).as("kiecontainer").isNotNull();
+        assertThat(((DroolsActivity)activity).mKieBase).as("kiebase").isNotNull();
+        assertThat(((DroolsActivity)activity).kSession).as("kiesession").isNotNull();
         Button fireRulesButton = (Button) activity.findViewById(R.id.fireRules);
-        assertNotNull("fireRulesButton", fireRulesButton);
+        assertThat(fireRulesButton).as("fireRulesButton").isNotNull();
         TextView log = (TextView) activity.findViewById(R.id.log);
         fireRulesButton.performClick();
         Thread.sleep(2000);
-        assertFalse(log.getText().toString().isEmpty());
+        assertThat(log.getText().toString().isEmpty()).isFalse();
 
         getInstrumentation().callActivityOnPause(activity);
         getInstrumentation().callActivityOnStop(activity);

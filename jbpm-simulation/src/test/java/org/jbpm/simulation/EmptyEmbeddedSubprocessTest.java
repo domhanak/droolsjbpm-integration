@@ -23,7 +23,7 @@ import java.io.InputStreamReader;
 import java.util.Collection;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 
 public class EmptyEmbeddedSubprocessTest {
@@ -40,16 +40,16 @@ public class EmptyEmbeddedSubprocessTest {
             out += line;
 
         SimulationRepository repo = SimulationRunner.runSimulation("defaultPackage.emptysubprocess", out, 10, 100, true, "onevent.simulation.rules.drl");
-        assertNotNull(repo);
+        assertThat(repo).isNotNull();
 
         WorkingMemorySimulationRepository wmRepo = (WorkingMemorySimulationRepository) repo;
         wmRepo.getSession().execute(new InsertElementsCommand((Collection)wmRepo.getAggregatedEvents()));
         wmRepo.fireAllRules();
 
         List<AggregatedSimulationEvent> summary = (List<AggregatedSimulationEvent>) wmRepo.getGlobal("summary");
-        assertNotNull(summary);
-        assertEquals(1, summary.size());
-        assertEquals(20, wmRepo.getEvents().size());
+        assertThat(summary).isNotNull();
+        assertThat(summary).hasSize(1);
+        assertThat(wmRepo.getEvents()).hasSize(20);
 
         wmRepo.close();
 

@@ -39,7 +39,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath*:/jbpm/services/jta-services.xml"})
@@ -114,8 +114,8 @@ public class JtaJbpmServicesTest extends AbstractJbpmServicesTest {
         processService.abortProcessInstance(processInstanceId);
 
         ProcessInstanceDesc pi = runtimeDataService.getProcessInstanceById(processInstanceId);
-        assertNotNull(pi);
-        assertEquals(ProcessInstance.STATE_ABORTED, pi.getState().intValue());
+        assertThat(pi).isNotNull();
+        assertThat(pi.getState().intValue()).isEqualTo(ProcessInstance.STATE_ABORTED);
     }
 
 

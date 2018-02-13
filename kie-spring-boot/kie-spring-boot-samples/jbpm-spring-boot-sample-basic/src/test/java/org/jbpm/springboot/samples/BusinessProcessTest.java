@@ -17,7 +17,7 @@
 package org.jbpm.springboot.samples;
 
 import static org.appformer.maven.integration.MavenRepository.getMavenRepository;
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -104,13 +104,13 @@ public class BusinessProcessTest {
         parameters.put("employee", "john");
         parameters.put("reason", "SpringBoot jBPM evaluation");
         long processInstanceId = processService.startProcess(unit.getIdentifier(), "evaluation");
-        assertNotNull(processInstanceId);
-        assertTrue(processInstanceId > 0);
+        assertThat(processInstanceId).isNotNull();
+        assertThat(processInstanceId > 0).isTrue();
         
         processService.abortProcessInstance(processInstanceId);
         
         ProcessInstance pi = processService.getProcessInstance(processInstanceId);
-        assertNull(pi);
+        assertThat(pi).isNull();
     }
     
     @Test
@@ -119,29 +119,29 @@ public class BusinessProcessTest {
         parameters.put("employee", "john");
         parameters.put("reason", "SpringBoot jBPM evaluation");
         long processInstanceId = processService.startProcess(unit.getIdentifier(), "evaluation", parameters);
-        assertNotNull(processInstanceId);
-        assertTrue(processInstanceId > 0);
+        assertThat(processInstanceId).isNotNull();
+        assertThat(processInstanceId > 0).isTrue();
         
         List<TaskSummary> tasks = runtimeDataService.getTasksAssignedAsPotentialOwner("john", new QueryFilter());
-        assertEquals(1, tasks.size());
+        assertThat(tasks).hasSize(1);
         
         TaskSummary task = tasks.get(0);
-        assertNotNull(task);
-        assertEquals("Self Evaluation", task.getName());
-        assertEquals(Status.Reserved, task.getStatus());
+        assertThat(task).isNotNull();
+        assertThat(task.getName()).isEqualTo("Self Evaluation");
+        assertThat(task.getStatus()).isEqualTo(Status.Reserved);
         
         Map<String, Object> outcome = new HashMap<>();
         
         userTaskService.completeAutoProgress(task.getId(), "john", outcome);
         
         tasks = runtimeDataService.getTasksAssignedAsPotentialOwner("john", new QueryFilter());
-        assertEquals(2, tasks.size());
+        assertThat(tasks).hasSize(2);
         
         userTaskService.completeAutoProgress(tasks.get(0).getId(), "john", outcome);
         userTaskService.completeAutoProgress(tasks.get(1).getId(), "john", outcome);
         
         ProcessInstance pi = processService.getProcessInstance(processInstanceId);
-        assertNull(pi);
+        assertThat(pi).isNull();
     }   
 }
 

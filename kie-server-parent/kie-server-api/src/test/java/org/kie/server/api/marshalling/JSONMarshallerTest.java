@@ -16,7 +16,7 @@ import org.junit.Test;
 import org.kie.server.api.marshalling.json.JSONMarshaller;
 import org.kie.server.api.marshalling.objects.DateObject;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 
 public class JSONMarshallerTest {
@@ -39,9 +39,9 @@ public class JSONMarshallerTest {
         dateObject.setOffsetDateTime( OffsetDateTime.of( LocalDateTime.of( 2017, 1, 1, 10, 10, 10 ), ZoneOffset.ofHours( 1 ) ) );
 
         String dateObjectString = marshaller.marshall( dateObject );
-        assertNotNull( dateObjectString );
+        assertThat(dateObjectString ).isNotNull();
 
-        assertEquals( expectedString, dateObjectString );
+        assertThat(dateObjectString ).isEqualTo(expectedString);
     }
 
     @Test
@@ -56,12 +56,12 @@ public class JSONMarshallerTest {
         Marshaller marshaller = MarshallerFactory.getMarshaller( MarshallingFormat.JSON, getClass().getClassLoader() );
 
         DateObject dateObject = marshaller.unmarshall( expectedString, DateObject.class );
-        assertNotNull( dateObject );
+        assertThat(dateObject ).isNotNull();
 
-        assertEquals( LocalDate.of( 2017, 1, 1 ), dateObject.getLocalDate() );
-        assertEquals( LocalDateTime.of( 2017, 1, 1, 10, 10, 10 ), dateObject.getLocalDateTime() );
-        assertEquals( LocalTime.of( 10, 10, 10 ), dateObject.getLocalTime() );
-        assertEquals( OffsetDateTime.of( LocalDateTime.of( 2017, 1, 1, 10, 10, 10 ), ZoneOffset.ofHours( 1 ) ), dateObject.getOffsetDateTime() );
+        assertThat(1 )).isCloseTo(LocalDate.of( 2017, 1, within(dateObject.getLocalDate() ));
+        assertThat(10 )).isCloseTo(LocalDateTime.of( 2017, 1, 1, 10, 10, within(dateObject.getLocalDateTime() ));
+        assertThat(10 )).isCloseTo(LocalTime.of( 10, 10, within(dateObject.getLocalTime() ));
+        assertThat(ZoneOffset.ofHours( 1 ) )).isCloseTo(OffsetDateTime.of( LocalDateTime.of( 2017, 1, 1, 10, 10, 10 ), within(dateObject.getOffsetDateTime() ));
     }
     
     public static class Holder {

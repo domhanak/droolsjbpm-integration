@@ -71,7 +71,7 @@ public class KieComponentOpOnUriTest extends BaseKieComponentTest {
         assertMockEndpointsSatisfied();
 
         DMNResult result = getResultMessage(mockEndpoint.getExchanges().get(0)).getBody(DMNResult.class);
-        assertEquals(1, result.getDecisionResults().size());
+        assertThat(result.getDecisionResults()).hasSize(1);
     }
 
     @Override

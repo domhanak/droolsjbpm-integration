@@ -55,13 +55,13 @@ public class KieServerStateTest {
         String serverId = UUID.randomUUID().toString();
 
         KieServerState state = repository.load(serverId);
-        Assert.assertNotNull(state);
+        Assert.assertThat(state).isNotNull();
 
         KieServerConfig config = state.getConfiguration();
-        Assert.assertNotNull(config);
-        Assert.assertNull(config.getConfigItemValue(KieServerConstants.CFG_PERSISTANCE_DIALECT));
-        Assert.assertNull(config.getConfigItemValue(KieServerConstants.CFG_PERSISTANCE_DS));
-        Assert.assertNull(config.getConfigItemValue(KieServerConstants.CFG_PERSISTANCE_TM));
+        Assert.assertThat(config).isNotNull();
+        Assert.assertThat(config.getConfigItemValue(KieServerConstants.CFG_PERSISTANCE_DIALECT)).isNull();
+        Assert.assertThat(config.getConfigItemValue(KieServerConstants.CFG_PERSISTANCE_DS)).isNull();
+        Assert.assertThat(config.getConfigItemValue(KieServerConstants.CFG_PERSISTANCE_TM)).isNull();
 
         System.setProperty(KieServerConstants.CFG_PERSISTANCE_DIALECT, "org.hibernate.dialect.PostgreSQLDialect");
         System.setProperty(KieServerConstants.CFG_PERSISTANCE_DS, "jdbc/jbpm");
@@ -71,13 +71,13 @@ public class KieServerStateTest {
 
         repository = new KieServerStateFileRepository(REPOSITORY_DIR);
         state = repository.load(serverId);
-        Assert.assertNotNull(state);
+        Assert.assertThat(state).isNotNull();
 
         config = state.getConfiguration();
-        Assert.assertNotNull(config);
-        Assert.assertEquals("org.hibernate.dialect.PostgreSQLDialect", config.getConfigItemValue(KieServerConstants.CFG_PERSISTANCE_DIALECT));
-        Assert.assertEquals("jdbc/jbpm", config.getConfigItemValue(KieServerConstants.CFG_PERSISTANCE_DS));
-        Assert.assertEquals("org.hibernate.service.jta.platform.internal.JBossStandAloneJtaPlatform", config.getConfigItemValue(KieServerConstants.CFG_PERSISTANCE_TM));
+        Assert.assertThat(config).isNotNull();
+        Assert.assertThat(config.getConfigItemValue(KieServerConstants.CFG_PERSISTANCE_DIALECT)).isEqualTo("org.hibernate.dialect.PostgreSQLDialect");
+        Assert.assertThat(config.getConfigItemValue(KieServerConstants.CFG_PERSISTANCE_DS)).isEqualTo("jdbc/jbpm");
+        Assert.assertThat(config.getConfigItemValue(KieServerConstants.CFG_PERSISTANCE_TM)).isEqualTo("org.hibernate.service.jta.platform.internal.JBossStandAloneJtaPlatform");
     }
 
     @Test
@@ -91,13 +91,13 @@ public class KieServerStateTest {
         String serverId = UUID.randomUUID().toString();
 
         KieServerState state = repository.load(serverId);
-        Assert.assertNotNull(state);
+        Assert.assertThat(state).isNotNull();
 
         KieServerConfig config = state.getConfiguration();
-        Assert.assertNotNull(config);
+        Assert.assertThat(config).isNotNull();
 
-        Assert.assertEquals("org.hibernate.dialect.PostgreSQLDialect", config.getConfigItemValue(KieServerConstants.CFG_PERSISTANCE_DIALECT));
-        Assert.assertEquals("jdbc/jbpm", config.getConfigItemValue(KieServerConstants.CFG_PERSISTANCE_DS));
-        Assert.assertEquals("org.hibernate.service.jta.platform.internal.JBossStandAloneJtaPlatform", config.getConfigItemValue(KieServerConstants.CFG_PERSISTANCE_TM));
+        Assert.assertThat(config.getConfigItemValue(KieServerConstants.CFG_PERSISTANCE_DIALECT)).isEqualTo("org.hibernate.dialect.PostgreSQLDialect");
+        Assert.assertThat(config.getConfigItemValue(KieServerConstants.CFG_PERSISTANCE_DS)).isEqualTo("jdbc/jbpm");
+        Assert.assertThat(config.getConfigItemValue(KieServerConstants.CFG_PERSISTANCE_TM)).isEqualTo("org.hibernate.service.jta.platform.internal.JBossStandAloneJtaPlatform");
     }
 }

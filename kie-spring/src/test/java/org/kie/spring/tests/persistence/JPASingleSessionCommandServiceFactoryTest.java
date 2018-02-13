@@ -70,7 +70,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class JPASingleSessionCommandServiceFactoryTest {
     private static String TMPDIR = System.getProperty("java.io.tmpdir");
@@ -157,7 +157,7 @@ public class JPASingleSessionCommandServiceFactoryTest {
 
         TestWorkItemHandler handler = TestWorkItemHandler.getInstance();
         WorkItem workItem = handler.getWorkItem();
-        assertNotNull(workItem);
+        assertThat(workItem).isNotNull();
         service.dispose();
 
         Environment env = KieServices.get().newEnvironment();
@@ -170,7 +170,7 @@ public class JPASingleSessionCommandServiceFactoryTest {
                 null,
                 env);
         processInstance = service.getProcessInstance(processInstance.getId());
-        assertNotNull(processInstance);
+        assertThat(processInstance).isNotNull();
         service.dispose();
 
         service = kstore.loadKieSession(sessionId,
@@ -181,7 +181,7 @@ public class JPASingleSessionCommandServiceFactoryTest {
                 null);
 
         workItem = handler.getWorkItem();
-        assertNotNull(workItem);
+        assertThat(workItem).isNotNull();
         service.dispose();
 
         service = kstore.loadKieSession(sessionId,
@@ -189,7 +189,7 @@ public class JPASingleSessionCommandServiceFactoryTest {
                 null,
                 env);
         processInstance = service.getProcessInstance(processInstance.getId());
-        assertNotNull(processInstance);
+        assertThat(processInstance).isNotNull();
         service.dispose();
 
         service = kstore.loadKieSession(sessionId,
@@ -200,7 +200,7 @@ public class JPASingleSessionCommandServiceFactoryTest {
                 null);
 
         workItem = handler.getWorkItem();
-        assertNotNull(workItem);
+        assertThat(workItem).isNotNull();
         service.dispose();
 
         service = kstore.loadKieSession(sessionId,
@@ -218,7 +218,7 @@ public class JPASingleSessionCommandServiceFactoryTest {
                 null);
 
         workItem = handler.getWorkItem();
-        assertNull(workItem);
+        assertThat(workItem).isNull();
         service.dispose();
 
         service = kstore.loadKieSession(sessionId,
@@ -243,7 +243,7 @@ public class JPASingleSessionCommandServiceFactoryTest {
 
         TestWorkItemHandler handler = TestWorkItemHandler.getInstance();
         WorkItem workItem = handler.getWorkItem();
-        assertNotNull(workItem);
+        assertThat(workItem).isNotNull();
         service.dispose();
 
         Environment env = KieServices.get().newEnvironment();
@@ -260,7 +260,7 @@ public class JPASingleSessionCommandServiceFactoryTest {
                 env);
 
         processInstance = service.getProcessInstance(processInstance.getId());
-        assertNotNull(processInstance);
+        assertThat(processInstance).isNotNull();
         service.dispose();
 
         service = kstore.loadKieSession(sessionId,
@@ -271,7 +271,7 @@ public class JPASingleSessionCommandServiceFactoryTest {
                 null);
 
         workItem = handler.getWorkItem();
-        assertNotNull(workItem);
+        assertThat(workItem).isNotNull();
         service.dispose();
 
         service = kstore.loadKieSession(sessionId,
@@ -279,7 +279,7 @@ public class JPASingleSessionCommandServiceFactoryTest {
                 null,
                 env);
         processInstance = service.getProcessInstance(processInstance.getId());
-        assertNotNull(processInstance);
+        assertThat(processInstance).isNotNull();
         service.dispose();
 
         service = kstore.loadKieSession(sessionId,
@@ -289,7 +289,7 @@ public class JPASingleSessionCommandServiceFactoryTest {
         service.getWorkItemManager().abortWorkItem(workItem.getId());
 
         workItem = handler.getWorkItem();
-        assertNotNull(workItem);
+        assertThat(workItem).isNotNull();
         service.dispose();
 
         service = kstore.loadKieSession(sessionId,
@@ -297,7 +297,7 @@ public class JPASingleSessionCommandServiceFactoryTest {
                 null,
                 env);
         processInstance = service.getProcessInstance(processInstance.getId());
-        assertNotNull(processInstance);
+        assertThat(processInstance).isNotNull();
         service.dispose();
 
         service = kstore.loadKieSession(sessionId,
@@ -307,7 +307,7 @@ public class JPASingleSessionCommandServiceFactoryTest {
         service.getWorkItemManager().completeWorkItem(workItem.getId(),
                 null);
         workItem = handler.getWorkItem();
-        assertNull(workItem);
+        assertThat(workItem).isNull();
         service.dispose();
 
         service = kstore.loadKieSession(sessionId,
@@ -315,7 +315,7 @@ public class JPASingleSessionCommandServiceFactoryTest {
                 null,
                 env);
         processInstance = service.getProcessInstance(processInstance.getId());
-        assertNull(processInstance);
+        assertThat(processInstance).isNull();
         service.dispose();
     }
 
@@ -425,7 +425,7 @@ public class JPASingleSessionCommandServiceFactoryTest {
 
         TestWorkItemHandler handler = TestWorkItemHandler.getInstance();
         WorkItem workItem = handler.getWorkItem();
-        assertNotNull(workItem);
+        assertThat(workItem).isNotNull();
         service.dispose();
 
         Environment env = KieServices.get().newEnvironment();
@@ -442,7 +442,7 @@ public class JPASingleSessionCommandServiceFactoryTest {
                 env);
 
         processInstance = (RuleFlowProcessInstance) service.getProcessInstance(processInstanceId);
-        assertNotNull(processInstance);
+        assertThat(processInstance).isNotNull();
 
         Collection<NodeInstance> nodeInstances = processInstance.getNodeInstances();
         assertEquals(1,
@@ -450,7 +450,7 @@ public class JPASingleSessionCommandServiceFactoryTest {
         SubProcessNodeInstance subProcessNodeInstance = (SubProcessNodeInstance) nodeInstances.iterator().next();
         long subProcessInstanceId = subProcessNodeInstance.getProcessInstanceId();
         RuleFlowProcessInstance subProcessInstance = (RuleFlowProcessInstance) service.getProcessInstance(subProcessInstanceId);
-        assertNotNull(subProcessInstance);
+        assertThat(subProcessInstance).isNotNull();
         service.dispose();
 
         service = kstore.loadKieSession(sessionId,
@@ -466,10 +466,10 @@ public class JPASingleSessionCommandServiceFactoryTest {
                 null,
                 env);
         subProcessInstance = (RuleFlowProcessInstance) service.getProcessInstance(subProcessInstanceId);
-        assertNull(subProcessInstance);
+        assertThat(subProcessInstance).isNull();
 
         processInstance = (RuleFlowProcessInstance) service.getProcessInstance(processInstanceId);
-        assertNull(processInstance);
+        assertThat(processInstance).isNull();
         service.dispose();
     }
 
@@ -483,14 +483,14 @@ public class JPASingleSessionCommandServiceFactoryTest {
         long sessionId = service.getIdentifier();
 
         Collection<ProcessEventListener> listenersP = service.getProcessEventListeners();
-        assertEquals(1, listenersP.size());
+        assertThat(listenersP).hasSize(1);
 
         Collection<AgendaEventListener> listenersA = service.getAgendaEventListeners();
         // two of these are jbpm listeners registered by default + one defined in spring xml
-        assertEquals(3, listenersA.size());
+        assertThat(listenersA).hasSize(3);
 
         Collection<RuleRuntimeEventListener> listenersR = service.getRuleRuntimeEventListeners();
-        assertEquals(1, listenersR.size());
+        assertThat(listenersR).hasSize(1);
 
         RuleFlowProcessInstance processInstance = (RuleFlowProcessInstance) service.startProcess("org.drools.test.ProcessSubProcess");
         log.debug("Started process instance {}",
@@ -499,7 +499,7 @@ public class JPASingleSessionCommandServiceFactoryTest {
 
         TestWorkItemHandler handler = TestWorkItemHandler.getInstance();
         WorkItem workItem = handler.getWorkItem();
-        assertNotNull(workItem);
+        assertThat(workItem).isNotNull();
         service.dispose();
 
         Environment env = KieServices.get().newEnvironment();
@@ -516,7 +516,7 @@ public class JPASingleSessionCommandServiceFactoryTest {
                 env);
 
         processInstance = (RuleFlowProcessInstance) service.getProcessInstance(processInstanceId);
-        assertNotNull(processInstance);
+        assertThat(processInstance).isNotNull();
 
         Collection<NodeInstance> nodeInstances = processInstance.getNodeInstances();
         assertEquals(1,
@@ -524,7 +524,7 @@ public class JPASingleSessionCommandServiceFactoryTest {
         SubProcessNodeInstance subProcessNodeInstance = (SubProcessNodeInstance) nodeInstances.iterator().next();
         long subProcessInstanceId = subProcessNodeInstance.getProcessInstanceId();
         RuleFlowProcessInstance subProcessInstance = (RuleFlowProcessInstance) service.getProcessInstance(subProcessInstanceId);
-        assertNotNull(subProcessInstance);
+        assertThat(subProcessInstance).isNotNull();
         service.dispose();
 
         service = kstore.loadKieSession(sessionId,
@@ -540,10 +540,10 @@ public class JPASingleSessionCommandServiceFactoryTest {
                 null,
                 env);
         subProcessInstance = (RuleFlowProcessInstance) service.getProcessInstance(subProcessInstanceId);
-        assertNull(subProcessInstance);
+        assertThat(subProcessInstance).isNull();
 
         processInstance = (RuleFlowProcessInstance) service.getProcessInstance(processInstanceId);
-        assertNull(processInstance);
+        assertThat(processInstance).isNull();
         service.dispose();
     }
 
@@ -666,7 +666,7 @@ public class JPASingleSessionCommandServiceFactoryTest {
         log.debug("---> load session: " + sessionId);
         processInstance = service.getProcessInstance(procId);
         log.debug("---> GetProcessInstanceCommand id: " + procId);
-        assertNotNull(processInstance);
+        assertThat(processInstance).isNotNull();
 
         waitForTimer();
         
@@ -685,7 +685,7 @@ public class JPASingleSessionCommandServiceFactoryTest {
         log.debug("---> GetProcessInstanceCommand id: " + procId);
         processInstance = service.getProcessInstance(procId);
         log.debug("---> session disposed");
-        assertNull(processInstance);
+        assertThat(processInstance).isNull();
     }
 
     private static KiePackage getProcessTimer() {
@@ -766,7 +766,7 @@ public class JPASingleSessionCommandServiceFactoryTest {
                 env);
 
         processInstance = service.getProcessInstance(processInstance.getId());
-        assertNull(processInstance);
+        assertThat(processInstance).isNull();
     }
 
     private static KiePackage getProcessTimer2() {

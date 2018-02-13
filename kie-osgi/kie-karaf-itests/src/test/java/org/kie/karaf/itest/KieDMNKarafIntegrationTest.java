@@ -69,7 +69,7 @@ public class KieDMNKarafIntegrationTest extends AbstractKarafIntegrationTest {
     @Test
     public void testDMNbasic() throws Exception {
         DMNRuntime runtime = createKieDMNRuntime(SIMPLE_DMN_FILE);
-        assertTrue( runtime.getModels().size() > 0 );
+        assertThat(runtime.getModels().size() > 0 ).isTrue();
     }
 
     @Configuration
@@ -98,7 +98,7 @@ public class KieDMNKarafIntegrationTest extends AbstractKarafIntegrationTest {
             kieHelper.addResource(kieResources.newUrlResource(getClass().getResource(resourcePath)));
         }
         Results results = kieHelper.verify();
-        Assert.assertTrue(results.toString(), results.getMessages().isEmpty());
+        Assert.assertThat(results.toString(), results.getMessages().isEmpty()).isTrue();
         final KieContainer kieContainer = kieHelper.getKieContainer();
         DMNRuntime runtime = kieContainer.newKieSession().getKieRuntime(DMNRuntime.class);
         return runtime;

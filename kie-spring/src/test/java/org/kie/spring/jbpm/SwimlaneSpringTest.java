@@ -17,7 +17,7 @@ package org.kie.spring.jbpm;
 
 import java.util.Arrays;
 import java.util.Collection;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -59,7 +59,7 @@ public class SwimlaneSpringTest extends AbstractJbpmSpringParameterizedTest {
         ProcessInstance processInstance = ksession.startProcess(AGU_SAMPLE_PROCESS_ID, params);
 
         ProcessInstanceLog log = getLogService().findProcessInstance(processInstance.getId());
-        assertNotNull(log);
+        assertThat(log).isNotNull();
 
         List<TaskSummary> tasks = taskService.getTasksOwned(USER_MAX, "en-UK");
         System.out.println("Found " + tasks.size() + " task(s) for user '"+USER_MAX+"'");
@@ -78,7 +78,7 @@ public class SwimlaneSpringTest extends AbstractJbpmSpringParameterizedTest {
 
 
         processInstance = ksession.getProcessInstance(processInstance.getId());
-        assertNull(processInstance);
+        assertThat(processInstance).isNull();
         System.out.println("Process instance completed");
     }
 

@@ -31,7 +31,7 @@ import org.kie.spring.mocks.MockObjectMarshallingStrategy;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class KieSpringEnvironmentTest {
 
@@ -62,82 +62,82 @@ public class KieSpringEnvironmentTest {
 
     @Test
     public void testCtxNotNull() throws Exception {
-        assertNotNull(context);
+        assertThat(context).isNotNull();
     }
 
     @Test
     public void testEnvRef() throws Exception {
         Environment environment = (Environment) context.getBean("drools-env");
-        assertNotNull(environment);
+        assertThat(environment).isNotNull();
 
-        assertNotNull(environment.get(EnvironmentName.TRANSACTION_MANAGER));
-        assertNotNull(environment.get(EnvironmentName.ENTITY_MANAGER_FACTORY));
-        assertNotNull(environment.get(EnvironmentName.GLOBALS));
-        assertNotNull(environment.get(EnvironmentName.CALENDARS));
+        assertThat(environment.get(EnvironmentName.TRANSACTION_MANAGER)).isNotNull();
+        assertThat(environment.get(EnvironmentName.ENTITY_MANAGER_FACTORY)).isNotNull();
+        assertThat(environment.get(EnvironmentName.GLOBALS)).isNotNull();
+        assertThat(environment.get(EnvironmentName.CALENDARS)).isNotNull();
 
-        assertNotNull(environment.get(EnvironmentName.OBJECT_MARSHALLING_STRATEGIES));
-        assertEquals(4, ((ObjectMarshallingStrategy[]) environment.get(EnvironmentName.OBJECT_MARSHALLING_STRATEGIES)).length);
+        assertThat(environment.get(EnvironmentName.OBJECT_MARSHALLING_STRATEGIES)).isNotNull();
+        assertThat(((ObjectMarshallingStrategy[]) environment.get(EnvironmentName.OBJECT_MARSHALLING_STRATEGIES)).length).isEqualTo(4);
     }
 
     @Test
     public void testEnvEmb() throws Exception {
         Environment environment = (Environment) context.getBean("drools-env-embedded");
-        assertNotNull(environment);
+        assertThat(environment).isNotNull();
 
-        assertNotNull(environment.get(EnvironmentName.TRANSACTION_MANAGER));
-        assertNotNull(environment.get(EnvironmentName.ENTITY_MANAGER_FACTORY));
-        assertNotNull(environment.get(EnvironmentName.GLOBALS));
-        assertNotNull(environment.get(EnvironmentName.CALENDARS));
+        assertThat(environment.get(EnvironmentName.TRANSACTION_MANAGER)).isNotNull();
+        assertThat(environment.get(EnvironmentName.ENTITY_MANAGER_FACTORY)).isNotNull();
+        assertThat(environment.get(EnvironmentName.GLOBALS)).isNotNull();
+        assertThat(environment.get(EnvironmentName.CALENDARS)).isNotNull();
 
-        assertNotNull(environment.get(EnvironmentName.OBJECT_MARSHALLING_STRATEGIES));
-        assertEquals(2, ((ObjectMarshallingStrategy[]) environment.get(EnvironmentName.OBJECT_MARSHALLING_STRATEGIES)).length);
+        assertThat(environment.get(EnvironmentName.OBJECT_MARSHALLING_STRATEGIES)).isNotNull();
+        assertThat(((ObjectMarshallingStrategy[]) environment.get(EnvironmentName.OBJECT_MARSHALLING_STRATEGIES)).length).isEqualTo(2);
     }
 
     @Test
     public void testEnvCustomMarshallerNested() throws Exception {
         Environment environment = (Environment) context.getBean("drools-env-custom-marshaller-nested");
-        assertNotNull(environment);
+        assertThat(environment).isNotNull();
 
-        assertNotNull(environment.get(EnvironmentName.OBJECT_MARSHALLING_STRATEGIES));
+        assertThat(environment.get(EnvironmentName.OBJECT_MARSHALLING_STRATEGIES)).isNotNull();
         ObjectMarshallingStrategy[] objectMarshallingStrategies = (ObjectMarshallingStrategy[]) environment.get(EnvironmentName.OBJECT_MARSHALLING_STRATEGIES);
-        assertEquals(1, objectMarshallingStrategies.length);
-        assertEquals(objectMarshallingStrategies[0].getClass().getName(), "org.kie.spring.mocks.MockObjectMarshallingStrategy");
+        assertThat(objectMarshallingStrategies.length).isEqualTo(1);
+        assertThat("org.kie.spring.mocks.MockObjectMarshallingStrategy").isEqualTo(objectMarshallingStrategies[0].getClass().getName());
     }
 
     @Test
     public void testEnvCustomMarshallerRef() throws Exception {
         Environment environment = (Environment) context.getBean("drools-env-custom-marshaller-ref");
-        assertNotNull(environment);
+        assertThat(environment).isNotNull();
 
         ObjectMarshallingStrategy[] objectMarshallingStrategies = (ObjectMarshallingStrategy[]) environment.get(EnvironmentName.OBJECT_MARSHALLING_STRATEGIES);
-        assertEquals(1, objectMarshallingStrategies.length);
-        assertEquals(objectMarshallingStrategies[0].getClass().getName(), "org.kie.spring.mocks.MockObjectMarshallingStrategy");
+        assertThat(objectMarshallingStrategies.length).isEqualTo(1);
+        assertThat("org.kie.spring.mocks.MockObjectMarshallingStrategy").isEqualTo(objectMarshallingStrategies[0].getClass().getName());
     }
 
     @Test
     public void testEnvMarshallerOrder() throws Exception {
         Environment environment = (Environment) context.getBean("drools-env");
-        assertNotNull(environment);
+        assertThat(environment).isNotNull();
 
         ObjectMarshallingStrategy[] objectMarshallingStrategies = (ObjectMarshallingStrategy[]) environment.get(EnvironmentName.OBJECT_MARSHALLING_STRATEGIES);
-        assertEquals(4, objectMarshallingStrategies.length);
-        assertTrue(objectMarshallingStrategies[0] instanceof SerializablePlaceholderResolverStrategy);
-        assertTrue(objectMarshallingStrategies[1] instanceof IdentityPlaceholderResolverStrategy);
-        assertTrue(objectMarshallingStrategies[2] instanceof JPAPlaceholderResolverStrategy);
-        assertTrue(objectMarshallingStrategies[3] instanceof ProcessInstanceResolverStrategy);
+        assertThat(objectMarshallingStrategies.length).isEqualTo(4);
+        assertThat(objectMarshallingStrategies[0] instanceof SerializablePlaceholderResolverStrategy).isTrue();
+        assertThat(objectMarshallingStrategies[1] instanceof IdentityPlaceholderResolverStrategy).isTrue();
+        assertThat(objectMarshallingStrategies[2] instanceof JPAPlaceholderResolverStrategy).isTrue();
+        assertThat(objectMarshallingStrategies[3] instanceof ProcessInstanceResolverStrategy).isTrue();
     }
 
     @Test
     public void testEnvMarshallerOrderWithCustom() throws Exception {
         Environment environment = (Environment) context.getBean("drools-env-custom-marshaller-mixed");
-        assertNotNull(environment);
+        assertThat(environment).isNotNull();
 
         ObjectMarshallingStrategy[] objectMarshallingStrategies = (ObjectMarshallingStrategy[]) environment.get(EnvironmentName.OBJECT_MARSHALLING_STRATEGIES);
-        assertEquals(5, objectMarshallingStrategies.length);
-        assertTrue(objectMarshallingStrategies[0] instanceof SerializablePlaceholderResolverStrategy);
-        assertTrue(objectMarshallingStrategies[1] instanceof IdentityPlaceholderResolverStrategy);
-        assertTrue(objectMarshallingStrategies[2] instanceof JPAPlaceholderResolverStrategy);
-        assertTrue(objectMarshallingStrategies[3] instanceof MockObjectMarshallingStrategy);
-        assertTrue(objectMarshallingStrategies[4] instanceof ProcessInstanceResolverStrategy);
+        assertThat(objectMarshallingStrategies.length).isEqualTo(5);
+        assertThat(objectMarshallingStrategies[0] instanceof SerializablePlaceholderResolverStrategy).isTrue();
+        assertThat(objectMarshallingStrategies[1] instanceof IdentityPlaceholderResolverStrategy).isTrue();
+        assertThat(objectMarshallingStrategies[2] instanceof JPAPlaceholderResolverStrategy).isTrue();
+        assertThat(objectMarshallingStrategies[3] instanceof MockObjectMarshallingStrategy).isTrue();
+        assertThat(objectMarshallingStrategies[4] instanceof ProcessInstanceResolverStrategy).isTrue();
     }
 }

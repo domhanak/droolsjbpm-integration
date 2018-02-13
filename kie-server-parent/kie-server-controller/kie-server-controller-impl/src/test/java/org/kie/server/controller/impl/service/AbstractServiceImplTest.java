@@ -29,7 +29,7 @@ import org.kie.server.controller.api.service.SpecManagementService;
 import org.kie.server.controller.impl.KieServerInstanceManager;
 import org.kie.server.controller.api.model.runtime.Container;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public abstract class AbstractServiceImplTest {
 
@@ -51,8 +51,8 @@ public abstract class AbstractServiceImplTest {
         specManagementService.saveServerTemplate(serverTemplate);
 
         ServerTemplateKeyList existing = specManagementService.listServerTemplateKeys();
-        assertNotNull(existing);
-        assertEquals(1, existing.getServerTemplates().length);
+        assertThat(existing).isNotNull();
+        assertThat(existing.getServerTemplates().length).isEqualTo(1);
 
         Map<Capability, ContainerConfig> configs = new HashMap<Capability, ContainerConfig>();
         RuleConfig ruleConfig = new RuleConfig();

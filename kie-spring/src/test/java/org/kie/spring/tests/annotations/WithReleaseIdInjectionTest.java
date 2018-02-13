@@ -40,25 +40,25 @@ public class WithReleaseIdInjectionTest {
 
     @Test
     public void testContext() throws Exception {
-        assertNotNull(context);
+        assertThat(context).isNotNull();
     }
 
     @Test
     public void testKContainer() throws Exception {
         BeanWithReleaseId sampleBean = (BeanWithReleaseId) context.getBean("sampleBean");
-        assertNotNull(sampleBean);
-        assertNotNull(sampleBean.getKieContainer() );
-        assertTrue(sampleBean.getKieContainer() instanceof KieContainer );
+        assertThat(sampleBean).isNotNull();
+        assertThat(sampleBean.getKieContainer() ).isNotNull();
+        assertThat(sampleBean.getKieContainer() instanceof KieContainer ).isTrue();
         ReleaseId releaseId = sampleBean.getKieContainer().getReleaseId();
-        assertTrue("named-kiesession".equalsIgnoreCase(releaseId.getArtifactId()));
+        assertThat("named-kiesession".equalsIgnoreCase(releaseId.getArtifactId())).isTrue();
     }
 
     @Test
     public void testKieBase() throws Exception {
         BeanWithReleaseId sampleBean = (BeanWithReleaseId) context.getBean("sampleBean");
-        assertNotNull(sampleBean);
-        assertNotNull(sampleBean.getKieBase() );
-        assertTrue(sampleBean.getKieBase() instanceof KieBase );
+        assertThat(sampleBean).isNotNull();
+        assertThat(sampleBean.getKieBase() ).isNotNull();
+        assertThat(sampleBean.getKieBase() instanceof KieBase ).isTrue();
     }
 
 

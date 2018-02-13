@@ -33,7 +33,7 @@ import org.kie.server.api.model.instance.TaskSummary;
 import org.kie.server.api.exception.KieServicesException;
 import org.kie.server.integrationtests.category.Smoke;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 import org.kie.server.integrationtests.shared.KieServerDeployer;
 import org.kie.server.integrationtests.shared.KieServerUtil;
 
@@ -86,10 +86,10 @@ public class DocumentServiceIntegrationTest extends JbpmKieServerBaseIntegration
     public void testCreateLoadDeleteDocument() throws Exception {
 
         String documentId = documentClient.createDocument(document);
-        assertNotNull(documentId);
+        assertThat(documentId).isNotNull();
 
         DocumentInstance fromServer = documentClient.getDocument(documentId);
-        assertEquals(documentId, fromServer.getIdentifier());
+        assertThat(fromServer.getIdentifier()).isEqualTo(documentId);
         assertDocumentInstances(document, fromServer, true);
 
         documentClient.deleteDocument(documentId);
@@ -106,10 +106,10 @@ public class DocumentServiceIntegrationTest extends JbpmKieServerBaseIntegration
     @Test
     public void testCreateDocument() {
         String documentId = documentClient.createDocument(document);
-        assertNotNull(documentId);
+        assertThat(documentId).isNotNull();
 
         DocumentInstance fromServer = documentClient.getDocument(documentId);
-        assertEquals(documentId, fromServer.getIdentifier());
+        assertThat(fromServer.getIdentifier()).isEqualTo(documentId);
         assertDocumentInstances(document, fromServer, true);
     }
 
@@ -125,10 +125,10 @@ public class DocumentServiceIntegrationTest extends JbpmKieServerBaseIntegration
                 .build();
 
         String documentId = documentClient.createDocument(document);
-        assertNotNull(documentId);
+        assertThat(documentId).isNotNull();
 
         DocumentInstance fromServer = documentClient.getDocument(documentId);
-        assertEquals(documentId, fromServer.getIdentifier());
+        assertThat(fromServer.getIdentifier()).isEqualTo(documentId);
         assertDocumentInstances(document, fromServer, true);
     }
 
@@ -141,10 +141,10 @@ public class DocumentServiceIntegrationTest extends JbpmKieServerBaseIntegration
     @Test
     public void testUpdateDocument() {
         String documentId = documentClient.createDocument(document);
-        assertNotNull(documentId);
+        assertThat(documentId).isNotNull();
 
         DocumentInstance fromServer = documentClient.getDocument(documentId);
-        assertEquals(documentId, fromServer.getIdentifier());
+        assertThat(fromServer.getIdentifier()).isEqualTo(documentId);
         assertDocumentInstances(document, fromServer, true);
 
 
@@ -157,7 +157,7 @@ public class DocumentServiceIntegrationTest extends JbpmKieServerBaseIntegration
         documentClient.updateDocument(fromServer);
 
         DocumentInstance updatedFromServer = documentClient.getDocument(documentId);
-        assertEquals(documentId, updatedFromServer.getIdentifier());
+        assertThat(updatedFromServer.getIdentifier()).isEqualTo(documentId);
         assertDocumentInstances(fromServer, updatedFromServer, true);
     }
 
@@ -165,10 +165,10 @@ public class DocumentServiceIntegrationTest extends JbpmKieServerBaseIntegration
     public void testDeleteDocument() throws Exception {
 
         String documentId = documentClient.createDocument(document);
-        assertNotNull(documentId);
+        assertThat(documentId).isNotNull();
 
         DocumentInstance fromServer = documentClient.getDocument(documentId);
-        assertNotNull(fromServer);
+        assertThat(fromServer).isNotNull();
 
         documentClient.deleteDocument(documentId);
 
@@ -196,18 +196,18 @@ public class DocumentServiceIntegrationTest extends JbpmKieServerBaseIntegration
     @Test
     public void testListDocuments() {
         List<DocumentInstance> docs = documentClient.listDocuments(0, 10);
-        assertNotNull(docs);
-        assertEquals(0, docs.size());
+        assertThat(docs).isNotNull();
+        assertThat(docs).isEmpty();
 
         String documentId = documentClient.createDocument(document);
-        assertNotNull(documentId);
+        assertThat(documentId).isNotNull();
 
         docs = documentClient.listDocuments(0, 10);
-        assertNotNull(docs);
-        assertEquals(1, docs.size());
+        assertThat(docs).isNotNull();
+        assertThat(docs).hasSize(1);
 
         DocumentInstance fromServer = docs.get(0);
-        assertEquals(documentId, fromServer.getIdentifier());
+        assertThat(fromServer.getIdentifier()).isEqualTo(documentId);
         assertDocumentInstances(document, fromServer, false);
     }
 
@@ -228,23 +228,23 @@ public class DocumentServiceIntegrationTest extends JbpmKieServerBaseIntegration
         try {
             processInstanceId = processClient.startProcess("definition-project", "xyz-translations", parameters);
 
-            assertNotNull(processInstanceId);
-            assertTrue(processInstanceId.longValue() > 0);
+            assertThat(processInstanceId).isNotNull();
+            assertThat(processInstanceId.longValue() > 0).isTrue();
 
             List<DocumentInstance> docs = documentClient.listDocuments(0, 10);
-            assertNotNull(docs);
-            assertEquals(1, docs.size());
+            assertThat(docs).isNotNull();
+            assertThat(docs).hasSize(1);
 
             Object docVar = processClient.getProcessInstanceVariable("definition-project", processInstanceId, "original_document");
-            assertNotNull(docVar);
-            assertTrue(docVar instanceof Document);
+            assertThat(docVar).isNotNull();
+            assertThat(docVar instanceof Document).isTrue();
 
             Document doc = (Document) docVar;
             assertDocuments(docToTranslate, doc);
 
             List<TaskSummary> tasks = taskClient.findTasksAssignedAsPotentialOwner("yoda", 0, 10);
-            assertNotNull(tasks);
-            assertEquals(1, tasks.size());
+            assertThat(tasks).isNotNull();
+            assertThat(tasks).hasSize(1);
             // review task
             long taskId = tasks.get(0).getId();
 
@@ -252,12 +252,12 @@ public class DocumentServiceIntegrationTest extends JbpmKieServerBaseIntegration
             taskClient.startTask("definition-project", taskId, "yoda");
 
             Map<String, Object> taskInputs = taskClient.getTaskInputContentByTaskId("definition-project", taskId);
-            assertNotNull(taskInputs);
-            assertEquals(6, taskInputs.size());
+            assertThat(taskInputs).isNotNull();
+            assertThat(taskInputs).hasSize(6);
 
             docVar = taskInputs.get("in_doc");
-            assertNotNull(docVar);
-            assertTrue(docVar instanceof Document);
+            assertThat(docVar).isNotNull();
+            assertThat(docVar instanceof Document).isTrue();
 
             doc = (Document) docVar;
             assertDocuments(docToTranslate, doc);
@@ -269,8 +269,8 @@ public class DocumentServiceIntegrationTest extends JbpmKieServerBaseIntegration
             taskClient.completeTask("definition-project", taskId, "yoda", result);
 
             tasks = taskClient.findTasksAssignedAsPotentialOwner("yoda", 0, 10);
-            assertNotNull(tasks);
-            assertEquals(1, tasks.size());
+            assertThat(tasks).isNotNull();
+            assertThat(tasks).hasSize(1);
             // translate task
             taskId = tasks.get(0).getId();
 
@@ -278,12 +278,12 @@ public class DocumentServiceIntegrationTest extends JbpmKieServerBaseIntegration
             taskClient.startTask("definition-project", taskId, "yoda");
 
             taskInputs = taskClient.getTaskInputContentByTaskId("definition-project", taskId);
-            assertNotNull(taskInputs);
-            assertEquals(8, taskInputs.size());
+            assertThat(taskInputs).isNotNull();
+            assertThat(taskInputs).hasSize(8);
 
             docVar = taskInputs.get("in_doc");
-            assertNotNull(docVar);
-            assertTrue(docVar instanceof Document);
+            assertThat(docVar).isNotNull();
+            assertThat(docVar instanceof Document).isTrue();
 
             doc = (Document) docVar;
             assertDocuments(docToTranslate, doc);
@@ -302,15 +302,15 @@ public class DocumentServiceIntegrationTest extends JbpmKieServerBaseIntegration
 
             // now lets check if the document was updated
             docVar = processClient.getProcessInstanceVariable("definition-project", processInstanceId, "translated_document");
-            assertNotNull(docVar);
-            assertTrue(docVar instanceof Document);
+            assertThat(docVar).isNotNull();
+            assertThat(docVar instanceof Document).isTrue();
 
             doc = (Document) docVar;
             assertDocuments(translated, doc);
 
             docs = documentClient.listDocuments(0, 10);
-            assertNotNull(docs);
-            assertEquals(2, docs.size());
+            assertThat(docs).isNotNull();
+            assertThat(docs).hasSize(2);
         } finally {
             if (processInstanceId != null) {
                 processClient.abortProcessInstance("definition-project", processInstanceId);
@@ -320,26 +320,26 @@ public class DocumentServiceIntegrationTest extends JbpmKieServerBaseIntegration
     }
 
     private void assertDocumentInstances(DocumentInstance expected, DocumentInstance actual, boolean assertContent) {
-        assertNotNull(actual);
-        assertNotNull(actual.getIdentifier());
-        assertNotNull(actual.getName());
-        assertNotNull(actual.getLastModified());
-        assertNotNull(actual.getSize());
-        assertEquals(expected.getName(), actual.getName());
-        assertEquals(expected.getSize(), actual.getSize());
+        assertThat(actual).isNotNull();
+        assertThat(actual.getIdentifier()).isNotNull();
+        assertThat(actual.getName()).isNotNull();
+        assertThat(actual.getLastModified()).isNotNull();
+        assertThat(actual.getSize()).isNotNull();
+        assertThat(actual.getName()).isEqualTo(expected.getName());
+        assertThat(actual.getSize()).isEqualTo(expected.getSize());
         if (assertContent) {
-            assertEquals(new String(expected.getContent()), new String(actual.getContent()));
+            assertThat(new String(actual.getContent())).isEqualTo(new String(expected.getContent()));
         }
     }
 
     private void assertDocuments(Document expected, Document actual) {
-        assertNotNull(actual);
-        assertNotNull(actual.getIdentifier());
-        assertNotNull(actual.getName());
-        assertNotNull(actual.getLastModified());
-        assertNotNull(actual.getSize());
-        assertEquals(expected.getName(), actual.getName());
-        assertEquals(expected.getSize(), actual.getSize());
-        assertEquals(new String(expected.getContent()), new String(actual.getContent()));
+        assertThat(actual).isNotNull();
+        assertThat(actual.getIdentifier()).isNotNull();
+        assertThat(actual.getName()).isNotNull();
+        assertThat(actual.getLastModified()).isNotNull();
+        assertThat(actual.getSize()).isNotNull();
+        assertThat(actual.getName()).isEqualTo(expected.getName());
+        assertThat(actual.getSize()).isEqualTo(expected.getSize());
+        assertThat(new String(actual.getContent())).isEqualTo(new String(expected.getContent()));
     }
 }

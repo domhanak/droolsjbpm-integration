@@ -15,10 +15,10 @@
 
 package org.jbpm.simulation;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.assertj.core.api.Assertions.fail;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -52,14 +52,14 @@ public class PathFinderTest {
         
         List<PathContext> paths = finder.findPaths();
         
-        assertNotNull(paths);
-        assertEquals(1, paths.size());
-        assertTrue(TestUtils.matchExpected(paths, expectedIds));
+        assertThat(paths).isNotNull();
+        assertThat(paths).hasSize(1);
+        assertThat(TestUtils.matchExpected(paths, expectedIds)).isTrue();
         
         JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
-        assertNotNull(jsonPaths);
+        assertThat(jsonPaths).isNotNull();
         try {
-            assertEquals(1, ((JSONObject)jsonPaths.get("paths")).length());
+            assertThat(((JSONObject)jsonPaths.get("paths")).length()).isEqualTo(1);
         } catch (JSONException e) {
             fail(e.getMessage());
         }
@@ -103,14 +103,14 @@ public class PathFinderTest {
         
         List<PathContext> paths = finder.findPaths();
         
-        assertNotNull(paths);
-        assertEquals(2, paths.size());
-        assertTrue(TestUtils.matchExpected(paths, expectedIds1, expectedIds2));
+        assertThat(paths).isNotNull();
+        assertThat(paths).hasSize(2);
+        assertThat(TestUtils.matchExpected(paths, expectedIds1, expectedIds2)).isTrue();
         
         JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
-        assertNotNull(jsonPaths);
+        assertThat(jsonPaths).isNotNull();
         try {
-            assertEquals(2, ((JSONObject)jsonPaths.get("paths")).length());
+            assertThat(((JSONObject)jsonPaths.get("paths")).length()).isEqualTo(2);
         } catch (JSONException e) {
             fail(e.getMessage());
         }
@@ -213,14 +213,14 @@ public class PathFinderTest {
         
         List<PathContext> paths = finder.findPaths();
 
-        assertNotNull(paths);
-        assertEquals(7, paths.size());
-        assertTrue(TestUtils.matchExpected(paths, expectedIds1, expectedIds2, expectedIds3, expectedIds4, expectedIds5, expectedIds6, expectedIds7));
+        assertThat(paths).isNotNull();
+        assertThat(paths).hasSize(7);
+        assertThat(TestUtils.matchExpected(paths, expectedIds1, expectedIds2, expectedIds3, expectedIds4, expectedIds5, expectedIds6, expectedIds7)).isTrue();
         
         JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
-        assertNotNull(jsonPaths);
+        assertThat(jsonPaths).isNotNull();
         try {
-			assertEquals(7, ((JSONObject)jsonPaths.get("paths")).length());
+			assertThat(((JSONObject)jsonPaths.get("paths")).length()).isEqualTo(7);
 		} catch (JSONException e) {
 			fail(e.getMessage());
 		}
@@ -247,14 +247,14 @@ public class PathFinderTest {
         
         List<PathContext> paths = finder.findPaths();
  
-        assertNotNull(paths);
-        assertEquals(1, paths.size());
-        assertTrue(TestUtils.matchExpected(paths, expectedIds1));
+        assertThat(paths).isNotNull();
+        assertThat(paths).hasSize(1);
+        assertThat(TestUtils.matchExpected(paths, expectedIds1)).isTrue();
         
         JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
-        assertNotNull(jsonPaths);
+        assertThat(jsonPaths).isNotNull();
         try {
-			assertEquals(1, ((JSONObject)jsonPaths.get("paths")).length());
+			assertThat(((JSONObject)jsonPaths.get("paths")).length()).isEqualTo(1);
 		} catch (JSONException e) {
 			fail(e.getMessage());
 		}
@@ -304,14 +304,14 @@ public class PathFinderTest {
         
         List<PathContext> paths = finder.findPaths();
 
-        assertNotNull(paths);
-        assertEquals(2, paths.size());
-        assertTrue(TestUtils.matchExpected(paths, expectedIds1, expectedIds2));
+        assertThat(paths).isNotNull();
+        assertThat(paths).hasSize(2);
+        assertThat(TestUtils.matchExpected(paths, expectedIds1, expectedIds2)).isTrue();
         
         JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
-        assertNotNull(jsonPaths);
+        assertThat(jsonPaths).isNotNull();
         try {
-			assertEquals(2, ((JSONObject)jsonPaths.get("paths")).length());
+			assertThat(((JSONObject)jsonPaths.get("paths")).length()).isEqualTo(2);
 		} catch (JSONException e) {
 			fail(e.getMessage());
 		}
@@ -344,14 +344,14 @@ public class PathFinderTest {
         
         List<PathContext> paths = finder.findPaths();
 
-        assertNotNull(paths);
-        assertEquals(2, paths.size());
-        assertTrue(TestUtils.matchExpected(paths, expectedIds1, expectedIds2));
+        assertThat(paths).isNotNull();
+        assertThat(paths).hasSize(2);
+        assertThat(TestUtils.matchExpected(paths, expectedIds1, expectedIds2)).isTrue();
         
         JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
-        assertNotNull(jsonPaths);
+        assertThat(jsonPaths).isNotNull();
         try {
-			assertEquals(2, ((JSONObject)jsonPaths.get("paths")).length());
+			assertThat(((JSONObject)jsonPaths.get("paths")).length()).isEqualTo(2);
 		} catch (JSONException e) {
 			fail(e.getMessage());
 		}
@@ -400,14 +400,14 @@ public class PathFinderTest {
         
         List<PathContext> paths = finder.findPaths();
 
-        assertNotNull(paths);
-        assertEquals(3, paths.size());
-        assertTrue(TestUtils.matchExpected(paths, expectedIds1, expectedIds2, expectedIds3));
+        assertThat(paths).isNotNull();
+        assertThat(paths).hasSize(3);
+        assertThat(TestUtils.matchExpected(paths, expectedIds1, expectedIds2, expectedIds3)).isTrue();
         
         JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
-        assertNotNull(jsonPaths);
+        assertThat(jsonPaths).isNotNull();
         try {
-			assertEquals(3, ((JSONObject)jsonPaths.get("paths")).length());
+			assertThat(((JSONObject)jsonPaths.get("paths")).length()).isEqualTo(3);
 		} catch (JSONException e) {
 			fail(e.getMessage());
 		}
@@ -439,14 +439,14 @@ public class PathFinderTest {
         
         List<PathContext> paths = finder.findPaths();
         
-        assertNotNull(paths);
-        assertEquals(2, paths.size());
-        assertTrue(TestUtils.matchExpected(paths, expectedIds1, expectedIds2));
+        assertThat(paths).isNotNull();
+        assertThat(paths).hasSize(2);
+        assertThat(TestUtils.matchExpected(paths, expectedIds1, expectedIds2)).isTrue();
         
         JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
-        assertNotNull(jsonPaths);
+        assertThat(jsonPaths).isNotNull();
         try {
-			assertEquals(2, ((JSONObject)jsonPaths.get("paths")).length());
+			assertThat(((JSONObject)jsonPaths.get("paths")).length()).isEqualTo(2);
 		} catch (JSONException e) {
 			fail(e.getMessage());
 		}
@@ -492,15 +492,15 @@ public class PathFinderTest {
         
         List<PathContext> paths = finder.findPaths();
 
-        assertNotNull(paths);
-        assertEquals(2, paths.size());
-        assertTrue(TestUtils.matchExpected(paths, expectedIds1, expectedIds2));
+        assertThat(paths).isNotNull();
+        assertThat(paths).hasSize(2);
+        assertThat(TestUtils.matchExpected(paths, expectedIds1, expectedIds2)).isTrue();
         
         JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
-        assertNotNull(jsonPaths);
+        assertThat(jsonPaths).isNotNull();
         
         try {
-			assertEquals(2, ((JSONObject)jsonPaths.get("paths")).length());
+			assertThat(((JSONObject)jsonPaths.get("paths")).length()).isEqualTo(2);
 		} catch (JSONException e) {
 			fail(e.getMessage());
 		}
@@ -542,14 +542,14 @@ public class PathFinderTest {
         
         List<PathContext> paths = finder.findPaths();
         
-        assertNotNull(paths);
-        assertEquals(5, paths.size());
-        assertTrue(TestUtils.matchExpected(paths, expectedIds1, expectedIds2, expectedIds3, expectedIds4, expectedIds5));
+        assertThat(paths).isNotNull();
+        assertThat(paths).hasSize(5);
+        assertThat(TestUtils.matchExpected(paths, expectedIds1, expectedIds2, expectedIds3, expectedIds4, expectedIds5)).isTrue();
         
         JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
-        assertNotNull(jsonPaths);
+        assertThat(jsonPaths).isNotNull();
         try {
-			assertEquals(5, ((JSONObject)jsonPaths.get("paths")).length());
+			assertThat(((JSONObject)jsonPaths.get("paths")).length()).isEqualTo(5);
 		} catch (JSONException e) {
 			fail(e.getMessage());
 		}
@@ -584,14 +584,14 @@ public class PathFinderTest {
         
         List<PathContext> paths = finder.findPaths();
 
-        assertNotNull(paths);
-        assertEquals(2, paths.size());
-        assertTrue(TestUtils.matchExpected(paths, expectedIds1, expectedIds2));
+        assertThat(paths).isNotNull();
+        assertThat(paths).hasSize(2);
+        assertThat(TestUtils.matchExpected(paths, expectedIds1, expectedIds2)).isTrue();
         
         JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
-        assertNotNull(jsonPaths);
+        assertThat(jsonPaths).isNotNull();
         try {
-            assertEquals(2, ((JSONObject)jsonPaths.get("paths")).length());
+            assertThat(((JSONObject)jsonPaths.get("paths")).length()).isEqualTo(2);
         } catch (JSONException e) {
             fail(e.getMessage());
         }
@@ -644,14 +644,14 @@ public class PathFinderTest {
         
         List<PathContext> paths = finder.findPaths();
 
-        assertNotNull(paths);
-        assertEquals(2, paths.size());
-        assertTrue(TestUtils.matchExpected(paths, expectedIds1, expectedIds2));
+        assertThat(paths).isNotNull();
+        assertThat(paths).hasSize(2);
+        assertThat(TestUtils.matchExpected(paths, expectedIds1, expectedIds2)).isTrue();
         
         JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
-        assertNotNull(jsonPaths);
+        assertThat(jsonPaths).isNotNull();
         try {
-            assertEquals(2, ((JSONObject)jsonPaths.get("paths")).length());
+            assertThat(((JSONObject)jsonPaths.get("paths")).length()).isEqualTo(2);
         } catch (JSONException e) {
             fail(e.getMessage());
         }
@@ -686,14 +686,14 @@ public class PathFinderTest {
         
         List<PathContext> paths = finder.findPaths();
 
-        assertNotNull(paths);
-        assertEquals(2, paths.size());
-        assertTrue(TestUtils.matchExpected(paths, expectedIds1, expectedIds2));
+        assertThat(paths).isNotNull();
+        assertThat(paths).hasSize(2);
+        assertThat(TestUtils.matchExpected(paths, expectedIds1, expectedIds2)).isTrue();
         
         JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
-        assertNotNull(jsonPaths);
+        assertThat(jsonPaths).isNotNull();
         try {
-            assertEquals(2, ((JSONObject)jsonPaths.get("paths")).length());
+            assertThat(((JSONObject)jsonPaths.get("paths")).length()).isEqualTo(2);
         } catch (JSONException e) {
             fail(e.getMessage());
         }
@@ -719,14 +719,14 @@ public class PathFinderTest {
         
         List<PathContext> paths = finder.findPaths();
         
-        assertNotNull(paths);
-        assertEquals(1, paths.size());
-        assertTrue(TestUtils.matchExpected(paths, expectedIds));
+        assertThat(paths).isNotNull();
+        assertThat(paths).hasSize(1);
+        assertThat(TestUtils.matchExpected(paths, expectedIds)).isTrue();
         
         JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
-        assertNotNull(jsonPaths);
+        assertThat(jsonPaths).isNotNull();
         try {
-            assertEquals(1, ((JSONObject)jsonPaths.get("paths")).length());
+            assertThat(((JSONObject)jsonPaths.get("paths")).length()).isEqualTo(1);
         } catch (JSONException e) {
             fail(e.getMessage());
         }
@@ -756,14 +756,14 @@ public class PathFinderTest {
         
         List<PathContext> paths = finder.findPaths();
         
-        assertNotNull(paths);
-        assertEquals(1, paths.size());
-        assertTrue(TestUtils.matchExpected(paths, expectedIds));
+        assertThat(paths).isNotNull();
+        assertThat(paths).hasSize(1);
+        assertThat(TestUtils.matchExpected(paths, expectedIds)).isTrue();
         
         JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
-        assertNotNull(jsonPaths);
+        assertThat(jsonPaths).isNotNull();
         try {
-            assertEquals(1, ((JSONObject)jsonPaths.get("paths")).length());
+            assertThat(((JSONObject)jsonPaths.get("paths")).length()).isEqualTo(1);
         } catch (JSONException e) {
             fail(e.getMessage());
         }
@@ -819,14 +819,14 @@ public class PathFinderTest {
         
         List<PathContext> paths = finder.findPaths();
         
-        assertNotNull(paths);
-        assertEquals(3, paths.size());
-        assertTrue("Found activities do not match expected", TestUtils.matchExpected(paths, expectedIds, expectedIds2, expectedIds3));
+        assertThat(paths).isNotNull();
+        assertThat(paths).hasSize(3);
+        assertThat(TestUtils.matchExpected(paths, expectedIds, expectedIds2, expectedIds3)).as("Found activities do not match expected").isTrue();
         
         JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
-        assertNotNull(jsonPaths);
+        assertThat(jsonPaths).isNotNull();
         try {
-            assertEquals(3, ((JSONObject)jsonPaths.get("paths")).length());
+            assertThat(((JSONObject)jsonPaths.get("paths")).length()).isEqualTo(3);
         } catch (JSONException e) {
             fail(e.getMessage());
         }
@@ -903,14 +903,14 @@ public class PathFinderTest {
         
         List<PathContext> paths = finder.findPaths();
         
-        assertNotNull(paths);
-        assertEquals(3, paths.size());
-        assertTrue("Found activities do not match expected", TestUtils.matchExpected(paths, expectedIds, expectedIds2, expectedIds3));
+        assertThat(paths).isNotNull();
+        assertThat(paths).hasSize(3);
+        assertThat(TestUtils.matchExpected(paths, expectedIds, expectedIds2, expectedIds3)).as("Found activities do not match expected").isTrue();
         
         JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
-        assertNotNull(jsonPaths);
+        assertThat(jsonPaths).isNotNull();
         try {
-            assertEquals(3, ((JSONObject)jsonPaths.get("paths")).length());
+            assertThat(((JSONObject)jsonPaths.get("paths")).length()).isEqualTo(3);
         } catch (JSONException e) {
             fail(e.getMessage());
         }
@@ -952,14 +952,14 @@ public class PathFinderTest {
         
         List<PathContext> paths = finder.findPaths();
 
-        assertNotNull(paths);
-        assertEquals(2, paths.size());
-        assertTrue(TestUtils.matchExpected(paths, expectedIds1, expectedIds2));
+        assertThat(paths).isNotNull();
+        assertThat(paths).hasSize(2);
+        assertThat(TestUtils.matchExpected(paths, expectedIds1, expectedIds2)).isTrue();
         
         JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
-        assertNotNull(jsonPaths);
+        assertThat(jsonPaths).isNotNull();
         try {
-            assertEquals(2, ((JSONObject)jsonPaths.get("paths")).length());
+            assertThat(((JSONObject)jsonPaths.get("paths")).length()).isEqualTo(2);
         } catch (JSONException e) {
             fail(e.getMessage());
         }
@@ -1069,14 +1069,14 @@ public class PathFinderTest {
         
         List<PathContext> paths = finder.findPaths();
 
-        assertNotNull(paths);
-        assertEquals(4, paths.size());
-        assertTrue(TestUtils.matchExpected(paths, expectedIds1, expectedIds2, expectedIds3, expectedIds4));
+        assertThat(paths).isNotNull();
+        assertThat(paths).hasSize(4);
+        assertThat(TestUtils.matchExpected(paths, expectedIds1, expectedIds2, expectedIds3, expectedIds4)).isTrue();
         
         JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
-        assertNotNull(jsonPaths);
+        assertThat(jsonPaths).isNotNull();
         try {
-            assertEquals(4, ((JSONObject)jsonPaths.get("paths")).length());
+            assertThat(((JSONObject)jsonPaths.get("paths")).length()).isEqualTo(4);
         } catch (JSONException e) {
             fail(e.getMessage());
         }
@@ -1143,14 +1143,14 @@ public class PathFinderTest {
         
         List<PathContext> paths = finder.findPaths();
 
-        assertNotNull(paths);
-        assertEquals(2, paths.size());
-        assertTrue(TestUtils.matchExpected(paths, expectedIds1, expectedIds2));
+        assertThat(paths).isNotNull();
+        assertThat(paths).hasSize(2);
+        assertThat(TestUtils.matchExpected(paths, expectedIds1, expectedIds2)).isTrue();
         
         JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
-        assertNotNull(jsonPaths);
+        assertThat(jsonPaths).isNotNull();
         try {
-            assertEquals(2, ((JSONObject)jsonPaths.get("paths")).length());
+            assertThat(((JSONObject)jsonPaths.get("paths")).length()).isEqualTo(2);
         } catch (JSONException e) {
             fail(e.getMessage());
         }
@@ -1214,14 +1214,14 @@ public class PathFinderTest {
         
         List<PathContext> paths = finder.findPaths();
 
-        assertNotNull(paths);
-        assertEquals(2, paths.size());
-        assertTrue(TestUtils.matchExpected(paths, expectedIds1, expectedIds2));
+        assertThat(paths).isNotNull();
+        assertThat(paths).hasSize(2);
+        assertThat(TestUtils.matchExpected(paths, expectedIds1, expectedIds2)).isTrue();
         
         JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
-        assertNotNull(jsonPaths);
+        assertThat(jsonPaths).isNotNull();
         try {
-            assertEquals(2, ((JSONObject)jsonPaths.get("paths")).length());
+            assertThat(((JSONObject)jsonPaths.get("paths")).length()).isEqualTo(2);
         } catch (JSONException e) {
             fail(e.getMessage());
         }
@@ -1344,14 +1344,14 @@ public class PathFinderTest {
         
         List<PathContext> paths = finder.findPaths();
 
-        assertNotNull(paths);
-        assertEquals(4, paths.size());
-        assertTrue(TestUtils.matchExpected(paths, expectedIds1, expectedIds2, expectedIds3, expectedIds4));
+        assertThat(paths).isNotNull();
+        assertThat(paths).hasSize(4);
+        assertThat(TestUtils.matchExpected(paths, expectedIds1, expectedIds2, expectedIds3, expectedIds4)).isTrue();
         
         JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
-        assertNotNull(jsonPaths);
+        assertThat(jsonPaths).isNotNull();
         try {
-            assertEquals(4, ((JSONObject)jsonPaths.get("paths")).length());
+            assertThat(((JSONObject)jsonPaths.get("paths")).length()).isEqualTo(4);
         } catch (JSONException e) {
             fail(e.getMessage());
         }
@@ -1476,14 +1476,14 @@ public class PathFinderTest {
         
         List<PathContext> paths = finder.findPaths();
 
-        assertNotNull(paths);
-        assertEquals(5, paths.size());
-        assertTrue(TestUtils.matchExpected(paths, expectedIds1, expectedIds2, expectedIds3, expectedIds4, expectedIds5));
+        assertThat(paths).isNotNull();
+        assertThat(paths).hasSize(5);
+        assertThat(TestUtils.matchExpected(paths, expectedIds1, expectedIds2, expectedIds3, expectedIds4, expectedIds5)).isTrue();
         
         JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
-        assertNotNull(jsonPaths);
+        assertThat(jsonPaths).isNotNull();
         try {
-            assertEquals(5, ((JSONObject)jsonPaths.get("paths")).length());
+            assertThat(((JSONObject)jsonPaths.get("paths")).length()).isEqualTo(5);
         } catch (JSONException e) {
             fail(e.getMessage());
         }
@@ -1534,14 +1534,14 @@ public class PathFinderTest {
         
         List<PathContext> paths = finder.findPaths();
         
-        assertNotNull(paths);
-        assertEquals(3, paths.size());
-        assertTrue(TestUtils.matchExpected(paths, expectedIds, expectedIds2, expectedIds3));
+        assertThat(paths).isNotNull();
+        assertThat(paths).hasSize(3);
+        assertThat(TestUtils.matchExpected(paths, expectedIds, expectedIds2, expectedIds3)).isTrue();
         
         JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
-        assertNotNull(jsonPaths);
+        assertThat(jsonPaths).isNotNull();
         try {
-            assertEquals(3, ((JSONObject)jsonPaths.get("paths")).length());
+            assertThat(((JSONObject)jsonPaths.get("paths")).length()).isEqualTo(3);
         } catch (JSONException e) {
             fail(e.getMessage());
         }
@@ -1574,14 +1574,14 @@ public class PathFinderTest {
         
         List<PathContext> paths = finder.findPaths();
         
-        assertNotNull(paths);
-        assertEquals(2, paths.size());
-        assertTrue(TestUtils.matchExpected(paths, expectedIds, expectedIds2));
+        assertThat(paths).isNotNull();
+        assertThat(paths).hasSize(2);
+        assertThat(TestUtils.matchExpected(paths, expectedIds, expectedIds2)).isTrue();
         
         JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
-        assertNotNull(jsonPaths);
+        assertThat(jsonPaths).isNotNull();
         try {
-            assertEquals(2, ((JSONObject)jsonPaths.get("paths")).length());
+            assertThat(((JSONObject)jsonPaths.get("paths")).length()).isEqualTo(2);
         } catch (JSONException e) {
             fail(e.getMessage());
         }
@@ -1599,13 +1599,13 @@ public class PathFinderTest {
 
         List<PathContext> paths = finder.findPaths();
 
-        assertNotNull(paths);
-        assertEquals(6, paths.size());
+        assertThat(paths).isNotNull();
+        assertThat(paths).hasSize(6);
 
         JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
-        assertNotNull(jsonPaths);
+        assertThat(jsonPaths).isNotNull();
         try {
-            assertEquals(6, ((JSONObject)jsonPaths.get("paths")).length());
+            assertThat(((JSONObject)jsonPaths.get("paths")).length()).isEqualTo(6);
         } catch (JSONException e) {
             fail(e.getMessage());
         }
@@ -1622,18 +1622,18 @@ public class PathFinderTest {
 
         List<PathContext> paths = finder.findPaths();
 
-        assertNotNull(paths);
-        assertEquals(4, paths.size());
+        assertThat(paths).isNotNull();
+        assertThat(paths).hasSize(4);
 
 
         for (PathContext context : paths) {
-            assertEquals(15, context.getPathElements().size());
+            assertThat(context.getPathElements()).hasSize(15);
         }
 
         JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
-        assertNotNull(jsonPaths);
+        assertThat(jsonPaths).isNotNull();
         try {
-            assertEquals(4, ((JSONObject)jsonPaths.get("paths")).length());
+            assertThat(((JSONObject)jsonPaths.get("paths")).length()).isEqualTo(4);
         } catch (JSONException e) {
             fail(e.getMessage());
         }
@@ -1680,14 +1680,14 @@ public class PathFinderTest {
 
         List<PathContext> paths = finder.findPaths();
 
-        assertNotNull(paths);
-        assertEquals(3, paths.size());
-        assertTrue(TestUtils.matchExpected(paths, expectedIds, expectedIds2, expectedIds3));
+        assertThat(paths).isNotNull();
+        assertThat(paths).hasSize(3);
+        assertThat(TestUtils.matchExpected(paths, expectedIds, expectedIds2, expectedIds3)).isTrue();
 
         JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
-        assertNotNull(jsonPaths);
+        assertThat(jsonPaths).isNotNull();
         try {
-            assertEquals(3, ((JSONObject)jsonPaths.get("paths")).length());
+            assertThat(((JSONObject)jsonPaths.get("paths")).length()).isEqualTo(3);
         } catch (JSONException e) {
             fail(e.getMessage());
         }

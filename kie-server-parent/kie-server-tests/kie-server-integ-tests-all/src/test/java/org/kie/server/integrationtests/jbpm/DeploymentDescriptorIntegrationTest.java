@@ -15,7 +15,7 @@
 
 package org.kie.server.integrationtests.jbpm;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.ArrayList;
@@ -71,13 +71,13 @@ public class DeploymentDescriptorIntegrationTest extends JbpmKieServerBaseIntegr
         commands.add(commandsFactory.newGetGlobal(GLOBAL_PERSON_IDENTIFIER));
 
         ServiceResponse<ExecutionResults> reply = ruleClient.executeCommandsWithResults(CONTAINER_ID, executionCommand);
-        assertEquals(ServiceResponse.ResponseType.SUCCESS, reply.getType());
+        assertThat(reply.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
 
         ExecutionResults actualData = reply.getResult();
-        assertNotNull(actualData);
+        assertThat(actualData).isNotNull();
         Object personVar = actualData.getValue(GLOBAL_PERSON_IDENTIFIER);
-        assertNotNull(personVar);
-        assertEquals(GLOBAL_PERSON_NAME, KieServerReflections.valueOf(personVar, PERSON_NAME_FIELD));
+        assertThat(personVar).isNotNull();
+        assertThat(KieServerReflections.valueOf(personVar).isCloseTo(GLOBAL_PERSON_NAME, within(PERSON_NAME_FIELD)));
     }
 
     @Test
@@ -93,22 +93,22 @@ public class DeploymentDescriptorIntegrationTest extends JbpmKieServerBaseIntegr
         commands.add(commandsFactory.newInsert(createPersonInstance, personOutIdentifier));
         commands.add(commandsFactory.newGetObjects(personOutIdentifier));
         ServiceResponse<ExecutionResults> reply = ruleClient.executeCommandsWithResults(CONTAINER_ID, executionCommand);
-        assertEquals(ServiceResponse.ResponseType.SUCCESS, reply.getType());
+        assertThat(reply.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
 
         ExecutionResults actualData = reply.getResult();
-        assertNotNull(actualData);
+        assertThat(actualData).isNotNull();
         ArrayList<Object> personVar = (ArrayList<Object>) actualData.getValue(personOutIdentifier);
-        assertEquals(1, personVar.size());
-        assertEquals(personName, KieServerReflections.valueOf(personVar.get(0), PERSON_NAME_FIELD));
+        assertThat(personVar).hasSize(1);
+        assertThat(KieServerReflections.valueOf(personVar.get(0)).isCloseTo(personName, within(PERSON_NAME_FIELD)));
 
         // try to retrieve person object by new request
         commands.clear();
         commands.add(commandsFactory.newGetObjects(personOutIdentifier));
         reply = ruleClient.executeCommandsWithResults(CONTAINER_ID, executionCommand);
-        assertEquals(ServiceResponse.ResponseType.SUCCESS, reply.getType());
+        assertThat(reply.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
 
         actualData = reply.getResult();
-        assertNotNull(actualData);
+        assertThat(actualData).isNotNull();
         personVar = (ArrayList<Object>) actualData.getValue(personOutIdentifier);
         KieServerAssert.assertNullOrEmpty("Person object was returned!", personVar);
     }

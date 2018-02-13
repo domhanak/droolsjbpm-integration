@@ -15,7 +15,7 @@
 
 package org.kie.server.integrationtests.jbpm;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -60,8 +60,8 @@ public class JobServiceJmsIntegrationTest extends JbpmKieServerBaseIntegrationTe
         // Start 10 jobs at once.
         for (int i=0; i<NUMBER_OF_JOBS; i++) {
             Long jobId = jobServicesClient.scheduleRequest(jobRequestInstance);
-            assertNotNull(jobId);
-            assertTrue( jobId.longValue() > 0);
+            assertThat(jobId).isNotNull();
+            assertThat(jobId.longValue() > 0).isTrue();
             jobIds.add(jobId);
         }
 
@@ -70,15 +70,15 @@ public class JobServiceJmsIntegrationTest extends JbpmKieServerBaseIntegrationTe
             KieServerSynchronization.waitForJobToFinish(jobServicesClient, jobId);
             RequestInfoInstance jobRequest = jobServicesClient.getRequestById(jobId, false, false);
 
-            assertNotNull(jobRequest);
-            assertEquals(jobId, jobRequest.getId());
-            assertEquals(businessKey, jobRequest.getBusinessKey());
-            assertEquals(STATUS.DONE.toString(), jobRequest.getStatus());
-            assertEquals(command, jobRequest.getCommandName());
+            assertThat(jobRequest).isNotNull();
+            assertThat(jobRequest.getId()).isEqualTo(jobId);
+            assertThat(jobRequest.getBusinessKey()).isEqualTo(businessKey);
+            assertThat(jobRequest.getStatus()).isEqualTo(STATUS.DONE.toString());
+            assertThat(jobRequest.getCommandName()).isEqualTo(command);
         }
         long durationTime = Calendar.getInstance().getTimeInMillis() - startTime;
 
         // All jobs should be processed and done in less than 20 s.
-        assertTrue("Job processing exceeded expected time! Actual time: " + durationTime + "ms", durationTime < MAXIMUM_PROCESSING_TIME);
+        assertThat(durationTime < MAXIMUM_PROCESSING_TIME).as("Job processing exceeded expected time! Actual time: " + durationTime + "ms").isTrue();
     }
 }

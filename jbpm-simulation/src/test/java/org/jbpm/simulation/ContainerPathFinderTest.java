@@ -15,7 +15,7 @@
 
 package org.jbpm.simulation;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -62,9 +62,9 @@ public class ContainerPathFinderTest {
 
         List<PathContext> paths = finder.findPaths();
 
-        assertNotNull(paths);
-        assertEquals(1, paths.size());
-        assertTrue(TestUtils.matchExpected(paths, expectedIds));
+        assertThat(paths).isNotNull();
+        assertThat(paths).hasSize(1);
+        assertThat(TestUtils.matchExpected(paths, expectedIds)).isTrue();
         
         TestUtils.printOutPaths(paths, "testFindPathFromProcess");
     }
@@ -92,7 +92,7 @@ public class ContainerPathFinderTest {
                 break;
             }
         }
-        assertNotNull(process);
+        assertThat(process).isNotNull();
         
         FlowElementsContainer container = null;
         for (FlowElement element : process.getFlowElements()) {
@@ -101,16 +101,16 @@ public class ContainerPathFinderTest {
                 break;
             }
         }
-        assertNotNull(container);
+        assertThat(container).isNotNull();
         
         PathFinder finder = PathFinderFactory.getInstance(container);
 
         List<PathContext> paths = finder.findPaths();
 
-        assertNotNull(paths);
-        assertEquals(2, paths.size());
+        assertThat(paths).isNotNull();
+        assertThat(paths).hasSize(2);
         
-        assertTrue(TestUtils.matchExpected(paths, expectedIds1, expectedIds2));
+        assertThat(TestUtils.matchExpected(paths, expectedIds1, expectedIds2)).isTrue();
         
         TestUtils.printOutPaths(paths, "testFindPathFromAdHocSubprocess");
     }
@@ -150,7 +150,7 @@ public class ContainerPathFinderTest {
                 break;
             }
         }
-        assertNotNull(process);
+        assertThat(process).isNotNull();
         
         FlowElementsContainer container = null;
         for (FlowElement element : process.getFlowElements()) {
@@ -159,15 +159,15 @@ public class ContainerPathFinderTest {
                 break;
             }
         }
-        assertNotNull(container);
+        assertThat(container).isNotNull();
         
         PathFinder finder = PathFinderFactory.getInstance(container);
         
         List<PathContext> paths = finder.findPaths();
 
-        assertNotNull(paths);
-        assertEquals(2, paths.size());
-        assertTrue(TestUtils.matchExpected(paths, expectedIds1, expectedIds2));
+        assertThat(paths).isNotNull();
+        assertThat(paths).hasSize(2);
+        assertThat(TestUtils.matchExpected(paths, expectedIds1, expectedIds2)).isTrue();
        
         
         TestUtils.printOutPaths(paths, "testFindPathFromEmbeddedSubprocess");

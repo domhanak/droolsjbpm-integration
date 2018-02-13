@@ -41,8 +41,8 @@ public class TimeGeneratorTest {
         data.put(SimulationConstants.MAX, 40000L);
         
         TimeGenerator generator = TimeGeneratorFactory.newTimeGenerator(data);
-        assertNotNull(generator);
-        assertTrue(generator instanceof RandomTimeGenerator);
+        assertThat(generator).isNotNull();
+        assertThat(generator instanceof RandomTimeGenerator).isTrue();
         
         System.out.println(generator.generateTime());
         System.out.println(generator.generateTime());

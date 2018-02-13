@@ -15,7 +15,7 @@
  */
 package org.kie.server.services.impl;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Set;
 
@@ -59,22 +59,22 @@ public class KieServerContainerDeploymentTest {
     @Test
     public void testDeploymentFiltering() throws Exception {
         Set<KieServerContainerDeployment> deployments = KieServerContainerDeployment.fromString(serverContainerDeployment, false);
-        assertEquals(8, deployments.size());
+        assertThat(deployments).hasSize(8);
         deployments = KieServerContainerDeployment.fromString(serverContainerDeployment, true);
-        assertEquals(3, deployments.size());
+        assertThat(deployments).hasSize(3);
         deployments = KieServerContainerDeployment.fromString(serverContainerDeployment);
-        assertEquals(3, deployments.size());
+        assertThat(deployments).hasSize(3);
     }
 
     @Test
     public void testDeploymentRepresentation() throws Exception {
         Set<KieServerContainerDeployment> deploymentsA = KieServerContainerDeployment.fromString(serverContainerDeployment);
-        assertEquals(3, deploymentsA.size());
+        assertThat(deploymentsA).hasSize(3);
         String out = KieServerContainerDeployment.toString(deploymentsA);
-        assertEquals(canonicalRepresentation, out);
+        assertThat(out).isEqualTo(canonicalRepresentation);
         Set<KieServerContainerDeployment> deploymentsB = KieServerContainerDeployment.fromString(out);
-        assertEquals(3, deploymentsB.size());
-        assertEquals(deploymentsA, deploymentsB);
+        assertThat(deploymentsB).hasSize(3);
+        assertThat(deploymentsB).isEqualTo(deploymentsA);
     }
 
 }

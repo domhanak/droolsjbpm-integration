@@ -15,7 +15,7 @@
 
 package org.kie.server.services.swagger;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.lang.reflect.Field;
 import java.util.concurrent.ConcurrentMap;
@@ -38,7 +38,7 @@ public class SwaggerKierServerExtensionTest {
 		SwaggerKieServerExtension extension = new SwaggerKieServerExtension();
 		extension.init(null, null);
 		BeanConfig config = (BeanConfig) SwaggerConfigLocator.getInstance().getConfig(SwaggerContextService.CONFIG_ID_DEFAULT);
-		assertEquals("/kie-server/services/rest", config.getBasePath());
+		assertThat(config.getBasePath()).isEqualTo("/kie-server/services/rest");
 	}
 	
 	@Test
@@ -49,7 +49,7 @@ public class SwaggerKierServerExtensionTest {
 		SwaggerKieServerExtension extension = new SwaggerKieServerExtension();
 		extension.init(null, null);
 		BeanConfig config = (BeanConfig) SwaggerConfigLocator.getInstance().getConfig(SwaggerContextService.CONFIG_ID_DEFAULT);
-		assertEquals("/services/rest", config.getBasePath());
+		assertThat(config.getBasePath()).isEqualTo("/services/rest");
 	}
 	
 

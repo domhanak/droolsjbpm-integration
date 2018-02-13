@@ -17,7 +17,7 @@ package org.kie.spring.jbpm;
 
 import java.util.Arrays;
 import java.util.Collection;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
 import javax.naming.InitialContext;
@@ -68,15 +68,15 @@ public class PerProcessInstanceSpringTest extends AbstractJbpmSpringParameterize
         EntityManager entityManager = getEntityManager();
         // check that there is no sessions in db
         List<?> sessions = entityManager.createQuery("from SessionInfo").getResultList();
-        assertNotNull(sessions);
-        assertEquals(0, sessions.size());
+        assertThat(sessions).isNotNull();
+        assertThat(sessions).isEmpty();
 
         getManager();
 
         // after creating per process instance manager init creates temp session that shall be directly destroyed
         sessions = entityManager.createQuery("from SessionInfo").getResultList();
-        assertNotNull(sessions);
-        assertEquals(0, sessions.size());
+        assertThat(sessions).isNotNull();
+        assertThat(sessions).isEmpty();
     }
 
     /**
@@ -103,15 +103,15 @@ public class PerProcessInstanceSpringTest extends AbstractJbpmSpringParameterize
         ksession = engine.getKieSession();
         TaskService taskService = engine.getTaskService();
 
-        assertEquals(ksessionId, ksession.getIdentifier());
+        assertThat(ksession.getIdentifier()).isEqualTo(ksessionId);
 
         // Process can continue with new task service
         ProcessInstanceLog log = getLogService().findProcessInstance(processInstance.getId());
-        assertNotNull(log);
+        assertThat(log).isNotNull();
 
         List<TaskSummary> tasks = taskService.getTasksAssignedAsPotentialOwner(USER_JOHN, "en-UK");
         System.out.println("Found " + tasks.size() + " task(s) for user '"+USER_JOHN+"'");
-        assertEquals(1, tasks.size());
+        assertThat(tasks).hasSize(1);
 
         long taskId = tasks.get(0).getId();
         taskService.start(taskId, USER_JOHN);
@@ -119,14 +119,14 @@ public class PerProcessInstanceSpringTest extends AbstractJbpmSpringParameterize
 
         tasks = taskService.getTasksAssignedAsPotentialOwner(USER_MARY, "en-UK");
         System.out.println("Found " + tasks.size() + " task(s) for user '"+USER_MARY+"'");
-        assertEquals(1, tasks.size());
+        assertThat(tasks).hasSize(1);
 
         taskId = tasks.get(0).getId();
         taskService.start(taskId, USER_MARY);
         taskService.complete(taskId, USER_MARY, null);
 
         processInstance = ksession.getProcessInstance(processInstance.getId());
-        assertNull(processInstance);
+        assertThat(processInstance).isNull();
         System.out.println("Process instance completed");
 
         manager.disposeRuntimeEngine(engine);
@@ -145,14 +145,14 @@ public class PerProcessInstanceSpringTest extends AbstractJbpmSpringParameterize
         RuntimeEngine runtime = manager.getRuntimeEngine(ProcessInstanceIdContext.get());
         KieSession ksession = runtime.getKieSession();
 
-        assertNotNull(ksession);
+        assertThat(ksession).isNotNull();
         ProcessInstance pi1 = ksession.startProcess(SAMPLE_HELLO_PROCESS_ID);
-        assertEquals(ProcessInstance.STATE_ACTIVE, pi1.getState());
+        assertThat(pi1.getState()).isEqualTo(ProcessInstance.STATE_ACTIVE);
 
         // collect task for process instance 1
         List<Long> taskIds = runtime.getTaskService().getTasksByProcessInstanceId(pi1.getId());
-        assertNotNull(taskIds);
-        assertEquals(1, taskIds.size());
+        assertThat(taskIds).isNotNull();
+        assertThat(taskIds).hasSize(1);
 
         Long taskId1 = taskIds.get(0);
 
@@ -165,15 +165,15 @@ public class PerProcessInstanceSpringTest extends AbstractJbpmSpringParameterize
         // start process 2
         RuntimeEngine runtime2 = manager.getRuntimeEngine(ProcessInstanceIdContext.get());
         KieSession ksession2 = runtime2.getKieSession();
-        assertNotNull(ksession2);
+        assertThat(ksession2).isNotNull();
 
         ProcessInstance pi2 = ksession2.startProcess(SAMPLE_HELLO_PROCESS_ID);
-        assertEquals(ProcessInstance.STATE_ACTIVE, pi2.getState());
+        assertThat(pi2.getState()).isEqualTo(ProcessInstance.STATE_ACTIVE);
 
         // collect task for process instance 2
         List<Long> taskIds2 = runtime2.getTaskService().getTasksByProcessInstanceId(pi2.getId());
-        assertNotNull(taskIds2);
-        assertEquals(1, taskIds2.size());
+        assertThat(taskIds2).isNotNull();
+        assertThat(taskIds2).hasSize(1);
 
         Long taskId2 = taskIds2.get(0);
         runtime2.getTaskService().start(taskId2, USER_JOHN);
@@ -202,8 +202,8 @@ public class PerProcessInstanceSpringTest extends AbstractJbpmSpringParameterize
         status = transactionManager.getTransaction(defTransDefinition);
         runtime = manager.getRuntimeEngine(ProcessInstanceIdContext.get(pi1.getId()));
         taskIds = runtime.getTaskService().getTasksByProcessInstanceId(pi1.getId());
-        assertNotNull(taskIds);
-        assertEquals(2, taskIds.size());
+        assertThat(taskIds).isNotNull();
+        assertThat(taskIds).hasSize(2);
 
         taskId1 = taskIds.get(1);
         // start and complete second task in process instance 1
@@ -224,8 +224,8 @@ public class PerProcessInstanceSpringTest extends AbstractJbpmSpringParameterize
         status = transactionManager.getTransaction(defTransDefinition);
         runtime2 = manager.getRuntimeEngine(ProcessInstanceIdContext.get(pi2.getId()));
         taskIds2 = runtime2.getTaskService().getTasksByProcessInstanceId(pi2.getId());
-        assertNotNull(taskIds2);
-        assertEquals(2, taskIds2.size());
+        assertThat(taskIds2).isNotNull();
+        assertThat(taskIds2).hasSize(2);
 
         taskId2 = taskIds2.get(1);
 

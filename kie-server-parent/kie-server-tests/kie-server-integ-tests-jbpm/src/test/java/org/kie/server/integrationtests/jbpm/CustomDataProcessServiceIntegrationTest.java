@@ -25,7 +25,7 @@ import org.kie.server.api.model.ReleaseId;
 import org.kie.server.integrationtests.shared.KieServerDeployer;
 import org.kie.server.integrationtests.shared.KieServerReflections;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class CustomDataProcessServiceIntegrationTest extends JbpmKieServerBaseIntegrationTest {
 
@@ -70,25 +70,25 @@ public class CustomDataProcessServiceIntegrationTest extends JbpmKieServerBaseIn
         try {
             processInstanceId = processClient.startProcess(CONTAINER_ID, "definition-project.usertaskpojo", parameters);
 
-            assertNotNull(processInstanceId);
-            assertTrue(processInstanceId.longValue() > 0);
+            assertThat(processInstanceId).isNotNull();
+            assertThat(processInstanceId.longValue() > 0).isTrue();
 
             Object pojoVariable = processClient.getProcessInstanceVariable(CONTAINER_ID, processInstanceId, "pojoData");
-            assertNotNull(pojoVariable);
-            assertTrue(pojo1Class.isAssignableFrom(pojoVariable.getClass()));
+            assertThat(pojoVariable).isNotNull();
+            assertThat(pojo1Class.isAssignableFrom(pojoVariable.getClass())).isTrue();
 
-            assertEquals("one", KieServerReflections.valueOf(pojoVariable, "desc"));
+            assertThat("desc")).as("one").isEqualTo(KieServerReflections.valueOf(pojoVariable);
 
             Object pojo2Variable = KieServerReflections.valueOf(pojoVariable, "pojo2");
-            assertNotNull(pojo2Variable);
+            assertThat(pojo2Variable).isNotNull();
 
-            assertEquals("two", KieServerReflections.valueOf(pojo2Variable, "desc2"));
-            assertEquals(true, KieServerReflections.valueOf(pojo2Variable, "primitiveBoolean"));
+            assertThat("desc2")).as("two").isEqualTo(KieServerReflections.valueOf(pojo2Variable);
+            assertThat("primitiveBoolean")).isEqualTo(true, KieServerReflections.valueOf(pojo2Variable);
 
             Object pojo3Variable = KieServerReflections.valueOf(pojo2Variable, "pojo3");
-            assertNotNull(pojo3Variable);
+            assertThat(pojo3Variable).isNotNull();
 
-            assertEquals("three", KieServerReflections.valueOf(pojo3Variable, "desc3"));
+            assertThat("desc3")).as("three").isEqualTo(KieServerReflections.valueOf(pojo3Variable);
 
         } finally {
             if (processInstanceId != null) {

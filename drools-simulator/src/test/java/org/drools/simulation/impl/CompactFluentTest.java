@@ -154,7 +154,7 @@ public class CompactFluentTest extends SimulateTestBase {
         } catch ( AssertionError e) {
             fail = true;
         } 
-        assertTrue( "Assertion should have failed", fail ); 
+        assertThat("Assertion should have failed", fail ).isTrue(); 
 
         // @ FIXME commented out until hamsandwich works in the build
         //        f = new FluentCompactSimulationImpl();

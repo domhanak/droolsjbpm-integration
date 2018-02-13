@@ -26,7 +26,7 @@ import org.kie.server.api.model.KieContainerStatus;
 import org.kie.server.api.model.ReleaseId;
 import org.kie.server.api.model.ServiceResponse;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 import org.kie.server.integrationtests.shared.KieServerAssert;
 import org.kie.server.integrationtests.shared.KieServerDeployer;
 
@@ -66,19 +66,19 @@ public class FailureOnContainerDisposeIntegrationTest extends JbpmKieServerBaseI
         // dispose not allowed as there is active process instance
         ServiceResponse<Void> disposeContainerResponse = client.disposeContainer(CONTAINER_ID);
 
-        assertEquals(ServiceResponse.ResponseType.FAILURE, disposeContainerResponse.getType());
+        assertThat(disposeContainerResponse.getType()).isEqualTo(ServiceResponse.ResponseType.FAILURE);
         String failureMessage = disposeContainerResponse.getMsg();
-        assertEquals(DISPOSE_FAILURE_MSG, failureMessage);
+        assertThat(failureMessage).isEqualTo(DISPOSE_FAILURE_MSG);
         // after failed dispose container should be fully operational and in started state
         ServiceResponse<KieContainerResource> containerResponse = client.getContainerInfo(CONTAINER_ID);
-        assertEquals(ServiceResponse.ResponseType.SUCCESS, containerResponse.getType());
+        assertThat(containerResponse.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
         KieContainerResource container = containerResponse.getResult();
-        assertNotNull(container);
-        assertEquals(KieContainerStatus.STARTED, container.getStatus());
+        assertThat(container).isNotNull();
+        assertThat(container.getStatus()).isEqualTo(KieContainerStatus.STARTED);
         // let's abort the active instance
         processClient.abortProcessInstance(CONTAINER_ID, processInstanceId);
         // and now proceed with dispose again which must be successful
         disposeContainerResponse = client.disposeContainer(CONTAINER_ID);
-        assertEquals(ServiceResponse.ResponseType.SUCCESS, disposeContainerResponse.getType());
+        assertThat(disposeContainerResponse.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
     }
 }

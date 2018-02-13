@@ -41,29 +41,29 @@ public class SimpleKieSpringKarafIntegrationTest extends AbstractKieSpringKarafI
     @Before
     public void init() {
         applicationContext = createApplicationContext();
-        assertNotNull("Should have created a valid spring context", applicationContext);
+        assertThat(applicationContext).as("Should have created a valid spring context").isNotNull();
     }
 
     @Test
     public void testKieBase() throws Exception {
         refresh();
         KieBase kbase = (KieBase) applicationContext.getBean("drl_kiesample");
-        assertNotNull(kbase);
+        assertThat(kbase).isNotNull();
     }
 
     @Test
     public void testKieSession() throws Exception {
         refresh();
         StatelessKieSession ksession = (StatelessKieSession) applicationContext.getBean("ksession9");
-        assertNotNull(ksession);
+        assertThat(ksession).isNotNull();
     }
 
     @Test
     public void testKieSessionDefaultType() throws Exception {
         refresh();
         Object obj = applicationContext.getBean("ksession99");
-        assertNotNull(obj);
-        assertTrue(obj instanceof KieSession);
+        assertThat(obj).isNotNull();
+        assertThat(obj instanceof KieSession).isTrue();
     }
 
 

@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.kie.maven.plugin.InjectReactiveMojo.convertAllToPkgRegExps;
 import static org.kie.maven.plugin.InjectReactiveMojo.isPackageNameIncluded;
 
@@ -24,9 +24,9 @@ public class InjectReactiveMojoConfigTest {
 
         logger.info(config.toString());
 
-        assertTrue(isPackageNameIncluded(Object.class.getPackage().getName(),
+        assertThat(isPackageNameIncluded(Object.class.getPackage().getName().isTrue(),
                                          config));
-        assertTrue(isPackageNameIncluded(ReactiveObject.class.getPackage().getName(),
+        assertThat(isPackageNameIncluded(ReactiveObject.class.getPackage().getName().isTrue(),
                                          config));
         assertTrue(isPackageNameIncluded("xyz.my",
                                          config));
@@ -40,9 +40,9 @@ public class InjectReactiveMojoConfigTest {
 
         logger.info(config.toString());
 
-        assertFalse(isPackageNameIncluded(Object.class.getPackage().getName(),
+        assertThat(isPackageNameIncluded(Object.class.getPackage().getName().isFalse(),
                                           config));
-        assertFalse(isPackageNameIncluded(ReactiveObject.class.getPackage().getName(),
+        assertThat(isPackageNameIncluded(ReactiveObject.class.getPackage().getName().isFalse(),
                                           config));
         assertFalse(isPackageNameIncluded("xyz.my",
                                           config));
@@ -56,9 +56,9 @@ public class InjectReactiveMojoConfigTest {
 
         logger.info(config.toString());
 
-        assertFalse(isPackageNameIncluded(Object.class.getPackage().getName(),
+        assertThat(isPackageNameIncluded(Object.class.getPackage().getName().isFalse(),
                                           config));
-        assertFalse(isPackageNameIncluded(ReactiveObject.class.getPackage().getName(),
+        assertThat(isPackageNameIncluded(ReactiveObject.class.getPackage().getName().isFalse(),
                                           config));
         assertTrue(isPackageNameIncluded("xyz.my",
                                          config));
@@ -72,9 +72,9 @@ public class InjectReactiveMojoConfigTest {
 
         logger.info(config.toString());
 
-        assertFalse(isPackageNameIncluded(Object.class.getPackage().getName(),
+        assertThat(isPackageNameIncluded(Object.class.getPackage().getName().isFalse(),
                                           config));
-        assertTrue(isPackageNameIncluded(ReactiveObject.class.getPackage().getName(),
+        assertThat(isPackageNameIncluded(ReactiveObject.class.getPackage().getName().isTrue(),
                                          config));
         assertFalse(isPackageNameIncluded("xyz.my",
                                           config));
@@ -88,9 +88,9 @@ public class InjectReactiveMojoConfigTest {
 
         logger.info(config.toString());
 
-        assertFalse(isPackageNameIncluded(Object.class.getPackage().getName(),
+        assertThat(isPackageNameIncluded(Object.class.getPackage().getName().isFalse(),
                                           config));
-        assertTrue(isPackageNameIncluded(ReactiveObject.class.getPackage().getName(),
+        assertThat(isPackageNameIncluded(ReactiveObject.class.getPackage().getName().isTrue(),
                                          config));
         assertTrue(isPackageNameIncluded("xyz.my",
                                          config));
@@ -104,9 +104,9 @@ public class InjectReactiveMojoConfigTest {
 
         logger.info(config.toString());
 
-        assertFalse(isPackageNameIncluded(Object.class.getPackage().getName(),
+        assertThat(isPackageNameIncluded(Object.class.getPackage().getName().isFalse(),
                                           config));
-        assertFalse(isPackageNameIncluded(ReactiveObject.class.getPackage().getName(),
+        assertThat(isPackageNameIncluded(ReactiveObject.class.getPackage().getName().isFalse(),
                                           config));
         assertFalse(isPackageNameIncluded("xyz.my",
                                           config));
@@ -120,9 +120,9 @@ public class InjectReactiveMojoConfigTest {
 
         logger.info(config.toString());
 
-        assertFalse(isPackageNameIncluded(Object.class.getPackage().getName(),
+        assertThat(isPackageNameIncluded(Object.class.getPackage().getName().isFalse(),
                                           config));
-        assertFalse(isPackageNameIncluded(ReactiveObject.class.getPackage().getName(),
+        assertThat(isPackageNameIncluded(ReactiveObject.class.getPackage().getName().isFalse(),
                                           config));
         assertFalse(isPackageNameIncluded("xyz.my",
                                           config));

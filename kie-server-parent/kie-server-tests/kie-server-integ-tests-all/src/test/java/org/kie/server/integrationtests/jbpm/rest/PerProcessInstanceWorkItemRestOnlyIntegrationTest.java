@@ -73,14 +73,14 @@ public class PerProcessInstanceWorkItemRestOnlyIntegrationTest extends RestJbpmB
         Long processInstanceId = startProcess(CONTAINER_ID, PROCESS_ID);
 
         response = callGetWorkItemByProcessInstance(CONTAINER_ID, processInstanceId);
-        Assert.assertEquals("Expected HTTP 200 to be returned as one work item should be returned.", Response.Status.OK.getStatusCode(), response.getStatus());
+        Assert.assertThat(response.getStatus()).as("Expected HTTP 200 to be returned as one work item should be returned.").isEqualTo(Response.Status.OK.getStatusCode());
 
         WorkItemInstanceList result = response.readEntity(WorkItemInstanceList.class);
-        Assert.assertEquals(1, result.getItems().size());
+        Assert.assertThat(result.getItems()).hasSize(1);
 
         WorkItemInstance workItem = result.getItems().get(0);
-        Assert.assertEquals("Email", workItem.getName());
-        Assert.assertEquals(processInstanceId, workItem.getProcessInstanceId());
+        Assert.assertThat(workItem.getName()).isEqualTo("Email");
+        Assert.assertThat(workItem.getProcessInstanceId()).isEqualTo(processInstanceId);
     }
 
     @Test
@@ -89,13 +89,13 @@ public class PerProcessInstanceWorkItemRestOnlyIntegrationTest extends RestJbpmB
         abortProcess(CONTAINER_ID, processInstanceId);
 
         response = callGetWorkItemByProcessInstance(CONTAINER_ID, processInstanceId);
-        Assert.assertEquals("Expected HTTP 404 to be returned as process instance is aborted.", Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
+        Assert.assertThat(response.getStatus()).as("Expected HTTP 404 to be returned as process instance is aborted.").isEqualTo(Response.Status.NOT_FOUND.getStatusCode());
     }
 
     @Test
     public void testGetWorkItemByProcessInstanceNonExistingProcess() throws Exception {
         response = callGetWorkItemByProcessInstance(CONTAINER_ID, 123456L);
-        Assert.assertEquals("Expected HTTP 404 to be returned as process instance doesn't exist.", Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
+        Assert.assertThat(response.getStatus()).as("Expected HTTP 404 to be returned as process instance doesn't exist.").isEqualTo(Response.Status.NOT_FOUND.getStatusCode());
     }
 
     @Test
@@ -103,7 +103,7 @@ public class PerProcessInstanceWorkItemRestOnlyIntegrationTest extends RestJbpmB
         Long processInstanceId = startProcess(CONTAINER_ID, PROCESS_ID);
 
         response = callGetWorkItem(CONTAINER_ID, processInstanceId, 123456L);
-        Assert.assertEquals("Expected HTTP 404 to be returned as work item doesn't exist.", Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
+        Assert.assertThat(response.getStatus()).as("Expected HTTP 404 to be returned as work item doesn't exist.").isEqualTo(Response.Status.NOT_FOUND.getStatusCode());
     }
 
     @Test
@@ -112,13 +112,13 @@ public class PerProcessInstanceWorkItemRestOnlyIntegrationTest extends RestJbpmB
         abortProcess(CONTAINER_ID, processInstanceId);
 
         response = callGetWorkItem(CONTAINER_ID, processInstanceId, 123456L);
-        Assert.assertEquals("Expected HTTP 404 to be returned as process instance is aborted.", Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
+        Assert.assertThat(response.getStatus()).as("Expected HTTP 404 to be returned as process instance is aborted.").isEqualTo(Response.Status.NOT_FOUND.getStatusCode());
     }
 
     @Test
     public void testGetWorkItemNonExistingProcess() throws Exception {
         response = callGetWorkItem(CONTAINER_ID, 123456L, 123456L);
-        Assert.assertEquals("Expected HTTP 404 to be returned as process instance doesn't exist.", Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
+        Assert.assertThat(response.getStatus()).as("Expected HTTP 404 to be returned as process instance doesn't exist.").isEqualTo(Response.Status.NOT_FOUND.getStatusCode());
     }
 
     private Long startProcess(String containerId, String processId) {
@@ -132,10 +132,10 @@ public class PerProcessInstanceWorkItemRestOnlyIntegrationTest extends RestJbpmB
         Response response = null;
         try {
             response = clientRequest.request(getMediaType()).post(Entity.entity("", getMediaType()));
-            Assert.assertEquals("Expected HTTP 201 to be returned for process start.", Response.Status.CREATED.getStatusCode(), response.getStatus());
+            Assert.assertThat(response.getStatus()).as("Expected HTTP 201 to be returned for process start.").isEqualTo(Response.Status.CREATED.getStatusCode());
 
             Long result = response.readEntity(JaxbLong.class).unwrap();
-            assertNotNull(result);
+            assertThat(result).isNotNull();
 
             return result;
         } finally {
@@ -154,7 +154,7 @@ public class PerProcessInstanceWorkItemRestOnlyIntegrationTest extends RestJbpmB
         Response response = null;
         try {
             response = clientRequest.request().delete();
-            Assert.assertEquals("Expected HTTP 204 to be returned for process abort.", Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
+            Assert.assertThat(response.getStatus()).as("Expected HTTP 204 to be returned for process abort.").isEqualTo(Response.Status.NO_CONTENT.getStatusCode());
         } finally {
             response.close();
         }

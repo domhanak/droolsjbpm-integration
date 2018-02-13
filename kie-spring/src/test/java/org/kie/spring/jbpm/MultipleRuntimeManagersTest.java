@@ -16,7 +16,7 @@
 package org.kie.spring.jbpm;
 
 import org.kie.spring.jbpm.tools.RuntimeManagerHolder;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -54,7 +54,7 @@ public class MultipleRuntimeManagersTest extends AbstractJbpmSpringTest {
     @Test
     public void testGettingMultipleRuntimeManagersByInjection() throws Exception {
         assertNotEquals(holderOne, holderTwo);
-        assertEquals(holderOne.getRuntimeManager(), holderTwo.getRuntimeManager());
+        assertThat(holderTwo.getRuntimeManager()).isEqualTo(holderOne.getRuntimeManager());
     }
 
     @Test
@@ -62,6 +62,6 @@ public class MultipleRuntimeManagersTest extends AbstractJbpmSpringTest {
         RuntimeManager managerOne = context.getBean(RUNTIME_MANAGER_ONE, RuntimeManager.class);
         RuntimeManager managerTwo = context.getBean(RUNTIME_MANAGER_TWO, RuntimeManager.class);
 
-        assertEquals(managerOne, managerTwo);
+        assertThat(managerTwo).isEqualTo(managerOne);
     }
 }

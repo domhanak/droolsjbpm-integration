@@ -45,7 +45,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class VariablePersistenceStrategyEnvTest {
 
@@ -259,7 +259,7 @@ public class VariablePersistenceStrategyEnvTest {
 
         TestWorkItemHandler handler = TestWorkItemHandler.getInstance();
         WorkItem workItem = handler.getWorkItem();
-        assertNotNull(workItem);
+        assertThat(workItem).isNotNull();
         service.dispose();
 
         //EntityManagerFactory emf = (EntityManagerFactory) ctx.getBean( "myEmf" );
@@ -289,9 +289,9 @@ public class VariablePersistenceStrategyEnvTest {
                 env);
 
         processInstance = (WorkflowProcessInstance) service.getProcessInstance(processInstance.getId());
-        assertNotNull(processInstance);
+        assertThat(processInstance).isNotNull();
 
-        assertNotNull(processInstance);
+        assertThat(processInstance).isNotNull();
         assertEquals("SomeString",
                 processInstance.getVariable("x"));
         assertEquals("This is a test Entity with annotation in fields",
@@ -302,9 +302,9 @@ public class VariablePersistenceStrategyEnvTest {
                 ((MyEntityOnlyFields) processInstance.getVariable("f")).test);
         assertEquals("This is a test SerializableObject",
                 ((MyVariableSerializable) processInstance.getVariable("z")).getText());
-        assertNull(processInstance.getVariable("a"));
-        assertNull(processInstance.getVariable("b"));
-        assertNull(processInstance.getVariable("c"));
+        assertThat(processInstance.getVariable("a")).isNull();
+        assertThat(processInstance.getVariable("b")).isNull();
+        assertThat(processInstance.getVariable("c")).isNull();
 
         service.dispose();
     }

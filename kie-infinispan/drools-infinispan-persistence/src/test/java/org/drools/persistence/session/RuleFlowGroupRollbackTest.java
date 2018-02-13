@@ -40,8 +40,8 @@ import java.util.List;
 
 import static org.drools.persistence.util.PersistenceUtil.DROOLS_PERSISTENCE_UNIT_NAME;
 import static org.drools.persistence.util.PersistenceUtil.createEnvironment;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 public class RuleFlowGroupRollbackTest {
     
@@ -67,7 +67,7 @@ public class RuleFlowGroupRollbackTest {
 		
 		ksession.insert(list);
 		ksession.execute(new ActivateRuleFlowCommand("ruleflow-group"));
-		assertEquals(1, ksession.fireAllRules());
+		assertThat(ksession.fireAllRules()).isEqualTo(1);
 		
 		try {
 			ksession.execute(new ExceptionCommand());
@@ -78,7 +78,7 @@ public class RuleFlowGroupRollbackTest {
 		
 		ksession.insert(list);
 		ksession.execute(new ActivateRuleFlowCommand("ruleflow-group"));
-		assertEquals(1, ksession.fireAllRules());
+		assertThat(ksession.fireAllRules()).isEqualTo(1);
 		
 	}
 	

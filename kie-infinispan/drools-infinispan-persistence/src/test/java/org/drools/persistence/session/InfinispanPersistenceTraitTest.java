@@ -19,9 +19,9 @@ package org.drools.persistence.session;
 
 import static org.drools.persistence.util.PersistenceUtil.DROOLS_PERSISTENCE_UNIT_NAME;
 import static org.drools.persistence.util.PersistenceUtil.createEnvironment;
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.assertj.core.api.Assertions.fail;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -150,7 +150,7 @@ public class InfinispanPersistenceTraitTest {
 
 
         Collection x = ksession2.getObjects();
-        assertEquals( 4, x.size() );
+        assertThat(x.size() ).isEqualTo(4);
 
         TraitableBean core = null;
         for ( Object o : x ) {
@@ -159,11 +159,11 @@ public class InfinispanPersistenceTraitTest {
                 break;
             }
         }
-        assertNotNull( core );
-        assertEquals( 2, core._getDynamicProperties().size() );
-        assertNotNull( core.getTrait( "org.drools.core.factmodel.traits.Thing" ) );
-        assertNotNull( core.getTrait( "org.drools.trait.test.Mask" ) );
-        assertNotNull( core.getTrait( "org.drools.trait.test.Cloak" ) );
+        assertThat(core ).isNotNull();
+        assertThat(core._getDynamicProperties().size() ).isEqualTo(2);
+        assertThat(core.getTrait( "org.drools.core.factmodel.traits.Thing" ) ).isNotNull();
+        assertThat(core.getTrait( "org.drools.trait.test.Mask" ) ).isNotNull();
+        assertThat(core.getTrait( "org.drools.trait.test.Cloak" ) ).isNotNull();
 
     }
 
@@ -256,7 +256,7 @@ public class InfinispanPersistenceTraitTest {
 
 
         Collection x = ksession2.getObjects();
-        assertEquals( 4, x.size() );
+        assertThat(x.size() ).isEqualTo(4);
 
         TraitableBean core = null;
         for ( Object o : x ) {
@@ -265,11 +265,11 @@ public class InfinispanPersistenceTraitTest {
                 break;
             }
         }
-        assertNotNull( core );
-        assertEquals( 2, core._getDynamicProperties().size() );
-        assertNotNull( core.getTrait( "org.drools.core.factmodel.traits.Thing" ) );
-        assertNotNull( core.getTrait( "org.drools.trait.test.Mask2" ) );
-        assertNotNull( core.getTrait( "org.drools.trait.test.Cloak2" ) );
+        assertThat(core ).isNotNull();
+        assertThat(core._getDynamicProperties().size() ).isEqualTo(2);
+        assertThat(core.getTrait( "org.drools.core.factmodel.traits.Thing" ) ).isNotNull();
+        assertThat(core.getTrait( "org.drools.trait.test.Mask2" ) ).isNotNull();
+        assertThat(core.getTrait( "org.drools.trait.test.Cloak2" ) ).isNotNull();
 
     }
 
@@ -346,7 +346,7 @@ public class InfinispanPersistenceTraitTest {
                 break;
             }
         }
-        assertNotNull( coreOld );
+        assertThat(coreOld ).isNotNull();
 
 
         StatefulKnowledgeSession ksession2 = InfinispanKnowledgeService.loadStatefulKnowledgeSession( id, kbase, null, env );
@@ -355,7 +355,7 @@ public class InfinispanPersistenceTraitTest {
 
 
         Collection y = ksession2.getObjects();
-        assertEquals( 3, y.size() );
+        assertThat(y.size() ).isEqualTo(3);
 
         TraitableBean core = null;
         for ( Object o : y ) {
@@ -364,10 +364,10 @@ public class InfinispanPersistenceTraitTest {
                 break;
             }
         }
-        assertNotNull( core );
-        assertEquals( 1, core._getDynamicProperties().size() );
-        assertNotNull( core.getTrait( "org.drools.core.factmodel.traits.Thing" ) );
-        assertNotNull( core.getTrait( "org.drools.trait.test.Mask" ) );
+        assertThat(core ).isNotNull();
+        assertThat(core._getDynamicProperties().size() ).isEqualTo(1);
+        assertThat(core.getTrait( "org.drools.core.factmodel.traits.Thing" ) ).isNotNull();
+        assertThat(core.getTrait( "org.drools.trait.test.Mask" ) ).isNotNull();
 
     }
 

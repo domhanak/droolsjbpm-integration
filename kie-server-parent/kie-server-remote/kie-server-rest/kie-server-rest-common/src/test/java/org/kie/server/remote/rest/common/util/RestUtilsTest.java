@@ -15,7 +15,7 @@
 
 package org.kie.server.remote.rest.common.util;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -60,20 +60,20 @@ public class RestUtilsTest {
 
         Header conversationIdHeader = RestUtils.buildConversationIdHeader(CONTAINER_ID, registry, headers);
 
-        assertEquals(KieServerConstants.KIE_CONVERSATION_ID_TYPE_HEADER, conversationIdHeader.getName());
-        assertEquals(conversationId, conversationIdHeader.getValue());
+        assertThat(conversationIdHeader.getName()).isEqualTo(KieServerConstants.KIE_CONVERSATION_ID_TYPE_HEADER);
+        assertThat(conversationIdHeader.getValue()).isEqualTo(conversationId);
     }
 
     @Test
     public void buildConversationIdHeaderWithoutContainer() {
         Header conversationIdHeader = RestUtils.buildConversationIdHeader(CONTAINER_ID, registry, headers);
-        assertNull(conversationIdHeader);
+        assertThat(conversationIdHeader).isNull();
     }
 
     @Test
     public void buildConversationIdHeaderNullContainer() {
         Header conversationIdHeader = RestUtils.buildConversationIdHeader(null, registry, headers);
-        assertNull(conversationIdHeader);
+        assertThat(conversationIdHeader).isNull();
     }
 
     @Test
@@ -91,13 +91,13 @@ public class RestUtilsTest {
 
         Header conversationIdHeader = RestUtils.buildConversationIdHeader(CONTAINER_ID, registry, headers);
 
-        assertEquals(KieServerConstants.KIE_CONVERSATION_ID_TYPE_HEADER, conversationIdHeader.getName());
-        assertNotNull(conversationIdHeader.getValue());
-        assertTrue(conversationIdHeader.getValue().contains(groupId));
-        assertTrue(conversationIdHeader.getValue().contains(artifactId));
-        assertTrue(conversationIdHeader.getValue().contains(version));
-        assertTrue(conversationIdHeader.getValue().contains(CONTAINER_ID));
-        assertTrue(conversationIdHeader.getValue().contains(kieServerId));
+        assertThat(conversationIdHeader.getName()).isEqualTo(KieServerConstants.KIE_CONVERSATION_ID_TYPE_HEADER);
+        assertThat(conversationIdHeader.getValue()).isNotNull();
+        assertThat(conversationIdHeader.getValue().contains(groupId)).isTrue();
+        assertThat(conversationIdHeader.getValue().contains(artifactId)).isTrue();
+        assertThat(conversationIdHeader.getValue().contains(version)).isTrue();
+        assertThat(conversationIdHeader.getValue().contains(CONTAINER_ID)).isTrue();
+        assertThat(conversationIdHeader.getValue().contains(kieServerId)).isTrue();
     }
 
     @Test
@@ -110,6 +110,6 @@ public class RestUtilsTest {
 
         Header conversationIdHeader = RestUtils.buildConversationIdHeader(CONTAINER_ID, registry, headers);
 
-        assertNull(conversationIdHeader);
+        assertThat(conversationIdHeader).isNull();
     }
 }

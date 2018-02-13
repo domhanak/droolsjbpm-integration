@@ -101,7 +101,7 @@ public class InstallFeaturesKarafIntegrationTest extends AbstractKarafIntegratio
     @After
     public void removeInstalledFeature() throws Exception {
         featuresService.uninstallFeature(featureName);
-        Assert.assertFalse("Feature " + featureName + " is still installed, even after explicit call to uninstallFeature()!",
+        Assert.assertThat("Feature " + featureName + " is still installed, even after explicit call to uninstallFeature().isFalse()!",
                 featuresService.isInstalled(featuresService.getFeature(featureName)));
     }
 

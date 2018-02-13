@@ -16,7 +16,7 @@
 
 package org.kie.spring.timer;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Properties;
@@ -62,12 +62,12 @@ public class TimerFlowTest {
 
         MyDroolsBean myDroolsBean = (MyDroolsBean) ctx.getBean("myDroolsBean");
 
-        assertEquals(0, myDroolsBean.getTimerTriggerCount());
+        assertThat(myDroolsBean.getTimerTriggerCount()).isEqualTo(0);
 
         myDroolsBean.initStartDisposeAndLoadSession();
 
         int n = myDroolsBean.getTimerTriggerCount();
-        assertTrue(n > 0);
+        assertThat(n > 0).isTrue();
 
         for( int i = 0; i < 2; ++i ) { 
             // wait 2 more times for the timer to fire
@@ -75,6 +75,6 @@ public class TimerFlowTest {
         }
         
         myDroolsBean.endTheProcess();
-        assertTrue(myDroolsBean.getTimerTriggerCount() > n);
+        assertThat(myDroolsBean.getTimerTriggerCount() > n).isTrue();
     }
 }

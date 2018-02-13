@@ -26,7 +26,7 @@ import org.kie.spring.beans.annotations.BeanWithReleaseId;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class KieSpringImportKieTest {
 
@@ -39,46 +39,46 @@ public class KieSpringImportKieTest {
 
     @Test
     public void testContext() throws Exception {
-        assertNotNull(context);
+        assertThat(context).isNotNull();
     }
 
     @Test
     public void testNamedKieBase() throws Exception {
         KieBase kieBase = context.getBean("kbase1", KieBase.class);
-        assertNotNull(kieBase);
+        assertThat(kieBase).isNotNull();
     }
 
     @Test
     public void testNamedKieSession() throws Exception {
         KieSession kieSession = context.getBean("ksession1", KieSession.class);
-        assertNotNull(kieSession);
+        assertThat(kieSession).isNotNull();
     }
 
     @Test
     public void testRegularPojo() throws Exception {
         Person p = context.getBean("person", Person.class);
-        assertNotNull(p);
+        assertThat(p).isNotNull();
     }
 
     @Test
     public void testAnnotatedBeanKContainer() throws Exception {
         BeanWithReleaseId bean = context.getBean("annotatedBean", BeanWithReleaseId.class);
-        assertNotNull(bean);
-        assertNotNull(bean.getKieContainer());
+        assertThat(bean).isNotNull();
+        assertThat(bean.getKieContainer()).isNotNull();
     }
 
     @Test
     public void testAnnotatedBeanKieBase() throws Exception {
         BeanWithReleaseId bean = context.getBean("annotatedBean", BeanWithReleaseId.class);
-        assertNotNull(bean);
-        assertNotNull(bean.getKieBase());
+        assertThat(bean).isNotNull();
+        assertThat(bean.getKieBase()).isNotNull();
     }
 
     @Test
     public void testAnnotatedBeanKieSession() throws Exception {
         BeanWithReleaseId bean = context.getBean("annotatedBean", BeanWithReleaseId.class);
-        assertNotNull(bean);
-        assertNotNull(bean.getKieSession());
+        assertThat(bean).isNotNull();
+        assertThat(bean.getKieSession()).isNotNull();
     }
 
     @AfterClass

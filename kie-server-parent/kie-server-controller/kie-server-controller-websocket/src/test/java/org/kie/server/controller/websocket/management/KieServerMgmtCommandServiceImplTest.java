@@ -27,7 +27,7 @@ import org.kie.server.controller.websocket.common.WebSocketUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.kie.server.api.model.KieServiceResponse.ResponseType.FAILURE;
 import static org.kie.server.api.model.KieServiceResponse.ResponseType.SUCCESS;
 
@@ -45,7 +45,7 @@ public class KieServerMgmtCommandServiceImplTest {
     public void testNullCommandScript() {
         final KieServerControllerServiceResponse response = service.executeCommand(null);
 
-        assertNotNull(response);
+        assertThat(response).isNotNull();
         assertEquals(FAILURE,
                      response.getType());
     }
@@ -55,7 +55,7 @@ public class KieServerMgmtCommandServiceImplTest {
         final KieServerControllerServiceResponse response = service.executeCommand(new KieServerControllerDescriptorCommand("service",
                                                                                                                             "method"));
 
-        assertNotNull(response);
+        assertThat(response).isNotNull();
         assertEquals(FAILURE,
                      response.getType());
     }
@@ -66,7 +66,7 @@ public class KieServerMgmtCommandServiceImplTest {
                                                                                                                             "listServerTemplates",
                                                                                                                             1));
 
-        assertNotNull(response);
+        assertThat(response).isNotNull();
         assertEquals(FAILURE,
                      response.getType());
     }
@@ -76,7 +76,7 @@ public class KieServerMgmtCommandServiceImplTest {
         final KieServerControllerServiceResponse response = service.executeCommand(new KieServerControllerDescriptorCommand(SpecManagementService.class.getName(),
                                                                                                                             "listServerTemplates"));
 
-        assertNotNull(response);
+        assertThat(response).isNotNull();
         assertEquals(SUCCESS,
                      response.getType());
     }
@@ -96,11 +96,11 @@ public class KieServerMgmtCommandServiceImplTest {
         KieServerControllerServiceResponse response = service.executeCommand(WebSocketUtils.unmarshal(content,
                                                                                                       KieServerControllerDescriptorCommand.class));
 
-        assertNotNull(response);
+        assertThat(response).isNotNull();
         assertEquals(response.getMsg(),
                      SUCCESS,
                      response.getType());
-        assertNull(response.getResult());
+        assertThat(response.getResult()).isNull();
 
         command = new KieServerControllerDescriptorCommand(SpecManagementService.class.getName(),
                                                            "getServerTemplate",
@@ -108,20 +108,20 @@ public class KieServerMgmtCommandServiceImplTest {
 
         response = service.executeCommand(command);
 
-        assertNotNull(response);
+        assertThat(response).isNotNull();
         assertEquals(SUCCESS,
                      response.getType());
-        assertNotNull(response.getResult());
+        assertThat(response.getResult()).isNotNull();
         assertEquals(serverTemplate,
                      response.getResult());
 
         String responseContent = WebSocketUtils.marshal(response);
         response = WebSocketUtils.unmarshal(responseContent,
                                             KieServerControllerServiceResponse.class);
-        assertNotNull(response);
+        assertThat(response).isNotNull();
         assertEquals(SUCCESS,
                      response.getType());
-        assertNotNull(response.getResult());
+        assertThat(response.getResult()).isNotNull();
         assertEquals(serverTemplate,
                      response.getResult());
     }
@@ -142,11 +142,11 @@ public class KieServerMgmtCommandServiceImplTest {
         KieServerControllerServiceResponse response = service.executeCommand(WebSocketUtils.unmarshal(content,
                                                                                                       KieServerControllerDescriptorCommand.class));
 
-        assertNotNull(response);
+        assertThat(response).isNotNull();
         assertEquals(response.getMsg(),
                      SUCCESS,
                      response.getType());
-        assertNull(response.getResult());
+        assertThat(response.getResult()).isNull();
     }
 
     @Test
@@ -167,11 +167,11 @@ public class KieServerMgmtCommandServiceImplTest {
         KieServerControllerServiceResponse response = service.executeCommand(WebSocketUtils.unmarshal(content,
                                                                                                       KieServerControllerDescriptorCommand.class));
 
-        assertNotNull(response);
+        assertThat(response).isNotNull();
         assertEquals(FAILURE,
                      response.getType());
-        assertEquals("No server template found for id stid", response.getMsg());
-        assertNull(response.getResult());
+        assertThat(response.getMsg()).isEqualTo("No server template found for id stid");
+        assertThat(response.getResult()).isNull();
     }
 
     @Test
@@ -189,10 +189,10 @@ public class KieServerMgmtCommandServiceImplTest {
         KieServerControllerServiceResponse response = service.executeCommand(WebSocketUtils.unmarshal(content,
                                                                                                       KieServerControllerDescriptorCommand.class));
 
-        assertNotNull(response);
+        assertThat(response).isNotNull();
         assertEquals(FAILURE,
                      response.getType());
-        assertEquals("No server template found for id serverTemplateId", response.getMsg());
-        assertNull(response.getResult());
+        assertThat(response.getMsg()).isEqualTo("No server template found for id serverTemplateId");
+        assertThat(response.getResult()).isNull();
     }
 }

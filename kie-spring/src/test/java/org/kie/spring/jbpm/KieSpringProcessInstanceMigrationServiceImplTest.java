@@ -36,7 +36,7 @@ import org.kie.api.runtime.process.ProcessInstance;
 import org.kie.internal.runtime.manager.InternalRuntimeManager;
 import org.kie.internal.runtime.manager.context.ProcessInstanceIdContext;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 @RunWith(Parameterized.class)
 public class KieSpringProcessInstanceMigrationServiceImplTest extends AbstractJbpmSpringParameterizedTest {
@@ -82,7 +82,7 @@ public class KieSpringProcessInstanceMigrationServiceImplTest extends AbstractJb
         ((DeploymentDescriptorImpl) ((InternalRuntimeManager) firstManager).
                 getDeploymentDescriptor()).setPersistenceUnit("org.jbpm.persistence.spring.jta");
 
-        assertNotNull(firstManager);
+        assertThat(firstManager).isNotNull();
 
         RuntimeManager secondManager = getSecondManager();
         ((DeploymentDescriptorImpl) ((InternalRuntimeManager) secondManager).
@@ -91,19 +91,19 @@ public class KieSpringProcessInstanceMigrationServiceImplTest extends AbstractJb
                 getDeploymentDescriptor()).setPersistenceUnit("org.jbpm.persistence.spring.jta");
 
 
-        assertNotNull(secondManager);
+        assertThat(secondManager).isNotNull();
 
         RuntimeEngine engine = firstManager.getRuntimeEngine(runtimeManagerContext);
 
         ProcessInstance instance = engine.getKieSession().startProcess(ADDTASKAFTERACTIVE_ID_V1);
-        assertNotNull(instance);
+        assertThat(instance).isNotNull();
 
         long processInstanceId = instance.getId();
-        assertNotNull(processInstanceId);
+        assertThat(processInstanceId).isNotNull();
 
         org.kie.api.runtime.manager.audit.ProcessInstanceLog log = engine.getAuditService().findProcessInstance(processInstanceId);
-        assertEquals(ProcessInstance.STATE_ACTIVE, log.getStatus().intValue());
-        assertEquals(ADDTASKAFTERACTIVE_ID_V1, log.getProcessId());
+        assertThat(log.getStatus().intValue()).isEqualTo(ProcessInstance.STATE_ACTIVE);
+        assertThat(log.getProcessId()).isEqualTo(ADDTASKAFTERACTIVE_ID_V1);
 
         MigrationSpec migrationSpec = new MigrationSpec(firstManager.getIdentifier(), processInstanceId, secondManager.getIdentifier(), ADDTASKAFTERACTIVE_ID_V2);
         MigrationManager migrationManager = new MigrationManager(migrationSpec);
@@ -116,12 +116,12 @@ public class KieSpringProcessInstanceMigrationServiceImplTest extends AbstractJb
             report = e.getReport();
         }
 
-        assertNotNull(report);
-        assertTrue(report.isSuccessful());
+        assertThat(report).isNotNull();
+        assertThat(report.isSuccessful()).isTrue();
 
         log = engine.getAuditService().findProcessInstance(processInstanceId);
-        assertEquals(ProcessInstance.STATE_ACTIVE, log.getStatus().intValue());
-        assertEquals(ADDTASKAFTERACTIVE_ID_V2, log.getProcessId());
+        assertThat(log.getStatus().intValue()).isEqualTo(ProcessInstance.STATE_ACTIVE);
+        assertThat(log.getProcessId()).isEqualTo(ADDTASKAFTERACTIVE_ID_V2);
 
         firstManager.disposeRuntimeEngine(engine);
     }

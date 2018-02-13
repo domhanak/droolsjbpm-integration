@@ -15,7 +15,7 @@
 
 package org.kie.server.router.handlers;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.After;
 import org.junit.Before;
@@ -41,13 +41,13 @@ public class KieServerInfoHandlerTest {
     @Test
     public void testGetLocationUrl() {
         String locationUrl = KieServerInfoHandler.getLocationUrl();
-        assertEquals("http://localhost:9000", locationUrl);
+        assertThat(locationUrl).isEqualTo("http://localhost:9000");
     }
 
     @Test
     public void testGetLocationUrlExternalLocation() {
         System.setProperty(KieServerRouterConstants.ROUTER_EXTERNAL_URL, "https://my-domain:8900/");
         String locationUrl = KieServerInfoHandler.getLocationUrl();
-        assertEquals("https://my-domain:8900/", locationUrl);
+        assertThat(locationUrl).isEqualTo("https://my-domain:8900/");
     }
 }

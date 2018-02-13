@@ -17,7 +17,7 @@ package org.kie.server.api.marshalling;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -75,11 +75,11 @@ public class DecisionMarshallingTest {
         DMNContextKS dmnClientRequest = new DMNContextKS( realCtx.getAll() );
         
         DMNContextKS mu_dmnClientRequest = marshallUnmarshall(dmnClientRequest);
-        assertEquals(dmnClientRequest.getNamespace(), mu_dmnClientRequest.getNamespace());
-        assertEquals(dmnClientRequest.getModelName(), mu_dmnClientRequest.getModelName());
+        assertThat(mu_dmnClientRequest.getNamespace()).isEqualTo(dmnClientRequest.getNamespace());
+        assertThat(mu_dmnClientRequest.getModelName()).isEqualTo(dmnClientRequest.getModelName());
         assertThat(dmnClientRequest.getDecisionNames(), is(mu_dmnClientRequest.getDecisionNames()));
-        assertEquals(dmnClientRequest.getDmnContext().size(), mu_dmnClientRequest.getDmnContext().size());
-        assertEquals(dmnClientRequest.getDmnContext().keySet(), mu_dmnClientRequest.getDmnContext().keySet());
+        assertThat(mu_dmnClientRequest.getDmnContext().size()).isEqualTo(dmnClientRequest.getDmnContext().size());
+        assertThat(mu_dmnClientRequest.getDmnContext().keySet()).isEqualTo(dmnClientRequest.getDmnContext().keySet());
         
         DMNResult evaluateAll = dmnRuntime.evaluateAll(model, realCtx);
         ServiceResponse<DMNResultKS> dmnClientResponse = 
@@ -88,11 +88,11 @@ public class DecisionMarshallingTest {
                 "Test case",
                 new DMNResultKS(model.getNamespace(), model.getName(), dmnClientRequest.getDecisionNames(), evaluateAll) );
         ServiceResponse<DMNResultKS> mu_dmnClientResponse = marshallUnmarshall(dmnClientResponse);
-        assertEquals(dmnClientResponse.getResult().getNamespace(), mu_dmnClientResponse.getResult().getNamespace());
-        assertEquals(dmnClientResponse.getResult().getModelName(), mu_dmnClientResponse.getResult().getModelName());
+        assertThat(mu_dmnClientResponse.getResult().getNamespace()).isEqualTo(dmnClientResponse.getResult().getNamespace());
+        assertThat(mu_dmnClientResponse.getResult().getModelName()).isEqualTo(dmnClientResponse.getResult().getModelName());
         assertThat(dmnClientResponse.getResult().getDecisionNames(), is(mu_dmnClientResponse.getResult().getDecisionNames()));
-        assertEquals(dmnClientResponse.getResult().getDmnContext().size(), mu_dmnClientResponse.getResult().getDmnContext().size());
-        assertEquals(dmnClientResponse.getResult().getDmnContext().keySet(), mu_dmnClientResponse.getResult().getDmnContext().keySet());
+        assertThat(mu_dmnClientResponse.getResult().getDmnContext().size()).isEqualTo(dmnClientResponse.getResult().getDmnContext().size());
+        assertThat(mu_dmnClientResponse.getResult().getDmnContext().keySet()).isEqualTo(dmnClientResponse.getResult().getDmnContext().keySet());
     }
 
     @SuppressWarnings("unchecked")

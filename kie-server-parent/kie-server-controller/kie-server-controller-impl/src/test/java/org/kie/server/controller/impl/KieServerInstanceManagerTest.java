@@ -44,7 +44,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -160,12 +160,12 @@ public class KieServerInstanceManagerTest {
 
         final KieContainerResource resource = instanceManager.makeContainerResource(container, containerSpec);
 
-        assertEquals(id, resource.getContainerId());
-        assertEquals(releaseId, resource.getReleaseId());
-        assertEquals(resolvedReleasedId, resource.getResolvedReleaseId());
-        assertEquals(status, resource.getStatus());
-        assertEquals(containerName, resource.getContainerAlias());
-        assertEquals(messages, resource.getMessages());
+        assertThat(resource.getContainerId()).isEqualTo(id);
+        assertThat(resource.getReleaseId()).isEqualTo(releaseId);
+        assertThat(resource.getResolvedReleaseId()).isEqualTo(resolvedReleasedId);
+        assertThat(resource.getStatus()).isEqualTo(status);
+        assertThat(resource.getContainerAlias()).isEqualTo(containerName);
+        assertThat(resource.getMessages()).isEqualTo(messages);
 
         verify(instanceManager, never()).setRuleConfigAttributes(any(), any());
         verify(instanceManager, never()).setProcessConfigAttributes(any(), any());
@@ -183,7 +183,7 @@ public class KieServerInstanceManagerTest {
 
         verify(instanceManager).callRemoteKieServerOperation(serverTemplate, containerSpec, operation);
 
-        assertEquals(expectedContainers, actualContainers);
+        assertThat(actualContainers).isEqualTo(expectedContainers);
     }
 
     @Test
@@ -341,12 +341,12 @@ public class KieServerInstanceManagerTest {
 
         final KieContainerResource resource = instanceManager.makeContainerResource(container, containerSpec);
 
-        assertEquals(id, resource.getContainerId());
-        assertEquals(releaseId, resource.getReleaseId());
-        assertEquals(resolvedReleasedId, resource.getResolvedReleaseId());
-        assertEquals(status, resource.getStatus());
-        assertEquals(containerName, resource.getContainerAlias());
-        assertEquals(messages, resource.getMessages());
+        assertThat(resource.getContainerId()).isEqualTo(id);
+        assertThat(resource.getReleaseId()).isEqualTo(releaseId);
+        assertThat(resource.getResolvedReleaseId()).isEqualTo(resolvedReleasedId);
+        assertThat(resource.getStatus()).isEqualTo(status);
+        assertThat(resource.getContainerAlias()).isEqualTo(containerName);
+        assertThat(resource.getMessages()).isEqualTo(messages);
 
         verify(instanceManager).setRuleConfigAttributes(containerSpec, resource);
         verify(instanceManager).setProcessConfigAttributes(containerSpec, resource);
@@ -361,9 +361,9 @@ public class KieServerInstanceManagerTest {
 
         final KieServerConfigItem configItem = instanceManager.makeKieServerConfigItem(type, name, value);
 
-        assertEquals(type, configItem.getType());
-        assertEquals(name, configItem.getName());
-        assertEquals(value, configItem.getValue());
+        assertThat(configItem.getType()).isEqualTo(type);
+        assertThat(configItem.getName()).isEqualTo(name);
+        assertThat(configItem.getValue()).isEqualTo(value);
     }
 
     @Test
@@ -386,8 +386,8 @@ public class KieServerInstanceManagerTest {
 
         final KieScannerResource scannerResource = scannerResourceCaptor.getValue();
 
-        assertEquals(pollInterval, scannerResource.getPollInterval());
-        assertEquals(scannerStatus, scannerResource.getStatus());
+        assertThat(scannerResource.getPollInterval()).isEqualTo(pollInterval);
+        assertThat(scannerResource.getStatus()).isEqualTo(scannerStatus);
     }
 
     @Test
@@ -428,11 +428,11 @@ public class KieServerInstanceManagerTest {
 
         instanceManager.setProcessConfigAttributes(containerSpec, containerResource);
 
-        assertEquals(expectedConfigItem0, actualConfigItems.get(0));
-        assertEquals(expectedConfigItem1, actualConfigItems.get(1));
-        assertEquals(expectedConfigItem2, actualConfigItems.get(2));
-        assertEquals(expectedConfigItem3, actualConfigItems.get(3));
-        assertEquals(4, actualConfigItems.size());
+        assertThat(actualConfigItems.get(0)).isEqualTo(expectedConfigItem0);
+        assertThat(actualConfigItems.get(1)).isEqualTo(expectedConfigItem1);
+        assertThat(actualConfigItems.get(2)).isEqualTo(expectedConfigItem2);
+        assertThat(actualConfigItems.get(3)).isEqualTo(expectedConfigItem3);
+        assertThat(actualConfigItems).hasSize(4);
     }
 
     @Test
@@ -447,7 +447,7 @@ public class KieServerInstanceManagerTest {
 
         instanceManager.setProcessConfigAttributes(containerSpec, containerResource);
 
-        assertEquals(0, actualConfigItems.size());
+        assertThat(actualConfigItems).isEmpty();
     }
 
     @Test

@@ -80,7 +80,7 @@ public class KieBlueprintScannerTest extends AbstractKieBlueprintDynamicModuleTe
         ksession.setGlobal( "list", list );
         ksession.fireAllRules();
         ksession.dispose();
-        assertTrue("Expected:<" + value + "> but was:<" + list.get(0)  + ">", list.get(0) == value);
+        assertThat(list.get(0) == value).as("Expected:<" + value + "> but was:<" + list.get(0)  + ">").isTrue();
     }
 
 }

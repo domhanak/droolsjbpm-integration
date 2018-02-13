@@ -47,7 +47,7 @@ public class KieSpringMetaInfAppContextKarafIntegrationTest extends AbstractKara
 
     @Test
     public void testKieBase() throws Exception {
-        assertNotNull(kieSession);
+        assertThat(kieSession).isNotNull();
     }
 
     @Configuration

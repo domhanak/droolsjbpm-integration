@@ -52,7 +52,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class VariablePersistenceStrategyTest {
 
@@ -265,7 +265,7 @@ public class VariablePersistenceStrategyTest {
 
         TestWorkItemHandler handler = TestWorkItemHandler.getInstance();
         WorkItem workItem = handler.getWorkItem();
-        assertNotNull(workItem);
+        assertThat(workItem).isNotNull();
         service.dispose();
 
         EntityManagerFactory emf = (EntityManagerFactory) ctx.getBean("myEmf");
@@ -294,9 +294,9 @@ public class VariablePersistenceStrategyTest {
                 env);
 
         processInstance = (WorkflowProcessInstance) service.getProcessInstance(processInstance.getId());
-        assertNotNull(processInstance);
+        assertThat(processInstance).isNotNull();
 
-        assertNotNull(processInstance);
+        assertThat(processInstance).isNotNull();
         assertEquals("SomeString",
                 processInstance.getVariable("x"));
         assertEquals("This is a test Entity with annotation in fields",
@@ -307,9 +307,9 @@ public class VariablePersistenceStrategyTest {
                 ((MyEntityOnlyFields) processInstance.getVariable("f")).test);
         assertEquals("This is a test SerializableObject",
                 ((MyVariableSerializable) processInstance.getVariable("z")).getText());
-        assertNull(processInstance.getVariable("a"));
-        assertNull(processInstance.getVariable("b"));
-        assertNull(processInstance.getVariable("c"));
+        assertThat(processInstance.getVariable("a")).isNull();
+        assertThat(processInstance.getVariable("b")).isNull();
+        assertThat(processInstance.getVariable("c")).isNull();
 
         service.dispose();
 
@@ -317,13 +317,13 @@ public class VariablePersistenceStrategyTest {
         //        ksession.getWorkItemManager().completeWorkItem( workItem.getId(), null );
         //
         //        workItem = handler.getWorkItem();
-        //        assertNotNull( workItem );
+        //        assertThat(workItem ).isNotNull();
         //        
         //        log.debug("### Retrieving variable instance infos ###");
         //        result = emf.createEntityManager().createQuery("select i from VariableInstanceInfo i").getResultList();
-        //        assertEquals(8, result.size());
+        //        assertThat(result).hasSize(8);
         //        for (Object o: result) {
-        //            assertTrue(VariableInstanceInfo.class.isAssignableFrom(o.getClass()));
+        //            assertThat(VariableInstanceInfo.class.isAssignableFrom(o.getClass())).isTrue();
         //            log.debug(o);
         //        }
         //        
@@ -331,52 +331,52 @@ public class VariablePersistenceStrategyTest {
         //        ksession = JPAKnowledgeService.loadStatefulKnowledgeSession(id, kbase, null, env);
         //        processInstance = (WorkflowProcessInstance)
         //            ksession.getProcessInstance(processInstance.getId());
-        //        assertNotNull(processInstance);
-        //        assertEquals("SomeString", processInstance.getVariable("x"));
-        //        assertEquals("This is a test Entity with annotation in fields", ((MyEntity) processInstance.getVariable("y")).getTest());
-        //        assertEquals("This is a test Entity with annotations in methods", ((MyEntityMethods) processInstance.getVariable("m")).getTest());
-        //        assertEquals("This is a test Entity with annotations in fields and without accesors methods", ((MyEntityOnlyFields) processInstance.getVariable("f")).test);
-        //        assertEquals("This is a test SerializableObject", ((MyVariableSerializable) processInstance.getVariable("z")).getText());
-        //        assertEquals("Some new String", processInstance.getVariable("a"));
-        //        assertEquals("This is a new test Entity", ((MyEntity) processInstance.getVariable("b")).getTest());
-        //        assertEquals("This is a new test SerializableObject", ((MyVariableSerializable) processInstance.getVariable("c")).getText());
+        //        assertThat(processInstance).isNotNull();
+        //        assertThat(processInstance.getVariable("x")).isEqualTo("SomeString");
+        //        assertThat(((MyEntity) processInstance.getVariable("y")).getTest()).isEqualTo("This is a test Entity with annotation in fields");
+        //        assertThat(((MyEntityMethods) processInstance.getVariable("m")).getTest()).isEqualTo("This is a test Entity with annotations in methods");
+        //        assertThat(((MyEntityOnlyFields) processInstance.getVariable("f")).test).isEqualTo("This is a test Entity with annotations in fields and without accesors methods");
+        //        assertThat(((MyVariableSerializable) processInstance.getVariable("z")).getText()).isEqualTo("This is a test SerializableObject");
+        //        assertThat(processInstance.getVariable("a")).isEqualTo("Some new String");
+        //        assertThat(((MyEntity) processInstance.getVariable("b")).getTest()).isEqualTo("This is a new test Entity");
+        //        assertThat(((MyVariableSerializable) processInstance.getVariable("c")).getText()).isEqualTo("This is a new test SerializableObject");
         //        log.debug("### Completing second work item ###");
         //        ksession.getWorkItemManager().completeWorkItem(workItem.getId(), null);
         //
         //        workItem = handler.getWorkItem();
-        //        assertNotNull(workItem);
+        //        assertThat(workItem).isNotNull();
         //        
         //        result = emf.createEntityManager().createQuery("select i from VariableInstanceInfo i").getResultList();
-        //        assertEquals(8, result.size());
+        //        assertThat(result).hasSize(8);
         //        
         //        log.debug("### Retrieving process instance ###");
         //        ksession = JPAKnowledgeService.loadStatefulKnowledgeSession(id, kbase, null, env);
         //        processInstance = (WorkflowProcessInstance)
         //            ksession.getProcessInstance(processInstance.getId());
-        //        assertNotNull(processInstance);
-        //        assertEquals("SomeString", processInstance.getVariable("x"));
-        //        assertEquals("This is a test Entity with annotation in fields", ((MyEntity) processInstance.getVariable("y")).getTest());
-        //        assertEquals("This is a test Entity with annotations in methods", ((MyEntityMethods) processInstance.getVariable("m")).getTest());
-        //        assertEquals("This is a test Entity with annotations in fields and without accesors methods", ((MyEntityOnlyFields) processInstance.getVariable("f")).test);
-        //        assertEquals("This is a test SerializableObject", ((MyVariableSerializable) processInstance.getVariable("z")).getText());
-        //        assertEquals("Some changed String", processInstance.getVariable("a"));
-        //        assertEquals("This is a changed test Entity", ((MyEntity) processInstance.getVariable("b")).getTest());
-        //        assertEquals("This is a changed test SerializableObject", ((MyVariableSerializable) processInstance.getVariable("c")).getText());
+        //        assertThat(processInstance).isNotNull();
+        //        assertThat(processInstance.getVariable("x")).isEqualTo("SomeString");
+        //        assertThat(((MyEntity) processInstance.getVariable("y")).getTest()).isEqualTo("This is a test Entity with annotation in fields");
+        //        assertThat(((MyEntityMethods) processInstance.getVariable("m")).getTest()).isEqualTo("This is a test Entity with annotations in methods");
+        //        assertThat(((MyEntityOnlyFields) processInstance.getVariable("f")).test).isEqualTo("This is a test Entity with annotations in fields and without accesors methods");
+        //        assertThat(((MyVariableSerializable) processInstance.getVariable("z")).getText()).isEqualTo("This is a test SerializableObject");
+        //        assertThat(processInstance.getVariable("a")).isEqualTo("Some changed String");
+        //        assertThat(((MyEntity) processInstance.getVariable("b")).getTest()).isEqualTo("This is a changed test Entity");
+        //        assertThat(((MyVariableSerializable) processInstance.getVariable("c")).getText()).isEqualTo("This is a changed test SerializableObject");
         //        log.debug("### Completing third work item ###");
         //        ksession.getWorkItemManager().completeWorkItem(workItem.getId(), null);
         //
         //        workItem = handler.getWorkItem();
-        //        assertNull(workItem);
+        //        assertThat(workItem).isNull();
         //        
         //        result = emf.createEntityManager().createQuery("select i from VariableInstanceInfo i").getResultList();
         //        //This was 6.. but I change it to 0 because all the variables will go away with the process instance..
         //        //we need to change that to leave the variables there??? 
-        //        assertEquals(0, result.size());
+        //        assertThat(result).isEmpty();
         //
         //        ksession = JPAKnowledgeService.loadStatefulKnowledgeSession(id, kbase, null, env);
         //        processInstance = (WorkflowProcessInstance)
         //            ksession.getProcessInstance(processInstance.getId());
-        //        assertNull(processInstance);
+        //        assertThat(processInstance).isNull();
     }
 
     //    public void testPersistenceVariablesWithTypeChange() {
@@ -407,27 +407,27 @@ public class VariablePersistenceStrategyTest {
     //
     //        TestWorkItemHandler handler = TestWorkItemHandler.getInstance();
     //        WorkItem workItem = handler.getWorkItem();
-    //        assertNotNull( workItem );
+    //        assertThat(workItem ).isNotNull();
     //
     //        ksession = JPAKnowledgeService.loadStatefulKnowledgeSession( id, kbase, null, env );
     //        processInstance = ksession.getProcessInstance( processInstance.getId() );
-    //        assertNotNull( processInstance );
+    //        assertThat(processInstance ).isNotNull();
     //        ksession.getWorkItemManager().completeWorkItem( workItem.getId(), null );
     //
     //        workItem = handler.getWorkItem();
-    //        assertNotNull( workItem );
+    //        assertThat(workItem ).isNotNull();
     //
     //        ksession = JPAKnowledgeService.loadStatefulKnowledgeSession( id, kbase, null, env );
     //        processInstance = ksession.getProcessInstance( processInstance.getId() );
-    //        assertNotNull( processInstance );
+    //        assertThat(processInstance ).isNotNull();
     //        ksession.getWorkItemManager().completeWorkItem( workItem.getId(), null );
     //
     //        workItem = handler.getWorkItem();
-    //        assertNull( workItem );
+    //        assertThat(workItem ).isNull();
     //
     //        ksession = JPAKnowledgeService.loadStatefulKnowledgeSession( id, kbase, null, env );
     //        processInstance = ksession.getProcessInstance( processInstance.getId() );
-    //        assertNull( processInstance );
+    //        assertThat(processInstance ).isNull();
     //    }
     //    
     //    public void testPersistenceVariablesSubProcess() {
@@ -458,35 +458,35 @@ public class VariablePersistenceStrategyTest {
     //
     //        TestWorkItemHandler handler = TestWorkItemHandler.getInstance();
     //        WorkItem workItem = handler.getWorkItem();
-    //        assertNotNull( workItem );
+    //        assertThat(workItem ).isNotNull();
     //
     //        ksession = JPAKnowledgeService.loadStatefulKnowledgeSession( id, kbase, null, env );
     //        processInstance = ksession.getProcessInstance( processInstance.getId() );
-    //        assertNotNull( processInstance );
+    //        assertThat(processInstance ).isNotNull();
     //        ksession.getWorkItemManager().completeWorkItem( workItem.getId(), null );
     //
     //        workItem = handler.getWorkItem();
-    //        assertNotNull( workItem );
+    //        assertThat(workItem ).isNotNull();
     //
     //        ksession = JPAKnowledgeService.loadStatefulKnowledgeSession( id, kbase, null, env );
     //        processInstance = ksession.getProcessInstance( processInstance.getId() );
-    //        assertNotNull( processInstance );
+    //        assertThat(processInstance ).isNotNull();
     //        ksession.getWorkItemManager().completeWorkItem( workItem.getId(), null );
     //
     //        workItem = handler.getWorkItem();
-    //        assertNotNull( workItem );
+    //        assertThat(workItem ).isNotNull();
     //
     //        ksession = JPAKnowledgeService.loadStatefulKnowledgeSession( id, kbase, null, env );
     //        processInstance = ksession.getProcessInstance( processInstance.getId() );
-    //        assertNotNull( processInstance );
+    //        assertThat(processInstance ).isNotNull();
     //        ksession.getWorkItemManager().completeWorkItem( workItem.getId(), null );
     //
     //        workItem = handler.getWorkItem();
-    //        assertNull( workItem );
+    //        assertThat(workItem ).isNull();
     //
     //        ksession = JPAKnowledgeService.loadStatefulKnowledgeSession( id, kbase, null, env );
     //        processInstance = ksession.getProcessInstance( processInstance.getId() );
-    //        assertNull( processInstance );
+    //        assertThat(processInstance ).isNull();
     //    }
     //    
 }

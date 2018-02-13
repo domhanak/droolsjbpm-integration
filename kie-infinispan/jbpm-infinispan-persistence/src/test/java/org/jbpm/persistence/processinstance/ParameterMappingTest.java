@@ -59,7 +59,7 @@ public class ParameterMappingTest {
         Environment env = createEnvironment(context);
 
         ksession = InfinispanKnowledgeService.newStatefulKnowledgeSession(createKnowledgeBase(), null, env);
-        assertTrue("Valid KnowledgeSession could not be created.", ksession != null && ksession.getIdentifier() > 0);
+        assertThat(ksession != null && ksession.getIdentifier() > 0).as("Valid KnowledgeSession could not be created.").isTrue();
 
         listener = new ProcessListener();
         ksession.addEventListener(listener);
@@ -90,10 +90,10 @@ public class ParameterMappingTest {
 
         ksession.startProcess(PROCESS_ID, mapping);
 
-        assertTrue(listener.isProcessStarted(PROCESS_ID));
-        assertTrue(listener.isProcessStarted(SUBPROCESS_ID));
-        assertTrue(listener.isProcessCompleted(SUBPROCESS_ID));
-        assertTrue(listener.isProcessCompleted(PROCESS_ID));
+        assertThat(listener.isProcessStarted(PROCESS_ID)).isTrue();
+        assertThat(listener.isProcessStarted(SUBPROCESS_ID)).isTrue();
+        assertThat(listener.isProcessCompleted(SUBPROCESS_ID)).isTrue();
+        assertThat(listener.isProcessCompleted(PROCESS_ID)).isTrue();
     }
 
     @Test
@@ -105,10 +105,10 @@ public class ParameterMappingTest {
         ksession.startProcess(PROCESS_ID, mapping).getId();
         ksession.signalEvent("pass", "new value");
 
-        assertTrue(listener.isProcessStarted(PROCESS_ID));
-        assertTrue(listener.isProcessStarted(SUBPROCESS_ID));
-        assertTrue(listener.isProcessCompleted(SUBPROCESS_ID));
-        assertTrue(listener.isProcessCompleted(PROCESS_ID));
+        assertThat(listener.isProcessStarted(PROCESS_ID)).isTrue();
+        assertThat(listener.isProcessStarted(SUBPROCESS_ID)).isTrue();
+        assertThat(listener.isProcessCompleted(SUBPROCESS_ID)).isTrue();
+        assertThat(listener.isProcessCompleted(PROCESS_ID)).isTrue();
     }
 
     @Test
@@ -120,10 +120,10 @@ public class ParameterMappingTest {
         long processId = ksession.startProcess(PROCESS_ID, mapping).getId();
         ksession.signalEvent("pass", "new value", processId);
 
-        assertTrue(listener.isProcessStarted(PROCESS_ID));
-        assertTrue(listener.isProcessStarted(SUBPROCESS_ID));
-        assertTrue(listener.isProcessCompleted(SUBPROCESS_ID));
-        assertTrue(listener.isProcessCompleted(PROCESS_ID));
+        assertThat(listener.isProcessStarted(PROCESS_ID)).isTrue();
+        assertThat(listener.isProcessStarted(SUBPROCESS_ID)).isTrue();
+        assertThat(listener.isProcessCompleted(SUBPROCESS_ID)).isTrue();
+        assertThat(listener.isProcessCompleted(PROCESS_ID)).isTrue();
     }
 
     @Test
@@ -134,10 +134,10 @@ public class ParameterMappingTest {
 
         ksession.startProcess(PROCESS_ID, mapping);
 
-        assertTrue(listener.isProcessStarted(PROCESS_ID));
-        assertTrue(listener.isProcessStarted(SUBPROCESS_ID));
-        assertTrue(listener.isProcessCompleted(SUBPROCESS_ID));
-        assertTrue(listener.isProcessCompleted(PROCESS_ID));
+        assertThat(listener.isProcessStarted(PROCESS_ID)).isTrue();
+        assertThat(listener.isProcessStarted(SUBPROCESS_ID)).isTrue();
+        assertThat(listener.isProcessCompleted(SUBPROCESS_ID)).isTrue();
+        assertThat(listener.isProcessCompleted(PROCESS_ID)).isTrue();
     }
 
     @Test
@@ -147,10 +147,10 @@ public class ParameterMappingTest {
 
         ksession.startProcess(PROCESS_ID, mapping);
 
-        assertTrue(listener.isProcessStarted(PROCESS_ID));
-        assertTrue(listener.isProcessStarted(SUBPROCESS_ID));
-        assertTrue(listener.isProcessCompleted(SUBPROCESS_ID));
-        assertTrue(listener.isProcessCompleted(PROCESS_ID));
+        assertThat(listener.isProcessStarted(PROCESS_ID)).isTrue();
+        assertThat(listener.isProcessStarted(SUBPROCESS_ID)).isTrue();
+        assertThat(listener.isProcessCompleted(SUBPROCESS_ID)).isTrue();
+        assertThat(listener.isProcessCompleted(PROCESS_ID)).isTrue();
     }
 
     

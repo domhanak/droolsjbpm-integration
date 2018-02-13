@@ -46,7 +46,7 @@ import org.kie.server.integrationtests.shared.KieServerDeployer;
 import org.kie.server.integrationtests.shared.KieServerSynchronization;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
+import static org.assertj.core.api.Assertions.fail;
 
 @Category({JMSOnly.class})
 public class OptaPlannerJmsResponseHandlerIntegrationTest extends OptaplannerKieServerBaseIntegrationTest {

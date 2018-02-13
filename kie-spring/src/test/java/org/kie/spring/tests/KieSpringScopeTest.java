@@ -31,7 +31,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class KieSpringScopeTest {
     private static final Logger log = LoggerFactory.getLogger(KieSpringScopeTest.class);
@@ -44,48 +44,48 @@ public class KieSpringScopeTest {
 
     @Test
     public void testContext() throws Exception {
-        assertNotNull(context);
+        assertThat(context).isNotNull();
     }
 
 
     @Test
     public void testStatelessPrototypeKieSession() throws Exception {
         StatelessKieSession ksession = (StatelessKieSession) context.getBean("statelessPrototypeSession");
-        assertNotNull(ksession);
+        assertThat(ksession).isNotNull();
 
         StatelessKieSession anotherKsession = (StatelessKieSession) context.getBean("statelessPrototypeSession");
-        assertNotNull(anotherKsession);
+        assertThat(anotherKsession).isNotNull();
         assertNotEquals(ksession.hashCode(), anotherKsession.hashCode());
     }
 
     @Test
     public void testStatelessSingletonKieSession() throws Exception {
         StatelessKieSession ksession = (StatelessKieSession) context.getBean("statelessSingletonSession");
-        assertNotNull(ksession);
+        assertThat(ksession).isNotNull();
 
         StatelessKieSession anotherKsession = (StatelessKieSession) context.getBean("statelessSingletonSession");
-        assertNotNull(anotherKsession);
-        assertEquals(ksession.hashCode(), anotherKsession.hashCode());
+        assertThat(anotherKsession).isNotNull();
+        assertThat(anotherKsession.hashCode()).isEqualTo(ksession.hashCode());
     }
 
     @Test
     public void testStatefulSingletonKieSession() throws Exception {
         KieSession ksession = (KieSession) context.getBean("statefulSingletonSession");
-        assertNotNull(ksession);
+        assertThat(ksession).isNotNull();
 
         KieSession anotherKsession = (KieSession) context.getBean("statefulSingletonSession");
-        assertNotNull(anotherKsession);
+        assertThat(anotherKsession).isNotNull();
 
-        assertEquals(ksession.hashCode(), anotherKsession.hashCode());
+        assertThat(anotherKsession.hashCode()).isEqualTo(ksession.hashCode());
     }
 
     @Test
     public void testStatefulPrototypeKieSession() throws Exception {
         KieSession ksession = (KieSession) context.getBean("statefulPrototypeSession");
-        assertNotNull(ksession);
+        assertThat(ksession).isNotNull();
 
         KieSession anotherKsession = (KieSession) context.getBean("statefulPrototypeSession");
-        assertNotNull(anotherKsession);
+        assertThat(anotherKsession).isNotNull();
 
         assertNotEquals(ksession.hashCode(), anotherKsession.hashCode());
     }
@@ -111,7 +111,7 @@ public class KieSpringScopeTest {
             });
         }
         latch.await();
-        assertEquals(nThreads,ksessionMap.size());
+        assertThat(ksessionMap.size()).isEqualTo(nThreads);
     }
 
     @AfterClass

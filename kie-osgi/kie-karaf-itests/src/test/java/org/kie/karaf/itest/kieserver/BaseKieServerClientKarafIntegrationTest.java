@@ -46,7 +46,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.*;
 
 /**
@@ -82,15 +82,15 @@ public class BaseKieServerClientKarafIntegrationTest extends AbstractKarafIntegr
         KieServicesClient kieServicesClient =  KieServicesFactory.newKieServicesClient(configuration);
 
         ServiceResponse<KieContainerResourceList> containersResponse = kieServicesClient.listContainers();
-        assertNotNull(containersResponse);
-        assertEquals(ServiceResponse.ResponseType.SUCCESS, containersResponse.getType());
-        assertNotNull(containersResponse.getResult());
+        assertThat(containersResponse).isNotNull();
+        assertThat(containersResponse.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
+        assertThat(containersResponse.getResult()).isNotNull();
 
         List<KieContainerResource> containers = containersResponse.getResult().getContainers();
-        assertNotNull(containers);
+        assertThat(containers).isNotNull();
         logger.info("Found containers = " + containers);
         // change the assert according to actual state of kie server
-        assertTrue(containers.size() > 0);
+        assertThat(containers.size() > 0).isTrue();
     }
 
 

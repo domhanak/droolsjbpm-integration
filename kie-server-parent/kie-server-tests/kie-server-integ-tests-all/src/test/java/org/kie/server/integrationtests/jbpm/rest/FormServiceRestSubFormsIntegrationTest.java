@@ -15,7 +15,7 @@
  */
 package org.kie.server.integrationtests.jbpm.rest;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.kie.server.api.rest.RestURI.*;
 
 import java.util.HashMap;
@@ -79,12 +79,12 @@ public class FormServiceRestSubFormsIntegrationTest extends RestJbpmBaseIntegrat
         logger.info("[GET] " + clientRequest.getUri());
 
         response = clientRequest.request(getMediaType()).get();
-        Assert.assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+        Assert.assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
 
         String result = response.readEntity(String.class);
         logger.debug("Form content is '{}'", result);
-        assertNotNull(result);
-        assertFalse(result.isEmpty());
+        assertThat(result).isNotNull();
+        assertThat(result.isEmpty()).isFalse();
 
         // process form has two sub-forms
         // make sure fields from the two sub-forms are included in the result
@@ -92,31 +92,31 @@ public class FormServiceRestSubFormsIntegrationTest extends RestJbpmBaseIntegrat
         if(getMediaType().getSubtype().equals("json")) {
             JSONParser parser = new JSONParser();
             JSONObject resultJSON = (JSONObject) parser.parse(result);
-            assertNotNull(resultJSON);
+            assertThat(resultJSON).isNotNull();
 
             JSONObject formKey = (JSONObject) resultJSON.get("form");
             JSONArray allFormFields = (JSONArray) formKey.get("field");
 
-            assertNotNull(allFormFields);
+            assertThat(allFormFields).isNotNull();
             // two subforms
-            assertEquals(2, allFormFields.size());
-            assertEquals("component-ticket.form", ((JSONObject) allFormFields.get(0)).get("defaultSubform"));
-            assertEquals("issue-subform.form", ((JSONObject) allFormFields.get(1)).get("defaultSubform"));
+            assertThat(allFormFields).hasSize(2);
+            assertThat(((JSONObject) allFormFields.get(0)).get("defaultSubform")).isEqualTo("component-ticket.form");
+            assertThat(((JSONObject) allFormFields.get(1)).get("defaultSubform")).isEqualTo("issue-subform.form");
 
 
             JSONArray allFormInfo = (JSONArray) formKey.get("form");
-            assertNotNull(allFormInfo);
+            assertThat(allFormInfo).isNotNull();
             // two subform info
-            assertEquals(2, allFormInfo.size());
+            assertThat(allFormInfo).hasSize(2);
 
-            assertEquals(2, ((JSONArray) ((JSONObject) allFormInfo.get(0)).get("field")).size());
-            assertEquals(5, ((JSONArray) ((JSONObject) allFormInfo.get(1)).get("field")).size());
+            assertThat(((JSONArray) ((JSONObject) allFormInfo.get(0)).get("field"))).hasSize(2);
+            assertThat(((JSONArray) ((JSONObject) allFormInfo.get(1)).get("field"))).hasSize(5);
         } else if(getMediaType().getSubtype().equals("xml")) {
             try (ByteArrayInputStream stream = new java.io.ByteArrayInputStream(result.getBytes("UTF-8"))) {
                 Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(stream);
-                assertNotNull(doc);
-                assertNotNull(doc.getDocumentElement());
-                assertEquals(2,doc.getDocumentElement().getElementsByTagName("form").getLength());
+                assertThat(doc).isNotNull();
+                assertThat(doc.getDocumentElement()).isNotNull();
+                assertThat(doc.getDocumentElement().getElementsByTagName("form").getLength()).isEqualTo(2);
 
                 NodeList forms = doc.getDocumentElement().getElementsByTagName("form");
                 Node firstForm = forms.item(0);
@@ -155,9 +155,9 @@ public class FormServiceRestSubFormsIntegrationTest extends RestJbpmBaseIntegrat
             }
         }
 
-        assertEquals("Wrong count of expected elemntes", expectedElementsCount, elementCount);
-        assertEquals("Wrong count of expected fields", expectedFieldsCount, fieldsCount);
-        assertEquals("Wrong count of expected properties", expectedPropertiesCount, propertiesCount);
-        assertEquals("Wrong count of expected dataHolders", expectedDataHoldersCount, dataHoldersCount);
+        assertThat(elementCount).as("Wrong count of expected elemntes").isEqualTo(expectedElementsCount);
+        assertThat(fieldsCount).as("Wrong count of expected fields").isEqualTo(expectedFieldsCount);
+        assertThat(propertiesCount).as("Wrong count of expected properties").isEqualTo(expectedPropertiesCount);
+        assertThat(dataHoldersCount).as("Wrong count of expected dataHolders").isEqualTo(expectedDataHoldersCount);
     }
 }

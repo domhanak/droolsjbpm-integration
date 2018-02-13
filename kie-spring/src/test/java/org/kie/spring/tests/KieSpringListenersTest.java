@@ -34,7 +34,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class KieSpringListenersTest {
@@ -67,7 +67,7 @@ public class KieSpringListenersTest {
     @Test
     public void testStatefulAgendaEventListenerEmbedded() throws Exception {
         KieSession kSession = (KieSession) context.getBean("ksession1");
-        assertTrue(kSession.getAgendaEventListeners().size() > 0);
+        assertThat(kSession.getAgendaEventListeners().size() > 0).isTrue();
         boolean mockAgendaEventListenerFound = false;
         for (AgendaEventListener listener : kSession.getAgendaEventListeners()) {
             if (listener instanceof MockAgendaEventListener) {
@@ -75,13 +75,13 @@ public class KieSpringListenersTest {
                 break;
             }
         }
-        assertTrue(mockAgendaEventListenerFound);
+        assertThat(mockAgendaEventListenerFound).isTrue();
     }
 
     @Test
     public void testStatefulAgendaEventListener() throws Exception {
         KieSession kSession = (KieSession) context.getBean("ksession2");
-        assertTrue(kSession.getAgendaEventListeners().size() > 0);
+        assertThat(kSession.getAgendaEventListeners().size() > 0).isTrue();
         boolean mockAgendaEventListenerFound = false;
         for (AgendaEventListener listener : kSession.getAgendaEventListeners()) {
             if (listener instanceof MockAgendaEventListener) {
@@ -89,13 +89,13 @@ public class KieSpringListenersTest {
                 break;
             }
         }
-        assertTrue(mockAgendaEventListenerFound);
+        assertThat(mockAgendaEventListenerFound).isTrue();
     }
 
     @Test
     public void testStatefulProcessEventListener() throws Exception {
         KieSession kSession = (KieSession) context.getBean("ksession2");
-        assertTrue(kSession.getProcessEventListeners().size() > 0);
+        assertThat(kSession.getProcessEventListeners().size() > 0).isTrue();
         boolean mockProcessEventListenerFound = false;
         for (ProcessEventListener listener : kSession.getProcessEventListeners()) {
             if (listener instanceof MockProcessEventListener) {
@@ -103,13 +103,13 @@ public class KieSpringListenersTest {
                 break;
             }
         }
-        assertTrue(mockProcessEventListenerFound);
+        assertThat(mockProcessEventListenerFound).isTrue();
     }
 
     @Test
     public void testStatefulWMEventListener() throws Exception {
         KieSession kSession = (KieSession) context.getBean("ksession2");
-        assertTrue(kSession.getRuleRuntimeEventListeners().size() > 0);
+        assertThat(kSession.getRuleRuntimeEventListeners().size() > 0).isTrue();
         boolean mockWMEventListenerFound = false;
         for (RuleRuntimeEventListener listener : kSession.getRuleRuntimeEventListeners()) {
             if (listener instanceof MockRuleRuntimeEventListener) {
@@ -117,23 +117,23 @@ public class KieSpringListenersTest {
                 break;
             }
         }
-        assertTrue(mockWMEventListenerFound);
+        assertThat(mockWMEventListenerFound).isTrue();
 
         kSession.insert(new Person());
         kSession.fireAllRules();
         //this assert to show that our listener was called X number of times.
         // once from agenda listener, and second from working memory event listener
-        assertTrue(counterFromListener > 0);
+        assertThat(counterFromListener > 0).isTrue();
     }
 
     @Test
     public void testStatelessWithGroupedListeners() throws Exception {
         StatelessKieSession StatelessKieSession = (StatelessKieSession) context.getBean("statelessWithGroupedListeners");
-        assertEquals(1, StatelessKieSession.getRuleRuntimeEventListeners().size());
+        assertThat(StatelessKieSession.getRuleRuntimeEventListeners()).hasSize(1);
 
         StatelessKieSession.execute(new Person());
         // this assert to show that our listener was called X number of times.
         // once from agenda listener, and second from working memory event listener
-        assertEquals(2, counterFromListener);
+        assertThat(counterFromListener).isEqualTo(2);
     }
 }

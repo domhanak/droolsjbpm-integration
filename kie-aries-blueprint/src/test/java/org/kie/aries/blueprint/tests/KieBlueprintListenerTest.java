@@ -37,7 +37,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class KieBlueprintListenerTest {
 
@@ -55,30 +55,30 @@ public class KieBlueprintListenerTest {
     public void testKieBase() throws Exception {
         KieBase kbase = (KieBase) container.getComponentInstance("drl_kiesample");
         System.out.println(kbase);
-        assertNotNull(kbase);
+        assertThat(kbase).isNotNull();
     }
 
     @Test
     public void testKieSession() throws Exception {
         StatelessKieSession ksession = (StatelessKieSession) container.getComponentInstance("statelessWithGroupedListeners");
-        assertNotNull(ksession);
+        assertThat(ksession).isNotNull();
     }
 
     @Test
     public void testEventListenersGroup() throws Exception {
         List<KieListenerAdaptor> listeners = (List<KieListenerAdaptor>) container.getComponentInstance("debugListeners");
-        assertNotNull(listeners);
+        assertThat(listeners).isNotNull();
         for (KieListenerAdaptor obj : listeners){
-          assertNotNull(obj.getObjectRef());
+          assertThat(obj.getObjectRef()).isNotNull();
         }
     }
 
     @Test
     public void testStatelessRefWMEventListener() throws Exception {
         StatelessKieSession ksession = (StatelessKieSession) container.getComponentInstance("ksession1");
-        assertNotNull(ksession);
+        assertThat(ksession).isNotNull();
 
-        assertEquals(1, ksession.getRuleRuntimeEventListeners().size());
+        assertThat(ksession.getRuleRuntimeEventListeners()).hasSize(1);
         boolean mockWMEventListenerFound = false;
         for (RuleRuntimeEventListener listener : ksession.getRuleRuntimeEventListeners()){
             if (listener instanceof MockRuleRuntimeEventListener){
@@ -86,13 +86,13 @@ public class KieBlueprintListenerTest {
                 break;
             }
         }
-        assertTrue(mockWMEventListenerFound);
+        assertThat(mockWMEventListenerFound).isTrue();
     }
 
     @Test
     public void testStatelessRefAgendaEventListener() throws Exception {
         StatelessKieSession kSession = (StatelessKieSession) container.getComponentInstance("ksession1");
-        assertTrue(kSession.getAgendaEventListeners().size() > 0);
+        assertThat(kSession.getAgendaEventListeners().size() > 0).isTrue();
         boolean mockAgendaEventListenerFound = false;
         for (AgendaEventListener listener : kSession.getAgendaEventListeners()){
             if (listener instanceof MockAgendaEventListener){
@@ -100,13 +100,13 @@ public class KieBlueprintListenerTest {
                 break;
             }
         }
-        assertTrue(mockAgendaEventListenerFound);
+        assertThat(mockAgendaEventListenerFound).isTrue();
     }
 
     @Test
     public void testStatelessRefProcessEventListener() throws Exception {
         StatelessKieSession kSession = (StatelessKieSession) container.getComponentInstance("ksession1");
-        assertTrue(kSession.getProcessEventListeners().size() > 0);
+        assertThat(kSession.getProcessEventListeners().size() > 0).isTrue();
         boolean mockProcessEventListenerFound = false;
         for (ProcessEventListener listener : kSession.getProcessEventListeners()){
             if (listener instanceof MockProcessEventListener){
@@ -114,15 +114,15 @@ public class KieBlueprintListenerTest {
                 break;
             }
         }
-        assertTrue(mockProcessEventListenerFound);
+        assertThat(mockProcessEventListenerFound).isTrue();
     }
 
     @Test
     public void testStatefulWMEventListener() throws Exception {
         KieSession ksession = (KieSession) container.getComponentInstance("ksession99");
-        assertNotNull(ksession);
+        assertThat(ksession).isNotNull();
 
-        assertEquals(1, ksession.getRuleRuntimeEventListeners().size());
+        assertThat(ksession.getRuleRuntimeEventListeners()).hasSize(1);
         boolean mockWMEventListenerFound = false;
         for (RuleRuntimeEventListener listener : ksession.getRuleRuntimeEventListeners()){
             if (listener instanceof MockRuleRuntimeEventListener){
@@ -130,13 +130,13 @@ public class KieBlueprintListenerTest {
                 break;
             }
         }
-        assertTrue(mockWMEventListenerFound);
+        assertThat(mockWMEventListenerFound).isTrue();
     }
 
     @Test
     public void testStatefulAgendaEventListener() throws Exception {
         KieSession kSession = (KieSession) container.getComponentInstance("ksession99");
-        assertTrue(kSession.getAgendaEventListeners().size() > 0);
+        assertThat(kSession.getAgendaEventListeners().size() > 0).isTrue();
         boolean mockAgendaEventListenerFound = false;
         for (AgendaEventListener listener : kSession.getAgendaEventListeners()){
             if (listener instanceof MockAgendaEventListener){
@@ -144,13 +144,13 @@ public class KieBlueprintListenerTest {
                 break;
             }
         }
-        assertTrue(mockAgendaEventListenerFound);
+        assertThat(mockAgendaEventListenerFound).isTrue();
     }
 
     @Test
     public void testStatefulProcessEventListener() throws Exception {
         KieSession kSession = (KieSession) container.getComponentInstance("ksession99");
-        assertTrue(kSession.getProcessEventListeners().size() > 0);
+        assertThat(kSession.getProcessEventListeners().size() > 0).isTrue();
         boolean mockProcessEventListenerFound = false;
         for (ProcessEventListener listener : kSession.getProcessEventListeners()){
             if (listener instanceof MockProcessEventListener){
@@ -158,22 +158,22 @@ public class KieBlueprintListenerTest {
                 break;
             }
         }
-        assertTrue(mockProcessEventListenerFound);
+        assertThat(mockProcessEventListenerFound).isTrue();
     }
 
     @Test
     public void testEventListenersStandAlone() throws Exception {
         Object obj = container.getComponentInstance("mock-wm-listener");
-        assertNotNull(obj);
-        assertTrue(obj instanceof MockRuleRuntimeEventListener);
+        assertThat(obj).isNotNull();
+        assertThat(obj instanceof MockRuleRuntimeEventListener).isTrue();
 
         obj = container.getComponentInstance("mock-agenda-listener");
-        assertNotNull(obj);
-        assertTrue(obj instanceof MockAgendaEventListener);
+        assertThat(obj).isNotNull();
+        assertThat(obj instanceof MockAgendaEventListener).isTrue();
 
         obj = container.getComponentInstance("mock-process-listener");
-        assertNotNull(obj);
-        assertTrue(obj instanceof MockProcessEventListener);
+        assertThat(obj).isNotNull();
+        assertThat(obj instanceof MockProcessEventListener).isTrue();
     }
 
     @AfterClass

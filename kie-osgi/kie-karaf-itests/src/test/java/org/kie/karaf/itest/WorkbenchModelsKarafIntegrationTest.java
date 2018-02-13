@@ -102,7 +102,7 @@ public class WorkbenchModelsKarafIntegrationTest extends AbstractKarafIntegratio
             kieHelper.addResource(kieResources.newUrlResource(getClass().getResource(resourcePath)));
         }
         Results results = kieHelper.verify();
-        Assert.assertTrue(results.toString(), results.getMessages().isEmpty());
+        Assert.assertThat(results.toString(), results.getMessages().isEmpty()).isTrue();
         return kieHelper.build();
     }
 

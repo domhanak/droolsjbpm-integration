@@ -15,7 +15,7 @@
 
 package org.kie.server.integrationtests.jbpm.cases;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -95,7 +95,7 @@ public class CaseAdminServiceIntegrationTest extends JbpmKieServerBaseIntegratio
 
         String caseId = startUserTaskCase(USER_JOHN,
                                           USER_MARY);
-        assertNotNull(caseId);
+        assertThat(caseId).isNotNull();
 
         // yoda is not involved in case at all so should not see case at all
         List<CaseInstance> caseInstances = caseClient.getCaseInstances(0,
@@ -123,7 +123,7 @@ public class CaseAdminServiceIntegrationTest extends JbpmKieServerBaseIntegratio
         List<CaseInstance> caseInstances = caseAdminClient.getCaseInstances(Arrays.asList(CaseStatus.CANCELLED.getName()),
                                                                             0,
                                                                             1000);
-        assertNotNull(caseInstances);
+        assertThat(caseInstances).isNotNull();
         int abortedCaseInstanceCount = caseInstances.size();
 
         String caseId = startUserTaskCase(USER_JOHN,
@@ -150,7 +150,7 @@ public class CaseAdminServiceIntegrationTest extends JbpmKieServerBaseIntegratio
         caseInstances = caseAdminClient.getCaseInstances(Arrays.asList(CaseStatus.CANCELLED.getName()),
                                                          0,
                                                          1000);
-        assertNotNull(caseInstances);
+        assertThat(caseInstances).isNotNull();
         assertEquals(abortedCaseInstanceCount + 1,
                      caseInstances.size());
     }
@@ -254,7 +254,7 @@ public class CaseAdminServiceIntegrationTest extends JbpmKieServerBaseIntegratio
         String caseId = caseClient.startCase(CONTAINER_ID,
                                              CASE_HR_DEF_ID,
                                              caseFile);
-        assertNotNull(caseId);
+        assertThat(caseId).isNotNull();
         return caseId;
     }
 
@@ -277,7 +277,7 @@ public class CaseAdminServiceIntegrationTest extends JbpmKieServerBaseIntegratio
         String caseId = caseClient.startCase(CONTAINER_ID,
                                              CLAIM_CASE_DEF_ID,
                                              caseFile);
-        assertNotNull(caseId);
+        assertThat(caseId).isNotNull();
         return caseId;
     }
 }

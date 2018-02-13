@@ -57,14 +57,14 @@ public class DroolsActivityTest {
         DroolsActivity activity = Robolectric.setupActivity(DroolsActivity.class);
 
         //assert injection worked
-        assertNotNull("kiecontainer", activity.mContainer);
-        assertNotNull("kiebase", activity.mKieBase);
-        assertNotNull("kiesession", activity.kSession);
+        assertThat(activity.mContainer).as("kiecontainer").isNotNull();
+        assertThat(activity.mKieBase).as("kiebase").isNotNull();
+        assertThat(activity.kSession).as("kiesession").isNotNull();
 
         ShadowView.clickOn(activity.findViewById(R.id.fireRules));
         Robolectric.flushBackgroundThreadScheduler();
         TextView logView = (TextView) activity.findViewById(R.id.log);
-        assertTrue("logView contains 'Hello World'", logView.getText().toString().contains("Hello World"));
+        assertThat(logView.getText().toString().contains("Hello World")).as("logView contains 'Hello World'").isTrue();
     }
 
     public class MyTestModule extends AbstractModule {

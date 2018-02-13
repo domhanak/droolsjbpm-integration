@@ -69,7 +69,7 @@ public class KieArchiveTest {
 
     @Test
     public void test() {
-        assertNotNull(basicKieSession);
+        assertThat(basicKieSession).isNotNull();
 
         List list = new ArrayList();
         basicKieSession.setGlobal("resultList", list);
@@ -77,7 +77,7 @@ public class KieArchiveTest {
         basicKieSession.insert(new TestFactDeclaredInJar());
         basicKieSession.fireAllRules();
 
-        assertEquals(2, list.size());
+        assertThat(list).hasSize(2);
     }
 
 }

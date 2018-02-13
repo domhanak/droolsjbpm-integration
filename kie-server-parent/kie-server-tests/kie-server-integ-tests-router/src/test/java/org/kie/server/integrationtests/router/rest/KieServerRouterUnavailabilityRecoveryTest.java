@@ -18,7 +18,7 @@ package org.kie.server.integrationtests.router.rest;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
 import java.io.IOException;
@@ -114,26 +114,26 @@ public class KieServerRouterUnavailabilityRecoveryTest {
         Response response = null;
         try (KieServerRouterClient routerClient = new KieServerRouterClient(serverUrl)) {
             Configuration initialConfig = routerClient.getRouterConfig();
-            assertEquals(1, initialConfig.getHostsPerContainer().size());
-            assertEquals(1, initialConfig.getHostsPerServer().size());
+            assertThat(initialConfig.getHostsPerContainer()).hasSize(1);
+            assertThat(initialConfig.getHostsPerServer()).hasSize(1);
 
-            assertEquals(1, initialConfig.getHostsPerContainer().get("container1").size());
-            assertEquals(1, initialConfig.getHostsPerServer().get("server1").size());
+            assertThat(initialConfig.getHostsPerContainer().get("container1")).hasSize(1);
+            assertThat(initialConfig.getHostsPerServer().get("server1")).hasSize(1);
             
             WebTarget clientRequest = newRequest(serverUrl + "/containers");
             logger.debug("[GET] " + clientRequest.getUri());
 
             response = clientRequest.request(MediaType.APPLICATION_XML_TYPE).get();
-            Assert.assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+            Assert.assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
             response.close();
 
             Configuration config = routerClient.getRouterConfig();
 
-            assertEquals(1, config.getHostsPerContainer().size());
-            assertEquals(1, config.getHostsPerServer().size());
+            assertThat(config.getHostsPerContainer()).hasSize(1);
+            assertThat(config.getHostsPerServer()).hasSize(1);
 
-            assertEquals(1, config.getHostsPerContainer().get("container1").size());
-            assertEquals(1, config.getHostsPerServer().get("server1").size());
+            assertThat(config.getHostsPerContainer().get("container1")).hasSize(1);
+            assertThat(config.getHostsPerServer().get("server1")).hasSize(1);
             
             wireMockServer.stop();
             
@@ -141,16 +141,16 @@ public class KieServerRouterUnavailabilityRecoveryTest {
             logger.debug("[GET] " + clientRequest.getUri());
 
             response = clientRequest.request(MediaType.APPLICATION_XML_TYPE).get();
-            Assert.assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
+            Assert.assertThat(response.getStatus()).isEqualTo(Response.Status.NOT_FOUND.getStatusCode());
             response.close();
             
             config = routerClient.getRouterConfig();
 
-            assertEquals(1, config.getHostsPerContainer().size());
-            assertEquals(1, config.getHostsPerServer().size());
+            assertThat(config.getHostsPerContainer()).hasSize(1);
+            assertThat(config.getHostsPerServer()).hasSize(1);
 
-            assertEquals(0, config.getHostsPerContainer().get("container1").size());
-            assertEquals(0, config.getHostsPerServer().get("server1").size());
+            assertThat(config.getHostsPerContainer().get("container1")).isEmpty();
+            assertThat(config.getHostsPerServer().get("server1")).isEmpty();
             
             CountDownLatch latch = listener.activate();
             wireMockServer.start();
@@ -161,16 +161,16 @@ public class KieServerRouterUnavailabilityRecoveryTest {
             logger.debug("[GET] " + clientRequest.getUri());
 
             response = clientRequest.request(MediaType.APPLICATION_XML_TYPE).get();
-            Assert.assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+            Assert.assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
             response.close();
 
             config = routerClient.getRouterConfig();
 
-            assertEquals(1, config.getHostsPerContainer().size());
-            assertEquals(1, config.getHostsPerServer().size());
+            assertThat(config.getHostsPerContainer()).hasSize(1);
+            assertThat(config.getHostsPerServer()).hasSize(1);
 
-            assertEquals(1, config.getHostsPerContainer().get("container1").size());
-            assertEquals(1, config.getHostsPerServer().get("server1").size());
+            assertThat(config.getHostsPerContainer().get("container1")).hasSize(1);
+            assertThat(config.getHostsPerServer().get("server1")).hasSize(1);
         } finally {
             if(response != null) {
                 response.close();

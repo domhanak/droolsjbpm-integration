@@ -30,7 +30,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.*;
 import org.kie.server.integrationtests.shared.KieServerDeployer;
@@ -63,7 +63,7 @@ public class DMNTwoDMNModelsIntegrationTest
     public void test_getModels() {
         ServiceResponse<DMNModelInfoList> getModels = dmnClient.getModels(CONTAINER_1_ID);
         
-        assertEquals(ResponseType.SUCCESS, getModels.getType());
+        assertThat(getModels.getType()).isEqualTo(ResponseType.SUCCESS);
         
         List<DMNModelInfo> models = getModels.getResult().getModels();
         assertThat( models, hasSize( 2 ) );
@@ -89,7 +89,7 @@ public class DMNTwoDMNModelsIntegrationTest
                 "https://github.com/kiegroup/kie-dmn/input-data-string", "input-data-string",
                 dmnContext);
         
-        assertEquals(ResponseType.SUCCESS, evaluateAll.getType());
+        assertThat(evaluateAll.getType()).isEqualTo(ResponseType.SUCCESS);
         
         DMNResult dmnResult = evaluateAll.getResult();
         
@@ -110,7 +110,7 @@ public class DMNTwoDMNModelsIntegrationTest
                 "https://www.drools.org/kie-dmn/function-definition", "function-definition",
                 dmnContext);
         
-        assertEquals(ResponseType.SUCCESS, evaluateAll.getType());
+        assertThat(evaluateAll.getType()).isEqualTo(ResponseType.SUCCESS);
         
         DMNResult dmnResult = evaluateAll.getResult();
         

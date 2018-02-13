@@ -15,7 +15,7 @@
 
 package org.jbpm.simulation.impl.ht;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -54,25 +54,25 @@ public class StaffPoolImplTest {
         long waitTime = pool.allocate(startTime);
         System.out.println("Wait time is " + DurationFormatUtils.formatDurationHMS(waitTime));
         
-        assertEquals(0, waitTime);
+        assertThat(waitTime).isEqualTo(0);
         
         startTime += 10*60*1000;
         System.out.println("Start time is " + new Date(startTime));
         waitTime = pool.allocate(startTime);
         System.out.println("Wait time is " + DurationFormatUtils.formatDurationHMS(waitTime));
-        assertEquals(35*60*1000, waitTime);
+        assertThat(waitTime).isEqualTo(35*60*1000);
         
         startTime += 10*60*1000;
         System.out.println("Start time is " + new Date(startTime));
         waitTime = pool.allocate(startTime);
         System.out.println("Wait time is " + DurationFormatUtils.formatDurationHMS(waitTime));
-        assertEquals(70*60*1000, waitTime);
+        assertThat(waitTime).isEqualTo(70*60*1000);
         
         startTime += 10*60*1000;
         System.out.println("Start time is " + new Date(startTime));
         waitTime = pool.allocate(startTime);
         System.out.println("Wait time is " + DurationFormatUtils.formatDurationHMS(waitTime));
-        assertEquals(105*60*1000, waitTime);
+        assertThat(waitTime).isEqualTo(105*60*1000);
     }
     
     @Test
@@ -99,28 +99,28 @@ public class StaffPoolImplTest {
         System.out.println("Wait time is " + DurationFormatUtils.formatDurationHMS(waitTime));
         System.out.println("Complete time is " + new Date(startTime + waitTime + 45*60*1000));
         
-        assertEquals(0, waitTime);
+        assertThat(waitTime).isEqualTo(0);
         
         startTime += 10*60*1000;
         System.out.println("Start time is " + new Date(startTime));
         waitTime = pool.allocate(startTime);
         System.out.println("Wait time is " + DurationFormatUtils.formatDurationHMS(waitTime));
         System.out.println("Complete time is " + new Date(startTime + waitTime + 45*60*1000));
-        assertEquals(35*60*1000, waitTime);
+        assertThat(waitTime).isEqualTo(35*60*1000);
         
         startTime += 10*60*1000;
         System.out.println("Start time is " + new Date(startTime));
         waitTime = pool.allocate(startTime);
         System.out.println("Wait time is " + DurationFormatUtils.formatDurationHMS(waitTime));
         System.out.println("Complete time is " + new Date(startTime + waitTime + 45*60*1000));
-        assertEquals(250*60*1000, waitTime);
+        assertThat(waitTime).isEqualTo(250*60*1000);
         
         startTime += 10*60*1000;
         System.out.println("Start time is " + new Date(startTime));
         waitTime = pool.allocate(startTime);
         System.out.println("Wait time is " + DurationFormatUtils.formatDurationHMS(waitTime));
         System.out.println("Complete time is " + new Date(startTime + waitTime + 45*60*1000));
-        assertEquals(285*60*1000, waitTime);
+        assertThat(waitTime).isEqualTo(285*60*1000);
     }
     
     private class TestSimulationDataProvider implements SimulationDataProvider {

@@ -33,7 +33,7 @@ import org.kie.server.client.KieServicesConfiguration;
 import org.kie.server.integrationtests.shared.KieServerDeployer;
 import org.kie.server.integrationtests.shared.KieServerSynchronization;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class TimerIntegrationTest extends JbpmKieServerBaseIntegrationTest {
 
@@ -77,7 +77,7 @@ public class TimerIntegrationTest extends JbpmKieServerBaseIntegrationTest {
 
         List<ProcessInstance> startedInstances = queryClient.findProcessInstancesByContainerId(containerId, completedOnly, 0, 10, "Id", false);
 
-        assertEquals(3, startedInstances.size());
+        assertThat(startedInstances).hasSize(3);
 
         long thirdInstance = startedInstances.get(0).getDate().getTime();
         long secondInstance = startedInstances.get(1).getDate().getTime();
@@ -87,8 +87,8 @@ public class TimerIntegrationTest extends JbpmKieServerBaseIntegrationTest {
         double distance1 = Math.ceil((thirdInstance - secondInstance));
         double distance2 = Math.ceil((secondInstance - firstInstance));
         // since the expiration time is 5 seconds let's make sure it's not more than doubled of expiration time
-        assertTrue(distance1 < 10000);
-        assertTrue(distance2 < 10000);
+        assertThat(distance1 < 10000).isTrue();
+        assertThat(distance2 < 10000).isTrue();
 
     }
 }

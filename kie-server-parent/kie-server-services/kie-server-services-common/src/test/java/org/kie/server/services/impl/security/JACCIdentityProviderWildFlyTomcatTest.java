@@ -15,7 +15,7 @@
 
 package org.kie.server.services.impl.security;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.security.Principal;
@@ -91,16 +91,16 @@ public class JACCIdentityProviderWildFlyTomcatTest {
     public void testGetName() throws Exception {
         IdentityProvider jaccIdentityProvider = new JACCIdentityProvider();
 
-        assertEquals(PRINCIPAL_NAME, jaccIdentityProvider.getName());
+        assertThat(jaccIdentityProvider.getName()).isEqualTo(PRINCIPAL_NAME);
     }
 
     @Test
     public void testGetRoles() throws Exception {
         IdentityProvider jaccIdentityProvider = new JACCIdentityProvider();
 
-        assertEquals(2, jaccIdentityProvider.getRoles().size());
-        assertTrue(jaccIdentityProvider.getRoles().contains(GROUP_ONE_NAME));
-        assertTrue(jaccIdentityProvider.getRoles().contains(GROUP_TWO_NAME));
+        assertThat(jaccIdentityProvider.getRoles()).hasSize(2);
+        assertThat(jaccIdentityProvider.getRoles().contains(GROUP_ONE_NAME)).isTrue();
+        assertThat(jaccIdentityProvider.getRoles().contains(GROUP_TWO_NAME)).isTrue();
     }
 
     private class GroupImpl implements Group {

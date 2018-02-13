@@ -36,7 +36,7 @@ import org.osgi.framework.Constants;
 
 import javax.inject.Inject;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 import static org.ops4j.pax.exam.CoreOptions.streamBundle;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.*;
@@ -71,16 +71,16 @@ public class KieBlueprintjBPMPersistenceKarafIntegrationTest extends AbstractKar
 
     @Test
     public void testStartProcessNoEnv() throws Exception {
-        assertNotNull(processWithPersistenceNoEnv);
+        assertThat(processWithPersistenceNoEnv).isNotNull();
         final ProcessInstance processInstance = processWithPersistenceNoEnv.startProcess(PROCESS_ID);
-        assertEquals("Unexpected process instance state.", ProcessInstance.STATE_COMPLETED, processInstance.getState());
+        assertThat(processInstance.getState()).as("Unexpected process instance state.").isEqualTo(ProcessInstance.STATE_COMPLETED);
     }
 
     @Test
     public void testStartProcessEnv() throws Exception {
-        assertNotNull(processWithPersistenceEnv);
+        assertThat(processWithPersistenceEnv).isNotNull();
         final ProcessInstance processInstance = processWithPersistenceEnv.startProcess(PROCESS_ID);
-        assertEquals("Unexpected process instance state.", ProcessInstance.STATE_COMPLETED, processInstance.getState());
+        assertThat(processInstance.getState()).as("Unexpected process instance state.").isEqualTo(ProcessInstance.STATE_COMPLETED);
     }
 
     @Configuration

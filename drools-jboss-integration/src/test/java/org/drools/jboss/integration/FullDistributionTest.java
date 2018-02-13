@@ -75,7 +75,7 @@ public class FullDistributionTest {
     public static WebArchive createDeployment() {
         String distFile = System.getProperty(DIST_FILE);
         logger.info("Configured distribution file is: " + distFile);
-        assertNotNull("Distribution file was not configured", distFile);
+        assertThat(distFile).as("Distribution file was not configured").isNotNull();
 
         WebArchive distWar = null;
         try {
@@ -83,7 +83,7 @@ public class FullDistributionTest {
         } catch (Exception e) {
             logger.error("WebArchive creation failed, fistFile: "+ distFile, e);
         }
-        assertNotNull("WebArchive couldn't be created.", distWar);
+        assertThat(distWar).as("WebArchive couldn't be created.").isNotNull();
         return distWar;
     }
 

@@ -53,7 +53,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.drools.persistence.util.PersistenceUtil.DROOLS_PERSISTENCE_UNIT_NAME;
 import static org.drools.persistence.util.PersistenceUtil.createEnvironment;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class InfinispanPersistentStatefulSessionTest {
 
@@ -307,7 +307,7 @@ public class InfinispanPersistentStatefulSessionTest {
         ksession.insert( 2 );
         ksession.insert( 3 );
         ksession.getWorkItemManager().completeWorkItem(0, null);
-        assertEquals( 3, list.size() );
+        assertThat(list.size() ).isEqualTo(3);
     }
     
     @Test
@@ -363,7 +363,7 @@ public class InfinispanPersistentStatefulSessionTest {
         test.add( x );
         test2.add( x );
 
-        assertSame( test.get( 0 ), test2.get( 0 ) );
+        assertThat(test2.get( 0 ) ).isSameAs(test.get( 0 ));
 
         ksession.insert( test );
         ksession.insert( test2 );
@@ -375,7 +375,7 @@ public class InfinispanPersistentStatefulSessionTest {
         List ref1 = (List) c.next();
         List ref2 = (List) c.next();
 
-        assertSame( ref1.get( 0 ), ref2.get( 0 ) );
+        assertThat(ref2.get( 0 ) ).isSameAs(ref1.get( 0 ));
 
     }
 
@@ -391,7 +391,7 @@ public class InfinispanPersistentStatefulSessionTest {
         StatefulKnowledgeSession ksession = InfinispanKnowledgeService.newStatefulKnowledgeSession( kbase, config, env );
         SessionConfiguration sessionConfig = (SessionConfiguration)ksession.getSessionConfiguration();
 
-        assertEquals("com.example.CustomInfinispanProcessInstanceManagerFactory", sessionConfig.getProcessInstanceManagerFactory());
+        assertThat(sessionConfig.getProcessInstanceManagerFactory()).isEqualTo("com.example.CustomInfinispanProcessInstanceManagerFactory");
     }
 
     @Test
@@ -430,7 +430,7 @@ public class InfinispanPersistentStatefulSessionTest {
 
         ksession.fireAllRules();
 
-        assertEquals( 3, list.size() );
+        assertThat(list.size() ).isEqualTo(3);
 
         long ksessionId = ksession.getIdentifier();
         ksession.destroy();
@@ -479,7 +479,7 @@ public class InfinispanPersistentStatefulSessionTest {
 
         ksession.fireAllRules();
 
-        assertEquals( 3, list.size() );
+        assertThat(list.size() ).isEqualTo(3);
 
         long ksessionId = ksession.getIdentifier();
         ksession.destroy();

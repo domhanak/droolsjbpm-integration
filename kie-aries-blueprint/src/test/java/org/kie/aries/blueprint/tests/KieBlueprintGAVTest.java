@@ -32,7 +32,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 
 public class KieBlueprintGAVTest {
@@ -49,25 +49,25 @@ public class KieBlueprintGAVTest {
     @Test
     public void testKieBase() throws Exception {
         KieBase kbase = (KieBase) container.getComponentInstance("kbase1");
-        assertNotNull(kbase);
+        assertThat(kbase).isNotNull();
     }
 
     @Test
     public void testReleaseId() throws Exception {
         ReleaseId releaseId = (ReleaseId) container.getComponentInstance("rId");
-        assertNotNull(releaseId);
+        assertThat(releaseId).isNotNull();
     }
 
     @Test
     public void testKieSessionRef() throws Exception {
         KieSession ksession = (KieSession) container.getComponentInstance("ksession1");
-        assertNotNull(ksession);
+        assertThat(ksession).isNotNull();
     }
 
     @Test
     public void testKSessionExecution() throws Exception {
         KieSession kSession = (KieSession) container.getComponentInstance("ksession1");
-        assertNotNull(kSession);
+        assertThat(kSession).isNotNull();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(baos);
 
@@ -81,7 +81,7 @@ public class KieBlueprintGAVTest {
         String expected = "" +
                           "Dave: Hello, HAL. Do you read me, HAL?" +lineSeparator +
                           "HAL: Dave. I read you."+lineSeparator;
-        assertEquals(expected, actual);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @AfterClass

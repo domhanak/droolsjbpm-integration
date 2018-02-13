@@ -118,7 +118,7 @@ public class KieServerRouterControllerRecoveryTest {
             logger.debug("[POST] " + clientRequest.getUri());
 
             response = clientRequest.request(MediaType.APPLICATION_JSON_TYPE).put(Entity.json(CONTAINER_JSON));
-            Assert.assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+            Assert.assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
             response.close();
             
             CountDownLatch latch = new CountDownLatch(1);
@@ -146,7 +146,7 @@ public class KieServerRouterControllerRecoveryTest {
             logger.debug("[POST] " + clientRequest.getUri());
 
             response = clientRequest.request(MediaType.APPLICATION_JSON_TYPE).put(Entity.json(CONTAINER_JSON));
-            Assert.assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+            Assert.assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
             response.close();
             
             wireMockServer.start();

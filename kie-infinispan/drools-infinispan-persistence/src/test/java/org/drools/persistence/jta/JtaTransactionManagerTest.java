@@ -48,7 +48,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 import static org.drools.persistence.util.PersistenceUtil.*;
-import static org.junit.Assert.fail;
+import static org.assertj.core.api.Assertions.fail;
 import static org.kie.api.runtime.EnvironmentName.ENTITY_MANAGER_FACTORY;
 
 public class JtaTransactionManagerTest {

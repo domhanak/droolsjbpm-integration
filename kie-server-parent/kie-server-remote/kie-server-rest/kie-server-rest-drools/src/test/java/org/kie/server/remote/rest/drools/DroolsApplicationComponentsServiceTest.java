@@ -22,7 +22,7 @@ import org.kie.server.services.api.KieServerRegistry;
 import org.kie.server.services.api.SupportedTransports;
 import org.kie.server.services.drools.DroolsKieServerExtension;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class DroolsApplicationComponentsServiceTest {
@@ -34,9 +34,9 @@ public class DroolsApplicationComponentsServiceTest {
         extension.init(null, mock(KieServerRegistry.class));
         List<Object> appComponentsList = extension.getAppComponents(SupportedTransports.REST);
 
-        assertFalse("No application component retrieved!", appComponentsList.isEmpty());
+        assertThat(appComponentsList.isEmpty()).as("No application component retrieved!").isFalse();
         Object appComponent = appComponentsList.get(0);
-        assertTrue("Expected a " + CommandResource.class.getSimpleName() + " instance",
+        assertThat("Expected a " + CommandResource.class.getSimpleName().isTrue() + " instance",
                 appComponent instanceof CommandResource);
     }
 

@@ -31,7 +31,7 @@ import org.osgi.framework.Constants;
 
 import javax.inject.Inject;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
@@ -57,15 +57,15 @@ public class KieBlueprintProcessDependencyKarafIntegrationTest extends AbstractK
 
     @Test
     public void testKieBase() throws Exception {
-        assertNotNull(kieSession);
-        assertTrue("KieBase contains no packages?", kieSession.getKieBase().getKiePackages().size() > 0);
+        assertThat(kieSession).isNotNull();
+        assertThat(kieSession.getKieBase().getKiePackages().size() > 0).as("KieBase contains no packages?").isTrue();
     }
 
     @Test
     public void testStartProcess() throws Exception {
-        assertNotNull(kieSession);
+        assertThat(kieSession).isNotNull();
         final ProcessInstance processInstance = kieSession.startProcess(PROCESS_ID);
-        assertEquals("Unexpected process instance state.", ProcessInstance.STATE_COMPLETED, processInstance.getState());
+        assertThat(processInstance.getState()).as("Unexpected process instance state.").isEqualTo(ProcessInstance.STATE_COMPLETED);
     }
 
     @Configuration

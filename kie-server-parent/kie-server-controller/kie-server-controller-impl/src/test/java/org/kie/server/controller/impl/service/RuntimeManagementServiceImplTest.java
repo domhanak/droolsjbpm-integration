@@ -29,7 +29,7 @@ import org.kie.server.controller.impl.KieServerInstanceManager;
 import org.kie.server.controller.impl.storage.InMemoryKieServerTemplateStorage;
 import org.mockito.Mockito;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
@@ -55,25 +55,25 @@ public class RuntimeManagementServiceImplTest extends AbstractServiceImplTest {
     public void testGetServerInstances() {
 
         ServerInstanceKeyList found = runtimeManagementService.getServerInstances(serverTemplate.getId());
-        assertNotNull(found);
+        assertThat(found).isNotNull();
 
-        assertEquals(0, found.getServerInstanceKeys().length);
+        assertThat(found.getServerInstanceKeys().length).isEqualTo(0);
 
         serverTemplate.addServerInstance(new ServerInstanceKey(serverTemplate.getId(), "test server","instanceId" , "http://fake.url.org"));
         specManagementService.saveServerTemplate(serverTemplate);
 
         found = runtimeManagementService.getServerInstances(serverTemplate.getId());
-        assertNotNull(found);
+        assertThat(found).isNotNull();
 
-        assertEquals(1, found.getServerInstanceKeys().length);
+        assertThat(found.getServerInstanceKeys().length).isEqualTo(1);
 
         org.kie.server.controller.api.model.runtime.ServerInstanceKey server = found.getServerInstanceKeys()[0];
-        assertNotNull(server);
+        assertThat(server).isNotNull();
 
-        assertEquals(serverTemplate.getId(), server.getServerTemplateId());
-        assertEquals("instanceId", server.getServerInstanceId());
-        assertEquals("test server", server.getServerName());
-        assertEquals("http://fake.url.org", server.getUrl());
+        assertThat(server.getServerTemplateId()).isEqualTo(serverTemplate.getId());
+        assertThat(server.getServerInstanceId()).isEqualTo("instanceId");
+        assertThat(server.getServerName()).isEqualTo("test server");
+        assertThat(server.getUrl()).isEqualTo("http://fake.url.org");
     }
 
     @Test
@@ -88,9 +88,9 @@ public class RuntimeManagementServiceImplTest extends AbstractServiceImplTest {
         specManagementService.saveServerTemplate(serverTemplate);
 
         ContainerList containers = runtimeManagementService.getContainers(instanceKey);
-        assertNotNull(containers);
+        assertThat(containers).isNotNull();
 
-        assertEquals(1, containers.getContainers().length);
+        assertThat(containers.getContainers().length).isEqualTo(1);
         verify(kieServerInstanceManager, times(1)).getContainers(any(ServerInstanceKey.class));
     }
 

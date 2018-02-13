@@ -58,14 +58,14 @@ public class KieBlueprintImportIntegrationTest extends AbstractKarafIntegrationT
 
     @Test
     public void kieElementsExistTest() {
-        Assert.assertNotNull(kieSession);
-        Assert.assertNotNull(kieBase);
-        Assert.assertNotNull(kieScanner);
+        Assert.assertThat(kieSession).isNotNull();
+        Assert.assertThat(kieBase).isNotNull();
+        Assert.assertThat(kieScanner).isNotNull();
     }
 
     @Test @Ignore
     public void kieSessionOldPersonTest() {
-        Assert.assertNotNull(kieSession);
+        Assert.assertThat(kieSession).isNotNull();
 
         Drink drink = new Drink("whiskey", true);
         Customer customer = new Customer("Customer", 40);
@@ -74,12 +74,12 @@ public class KieBlueprintImportIntegrationTest extends AbstractKarafIntegrationT
         kieSession.insert(order);
         kieSession.fireAllRules();
 
-        Assert.assertTrue(order.isApproved());
+        Assert.assertThat(order.isApproved()).isTrue();
     }
 
     @Test @Ignore
     public void kieSessionYoungPersonTest() {
-        Assert.assertNotNull(kieSession);
+        Assert.assertThat(kieSession).isNotNull();
 
         Drink drink = new Drink("whiskey", true);
         Customer customer = new Customer("Customer", 14);
@@ -88,7 +88,7 @@ public class KieBlueprintImportIntegrationTest extends AbstractKarafIntegrationT
         kieSession.insert(order);
         kieSession.fireAllRules();
 
-        Assert.assertFalse(order.isApproved());
+        Assert.assertThat(order.isApproved()).isFalse();
     }
 
     @Configuration

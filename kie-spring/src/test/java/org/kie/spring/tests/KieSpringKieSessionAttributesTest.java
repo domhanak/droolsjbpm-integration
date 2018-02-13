@@ -26,7 +26,7 @@ import org.kie.api.runtime.conf.ClockTypeOption;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -41,24 +41,24 @@ public class KieSpringKieSessionAttributesTest {
 
     @Test
     public void testContext() throws Exception {
-        assertNotNull(context);
+        assertThat(context).isNotNull();
     }
 
     @Test
     public void testStatefulRealTimeClockKieSession() throws Exception {
         KieSession ksession = context.getBean("statefulSessionRealTime", KieSession.class);
-        assertNotNull(ksession);
-        assertEquals("Session has configured different clock type", ClockTypeOption.get("realtime"), ksession.getSessionConfiguration().getOption(ClockTypeOption.class));
-        assertTrue(String.format("Session clock not an instance of '~s', but: '~s'.", JDKTimerService.class.getSimpleName(), ksession.getSessionClock().getClass().getSimpleName()),
+        assertThat(ksession).isNotNull();
+        assertThat(ksession.getSessionConfiguration().getOption(ClockTypeOption.class)).as("Session has configured different clock type").isEqualTo(ClockTypeOption.get("realtime"));
+        assertThat(String.format("Session clock not an instance of '~s', but: '~s'.", JDKTimerService.class.getSimpleName(), ksession.getSessionClock().getClass().getSimpleName()).isTrue(),
                    ksession.getSessionClock() instanceof JDKTimerService);
     }
 
     @Test
     public void testStatefulPseudoClockKieSession() throws Exception {
         KieSession ksession = context.getBean("statefulSessionPseudo", KieSession.class);
-        assertNotNull(ksession);
-        assertEquals("Session has configured different clock type", ClockTypeOption.get("pseudo"), ksession.getSessionConfiguration().getOption(ClockTypeOption.class));
-        assertTrue(String.format("Session clock not an instance of '~s', but '~s'.", SessionPseudoClock.class.getSimpleName(), ksession.getSessionClock().getClass().getSimpleName()),
+        assertThat(ksession).isNotNull();
+        assertThat(ksession.getSessionConfiguration().getOption(ClockTypeOption.class)).as("Session has configured different clock type").isEqualTo(ClockTypeOption.get("pseudo"));
+        assertThat(String.format("Session clock not an instance of '~s', but '~s'.", SessionPseudoClock.class.getSimpleName(), ksession.getSessionClock().getClass().getSimpleName()).isTrue(),
                 ksession.getSessionClock() instanceof SessionPseudoClock);
     }
 

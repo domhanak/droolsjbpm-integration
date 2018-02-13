@@ -31,7 +31,7 @@ import org.kie.server.api.marshalling.objects.DateObject;
 import org.kie.server.api.marshalling.objects.Message;
 import org.kie.server.api.model.KieContainerResourceFilter;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class XStreamMarshallerTest {
 
@@ -48,9 +48,9 @@ public class XStreamMarshallerTest {
         Message testMessage = new Message("test content");
 
         String testMessageString = marshaller.marshall(testMessage);
-        assertNotNull(testMessageString);
+        assertThat(testMessageString).isNotNull();
 
-        assertEquals(expectedXml, testMessageString);
+        assertThat(testMessageString).isEqualTo(expectedXml);
     }
 
     @Test
@@ -66,9 +66,9 @@ public class XStreamMarshallerTest {
         AnotherMessage testMessage = new AnotherMessage("test content");
 
         String testMessageString = marshaller.marshall(testMessage);
-        assertNotNull(testMessageString);
+        assertThat(testMessageString).isNotNull();
 
-        assertEquals(expectedXml, testMessageString);
+        assertThat(testMessageString).isEqualTo(expectedXml);
     }
 
     @Test
@@ -100,9 +100,9 @@ public class XStreamMarshallerTest {
         dateObject.setOffsetDateTime( OffsetDateTime.of( LocalDateTime.of( 2017, 1, 1, 10, 10, 10 ), ZoneOffset.ofHours( 1 ) ) );
 
         String dateObjectString = marshaller.marshall( dateObject );
-        assertNotNull( dateObjectString );
+        assertThat(dateObjectString ).isNotNull();
 
-        assertEquals( expectedString, dateObjectString );
+        assertThat(dateObjectString ).isEqualTo(expectedString);
     }
 
     @Test
@@ -119,12 +119,12 @@ public class XStreamMarshallerTest {
         Marshaller marshaller = MarshallerFactory.getMarshaller( extraClasses, MarshallingFormat.XSTREAM, getClass().getClassLoader() );
 
         DateObject dateObject = marshaller.unmarshall( expectedString, DateObject.class );
-        assertNotNull( dateObject );
+        assertThat(dateObject ).isNotNull();
 
-        assertEquals( LocalDate.of( 2017, 1, 1 ), dateObject.getLocalDate() );
-        assertEquals( LocalDateTime.of( 2017, 1, 1, 10, 10, 10 ), dateObject.getLocalDateTime() );
-        assertEquals( LocalTime.of( 10, 10, 10 ), dateObject.getLocalTime() );
-        assertEquals( OffsetDateTime.of( LocalDateTime.of( 2017, 1, 1, 10, 10, 10 ), ZoneOffset.ofHours( 1 ) ), dateObject.getOffsetDateTime() );
+        assertThat(1 )).isCloseTo(LocalDate.of( 2017, 1, within(dateObject.getLocalDate() ));
+        assertThat(10 )).isCloseTo(LocalDateTime.of( 2017, 1, 1, 10, 10, within(dateObject.getLocalDateTime() ));
+        assertThat(10 )).isCloseTo(LocalTime.of( 10, 10, within(dateObject.getLocalTime() ));
+        assertThat(ZoneOffset.ofHours( 1 ) )).isCloseTo(OffsetDateTime.of( LocalDateTime.of( 2017, 1, 1, 10, 10, 10 ), within(dateObject.getOffsetDateTime() ));
     }
 
 }

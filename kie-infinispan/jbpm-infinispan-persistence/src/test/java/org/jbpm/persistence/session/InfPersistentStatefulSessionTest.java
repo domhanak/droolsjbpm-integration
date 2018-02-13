@@ -16,7 +16,7 @@
 package org.jbpm.persistence.session;
 
 import static org.jbpm.persistence.util.PersistenceUtil.*;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -232,40 +232,40 @@ public class InfPersistentStatefulSessionTest {
 
         TestWorkItemHandler handler = TestWorkItemHandler.getInstance();
         WorkItem workItem = handler.getWorkItem();
-        assertNotNull( workItem );
+        assertThat(workItem ).isNotNull();
 
         ksession = InfinispanKnowledgeService.loadStatefulKnowledgeSession( id, kbase, null, env );
         processInstance = ksession.getProcessInstance( processInstance.getId() );
-        assertNotNull( processInstance );
+        assertThat(processInstance ).isNotNull();
 
         ksession = InfinispanKnowledgeService.loadStatefulKnowledgeSession( id, kbase, null, env );
         ksession.getWorkItemManager().completeWorkItem( workItem.getId(),
                                                        null );
 
         workItem = handler.getWorkItem();
-        assertNotNull( workItem );
+        assertThat(workItem ).isNotNull();
 
         ksession = InfinispanKnowledgeService.loadStatefulKnowledgeSession( id, kbase, null, env );
         processInstance = ksession.getProcessInstance( processInstance.getId() );
-        assertNotNull( processInstance );
+        assertThat(processInstance ).isNotNull();
 
         ksession = InfinispanKnowledgeService.loadStatefulKnowledgeSession( id, kbase, null, env );
         ksession.getWorkItemManager().completeWorkItem( workItem.getId(),
                                                        null );
 
         workItem = handler.getWorkItem();
-        assertNotNull( workItem );
+        assertThat(workItem ).isNotNull();
 
         ksession = InfinispanKnowledgeService.loadStatefulKnowledgeSession( id, kbase, null, env );
         processInstance = ksession.getProcessInstance( processInstance.getId() );
-        assertNotNull( processInstance );
+        assertThat(processInstance ).isNotNull();
 
         ksession = InfinispanKnowledgeService.loadStatefulKnowledgeSession( id, kbase, null, env );
         ksession.getWorkItemManager().completeWorkItem( workItem.getId(),
                                                        null );
 
         workItem = handler.getWorkItem();
-        assertNull( workItem );
+        assertThat(workItem ).isNull();
 
         ksession = InfinispanKnowledgeService.loadStatefulKnowledgeSession( id, kbase, null, env );
         processInstance = ksession.getProcessInstance( processInstance.getId() );
@@ -274,7 +274,7 @@ public class InfPersistentStatefulSessionTest {
         for ( Object o : ksession.getObjects() ) {
             logger.debug( o.toString() );
         }
-        assertNull( processInstance );
+        assertThat(processInstance ).isNull();
 
     }
     
@@ -297,37 +297,37 @@ public class InfPersistentStatefulSessionTest {
 
         TestWorkItemHandler handler = TestWorkItemHandler.getInstance();
         WorkItem workItem = handler.getWorkItem();
-        assertNotNull( workItem );
+        assertThat(workItem ).isNotNull();
 
         ksession.getWorkItemManager().completeWorkItem( workItem.getId(),
                                                        null );
         
         workItem = handler.getWorkItem();
-        assertNotNull( workItem );
+        assertThat(workItem ).isNotNull();
 
         ut.commit();
 
         ksession = InfinispanKnowledgeService.loadStatefulKnowledgeSession( id, kbase, null, env );
         processInstance = ksession.getProcessInstance( processInstance.getId() );
-        assertNotNull( processInstance );
+        assertThat(processInstance ).isNotNull();
 
         ksession = InfinispanKnowledgeService.loadStatefulKnowledgeSession( id, kbase, null, env );
         ksession.getWorkItemManager().completeWorkItem( workItem.getId(),
                                                        null );
 
         workItem = handler.getWorkItem();
-        assertNotNull( workItem );
+        assertThat(workItem ).isNotNull();
 
         ksession = InfinispanKnowledgeService.loadStatefulKnowledgeSession( id, kbase, null, env );
         processInstance = ksession.getProcessInstance( processInstance.getId() );
-        assertNotNull( processInstance );
+        assertThat(processInstance ).isNotNull();
 
         ksession = InfinispanKnowledgeService.loadStatefulKnowledgeSession( id, kbase, null, env );
         ksession.getWorkItemManager().completeWorkItem( workItem.getId(),
                                                        null );
 
         workItem = handler.getWorkItem();
-        assertNull( workItem );
+        assertThat(workItem ).isNull();
 
         ksession = InfinispanKnowledgeService.loadStatefulKnowledgeSession( id, kbase, null, env );
         processInstance = ksession.getProcessInstance( processInstance.getId() );
@@ -336,7 +336,7 @@ public class InfPersistentStatefulSessionTest {
         for ( Object o : ksession.getObjects() ) {
             logger.debug( o.toString() );
         }
-        assertNull( processInstance );
+        assertThat(processInstance ).isNull();
 
     }
     
@@ -352,7 +352,7 @@ public class InfPersistentStatefulSessionTest {
         ksession.getWorkItemManager().registerWorkItemHandler("MyWork", new SystemOutWorkItemHandler());
         ProcessInstance processInstance = ksession.startProcess( "org.drools.test.TestProcess" );
         ksession.insert( "TestString" );
-        assertEquals(ProcessInstance.STATE_COMPLETED, processInstance.getState());
+        assertThat(processInstance.getState()).isEqualTo(ProcessInstance.STATE_COMPLETED);
     }
     
     @Test
@@ -370,14 +370,14 @@ public class InfPersistentStatefulSessionTest {
 
         ksession = InfinispanKnowledgeService.loadStatefulKnowledgeSession( id, kbase, null, env );
         processInstance = ksession.getProcessInstance( processInstance.getId() );
-        assertNotNull( processInstance );
+        assertThat(processInstance ).isNotNull();
 
         ksession = InfinispanKnowledgeService.loadStatefulKnowledgeSession( id, kbase, null, env );
         ksession.insert(new ArrayList<Object>());
 
         ksession = InfinispanKnowledgeService.loadStatefulKnowledgeSession( id, kbase, null, env );
         processInstance = ksession.getProcessInstance( processInstance.getId() );
-        assertNull( processInstance );
+        assertThat(processInstance ).isNull();
     }
     
     @Test
@@ -400,7 +400,7 @@ public class InfPersistentStatefulSessionTest {
 
         ksession = InfinispanKnowledgeService.loadStatefulKnowledgeSession( id, kbase, null, env );
         processInstance = ksession.getProcessInstance( processInstance.getId() );
-        assertNull( processInstance );
+        assertThat(processInstance ).isNull();
     }
     
     @Test
@@ -419,30 +419,30 @@ public class InfPersistentStatefulSessionTest {
 
         TestWorkItemHandler handler = TestWorkItemHandler.getInstance();
         WorkItem workItem = handler.getWorkItem();
-        assertNotNull( workItem );
+        assertThat(workItem ).isNotNull();
 
         ksession = InfinispanKnowledgeService.loadStatefulKnowledgeSession( id, kbase, null, env );
         processInstance = ksession.getProcessInstance( processInstance.getId() );
-        assertNotNull( processInstance );
+        assertThat(processInstance ).isNotNull();
 
         ksession = InfinispanKnowledgeService.loadStatefulKnowledgeSession( id, kbase, null, env );
         ksession.getWorkItemManager().completeWorkItem( workItem.getId(), null );
         
         ksession = InfinispanKnowledgeService.loadStatefulKnowledgeSession( id, kbase, null, env );
         processInstance = ksession.getProcessInstance( processInstance.getId() );
-        assertNotNull( processInstance );
+        assertThat(processInstance ).isNotNull();
 
         ksession.signalEvent("MyEvent1", null, processInstance.getId());
 
         ksession = InfinispanKnowledgeService.loadStatefulKnowledgeSession( id, kbase, null, env );
         processInstance = ksession.getProcessInstance( processInstance.getId() );
-        assertNotNull( processInstance );
+        assertThat(processInstance ).isNotNull();
 
         ksession.signalEvent("MyEvent2", null, processInstance.getId());
         
         ksession = InfinispanKnowledgeService.loadStatefulKnowledgeSession( id, kbase, null, env );
         processInstance = ksession.getProcessInstance( processInstance.getId() );
-        assertNull( processInstance );
+        assertThat(processInstance ).isNull();
     }
     
     @Test
@@ -502,19 +502,19 @@ public class InfPersistentStatefulSessionTest {
         ProcessInstance processInstance = ksession.startProcess( "org.drools.test.TestProcess" );
         logger.debug( "Started process instance " + processInstance.getId() );
         
-        assertEquals(12, events.size());
-        assertTrue(events.get(0) instanceof ProcessStartedEvent);
-        assertTrue(events.get(1) instanceof ProcessNodeTriggeredEvent);
-        assertTrue(events.get(2) instanceof ProcessNodeLeftEvent);
-        assertTrue(events.get(3) instanceof ProcessNodeTriggeredEvent);
-        assertTrue(events.get(4) instanceof ProcessNodeLeftEvent);
-        assertTrue(events.get(5) instanceof ProcessNodeTriggeredEvent);
-        assertTrue(events.get(6) instanceof ProcessNodeTriggeredEvent);
-        assertTrue(events.get(7) instanceof ProcessNodeLeftEvent);
-        assertTrue(events.get(8) instanceof ProcessNodeTriggeredEvent);
-        assertTrue(events.get(9) instanceof ProcessNodeLeftEvent);
-        assertTrue(events.get(10) instanceof ProcessNodeTriggeredEvent);
-        assertTrue(events.get(11) instanceof ProcessStartedEvent);
+        assertThat(events).hasSize(12);
+        assertThat(events.get(0) instanceof ProcessStartedEvent).isTrue();
+        assertThat(events.get(1) instanceof ProcessNodeTriggeredEvent).isTrue();
+        assertThat(events.get(2) instanceof ProcessNodeLeftEvent).isTrue();
+        assertThat(events.get(3) instanceof ProcessNodeTriggeredEvent).isTrue();
+        assertThat(events.get(4) instanceof ProcessNodeLeftEvent).isTrue();
+        assertThat(events.get(5) instanceof ProcessNodeTriggeredEvent).isTrue();
+        assertThat(events.get(6) instanceof ProcessNodeTriggeredEvent).isTrue();
+        assertThat(events.get(7) instanceof ProcessNodeLeftEvent).isTrue();
+        assertThat(events.get(8) instanceof ProcessNodeTriggeredEvent).isTrue();
+        assertThat(events.get(9) instanceof ProcessNodeLeftEvent).isTrue();
+        assertThat(events.get(10) instanceof ProcessNodeTriggeredEvent).isTrue();
+        assertThat(events.get(11) instanceof ProcessStartedEvent).isTrue();
         
         ksession.removeEventListener(listener);
         events.clear();
@@ -522,7 +522,7 @@ public class InfPersistentStatefulSessionTest {
         processInstance = ksession.startProcess( "org.drools.test.TestProcess" );
         logger.debug( "Started process instance " + processInstance.getId() );
         
-        assertTrue(events.isEmpty());
+        assertThat(events.isEmpty()).isTrue();
     }
 
     @Test
@@ -543,33 +543,33 @@ public class InfPersistentStatefulSessionTest {
 
         TestWorkItemHandler handler = TestWorkItemHandler.getInstance();
         WorkItem workItem = handler.getWorkItem();
-        assertNotNull( workItem );
+        assertThat(workItem ).isNotNull();
 
         ksession = InfinispanKnowledgeService.loadStatefulKnowledgeSession( id, kbase, null, env );
         processInstance = ksession.getProcessInstance( processInstance.getId() );
-        assertNotNull( processInstance );
+        assertThat(processInstance ).isNotNull();
 
         ksession = InfinispanKnowledgeService.loadStatefulKnowledgeSession( id, kbase, null, env );
         ksession.getWorkItemManager().completeWorkItem( workItem.getId(),
                                                        null );
 
         workItem = handler.getWorkItem();
-        assertNotNull( workItem );
+        assertThat(workItem ).isNotNull();
 
         ksession = InfinispanKnowledgeService.loadStatefulKnowledgeSession( id, kbase, null, env );
         processInstance = ksession.getProcessInstance( processInstance.getId() );
-        assertNotNull( processInstance );
+        assertThat(processInstance ).isNotNull();
 
         ksession = InfinispanKnowledgeService.loadStatefulKnowledgeSession( id, kbase, null, env );
         ksession.getWorkItemManager().completeWorkItem( workItem.getId(),
                                                        null );
 
         workItem = handler.getWorkItem();
-        assertNull( workItem );
+        assertThat(workItem ).isNull();
 
         ksession = InfinispanKnowledgeService.loadStatefulKnowledgeSession( id, kbase, null, env );
         processInstance = ksession.getProcessInstance( processInstance.getId() );
-        assertNull( "Process did not complete.", processInstance );
+        assertThat("Process did not complete.", processInstance ).isNull();
     }
     
     @Test
@@ -591,33 +591,33 @@ public class InfPersistentStatefulSessionTest {
 
         TestWorkItemHandler handler = TestWorkItemHandler.getInstance();
         WorkItem workItem = handler.getWorkItem();
-        assertNotNull( workItem );
-        assertEquals( "John Doe", workItem.getParameter("name"));
+        assertThat(workItem ).isNotNull();
+        assertThat(workItem.getParameter("name")).isEqualTo("John Doe");
 
         ksession = InfinispanKnowledgeService.loadStatefulKnowledgeSession( id, kbase, null, env );
         processInstance = ksession.getProcessInstance( processInstance.getId() );
-        assertNotNull( processInstance );
+        assertThat(processInstance ).isNotNull();
 
         ksession = InfinispanKnowledgeService.loadStatefulKnowledgeSession( id, kbase, null, env );
         ksession.getWorkItemManager().completeWorkItem( workItem.getId(), null );
 
         workItem = handler.getWorkItem();
-        assertNotNull( workItem );
-        assertEquals( "John Doe", workItem.getParameter("text"));
+        assertThat(workItem ).isNotNull();
+        assertThat(workItem.getParameter("text")).isEqualTo("John Doe");
         
         ksession = InfinispanKnowledgeService.loadStatefulKnowledgeSession( id, kbase, null, env );
         processInstance = ksession.getProcessInstance( processInstance.getId() );
-        assertNotNull( processInstance );
+        assertThat(processInstance ).isNotNull();
 
         ksession = InfinispanKnowledgeService.loadStatefulKnowledgeSession( id, kbase, null, env );
         ksession.getWorkItemManager().completeWorkItem( workItem.getId(), null );
 
         workItem = handler.getWorkItem();
-        assertNull( workItem );
+        assertThat(workItem ).isNull();
 
         ksession = InfinispanKnowledgeService.loadStatefulKnowledgeSession( id, kbase, null, env );
         processInstance = ksession.getProcessInstance( processInstance.getId() );
-        assertNull( processInstance );
+        assertThat(processInstance ).isNull();
     }
 
     @Test

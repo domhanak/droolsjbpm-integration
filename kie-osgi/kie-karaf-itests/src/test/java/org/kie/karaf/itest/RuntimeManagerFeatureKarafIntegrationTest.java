@@ -29,7 +29,7 @@ import org.ops4j.pax.exam.karaf.options.LogLevelOption;
 import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
 import org.ops4j.pax.exam.spi.reactors.PerMethod;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.*;
 
 @RunWith(PaxExam.class)
@@ -45,14 +45,14 @@ public class RuntimeManagerFeatureKarafIntegrationTest extends AbstractKarafInte
         ClassLoader classLoader = this.getClass().getClassLoader();
         // attempt to obtain RuntimeManagerFactory when KIE-API and Drools features are installed, but no jBPM
         RuntimeManagerFactory runtimeManagerFactory = RuntimeManagerFactory.Factory.get(classLoader);
-        assertNull("KIE-API created non-null RuntimeManagerFactory when jBPM was not installed.", runtimeManagerFactory);
+        assertThat(runtimeManagerFactory).as("KIE-API created non-null RuntimeManagerFactory when jBPM was not installed.").isNull();
 
         // install jBPM feature
         featuresService.installFeature("jbpm");
 
         // attempt to obtain RuntimeManagerFactory once again, now jBPM is installed so it should succeed
         runtimeManagerFactory = RuntimeManagerFactory.Factory.get(classLoader);
-        assertNotNull("KIE-API created null RuntimeManagerFactory after jBPM was installed.", runtimeManagerFactory);
+        assertThat(runtimeManagerFactory).as("KIE-API created null RuntimeManagerFactory after jBPM was installed.").isNotNull();
     }
 
     @Configuration

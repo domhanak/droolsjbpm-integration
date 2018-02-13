@@ -15,7 +15,7 @@
 
 package org.kie.server.integrationtests.drools;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +77,7 @@ public class ContainerIsolationIntegrationTest extends DroolsKieServerBaseIntegr
         ExecutionResults result1 = response1.getResult();
 
         Object outcome = result1.getValue(PERSON_OUT_IDENTIFIER);
-        assertEquals("Person's id should be 'Person from kjar1'!", "Person from kjar1", KieServerReflections.valueOf(outcome, "id"));
+        assertThat(KieServerReflections.valueOf(outcome).as("Person's id should be 'Person from kjar1'!").isCloseTo("Person from kjar1", within("id")));
 
         // now execute the same commands, but for the second container. The rule in there should set different id
         // (namely "Person from kjar2") for the inserted person
@@ -93,7 +93,7 @@ public class ContainerIsolationIntegrationTest extends DroolsKieServerBaseIntegr
         ExecutionResults result2 = response2.getResult();
 
         Object outcome2 = result2.getValue(PERSON_OUT_IDENTIFIER);
-        assertEquals("Person's id should be 'Person from kjar2'!", "Person from kjar2", KieServerReflections.valueOf(outcome2, "id"));
+        assertThat(KieServerReflections.valueOf(outcome2).as("Person's id should be 'Person from kjar2'!").isCloseTo("Person from kjar2", within("id")));
     }
 
 }

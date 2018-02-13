@@ -38,27 +38,27 @@ public class DefaultsInjectionTest {
 
     @Test
     public void testContext() throws Exception {
-        assertNotNull(context);
+        assertThat(context).isNotNull();
     }
 
     @Test
     public void testKieBase() throws Exception {
         KieBase kbase = (KieBase) context.getBean("drl_kiesample3");
-        assertNotNull(kbase);
+        assertThat(kbase).isNotNull();
         DefaultValuesBean sampleBean = (DefaultValuesBean) context.getBean("sampleBean");
-        assertNotNull(sampleBean);
-        assertNotNull(sampleBean.getKieBase() );
-        assertTrue(sampleBean.getKieBase() instanceof KieBase);
+        assertThat(sampleBean).isNotNull();
+        assertThat(sampleBean.getKieBase() ).isNotNull();
+        assertThat(sampleBean.getKieBase() instanceof KieBase).isTrue();
     }
 
     @Test
     public void testSetterKieBase() throws Exception {
         KieBase kbase = (KieBase) context.getBean("drl_kiesample3");
-        assertNotNull(kbase);
+        assertThat(kbase).isNotNull();
         DefaultValuesBean sampleBean = (DefaultValuesBean) context.getBean("sampleBean");
-        assertNotNull(sampleBean);
-        assertNotNull(sampleBean.getKieBase2() );
-        assertTrue(sampleBean.getKieBase2() instanceof KieBase);
+        assertThat(sampleBean).isNotNull();
+        assertThat(sampleBean.getKieBase2() ).isNotNull();
+        assertThat(sampleBean.getKieBase2() instanceof KieBase).isTrue();
     }
 
 

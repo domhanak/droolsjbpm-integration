@@ -36,18 +36,18 @@ import org.kie.server.integrationtests.config.TestConfig;
 import org.kie.server.integrationtests.shared.KieServerAssert;
 import org.kie.server.integrationtests.shared.KieServerExecutor;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class WebSocketKieControllerManagementIntegrationTest extends KieControllerManagementIntegrationTest<KieServerControllerClientException> {
 
     @Override
     protected void assertNotFoundException(KieServerControllerClientException e) {
-        assertNotNull(e.getMessage());
+        assertThat(e.getMessage()).isNotNull();
     }
 
     @Override
     protected void assertBadRequestException(KieServerControllerClientException e) {
-        assertNotNull(e.getMessage());
+        assertThat(e.getMessage()).isNotNull();
     }
 
     @Parameterized.Parameters(name = "{0}")
@@ -74,7 +74,7 @@ public class WebSocketKieControllerManagementIntegrationTest extends KieControll
         // Create kie server instance in controller.
         ServerTemplate serverTemplate = createServerTemplate();
 
-        assertEquals(1, serverTemplate.getServerInstanceKeys().size());
+        assertThat(serverTemplate.getServerInstanceKeys()).hasSize(1);
 
         ServerInstanceKey serverInstanceKey = new ServerInstanceKey(serverTemplate.getId(),
                                                                           "serverName",
@@ -82,17 +82,17 @@ public class WebSocketKieControllerManagementIntegrationTest extends KieControll
                                                                           "url");
 
         serverTemplate.addServerInstance(serverInstanceKey);
-        assertEquals(2, serverTemplate.getServerInstanceKeys().size());
+        assertThat(serverTemplate.getServerInstanceKeys()).hasSize(2);
 
         controllerClient.saveServerTemplate(serverTemplate);
 
         ServerInstanceKeyList serverInstanceKeyList = controllerClient.getServerInstances(serverTemplate.getId());
-        assertEquals(2, serverInstanceKeyList.getServerInstanceKeys().length);
+        assertThat(serverInstanceKeyList.getServerInstanceKeys().length).isEqualTo(2);
 
         controllerClient.deleteServerInstance(serverInstanceKey);
 
         serverInstanceKeyList = controllerClient.getServerInstances(serverTemplate.getId());
-        assertEquals(1, serverInstanceKeyList.getServerInstanceKeys().length);
+        assertThat(serverInstanceKeyList.getServerInstanceKeys().length).isEqualTo(1);
     }
 
     @Test
@@ -101,7 +101,7 @@ public class WebSocketKieControllerManagementIntegrationTest extends KieControll
         ServerTemplate serverTemplate = createServerTemplate();
 
         ServerInstanceKey serverInstanceKey = serverTemplate.getServerInstanceKeys().iterator().next();
-        assertEquals(1, serverTemplate.getServerInstanceKeys().size());
+        assertThat(serverTemplate.getServerInstanceKeys()).hasSize(1);
 
         try {
             controllerClient.deleteServerInstance(serverInstanceKey);
@@ -112,7 +112,7 @@ public class WebSocketKieControllerManagementIntegrationTest extends KieControll
         }
 
         ServerInstanceKeyList serverInstanceKeyList = controllerClient.getServerInstances(serverTemplate.getId());
-        assertEquals(1, serverInstanceKeyList.getServerInstanceKeys().length);
+        assertThat(serverInstanceKeyList.getServerInstanceKeys().length).isEqualTo(1);
     }
 
 }

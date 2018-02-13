@@ -51,8 +51,8 @@ public class KieSpringDependencyKarafIntegrationTest extends AbstractKarafIntegr
 
     @Test
     public void testKieBase() throws Exception {
-        assertNotNull(kieSession);
-        assertTrue("KieBase contains no packages?", kieSession.getKieBase().getKiePackages().size() > 0);
+        assertThat(kieSession).isNotNull();
+        assertThat(kieSession.getKieBase().getKiePackages().size() > 0).as("KieBase contains no packages?").isTrue();
     }
 
     @Configuration

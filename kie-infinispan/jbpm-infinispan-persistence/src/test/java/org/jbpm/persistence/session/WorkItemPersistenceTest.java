@@ -67,7 +67,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static org.jbpm.persistence.util.PersistenceUtil.*;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.kie.api.runtime.EnvironmentName.ENTITY_MANAGER_FACTORY;
 
 public class WorkItemPersistenceTest {
@@ -128,7 +128,7 @@ public class WorkItemPersistenceTest {
 
         }
 
-        Assert.assertEquals( ProcessInstance.STATE_ABORTED, processInstance.getState() );
+        Assert.assertThat(processInstance.getState() ).isEqualTo(ProcessInstance.STATE_ABORTED);
     }
 
     private RuleFlowProcess getWorkItemProcess(String processId, String workName) {
@@ -256,7 +256,7 @@ public class WorkItemPersistenceTest {
         
         ProcessInstance processInstance = ksession.startProcess("org.drools.humantask");
         
-        assertEquals(ProcessInstance.STATE_ACTIVE, processInstance.getState());
+        assertThat(processInstance.getState()).isEqualTo(ProcessInstance.STATE_ACTIVE);
         
         int state = processInstance.getState();
         switch(state) { 
@@ -280,7 +280,7 @@ public class WorkItemPersistenceTest {
         }
        
         procInstInfoList = retrieveProcessInstanceInfo(cm);
-        assertTrue( (procInstInfoList.size() - numProcInstInfos) == 1);
+        assertThat((procInstInfoList.size() - numProcInstInfos) == 1).isTrue();
         
         ProcessInstanceInfo processInstanceInfoMadeInThisTest = procInstInfoList.get(numProcInstInfos);
         assertNotNull("ByteArray of ProcessInstanceInfo from this test is not filled and null!", 

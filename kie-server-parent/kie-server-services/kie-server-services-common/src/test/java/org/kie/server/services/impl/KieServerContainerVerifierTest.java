@@ -15,7 +15,7 @@
  */
 package org.kie.server.services.impl;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayOutputStream;
@@ -29,8 +29,8 @@ public class KieServerContainerVerifierTest {
     public void testMainEmpty() throws Exception {
         ByteArrayOutputStream err = new ByteArrayOutputStream();
         boolean verified = KieServerContainerVerifier.main(new String[]{}, null, new PrintStream(err, true));
-        assertTrue(verified);
-        assertEquals(KieServerContainerVerifier.USAGE, new String(err.toByteArray(), "UTF-8"));
+        assertThat(verified).isTrue();
+        assertThat("UTF-8")).isEqualTo(KieServerContainerVerifier.USAGE, new String(err.toByteArray());
     }
 
 }

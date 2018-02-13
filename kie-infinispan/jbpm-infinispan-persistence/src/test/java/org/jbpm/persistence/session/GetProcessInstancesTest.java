@@ -19,7 +19,7 @@ import static org.jbpm.persistence.util.PersistenceUtil.JBPM_PERSISTENCE_UNIT_NA
 import static org.jbpm.persistence.util.PersistenceUtil.cleanUp;
 import static org.jbpm.persistence.util.PersistenceUtil.createEnvironment;
 import static org.jbpm.persistence.util.PersistenceUtil.setupWithPoolingDataSource;
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -74,7 +74,7 @@ public class GetProcessInstancesTest {
     @Test
     public void getEmptyProcessInstances() throws Exception {
         StatefulKnowledgeSession ksession = reloadKnowledgeSession();
-        assertEquals(0, ksession.getProcessInstances().size());
+        assertThat(ksession.getProcessInstances()).isEmpty();
         ksession.dispose();
     }
 
@@ -98,7 +98,7 @@ public class GetProcessInstancesTest {
         StatefulKnowledgeSession ksession = reloadKnowledgeSession();
 
         for (long id : processId) {
-            assertNotNull("Process instance " + id + " should not exist!", ksession.getProcessInstance(id));
+            assertThat(ksession.getProcessInstance(id)).as("Process instance " + id + " should not exist!").isNotNull();
         }
     }
 
@@ -106,14 +106,14 @@ public class GetProcessInstancesTest {
         StatefulKnowledgeSession ksession = reloadKnowledgeSession();
 
         for (long id : processId) {
-            assertNull(ksession.getProcessInstance(id));
+            assertThat(ksession.getProcessInstance(id)).isNull();
         }
     }
 
     private KieBase createBase() {
         KnowledgeBuilder kbuilder = KnowledgeBuilderFactory.newKnowledgeBuilder();
         kbuilder.add(ResourceFactory.newClassPathResource("processinstance/HelloWorld.rf"), ResourceType.DRF);
-        assertFalse(kbuilder.getErrors().toString(), kbuilder.hasErrors());
+        assertThat(kbuilder.getErrors().toString(), kbuilder.hasErrors()).isFalse();
 
         return kbuilder.newKieBase();
     }

@@ -118,7 +118,7 @@ public abstract class KieServerBaseIntegrationTest {
     protected static void disposeAllContainers() {
         KieServicesClient client = createDefaultStaticClient();
         ServiceResponse<KieContainerResourceList> response = client.listContainers();
-        Assert.assertEquals(ServiceResponse.ResponseType.SUCCESS, response.getType());
+        Assert.assertThat(response.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
         List<KieContainerResource> containers = response.getResult().getContainers();
         if (containers != null) {
             for (KieContainerResource container : containers) {

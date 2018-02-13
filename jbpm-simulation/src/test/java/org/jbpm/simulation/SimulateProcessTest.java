@@ -36,7 +36,7 @@ import org.jbpm.simulation.impl.events.ProcessInstanceEndSimulationEvent;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class SimulateProcessTest {
 
@@ -59,29 +59,29 @@ public class SimulateProcessTest {
 
         
         SimulationRepository repo = SimulationRunner.runSimulation("BPMN2-TwoUserTasks", out, 10, 2000, "default.simulation.rules.drl");
-        assertNotNull(repo);
+        assertThat(repo).isNotNull();
         
         WorkingMemorySimulationRepository wmRepo = (WorkingMemorySimulationRepository) repo;
         wmRepo.fireAllRules();
         
-        assertEquals(4, wmRepo.getAggregatedEvents().size());
-        assertEquals(50, wmRepo.getEvents().size());
+        assertThat(wmRepo.getAggregatedEvents()).hasSize(4);
+        assertThat(wmRepo.getEvents()).hasSize(50);
         
         AggregatedSimulationEvent event = wmRepo.getAggregatedEvents().get(0);
         if (event instanceof AggregatedEndEventSimulationEvent) {
-            assertNotNull(event.getProperty("minProcessDuration"));
-            assertFalse(event.getProperty("activityId").equals(""));
+            assertThat(event.getProperty("minProcessDuration")).isNotNull();
+            assertThat(event.getProperty("activityId").equals("")).isFalse();
         } 
         
         event = wmRepo.getAggregatedEvents().get(1);
-        assertFalse(event.getProperty("activityId").equals(""));
-        assertNotNull(event.getProperty("minExecutionTime"));
+        assertThat(event.getProperty("activityId").equals("")).isFalse();
+        assertThat(event.getProperty("minExecutionTime")).isNotNull();
         event = wmRepo.getAggregatedEvents().get(2);
-        assertFalse(event.getProperty("activityId").equals(""));
-        assertNotNull(event.getProperty("minExecutionTime"));
+        assertThat(event.getProperty("activityId").equals("")).isFalse();
+        assertThat(event.getProperty("minExecutionTime")).isNotNull();
         
         event = wmRepo.getAggregatedEvents().get(3);
-        assertNotNull(event.getProperty("minExecutionTime"));
+        assertThat(event.getProperty("minExecutionTime")).isNotNull();
         wmRepo.close();
         
     }
@@ -99,20 +99,20 @@ public class SimulateProcessTest {
 
         
         SimulationRepository repo = SimulationRunner.runSimulation("defaultPackage.test", out, 10, 2000, "default.simulation.rules.drl");
-        assertNotNull(repo);
+        assertThat(repo).isNotNull();
         
         WorkingMemorySimulationRepository wmRepo = (WorkingMemorySimulationRepository) repo;
         wmRepo.fireAllRules();
-        assertEquals(5, wmRepo.getAggregatedEvents().size());
-        assertEquals(70, wmRepo.getEvents().size());
+        assertThat(wmRepo.getAggregatedEvents()).hasSize(5);
+        assertThat(wmRepo.getEvents()).hasSize(70);
         
         List<AggregatedSimulationEvent> aggEvents = wmRepo.getAggregatedEvents();
         for (AggregatedSimulationEvent event : aggEvents) {
             if (event instanceof AggregatedProcessSimulationEvent) {
                 Map<String, Integer> numberOfInstancePerPath = ((AggregatedProcessSimulationEvent) event).getPathNumberOfInstances();
-                assertNotNull(numberOfInstancePerPath);
-                assertTrue(3 == numberOfInstancePerPath.get("Path800898475-0"));
-                assertTrue(7 == numberOfInstancePerPath.get("Path-960633761-1"));
+                assertThat(numberOfInstancePerPath).isNotNull();
+                assertThat(3 == numberOfInstancePerPath.get("Path800898475-0")).isTrue();
+                assertThat(7 == numberOfInstancePerPath.get("Path-960633761-1")).isTrue();
             }
         }
         wmRepo.close();
@@ -131,12 +131,12 @@ public class SimulateProcessTest {
 
         
         SimulationRepository repo = SimulationRunner.runSimulation("defaultPackage.test", out, 1, 2000, "default.simulation.rules.drl");
-        assertNotNull(repo);
+        assertThat(repo).isNotNull();
         
         WorkingMemorySimulationRepository wmRepo = (WorkingMemorySimulationRepository) repo;
         wmRepo.fireAllRules();
-        assertEquals(4, wmRepo.getAggregatedEvents().size());
-        assertEquals(7, wmRepo.getEvents().size());
+        assertThat(wmRepo.getAggregatedEvents()).hasSize(4);
+        assertThat(wmRepo.getEvents()).hasSize(7);
         wmRepo.close();
     }
     
@@ -153,12 +153,12 @@ public class SimulateProcessTest {
 
         
         SimulationRepository repo = SimulationRunner.runSimulation("defaultPackage.test", out, 2, 2000, "default.simulation.rules.drl");
-        assertNotNull(repo);
+        assertThat(repo).isNotNull();
         
         WorkingMemorySimulationRepository wmRepo = (WorkingMemorySimulationRepository) repo;
         wmRepo.fireAllRules();
-        assertEquals(5, wmRepo.getAggregatedEvents().size());
-        assertEquals(14, wmRepo.getEvents().size());
+        assertThat(wmRepo.getAggregatedEvents()).hasSize(5);
+        assertThat(wmRepo.getEvents()).hasSize(14);
         wmRepo.close();
     }
     
@@ -175,12 +175,12 @@ public class SimulateProcessTest {
 
         
         SimulationRepository repo = SimulationRunner.runSimulation("defaultPackage.test", out, 5, 2000, true, "default.simulation.rules.drl");
-        assertNotNull(repo);
+        assertThat(repo).isNotNull();
         
         WorkingMemorySimulationRepository wmRepo = (WorkingMemorySimulationRepository) repo;
 
-        assertEquals(20, wmRepo.getAggregatedEvents().size());
-        assertEquals(35, wmRepo.getEvents().size());
+        assertThat(wmRepo.getAggregatedEvents()).hasSize(20);
+        assertThat(wmRepo.getEvents()).hasSize(35);
         wmRepo.close();
     }
     
@@ -198,42 +198,42 @@ public class SimulateProcessTest {
 
         
         SimulationRepository repo = SimulationRunner.runSimulation("defaultPackage.test", out, 5, 2000, true, "onevent.simulation.rules.drl");
-        assertNotNull(repo);
+        assertThat(repo).isNotNull();
         
         WorkingMemorySimulationRepository wmRepo = (WorkingMemorySimulationRepository) repo;
 
-        assertEquals(20, wmRepo.getAggregatedEvents().size());
-        assertEquals(35, wmRepo.getEvents().size());
+        assertThat(wmRepo.getAggregatedEvents()).hasSize(20);
+        assertThat(wmRepo.getEvents()).hasSize(35);
 
         for (SimulationEvent event : wmRepo.getEvents()) {
             if ((event instanceof EndSimulationEvent) || (event instanceof ActivitySimulationEvent)|| (event instanceof HumanTaskActivitySimulationEvent)) {
-                assertNotNull(((GenericSimulationEvent) event).getAggregatedEvent());
-                assertTrue(((GenericSimulationEvent) event).getAggregatedEvent() instanceof AggregatedProcessSimulationEvent);
+                assertThat(((GenericSimulationEvent) event).getAggregatedEvent()).isNotNull();
+                assertThat(((GenericSimulationEvent) event).getAggregatedEvent() instanceof AggregatedProcessSimulationEvent).isTrue();
             } else if (event instanceof ProcessInstanceEndSimulationEvent) {
-                assertNull(((GenericSimulationEvent) event).getAggregatedEvent());
+                assertThat(((GenericSimulationEvent) event).getAggregatedEvent()).isNull();
             }
         }
         wmRepo.getSession().execute(new InsertElementsCommand((Collection)wmRepo.getAggregatedEvents()));
         wmRepo.fireAllRules();
         List<AggregatedSimulationEvent> summary = (List<AggregatedSimulationEvent>) wmRepo.getGlobal("summary");
-        assertNotNull(summary);
-        assertEquals(5, summary.size());
+        assertThat(summary).isNotNull();
+        assertThat(summary).hasSize(5);
         for (AggregatedSimulationEvent event : summary) {
             if (event instanceof AggregatedProcessSimulationEvent) {
                 Map<String, Integer> numberOfInstancePerPath = ((AggregatedProcessSimulationEvent) event).getPathNumberOfInstances();
-                assertNotNull(numberOfInstancePerPath);
-                assertEquals(1, (int)numberOfInstancePerPath.get("Path800898475-0"));
-                assertEquals(4, (int)numberOfInstancePerPath.get("Path-960633761-1"));
+                assertThat(numberOfInstancePerPath).isNotNull();
+                assertThat((int)numberOfInstancePerPath.get("Path800898475-0")).isEqualTo(1);
+                assertThat((int)numberOfInstancePerPath.get("Path-960633761-1")).isEqualTo(4);
             }
         }
         
         SimulationInfo info = wmRepo.getSimulationInfo();
         
-        assertNotNull(info);
-        assertEquals("defaultPackage.test", info.getProcessId());
-        assertEquals("test", info.getProcessName());
-        assertEquals(5, info.getNumberOfExecutions());
-        assertEquals(2000, info.getInterval());
+        assertThat(info).isNotNull();
+        assertThat(info.getProcessId()).isEqualTo("defaultPackage.test");
+        assertThat(info.getProcessName()).isEqualTo("test");
+        assertThat(info.getNumberOfExecutions()).isEqualTo(5);
+        assertThat(info.getInterval()).isEqualTo(2000);
         
         System.out.println("Start date is " + new Date(info.getStartTime()) + " end date is " + new Date(info.getEndTime()));
         wmRepo.close();
@@ -252,12 +252,12 @@ public class SimulateProcessTest {
 
         
         SimulationRepository repo = SimulationRunner.runSimulation("UserTask", out, 5, 2000, true, "onevent.simulation.rules.drl");
-        assertNotNull(repo);
+        assertThat(repo).isNotNull();
         
         WorkingMemorySimulationRepository wmRepo = (WorkingMemorySimulationRepository) repo;
 
-        assertEquals(15, wmRepo.getAggregatedEvents().size());
-        assertEquals(20, wmRepo.getEvents().size());
+        assertThat(wmRepo.getAggregatedEvents()).hasSize(15);
+        assertThat(wmRepo.getEvents()).hasSize(20);
         wmRepo.close();
     }
     
@@ -274,12 +274,12 @@ public class SimulateProcessTest {
 
         
         SimulationRepository repo = SimulationRunner.runSimulation("defaultPackage.test", out, 5, 2000, true, "onevent.simulation.rules.drl");
-        assertNotNull(repo);
+        assertThat(repo).isNotNull();
         
         WorkingMemorySimulationRepository wmRepo = (WorkingMemorySimulationRepository) repo;
 
-        assertEquals(25, wmRepo.getAggregatedEvents().size());
-        assertEquals(30, wmRepo.getEvents().size());
+        assertThat(wmRepo.getAggregatedEvents()).hasSize(25);
+        assertThat(wmRepo.getEvents()).hasSize(30);
         wmRepo.close();
     }
     
@@ -296,12 +296,12 @@ public class SimulateProcessTest {
 
         
         SimulationRepository repo = SimulationRunner.runSimulation("defaultPackage.test", out, 5, 2000, true, "onevent.simulation.rules.drl");
-        assertNotNull(repo);
+        assertThat(repo).isNotNull();
         
         WorkingMemorySimulationRepository wmRepo = (WorkingMemorySimulationRepository) repo;
 
-        assertEquals(25, wmRepo.getAggregatedEvents().size());
-        assertEquals(30, wmRepo.getEvents().size());
+        assertThat(wmRepo.getAggregatedEvents()).hasSize(25);
+        assertThat(wmRepo.getEvents()).hasSize(30);
         wmRepo.close();
     }
     
@@ -318,12 +318,12 @@ public class SimulateProcessTest {
 
         
         SimulationRepository repo = SimulationRunner.runSimulation("defaultPackage.test", out, 5, 2000, true, "onevent.simulation.rules.drl");
-        assertNotNull(repo);
+        assertThat(repo).isNotNull();
         
         WorkingMemorySimulationRepository wmRepo = (WorkingMemorySimulationRepository) repo;
 
-        assertEquals(25, wmRepo.getAggregatedEvents().size());
-        assertEquals(30, wmRepo.getEvents().size());
+        assertThat(wmRepo.getAggregatedEvents()).hasSize(25);
+        assertThat(wmRepo.getEvents()).hasSize(30);
         wmRepo.close();
     }
     
@@ -340,19 +340,19 @@ public class SimulateProcessTest {
 
         
         SimulationRepository repo = SimulationRunner.runSimulation("defaultPackage.demo", out, 5, 2000, true, "onevent.simulation.rules.drl");
-        assertNotNull(repo);
+        assertThat(repo).isNotNull();
         
         WorkingMemorySimulationRepository wmRepo = (WorkingMemorySimulationRepository) repo;
 
-        assertEquals(30, wmRepo.getAggregatedEvents().size());
-        assertEquals(45, wmRepo.getEvents().size());
+        assertThat(wmRepo.getAggregatedEvents()).hasSize(30);
+        assertThat(wmRepo.getEvents()).hasSize(45);
         
         wmRepo.getSession().execute(new InsertElementsCommand((Collection)wmRepo.getAggregatedEvents()));
         wmRepo.fireAllRules();
         
         List<AggregatedSimulationEvent> summary = (List<AggregatedSimulationEvent>) wmRepo.getGlobal("summary");
-        assertNotNull(summary);
-        assertEquals(7, summary.size());
+        assertThat(summary).isNotNull();
+        assertThat(summary).hasSize(7);
         wmRepo.close();
     }
     
@@ -369,12 +369,12 @@ public class SimulateProcessTest {
 
         
         SimulationRepository repo = SimulationRunner.runSimulation("defaultPackage.loop-sim", out, 5, 2000, true, "onevent.simulation.rules.drl");
-        assertNotNull(repo);
+        assertThat(repo).isNotNull();
         
         WorkingMemorySimulationRepository wmRepo = (WorkingMemorySimulationRepository) repo;
 
-        assertEquals(19, wmRepo.getAggregatedEvents().size());
-        assertEquals(37, wmRepo.getEvents().size());
+        assertThat(wmRepo.getAggregatedEvents()).hasSize(19);
+        assertThat(wmRepo.getEvents()).hasSize(37);
         wmRepo.close();
     }
 
@@ -391,12 +391,12 @@ public class SimulateProcessTest {
 
 
         SimulationRepository repo = SimulationRunner.runSimulation("project.simulation", out, 10, 120000, true, "onevent.simulation.rules.drl");
-        assertNotNull(repo);
+        assertThat(repo).isNotNull();
 
         WorkingMemorySimulationRepository wmRepo = (WorkingMemorySimulationRepository) repo;
 
-        assertEquals(50, wmRepo.getAggregatedEvents().size());
-        assertEquals(80, wmRepo.getEvents().size());
+        assertThat(wmRepo.getAggregatedEvents()).hasSize(50);
+        assertThat(wmRepo.getEvents()).hasSize(80);
         wmRepo.close();
     }
 
@@ -413,7 +413,7 @@ public class SimulateProcessTest {
         Integer intervalInt = 8*1000*60*60;
 
         SimulationRepository repo = SimulationRunner.runSimulation("simulation.fork-process", out, 40, intervalInt, true, "onevent.simulation.rules.drl");
-        assertNotNull(repo);
+        assertThat(repo).isNotNull();
 
         WorkingMemorySimulationRepository wmRepo = (WorkingMemorySimulationRepository) repo;
         wmRepo.getSession().execute(new InsertElementsCommand((Collection)wmRepo.getAggregatedEvents()));
@@ -423,7 +423,7 @@ public class SimulateProcessTest {
 
         for (AggregatedSimulationEvent event : aggEvents) {
             if (event instanceof HTAggregatedSimulationEvent) {
-                assertEquals(0.0, ((HTAggregatedSimulationEvent) event).getAvgWaitTime(), 0);
+                assertThat(((HTAggregatedSimulationEvent) event).getAvgWaitTime()).isCloseTo(0.0, within(0));
             }
         }
         wmRepo.close();

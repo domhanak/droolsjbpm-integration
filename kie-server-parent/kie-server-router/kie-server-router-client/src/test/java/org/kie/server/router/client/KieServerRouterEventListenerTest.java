@@ -21,7 +21,7 @@ import org.junit.After;
 import org.junit.Test;
 import org.kie.server.api.KieServerConstants;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class KieServerRouterEventListenerTest {
 
@@ -38,12 +38,12 @@ public class KieServerRouterEventListenerTest {
         KieServerRouterEventListener client = new KieServerRouterEventListener();
         List<String> routerUrls = client.routers();
 
-        assertNotNull(routerUrls);
-        assertEquals(3, routerUrls.size());
+        assertThat(routerUrls).isNotNull();
+        assertThat(routerUrls).hasSize(3);
 
-        assertTrue(routerUrls.contains("http://localhost:9000"));
-        assertTrue(routerUrls.contains("http://localhost:9001"));
-        assertTrue(routerUrls.contains("http://localhost:9002"));
+        assertThat(routerUrls.contains("http://localhost:9000")).isTrue();
+        assertThat(routerUrls.contains("http://localhost:9001")).isTrue();
+        assertThat(routerUrls.contains("http://localhost:9002")).isTrue();
     }
 
     @Test
@@ -54,12 +54,12 @@ public class KieServerRouterEventListenerTest {
         KieServerRouterEventListener client = new KieServerRouterEventListener();
         List<String> routerUrls = client.routers();
 
-        assertNotNull(routerUrls);
-        assertEquals(3, routerUrls.size());
+        assertThat(routerUrls).isNotNull();
+        assertThat(routerUrls).hasSize(3);
 
-        assertTrue(routerUrls.contains("http://localhost:9000"));
-        assertTrue(routerUrls.contains("http://localhost:9001"));
-        assertTrue(routerUrls.contains("http://localhost:9002"));
+        assertThat(routerUrls.contains("http://localhost:9000")).isTrue();
+        assertThat(routerUrls.contains("http://localhost:9001")).isTrue();
+        assertThat(routerUrls.contains("http://localhost:9002")).isTrue();
     }
 
     @Test
@@ -70,11 +70,11 @@ public class KieServerRouterEventListenerTest {
         KieServerRouterEventListener client = new KieServerRouterEventListener();
         List<String> routerUrls = client.routers();
 
-        assertNotNull(routerUrls);
-        assertEquals(3, routerUrls.size());
+        assertThat(routerUrls).isNotNull();
+        assertThat(routerUrls).hasSize(3);
 
-        assertTrue(routerUrls.contains("http://localhost:9000"));
-        assertTrue(routerUrls.contains("http://localhost:9001"));
-        assertTrue(routerUrls.contains("http://localhost:9002"));
+        assertThat(routerUrls.contains("http://localhost:9000")).isTrue();
+        assertThat(routerUrls.contains("http://localhost:9001")).isTrue();
+        assertThat(routerUrls.contains("http://localhost:9002")).isTrue();
     }
 }

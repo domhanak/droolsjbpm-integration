@@ -51,17 +51,17 @@ public class KieSpringImportReleaseIdTest extends AbstractKieSpringDynamicModule
 
     protected void lookupNamedKieBase() throws Exception {
         KieBase kieBase = context.getBean("KBase1", KieBase.class);
-        assertNotNull(kieBase);
+        assertThat(kieBase).isNotNull();
     }
 
     protected void lookupReleaseId() throws Exception {
         ReleaseId releaseId = context.getBean("spring-import-releaseId", ReleaseId.class);
-        assertNotNull(releaseId);
+        assertThat(releaseId).isNotNull();
     }
 
     protected void createSpringContext() throws Exception {
         context = new ClassPathXmlApplicationContext("org/kie/spring/kie-import-releaseid.xml");
-        assertNotNull(context);
+        assertThat(context).isNotNull();
     }
 
 }

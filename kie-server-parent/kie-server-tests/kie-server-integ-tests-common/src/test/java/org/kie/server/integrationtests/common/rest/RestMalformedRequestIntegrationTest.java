@@ -40,7 +40,7 @@ public class RestMalformedRequestIntegrationTest extends RestOnlyBaseIntegration
             WebTarget clientRequest = newRequest(TestConfig.getKieServerHttpUrl() + "/containers/" + resource.getContainerId());
             response = clientRequest.request(getMediaType()).put(createEntity(resource));
 
-            Assert.assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+            Assert.assertThat(response.getStatus()).isEqualTo(Response.Status.BAD_REQUEST.getStatusCode());
         } catch (Exception e) {
             throw new RuntimeException(
                     "Unexpected exception creating container: " + resource.getContainerId() + " with release-id " + resource.getReleaseId(),
@@ -59,7 +59,7 @@ public class RestMalformedRequestIntegrationTest extends RestOnlyBaseIntegration
             WebTarget clientRequest = newRequest(TestConfig.getKieServerHttpUrl() + "/containers/empty-body-container");
             response = clientRequest.request(getMediaType()).put(createEntity(""));
 
-            Assert.assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+            Assert.assertThat(response.getStatus()).isEqualTo(Response.Status.BAD_REQUEST.getStatusCode());
         } catch (Exception e) {
             throw new RuntimeException("Unexpected exception on empty body", e);
         } finally {

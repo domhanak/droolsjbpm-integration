@@ -81,10 +81,10 @@ public class KieServerBackwardCompatDroolsIntegrationTest extends DroolsKieServe
         commands.add(commandsFactory.newFireAllRules());
 
         ServiceResponse<String> reply = client.executeCommands(CONTAINER_ID, batchExecution);
-        Assert.assertEquals(ServiceResponse.ResponseType.SUCCESS, reply.getType());
+        Assert.assertThat(reply.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
         ExecutionResults results = marshaller.unmarshall(reply.getResult(), ExecutionResultImpl.class);
         Object value = results.getValue(MESSAGE_OUT_IDENTIFIER);
-        Assert.assertEquals(MESSAGE_RESPONSE, KieServerReflections.valueOf(value, MESSAGE_TEXT_FIELD));
+        Assert.assertThat(KieServerReflections.valueOf(value).isCloseTo(MESSAGE_RESPONSE, within(MESSAGE_TEXT_FIELD)));
     }
 
     @Test
@@ -103,10 +103,10 @@ public class KieServerBackwardCompatDroolsIntegrationTest extends DroolsKieServe
         String marshalledCommands = marshaller.marshall(batchExecution);
 
         ServiceResponse<String> reply = client.executeCommands(CONTAINER_ID, marshalledCommands);
-        Assert.assertEquals(ServiceResponse.ResponseType.SUCCESS, reply.getType());
+        Assert.assertThat(reply.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
         ExecutionResults results = marshaller.unmarshall(reply.getResult(), ExecutionResultImpl.class);
         Object value = results.getValue(MESSAGE_OUT_IDENTIFIER);
-        Assert.assertEquals(MESSAGE_RESPONSE, KieServerReflections.valueOf(value, MESSAGE_TEXT_FIELD));
+        Assert.assertThat(KieServerReflections.valueOf(value).isCloseTo(MESSAGE_RESPONSE, within(MESSAGE_TEXT_FIELD)));
     }
 
     @Test
@@ -123,10 +123,10 @@ public class KieServerBackwardCompatDroolsIntegrationTest extends DroolsKieServe
         commands.add(commandsFactory.newFireAllRules());
 
         ServiceResponse<String> reply = ruleClient.executeCommands(CONTAINER_ID, batchExecution);
-        Assert.assertEquals(ServiceResponse.ResponseType.SUCCESS, reply.getType());
+        Assert.assertThat(reply.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
         ExecutionResults results = marshaller.unmarshall(reply.getResult(), ExecutionResultImpl.class);
         Object value = results.getValue(MESSAGE_OUT_IDENTIFIER);
-        Assert.assertEquals(MESSAGE_RESPONSE, KieServerReflections.valueOf(value, MESSAGE_TEXT_FIELD));
+        Assert.assertThat(KieServerReflections.valueOf(value).isCloseTo(MESSAGE_RESPONSE, within(MESSAGE_TEXT_FIELD)));
     }
 
     @Test
@@ -145,10 +145,10 @@ public class KieServerBackwardCompatDroolsIntegrationTest extends DroolsKieServe
         String marshalledCommands = marshaller.marshall(batchExecution);
 
         ServiceResponse<String> reply = ruleClient.executeCommands(CONTAINER_ID, marshalledCommands);
-        Assert.assertEquals(ServiceResponse.ResponseType.SUCCESS, reply.getType());
+        Assert.assertThat(reply.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
         ExecutionResults results = marshaller.unmarshall(reply.getResult(), ExecutionResultImpl.class);
         Object value = results.getValue(MESSAGE_OUT_IDENTIFIER);
-        Assert.assertEquals(MESSAGE_RESPONSE, KieServerReflections.valueOf(value, MESSAGE_TEXT_FIELD));
+        Assert.assertThat(KieServerReflections.valueOf(value).isCloseTo(MESSAGE_RESPONSE, within(MESSAGE_TEXT_FIELD)));
     }
 
     @Test
@@ -157,6 +157,6 @@ public class KieServerBackwardCompatDroolsIntegrationTest extends DroolsKieServe
         BatchExecutionCommand batchExecution = commandsFactory.newBatchExecution(commands, "xyz");
 
         ServiceResponse<String> reply = client.executeCommands(CONTAINER_ID, batchExecution);
-        Assert.assertEquals(ServiceResponse.ResponseType.FAILURE, reply.getType());
+        Assert.assertThat(reply.getType()).isEqualTo(ServiceResponse.ResponseType.FAILURE);
     }
 }

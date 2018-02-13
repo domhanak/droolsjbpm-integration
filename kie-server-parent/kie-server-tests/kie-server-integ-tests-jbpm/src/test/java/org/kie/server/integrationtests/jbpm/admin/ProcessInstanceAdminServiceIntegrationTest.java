@@ -33,7 +33,7 @@ import org.kie.server.integrationtests.jbpm.JbpmKieServerBaseIntegrationTest;
 import org.kie.server.integrationtests.shared.KieServerDeployer;
 import org.kie.server.integrationtests.shared.KieServerSynchronization;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class ProcessInstanceAdminServiceIntegrationTest extends JbpmKieServerBaseIntegrationTest {
 
@@ -66,36 +66,36 @@ public class ProcessInstanceAdminServiceIntegrationTest extends JbpmKieServerBas
         try {
             processInstanceId = processClient.startProcess(CONTAINER_ID, PROCESS_ID_EVALUATION, parameters);
 
-            assertNotNull(processInstanceId);
-            assertTrue(processInstanceId.longValue() > 0);
+            assertThat(processInstanceId).isNotNull();
+            assertThat(processInstanceId.longValue() > 0).isTrue();
 
             List<NodeInstance> activeNodeInstances = processAdminClient.getActiveNodeInstances(CONTAINER_ID, processInstanceId);
-            assertNotNull(activeNodeInstances);
-            assertEquals(1, activeNodeInstances.size());
+            assertThat(activeNodeInstances).isNotNull();
+            assertThat(activeNodeInstances).hasSize(1);
 
             NodeInstance active = activeNodeInstances.get(0);
-            assertEquals("Evaluate items?", active.getName());
+            assertThat(active.getName()).isEqualTo("Evaluate items?");
 
             processAdminClient.cancelNodeInstance(CONTAINER_ID, processInstanceId, active.getId());
 
             activeNodeInstances = processAdminClient.getActiveNodeInstances(CONTAINER_ID, processInstanceId);
-            assertNotNull(activeNodeInstances);
-            assertEquals(0, activeNodeInstances.size());
+            assertThat(activeNodeInstances).isNotNull();
+            assertThat(activeNodeInstances).isEmpty();
 
             List<ProcessNode> processNodes = processAdminClient.getProcessNodes(CONTAINER_ID, processInstanceId);
             ProcessNode first = processNodes.stream().filter(pn -> pn.getNodeName().equals("Evaluate items?")).findFirst().orElse(null);
-            assertNotNull(first);
+            assertThat(first).isNotNull();
 
             processAdminClient.triggerNode(CONTAINER_ID, processInstanceId, first.getNodeId());
 
             activeNodeInstances = processAdminClient.getActiveNodeInstances(CONTAINER_ID, processInstanceId);
-            assertNotNull(activeNodeInstances);
-            assertEquals(1, activeNodeInstances.size());
+            assertThat(activeNodeInstances).isNotNull();
+            assertThat(activeNodeInstances).hasSize(1);
 
             NodeInstance activeTriggered = activeNodeInstances.get(0);
-            assertEquals("Evaluate items?", activeTriggered.getName());
+            assertThat(activeTriggered.getName()).isEqualTo("Evaluate items?");
 
-            assertFalse(activeTriggered.getId().longValue() == active.getId().longValue());
+            assertThat(activeTriggered.getId().longValue() == active.getId().longValue()).isFalse();
 
         } finally {
             if (processInstanceId != null) {
@@ -114,26 +114,26 @@ public class ProcessInstanceAdminServiceIntegrationTest extends JbpmKieServerBas
         try {
             processInstanceId = processClient.startProcess(CONTAINER_ID, PROCESS_ID_EVALUATION, parameters);
 
-            assertNotNull(processInstanceId);
-            assertTrue(processInstanceId.longValue() > 0);
+            assertThat(processInstanceId).isNotNull();
+            assertThat(processInstanceId.longValue() > 0).isTrue();
 
             List<NodeInstance> activeNodeInstances = processAdminClient.getActiveNodeInstances(CONTAINER_ID, processInstanceId);
-            assertNotNull(activeNodeInstances);
-            assertEquals(1, activeNodeInstances.size());
+            assertThat(activeNodeInstances).isNotNull();
+            assertThat(activeNodeInstances).hasSize(1);
 
             NodeInstance active = activeNodeInstances.get(0);
-            assertEquals("Evaluate items?", active.getName());
+            assertThat(active.getName()).isEqualTo("Evaluate items?");
 
             processAdminClient.retriggerNodeInstance(CONTAINER_ID, processInstanceId, active.getId());
 
             activeNodeInstances = processAdminClient.getActiveNodeInstances(CONTAINER_ID, processInstanceId);
-            assertNotNull(activeNodeInstances);
-            assertEquals(1, activeNodeInstances.size());
+            assertThat(activeNodeInstances).isNotNull();
+            assertThat(activeNodeInstances).hasSize(1);
 
             NodeInstance activeTriggered = activeNodeInstances.get(0);
-            assertEquals("Evaluate items?", activeTriggered.getName());
+            assertThat(activeTriggered.getName()).isEqualTo("Evaluate items?");
 
-            assertFalse(activeTriggered.getId().longValue() == active.getId().longValue());
+            assertThat(activeTriggered.getId().longValue() == active.getId().longValue()).isFalse();
 
         } finally {
             if (processInstanceId != null) {
@@ -148,25 +148,25 @@ public class ProcessInstanceAdminServiceIntegrationTest extends JbpmKieServerBas
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("timer", "1h");
         Long processInstanceId = processClient.startProcess(CONTAINER_ID, PROCESS_ID_TIMER, parameters);
-        assertNotNull(processInstanceId);
-        assertTrue(processInstanceId.longValue() > 0);
+        assertThat(processInstanceId).isNotNull();
+        assertThat(processInstanceId.longValue() > 0).isTrue();
 
         try {
             List<TimerInstance> timers = processAdminClient.getTimerInstances(CONTAINER_ID, processInstanceId);
-            assertNotNull(timers);
-            assertEquals(1, timers.size());
+            assertThat(timers).isNotNull();
+            assertThat(timers).hasSize(1);
 
             TimerInstance timerInstance = timers.get(0);
-            assertNotNull(timerInstance);
-            assertEquals("timer", timerInstance.getTimerName());
+            assertThat(timerInstance).isNotNull();
+            assertThat(timerInstance.getTimerName()).isEqualTo("timer");
 
             processAdminClient.updateTimer(CONTAINER_ID, processInstanceId, timerInstance.getTimerId(), 3, 0, 0);
 
             KieServerSynchronization.waitForProcessInstanceToFinish(processClient, CONTAINER_ID, processInstanceId);
 
             ProcessInstance pi = processClient.getProcessInstance(CONTAINER_ID, processInstanceId);
-            assertNotNull(pi);
-            assertEquals(org.kie.api.runtime.process.ProcessInstance.STATE_COMPLETED, pi.getState().intValue());
+            assertThat(pi).isNotNull();
+            assertThat(pi.getState().intValue()).isEqualTo(org.kie.api.runtime.process.ProcessInstance.STATE_COMPLETED);
 
         } catch (Exception e){
             processClient.abortProcessInstance(CONTAINER_ID, processInstanceId);
@@ -179,25 +179,25 @@ public class ProcessInstanceAdminServiceIntegrationTest extends JbpmKieServerBas
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("timer", "1h");
         Long processInstanceId = processClient.startProcess(CONTAINER_ID, PROCESS_ID_TIMER, parameters);
-        assertNotNull(processInstanceId);
-        assertTrue(processInstanceId.longValue() > 0);
+        assertThat(processInstanceId).isNotNull();
+        assertThat(processInstanceId.longValue() > 0).isTrue();
 
         try {
             List<TimerInstance> timers = processAdminClient.getTimerInstances(CONTAINER_ID, processInstanceId);
-            assertNotNull(timers);
-            assertEquals(1, timers.size());
+            assertThat(timers).isNotNull();
+            assertThat(timers).hasSize(1);
 
             TimerInstance timerInstance = timers.get(0);
-            assertNotNull(timerInstance);
-            assertEquals("timer", timerInstance.getTimerName());
+            assertThat(timerInstance).isNotNull();
+            assertThat(timerInstance.getTimerName()).isEqualTo("timer");
 
             processAdminClient.updateTimerRelative(CONTAINER_ID, processInstanceId, timerInstance.getTimerId(), 3, 0, 0);
 
             KieServerSynchronization.waitForProcessInstanceToFinish(processClient, CONTAINER_ID, processInstanceId);
 
             ProcessInstance pi = processClient.getProcessInstance(CONTAINER_ID, processInstanceId);
-            assertNotNull(pi);
-            assertEquals(org.kie.api.runtime.process.ProcessInstance.STATE_COMPLETED, pi.getState().intValue());
+            assertThat(pi).isNotNull();
+            assertThat(pi.getState().intValue()).isEqualTo(org.kie.api.runtime.process.ProcessInstance.STATE_COMPLETED);
 
         } catch (Exception e){
             processClient.abortProcessInstance(CONTAINER_ID, processInstanceId);
@@ -218,36 +218,36 @@ public class ProcessInstanceAdminServiceIntegrationTest extends JbpmKieServerBas
             // expected as the variable to configure timer duration is invalid
         }
         List<ExecutionErrorInstance> errors = processAdminClient.getErrors(CONTAINER_ID, false, 0, 10);
-        assertNotNull(errors);
-        assertEquals(1, errors.size());
+        assertThat(errors).isNotNull();
+        assertThat(errors).hasSize(1);
 
         ExecutionErrorInstance errorInstance = errors.get(0);
-        assertNotNull(errorInstance.getErrorId());
-        assertNull(errorInstance.getError());
-        assertNotNull(errorInstance.getProcessInstanceId());
-        assertNotNull(errorInstance.getActivityId());
-        assertNotNull(errorInstance.getErrorDate());
+        assertThat(errorInstance.getErrorId()).isNotNull();
+        assertThat(errorInstance.getError()).isNull();
+        assertThat(errorInstance.getProcessInstanceId()).isNotNull();
+        assertThat(errorInstance.getActivityId()).isNotNull();
+        assertThat(errorInstance.getErrorDate()).isNotNull();
 
-        assertEquals(CONTAINER_ID, errorInstance.getContainerId());
-        assertEquals(PROCESS_ID_TIMER, errorInstance.getProcessId());
-        assertEquals("timer", errorInstance.getActivityName());
+        assertThat(errorInstance.getContainerId()).isEqualTo(CONTAINER_ID);
+        assertThat(errorInstance.getProcessId()).isEqualTo(PROCESS_ID_TIMER);
+        assertThat(errorInstance.getActivityName()).isEqualTo("timer");
 
-        assertFalse(errorInstance.isAcknowledged());
-        assertNull(errorInstance.getAcknowledgedAt());
-        assertNull(errorInstance.getAcknowledgedBy());
+        assertThat(errorInstance.isAcknowledged()).isFalse();
+        assertThat(errorInstance.getAcknowledgedAt()).isNull();
+        assertThat(errorInstance.getAcknowledgedBy()).isNull();
 
         processAdminClient.acknowledgeError(CONTAINER_ID, errorInstance.getErrorId());
 
         errors = processAdminClient.getErrors(CONTAINER_ID, false, 0, 10);
-        assertNotNull(errors);
-        assertEquals(0, errors.size());
+        assertThat(errors).isNotNull();
+        assertThat(errors).isEmpty();
 
         errorInstance = processAdminClient.getError(CONTAINER_ID, errorInstance.getErrorId());
-        assertNotNull(errorInstance);
-        assertNotNull(errorInstance.getErrorId());
-        assertTrue(errorInstance.isAcknowledged());
-        assertNotNull(errorInstance.getAcknowledgedAt());
-        assertEquals(USER_YODA, errorInstance.getAcknowledgedBy());
+        assertThat(errorInstance).isNotNull();
+        assertThat(errorInstance.getErrorId()).isNotNull();
+        assertThat(errorInstance.isAcknowledged()).isTrue();
+        assertThat(errorInstance.getAcknowledgedAt()).isNotNull();
+        assertThat(errorInstance.getAcknowledgedBy()).isEqualTo(USER_YODA);
     }
 
     @Test
@@ -260,8 +260,8 @@ public class ProcessInstanceAdminServiceIntegrationTest extends JbpmKieServerBas
             processInstanceId = processClient.startProcess(CONTAINER_ID, PROCESS_ID_SIGNAL_PROCESS, parameters);
 
             List<ExecutionErrorInstance> errors = processAdminClient.getErrors(CONTAINER_ID, false, 0, 10);
-            assertNotNull(errors);
-            assertEquals(0, errors.size());
+            assertThat(errors).isNotNull();
+            assertThat(errors).isEmpty();
 
             try {
                 processClient.signalProcessInstance(CONTAINER_ID, processInstanceId, "Signal1", null);
@@ -271,41 +271,41 @@ public class ProcessInstanceAdminServiceIntegrationTest extends JbpmKieServerBas
             }
 
             errors = processAdminClient.getErrorsByProcessInstance(CONTAINER_ID, processInstanceId, false, 0, 10);
-            assertNotNull(errors);
-            assertEquals(1, errors.size());
+            assertThat(errors).isNotNull();
+            assertThat(errors).hasSize(1);
             ExecutionErrorInstance errorInstance = errors.get(0);
-            assertNotNull(errorInstance.getErrorId());
-            assertNull(errorInstance.getError());
-            assertNotNull(errorInstance.getProcessInstanceId());
-            assertNotNull(errorInstance.getActivityId());
-            assertNotNull(errorInstance.getErrorDate());
+            assertThat(errorInstance.getErrorId()).isNotNull();
+            assertThat(errorInstance.getError()).isNull();
+            assertThat(errorInstance.getProcessInstanceId()).isNotNull();
+            assertThat(errorInstance.getActivityId()).isNotNull();
+            assertThat(errorInstance.getErrorDate()).isNotNull();
 
-            assertEquals(CONTAINER_ID, errorInstance.getContainerId());
-            assertEquals(PROCESS_ID_SIGNAL_PROCESS, errorInstance.getProcessId());
-            assertEquals("Signal 1 data", errorInstance.getActivityName());
+            assertThat(errorInstance.getContainerId()).isEqualTo(CONTAINER_ID);
+            assertThat(errorInstance.getProcessId()).isEqualTo(PROCESS_ID_SIGNAL_PROCESS);
+            assertThat(errorInstance.getActivityName()).isEqualTo("Signal 1 data");
 
-            assertFalse(errorInstance.isAcknowledged());
-            assertNull(errorInstance.getAcknowledgedAt());
-            assertNull(errorInstance.getAcknowledgedBy());
+            assertThat(errorInstance.isAcknowledged()).isFalse();
+            assertThat(errorInstance.getAcknowledgedAt()).isNull();
+            assertThat(errorInstance.getAcknowledgedBy()).isNull();
 
             errors = processAdminClient.getErrorsByProcessInstanceAndNode(CONTAINER_ID, processInstanceId, "Signal 1 data", false, 0, 10);
-            assertNotNull(errors);
-            assertEquals(1, errors.size());
+            assertThat(errors).isNotNull();
+            assertThat(errors).hasSize(1);
             ExecutionErrorInstance errorInstance2 = errors.get(0);
-            assertEquals(errorInstance.getErrorId(), errorInstance2.getErrorId());
+            assertThat(errorInstance2.getErrorId()).isEqualTo(errorInstance.getErrorId());
 
             processAdminClient.acknowledgeError(CONTAINER_ID, errorInstance.getErrorId());
 
             errors = processAdminClient.getErrors(CONTAINER_ID, false, 0, 10);
-            assertNotNull(errors);
-            assertEquals(0, errors.size());
+            assertThat(errors).isNotNull();
+            assertThat(errors).isEmpty();
 
             errorInstance = processAdminClient.getError(CONTAINER_ID, errorInstance.getErrorId());
-            assertNotNull(errorInstance);
-            assertNotNull(errorInstance.getErrorId());
-            assertTrue(errorInstance.isAcknowledged());
-            assertNotNull(errorInstance.getAcknowledgedAt());
-            assertEquals(USER_YODA, errorInstance.getAcknowledgedBy());
+            assertThat(errorInstance).isNotNull();
+            assertThat(errorInstance.getErrorId()).isNotNull();
+            assertThat(errorInstance.isAcknowledged()).isTrue();
+            assertThat(errorInstance.getAcknowledgedAt()).isNotNull();
+            assertThat(errorInstance.getAcknowledgedBy()).isEqualTo(USER_YODA);
         } catch (KieServicesException e) {
             logger.error("Unexpected error", e);
             fail(e.getMessage());
@@ -335,33 +335,33 @@ public class ProcessInstanceAdminServiceIntegrationTest extends JbpmKieServerBas
             // expected as the variable to configure timer duration is invalid
         }
         List<ExecutionErrorInstance> errors = processAdminClient.getErrors(CONTAINER_ID, false, 0, 10);
-        assertNotNull(errors);
-        assertEquals(2, errors.size());
+        assertThat(errors).isNotNull();
+        assertThat(errors).hasSize(2);
 
         ExecutionErrorInstance errorInstance = errors.get(0);
 
-        assertFalse(errorInstance.isAcknowledged());
-        assertNull(errorInstance.getAcknowledgedAt());
-        assertNull(errorInstance.getAcknowledgedBy());
+        assertThat(errorInstance.isAcknowledged()).isFalse();
+        assertThat(errorInstance.getAcknowledgedAt()).isNull();
+        assertThat(errorInstance.getAcknowledgedBy()).isNull();
 
         ExecutionErrorInstance errorInstance2 = errors.get(1);
 
-        assertFalse(errorInstance2.isAcknowledged());
-        assertNull(errorInstance2.getAcknowledgedAt());
-        assertNull(errorInstance2.getAcknowledgedBy());
+        assertThat(errorInstance2.isAcknowledged()).isFalse();
+        assertThat(errorInstance2.getAcknowledgedAt()).isNull();
+        assertThat(errorInstance2.getAcknowledgedBy()).isNull();
 
         processAdminClient.acknowledgeError(CONTAINER_ID, errorInstance.getErrorId(), errorInstance2.getErrorId());
 
         errors = processAdminClient.getErrors(CONTAINER_ID, false, 0, 10);
-        assertNotNull(errors);
-        assertEquals(0, errors.size());
+        assertThat(errors).isNotNull();
+        assertThat(errors).isEmpty();
 
         errorInstance = processAdminClient.getError(CONTAINER_ID, errorInstance.getErrorId());
-        assertNotNull(errorInstance);
-        assertNotNull(errorInstance.getErrorId());
-        assertTrue(errorInstance.isAcknowledged());
-        assertNotNull(errorInstance.getAcknowledgedAt());
-        assertEquals(USER_YODA, errorInstance.getAcknowledgedBy());
+        assertThat(errorInstance).isNotNull();
+        assertThat(errorInstance.getErrorId()).isNotNull();
+        assertThat(errorInstance.isAcknowledged()).isTrue();
+        assertThat(errorInstance.getAcknowledgedAt()).isNotNull();
+        assertThat(errorInstance.getAcknowledgedBy()).isEqualTo(USER_YODA);
     }
 
 }

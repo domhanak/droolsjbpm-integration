@@ -87,10 +87,10 @@ public class KieBlueprintScannerReimportIntegrationTest extends AbstractKarafInt
 
     @Test
     public void testKieBaseUpdatedByScanNow() {
-        Assert.assertNotNull(kieBase);
+        Assert.assertThat(kieBase).isNotNull();
 
         KieSession kieSession = kieBase.newKieSession();
-        Assert.assertNotNull(kieSession);
+        Assert.assertThat(kieSession).isNotNull();
 
         kieScannerTestUtils.createAndInstallKJar(RELEASE_ID, "rule_1");
         kieScanner.scanNow();
@@ -108,10 +108,10 @@ public class KieBlueprintScannerReimportIntegrationTest extends AbstractKarafInt
 
     @Test
     public void testKieBaseUpdatedByTimer() throws InterruptedException {
-        Assert.assertNotNull(kieBase);
+        Assert.assertThat(kieBase).isNotNull();
 
         KieSession kieSession = kieBase.newKieSession();
-        Assert.assertNotNull(kieSession);
+        Assert.assertThat(kieSession).isNotNull();
 
         kieScannerTestUtils.createAndInstallKJar(RELEASE_ID, "rule_1");
         TimerUtils.sleepMillis(2000);

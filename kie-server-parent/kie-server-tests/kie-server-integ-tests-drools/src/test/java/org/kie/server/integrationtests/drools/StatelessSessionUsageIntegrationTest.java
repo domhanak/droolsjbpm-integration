@@ -16,7 +16,7 @@
 
 package org.kie.server.integrationtests.drools;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +72,7 @@ public class StatelessSessionUsageIntegrationTest extends DroolsKieServerBaseInt
         commands.add(commandsFactory.newInsert(person, PERSON_OUT_IDENTIFIER));
 
         ServiceResponse<ExecutionResults> reply = ruleClient.executeCommandsWithResults(CONTAINER_ID, executionCommand);
-        assertEquals(ServiceResponse.ResponseType.SUCCESS, reply.getType());
+        assertThat(reply.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
 
         ExecutionResults actualData = reply.getResult();
         Object value = actualData.getValue(PERSON_OUT_IDENTIFIER);

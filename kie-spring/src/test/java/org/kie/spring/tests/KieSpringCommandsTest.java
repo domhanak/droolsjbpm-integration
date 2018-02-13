@@ -29,7 +29,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class KieSpringCommandsTest {
 
@@ -43,20 +43,20 @@ public class KieSpringCommandsTest {
     @Test
     public void testKieBase() throws Exception {
         KieBase kbase = (KieBase) context.getBean("drl_kiesample3");
-        assertNotNull(kbase);
+        assertThat(kbase).isNotNull();
     }
 
     @Test
     public void testInsertObject() throws Exception {
         KieSession ksession = (KieSession) context.getBean("ksession2");
-        assertNotNull(ksession);
+        assertThat(ksession).isNotNull();
 
-        assertEquals(1, ksession.getObjects().size());
-        assertTrue(ksession.getObjects().toArray()[0] instanceof Person);
+        assertThat(ksession.getObjects()).hasSize(1);
+        assertThat(ksession.getObjects().toArray()[0] instanceof Person).isTrue();
 
         for (Object object : ksession.getObjects()) {
             if (object instanceof Person) {
-                assertFalse(((Person) object).isHappy());
+                assertThat(((Person) object).isHappy()).isFalse();
             }
         }
 
@@ -65,7 +65,7 @@ public class KieSpringCommandsTest {
         //if the rules have fired, then the setHappy(true) should have been called
         for (Object object : ksession.getObjects()) {
             if (object instanceof Person) {
-                assertTrue(((Person) object).isHappy());
+                assertThat(((Person) object).isHappy()).isTrue();
             }
         }
     }
@@ -73,15 +73,15 @@ public class KieSpringCommandsTest {
     @Test
     public void testInsertObjectAndFireAll() throws Exception {
         KieSession ksession = (KieSession) context.getBean("ksessionForCommands");
-        assertNotNull(ksession);
+        assertThat(ksession).isNotNull();
 
-        assertEquals(1, ksession.getObjects().size());
-        assertTrue(ksession.getObjects().toArray()[0] instanceof Person);
+        assertThat(ksession.getObjects()).hasSize(1);
+        assertThat(ksession.getObjects().toArray()[0] instanceof Person).isTrue();
 
         //if the rules should have fired without any invoke of fireAllRules, then the setHappy(true) should have been called
         for (Object object : ksession.getObjects()) {
             if (object instanceof Person) {
-                assertTrue(((Person) object).isHappy());
+                assertThat(((Person) object).isHappy()).isTrue();
             }
         }
     }
@@ -89,18 +89,18 @@ public class KieSpringCommandsTest {
     @Test
     public void testStatelessKieSessionWithGlobal() throws Exception {
         StatelessKieSession ksession = (StatelessKieSession) context.getBean( "statlessKsessionWithGlobal" );
-        assertNotNull(ksession);
+        assertThat(ksession).isNotNull();
 
         Person person = new Person("HAL2", 42);
         person.setHappy(false);
         ksession.execute(person);
-        assertTrue(person.isHappy());
+        assertThat(person.isHappy()).isTrue();
     }
 
     @Test
     public void testStatelessKieSessionWithGlobalExecutingList() throws Exception {
         StatelessKieSession ksession = (StatelessKieSession) context.getBean( "statlessKsessionWithGlobal" );
-        assertNotNull(ksession);
+        assertThat(ksession).isNotNull();
 
         List<Person> persons = new ArrayList<Person>();
 
@@ -113,33 +113,33 @@ public class KieSpringCommandsTest {
         persons.add(person2);
 
         ksession.execute(persons);
-        assertTrue(person1.isHappy());
-        assertTrue(person2.isHappy());
+        assertThat(person1.isHappy()).isTrue();
+        assertThat(person2.isHappy()).isTrue();
     }
 
     @Test
     public void testSetGlobals() throws Exception {
         KieSession ksession = (KieSession) context.getBean("ksessionForCommands");
-        assertNotNull(ksession);
+        assertThat(ksession).isNotNull();
 
-        assertEquals(1, ksession.getObjects().size());
-        assertTrue(ksession.getObjects().toArray()[0] instanceof Person);
+        assertThat(ksession.getObjects()).hasSize(1);
+        assertThat(ksession.getObjects().toArray()[0] instanceof Person).isTrue();
         Person p1 = (Person) ksession.getObjects().toArray()[0];
-        assertNotNull(p1);
+        assertThat(p1).isNotNull();
         //if the rules should have fired without any invoke of fireAllRules, then the setHappy(true) should have been called
         for (Object object : ksession.getObjects()) {
             if (object instanceof Person) {
-                assertTrue(((Person) object).isHappy());
+                assertThat(((Person) object).isHappy()).isTrue();
             }
         }
 
         Object list = ksession.getGlobal("persons");
-        assertNotNull(list);
-        assertTrue(list instanceof ArrayList);
-        assertEquals(1, ((ArrayList) list).size());
+        assertThat(list).isNotNull();
+        assertThat(list instanceof ArrayList).isTrue();
+        assertThat(((ArrayList) list)).hasSize(1);
         Person p = (Person) ((ArrayList) list).get(0);
-        assertNotNull(p);
-        assertEquals(p, p1);
+        assertThat(p).isNotNull();
+        assertThat(p1).isEqualTo(p);
     }
 
     @AfterClass

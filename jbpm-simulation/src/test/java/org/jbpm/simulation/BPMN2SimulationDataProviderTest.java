@@ -15,7 +15,7 @@
 
 package org.jbpm.simulation;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -80,17 +80,17 @@ public class BPMN2SimulationDataProviderTest {
             }
         });
         
-        assertNotNull(data);
-        assertEquals(9, data.size());
-        assertTrue(data.containsKey(SimulationConstants.COST_PER_TIME_UNIT));
-        assertTrue(data.containsKey(SimulationConstants.DISTRIBUTION_TYPE));
-        assertTrue(data.containsKey(SimulationConstants.STANDARD_DEVIATION));
-        assertTrue(data.containsKey(SimulationConstants.MEAN));
-        assertTrue(data.containsKey(SimulationConstants.STAFF_AVAILABILITY));
-        assertTrue(data.containsKey(SimulationConstants.STANDARD_DEVIATION));
-        assertTrue(data.containsKey(SimulationConstants.TIMEUNIT));
-        assertTrue(data.containsKey(SimulationConstants.WORKING_HOURS));
-        assertTrue(data.containsKey(SimulationConstants.PROBABILITY));
+        assertThat(data).isNotNull();
+        assertThat(data).hasSize(9);
+        assertThat(data.containsKey(SimulationConstants.COST_PER_TIME_UNIT)).isTrue();
+        assertThat(data.containsKey(SimulationConstants.DISTRIBUTION_TYPE)).isTrue();
+        assertThat(data.containsKey(SimulationConstants.STANDARD_DEVIATION)).isTrue();
+        assertThat(data.containsKey(SimulationConstants.MEAN)).isTrue();
+        assertThat(data.containsKey(SimulationConstants.STAFF_AVAILABILITY)).isTrue();
+        assertThat(data.containsKey(SimulationConstants.STANDARD_DEVIATION)).isTrue();
+        assertThat(data.containsKey(SimulationConstants.TIMEUNIT)).isTrue();
+        assertThat(data.containsKey(SimulationConstants.WORKING_HOURS)).isTrue();
+        assertThat(data.containsKey(SimulationConstants.PROBABILITY)).isTrue();
     }
     
     @Test
@@ -138,9 +138,9 @@ public class BPMN2SimulationDataProviderTest {
             }
         });
         
-        assertNotNull(data);
-        assertEquals(1, data.size());
-        assertTrue(data.containsKey(SimulationConstants.PROBABILITY));
+        assertThat(data).isNotNull();
+        assertThat(data).hasSize(1);
+        assertThat(data.containsKey(SimulationConstants.PROBABILITY)).isTrue();
     }
     
     
@@ -150,16 +150,16 @@ public class BPMN2SimulationDataProviderTest {
         
         List<SimulationPath> paths = finder.findPaths(new SimulationFilterPathFormatConverter());
         
-        assertNotNull(paths);
-        assertEquals(2, paths.size());
+        assertThat(paths).isNotNull();
+        assertThat(paths).hasSize(2);
 
         BPMN2SimulationDataProvider provider = new BPMN2SimulationDataProvider(this.getClass().getResourceAsStream("/BPMN2-ExclusiveSplitWithSimulationProps.bpmn2"));
         
         double probabilityOfPathOne = provider.calculatePathProbability(paths.get(0));
         double probabilityOfPathTwo = provider.calculatePathProbability(paths.get(1));
         
-        assertTrue(0.7 == probabilityOfPathOne);
-        assertTrue(0.3 == probabilityOfPathTwo);
+        assertThat(0.7 == probabilityOfPathOne).isTrue();
+        assertThat(0.3 == probabilityOfPathTwo).isTrue();
         System.out.println("Probability 1: " + probabilityOfPathOne + " probabilit 2: " + probabilityOfPathTwo);
     }
 }

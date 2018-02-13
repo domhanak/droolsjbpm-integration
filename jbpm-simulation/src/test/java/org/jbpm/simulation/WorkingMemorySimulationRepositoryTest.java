@@ -15,7 +15,7 @@
 
 package org.jbpm.simulation;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
@@ -85,7 +85,7 @@ public class WorkingMemorySimulationRepositoryTest {
         ((WorkingMemorySimulationRepository) context.getRepository()).fireAllRules();
         List<AggregatedSimulationEvent> results = ((WorkingMemorySimulationRepository) context.getRepository()).getAggregatedEvents();
         
-        assertNotNull(results);
-        assertEquals(3, results.size());
+        assertThat(results).isNotNull();
+        assertThat(results).hasSize(3);
     }
 }

@@ -41,43 +41,43 @@ public class KieSpringExpressionTest {
 
     @Test
     public void testContext() throws Exception {
-        assertNotNull(context);
+        assertThat(context).isNotNull();
     }
 
     @Test
     public void testKieBase() throws Exception {
         KieBase kbase = (KieBase) context.getBean("drl_kiesample3");
-        assertNotNull(kbase);
+        assertThat(kbase).isNotNull();
     }
 
     @Test
     public void testStatelessKieSession() throws Exception {
         StatelessKieSession ksession = (StatelessKieSession) context.getBean("ksession1");
-        assertNotNull(ksession);
+        assertThat(ksession).isNotNull();
     }
 
     @Test
     public void testKieSession() throws Exception {
         KieSession ksession = (KieSession) context.getBean("ksession2");
-        assertNotNull(ksession);
+        assertThat(ksession).isNotNull();
     }
 
     @Test
     public void testKSessionExecution() throws Exception {
         StatelessKieSession ksession = (StatelessKieSession) context.getBean("ksession1");
-        assertNotNull(ksession);
+        assertThat(ksession).isNotNull();
         Person person = new Person("HAL", 42);
         person.setHappy(false);
         ksession.execute(person);
-        assertTrue(person.isHappy());
+        assertThat(person.isHappy()).isTrue();
     }
 
     @Test
     public void testKSessionInjection() throws Exception {
         SampleBean sampleBean = (SampleBean) context.getBean("sampleBean");
-        assertNotNull(sampleBean);
-        assertNotNull(sampleBean.getKieSession() );
-        assertTrue(sampleBean.getKieSession() instanceof StatelessKieSession);
+        assertThat(sampleBean).isNotNull();
+        assertThat(sampleBean.getKieSession() ).isNotNull();
+        assertThat(sampleBean.getKieSession() instanceof StatelessKieSession).isTrue();
     }
 
     @AfterClass

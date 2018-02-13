@@ -35,7 +35,7 @@ import org.kie.server.controller.api.model.spec.RuleConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 @RunWith(Parameterized.class)
 public class RestKieServerControllerClientTest {
@@ -83,7 +83,7 @@ public class RestKieServerControllerClientTest {
         final ContainerSpec specResult = client.deserialize(specContent,
                                                             ContainerSpec.class);
 
-        assertNotNull(specResult);
+        assertThat(specResult).isNotNull();
         assertEquals(spec,
                      specResult);
         assertEquals(spec.getId(),
@@ -96,15 +96,15 @@ public class RestKieServerControllerClientTest {
                      specResult.getConfigs());
         assertEquals(spec.getReleasedId(),
                      specResult.getReleasedId());
-        assertNotNull(specResult.getConfigs());
+        assertThat(specResult.getConfigs()).isNotNull();
         final ContainerConfig processConfigResult = specResult.getConfigs().get(Capability.PROCESS);
-        assertNotNull(processConfigResult);
-        assertTrue(processConfigResult instanceof ProcessConfig);
+        assertThat(processConfigResult).isNotNull();
+        assertThat(processConfigResult instanceof ProcessConfig).isTrue();
         assertEquals(processConfig,
                      processConfigResult);
         final ContainerConfig ruleConfigResult = specResult.getConfigs().get(Capability.RULE);
-        assertNotNull(ruleConfigResult);
-        assertTrue(ruleConfigResult instanceof RuleConfig);
+        assertThat(ruleConfigResult).isNotNull();
+        assertThat(ruleConfigResult instanceof RuleConfig).isTrue();
         assertEquals(ruleConfig,
                      ruleConfigResult);
     }

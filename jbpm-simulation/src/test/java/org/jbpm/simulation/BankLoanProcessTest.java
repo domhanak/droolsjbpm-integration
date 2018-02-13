@@ -15,7 +15,7 @@
 
 package org.jbpm.simulation;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.BufferedReader;
@@ -41,16 +41,16 @@ public class BankLoanProcessTest {
             out += line;
 
         SimulationRepository repo = SimulationRunner.runSimulation("defaultPackage.banl-loan", out, 10, 100, true, "onevent.simulation.rules.drl");
-        assertNotNull(repo);
+        assertThat(repo).isNotNull();
 
         WorkingMemorySimulationRepository wmRepo = (WorkingMemorySimulationRepository) repo;
         wmRepo.getSession().execute(new InsertElementsCommand((Collection)wmRepo.getAggregatedEvents()));
         wmRepo.fireAllRules();
 
         List<AggregatedSimulationEvent> summary = (List<AggregatedSimulationEvent>) wmRepo.getGlobal("summary");
-        assertNotNull(summary);
-        assertEquals(12, summary.size());
-        assertEquals(102, wmRepo.getEvents().size());
+        assertThat(summary).isNotNull();
+        assertThat(summary).hasSize(12);
+        assertThat(wmRepo.getEvents()).hasSize(102);
 
         wmRepo.close();
 

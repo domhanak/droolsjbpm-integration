@@ -17,7 +17,7 @@ package org.kie.spring.jbpm;
 
 import static org.hamcrest.CoreMatchers.anyOf;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
@@ -169,19 +169,19 @@ public class PessimisticLockingSpringTest extends AbstractJbpmSpringParameterize
         // getProcessInstance was waiting for thread 1 to finish its work.
         // Therefore exception list should be empty.
         if(abortedProcessInstanceStatus.isAbortedProcessInstance()) {
-            assertEquals(0, exceptions.size());
+            assertThat(exceptions).isEmpty();
         } else {
             // Otherwise database transaction timeout should be lower than waiting time set and thread 2 should throw PessimisticLockException or
             // LockTimeoutException.
-            assertEquals(1, exceptions.size());
+            assertThat(exceptions).hasSize(1);
             assertThat(exceptions.get(0).getClass().getName(), anyOf(equalTo(PessimisticLockException.class.getName()), equalTo(LockTimeoutException.class.getName())));
         }
 
         TransactionStatus status = transactionManager.getTransaction(defTransDefinition);
         ProcessInstanceLog instanceLog = logService.findProcessInstance(processInstance.getId());
         transactionManager.commit(status);
-        assertNotNull(instanceLog);
-        assertEquals(ProcessInstance.STATE_ABORTED, instanceLog.getStatus().intValue());
+        assertThat(instanceLog).isNotNull();
+        assertThat(instanceLog.getStatus().intValue()).isEqualTo(ProcessInstance.STATE_ABORTED);
 
         manager.disposeRuntimeEngine(engine);
     }

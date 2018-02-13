@@ -93,15 +93,15 @@ public class OsgiKieModuleTest {
     }
 
     private void assertAcceptsStringAsOsgiBundleUrL(String str) {
-        Assert.assertTrue("String '" + str + "' not recognized as OSGi bundle URL!", OsgiKieModule.isOsgiBundleUrl(str));
+        Assert.assertThat(OsgiKieModule.isOsgiBundleUrl(str)).as("String '" + str + "' not recognized as OSGi bundle URL!").isTrue();
     }
 
     private void assertRejectsStringAsOsgiBundleUrRL(String str) {
-        Assert.assertFalse("Invalid string '" + str + "' recognized as OSGi bundle URL!", OsgiKieModule.isOsgiBundleUrl(str));
+        Assert.assertThat(OsgiKieModule.isOsgiBundleUrl(str)).as("Invalid string '" + str + "' recognized as OSGi bundle URL!").isFalse();
     }
 
     private void assertBundleIdCorrectlyParsed(String bundleUrl, String expectedBundleId) {
-        Assert.assertEquals(expectedBundleId, OsgiKieModule.parseBundleId(bundleUrl));
+        Assert.assertThat(OsgiKieModule.parseBundleId(bundleUrl)).isEqualTo(expectedBundleId);
     }
 
 }

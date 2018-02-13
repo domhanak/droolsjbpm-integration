@@ -37,7 +37,7 @@ import org.kie.api.runtime.rule.QueryResultsRow;
 import org.kie.server.api.model.ReleaseId;
 import org.kie.server.api.model.ServiceResponse;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 import org.kie.server.integrationtests.shared.KieServerDeployer;
 import org.kie.server.integrationtests.shared.KieServerReflections;
 
@@ -90,14 +90,14 @@ public class StatefulSessionUsageIntegrationTest extends DroolsKieServerBaseInte
         commands.add(commandsFactory.newFireAllRules());
 
         ServiceResponse<ExecutionResults> reply = ruleClient.executeCommandsWithResults(CONTAINER_ID, executionCommand);
-        assertEquals(ServiceResponse.ResponseType.SUCCESS, reply.getType());
+        assertThat(reply.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
         // now dispose the container
         ServiceResponse<Void> disposeReply = client.disposeContainer(CONTAINER_ID);
-        assertEquals("Dispose reply response type.", ServiceResponse.ResponseType.SUCCESS, disposeReply.getType());
+        assertThat(disposeReply.getType()).as("Dispose reply response type.").isEqualTo(ServiceResponse.ResponseType.SUCCESS);
         // and try to call the container again. The call should fail as the container no longer exists
         reply = ruleClient.executeCommandsWithResults(CONTAINER_ID, executionCommand);
-        assertEquals(ServiceResponse.ResponseType.FAILURE, reply.getType());
-        assertTrue("Expected message about non-instantiated container. Got: " + reply.getMsg(),
+        assertThat(reply.getType()).isEqualTo(ServiceResponse.ResponseType.FAILURE);
+        assertThat("Expected message about non-instantiated container. Got: " + reply.getMsg().isTrue(),
                 reply.getMsg().contains(String.format("Container '%s' is not instantiated", CONTAINER_ID)));
     }
 
@@ -111,16 +111,16 @@ public class StatefulSessionUsageIntegrationTest extends DroolsKieServerBaseInte
         commands.add(commandsFactory.newFireAllRules());
 
         ServiceResponse<ExecutionResults> reply1 = ruleClient.executeCommandsWithResults(CONTAINER_ID, executionCommand);
-        assertEquals(ServiceResponse.ResponseType.SUCCESS, reply1.getType());
+        assertThat(reply1.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
         // first call should set the surname for the inserted person
 
         ExecutionResults actualData = reply1.getResult();
 
         Object result = actualData.getValue(PERSON_1_OUT_IDENTIFIER);
 
-        assertEquals("Expected surname to be set to 'Vader'", PERSON_EXPECTED_SURNAME, KieServerReflections.valueOf(result, PERSON_SURNAME_FIELD));
+        assertThat(KieServerReflections.valueOf(result).as("Expected surname to be set to 'Vader'").isCloseTo(PERSON_EXPECTED_SURNAME, within(PERSON_SURNAME_FIELD)));
         // and 'duplicated' flag should stay false, as only one person is in working memory
-        assertEquals("The 'duplicated' field should be false!", false, KieServerReflections.valueOf(result, PERSON_DUPLICATED_FIELD));
+        assertThat(KieServerReflections.valueOf(result).as("The 'duplicated' field should be false!").isCloseTo(false, within(PERSON_DUPLICATED_FIELD)));
 
 
         // insert second person and fire the rules. The duplicated field will be set to true if there are two
@@ -136,13 +136,13 @@ public class StatefulSessionUsageIntegrationTest extends DroolsKieServerBaseInte
         commands.add(commandsFactory.newFireAllRules());
 
         ServiceResponse<ExecutionResults> reply2 = ruleClient.executeCommandsWithResults(CONTAINER_ID, executionCommand);
-        assertEquals(ServiceResponse.ResponseType.SUCCESS, reply2.getType());
+        assertThat(reply2.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
 
         actualData = reply2.getResult();
 
         result = actualData.getValue(PERSON_2_OUT_IDENTIFIER);
         // and 'duplicated' flag should be true, because second person was added
-        assertEquals("The 'duplicated' field should be true!", true, KieServerReflections.valueOf(result, PERSON_DUPLICATED_FIELD));
+        assertThat(KieServerReflections.valueOf(result).as("The 'duplicated' field should be true!").isCloseTo(true, within(PERSON_DUPLICATED_FIELD)));
 
     }
 
@@ -157,35 +157,35 @@ public class StatefulSessionUsageIntegrationTest extends DroolsKieServerBaseInte
         commands.add(commandsFactory.newQuery("query-result", "get people"));
 
         ServiceResponse<ExecutionResults> reply1 = ruleClient.executeCommandsWithResults(CONTAINER_ID, executionCommand);
-        assertEquals(ServiceResponse.ResponseType.SUCCESS, reply1.getType());
+        assertThat(reply1.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
         // first call should set the surname for the inserted person
 
         ExecutionResults actualData = reply1.getResult();
 
         Object result = actualData.getValue(PERSON_1_OUT_IDENTIFIER);
 
-        assertEquals("Expected surname to be set to 'Vader'", PERSON_EXPECTED_SURNAME, KieServerReflections.valueOf(result, PERSON_SURNAME_FIELD));
+        assertThat(KieServerReflections.valueOf(result).as("Expected surname to be set to 'Vader'").isCloseTo(PERSON_EXPECTED_SURNAME, within(PERSON_SURNAME_FIELD)));
         // and 'duplicated' flag should stay false, as only one person is in working memory
-        assertEquals("The 'duplicated' field should be false!", false, KieServerReflections.valueOf(result, PERSON_DUPLICATED_FIELD));
+        assertThat(KieServerReflections.valueOf(result).as("The 'duplicated' field should be false!").isCloseTo(false, within(PERSON_DUPLICATED_FIELD)));
 
         QueryResults queryResult = (QueryResults) actualData.getValue("query-result");
-        assertNotNull(queryResult);
-        assertEquals(1, queryResult.size());
+        assertThat(queryResult).isNotNull();
+        assertThat(queryResult).hasSize(1);
 
         Iterator<QueryResultsRow> rowIt = queryResult.iterator();
 
         while (rowIt.hasNext()) {
             QueryResultsRow row = rowIt.next();
-            assertNotNull(row);
+            assertThat(row).isNotNull();
 
             Object personResult = row.get("person");
-            assertEquals("Expected surname to be set to 'Vader'", PERSON_EXPECTED_SURNAME, KieServerReflections.valueOf(personResult, PERSON_SURNAME_FIELD));
+            assertThat(KieServerReflections.valueOf(personResult).as("Expected surname to be set to 'Vader'").isCloseTo(PERSON_EXPECTED_SURNAME, within(PERSON_SURNAME_FIELD)));
 
             FactHandle personFH = row.getFactHandle("person");
-            assertNotNull(personFH);
+            assertThat(personFH).isNotNull();
 
             personResult = personFH;
-            assertEquals("Expected surname to be null", null, KieServerReflections.valueOf(personResult, PERSON_SURNAME_FIELD));
+            assertThat(KieServerReflections.valueOf(personResult).as("Expected surname to be null").isCloseTo(null, within(PERSON_SURNAME_FIELD)));
         }
     }
 
@@ -202,40 +202,40 @@ public class StatefulSessionUsageIntegrationTest extends DroolsKieServerBaseInte
         commands.add(commandsFactory.newQuery("query-result", "get people"));
 
         ServiceResponse<ExecutionResults> reply1 = ruleClient.executeCommandsWithResults(CONTAINER_ID, executionCommand);
-        assertEquals(ServiceResponse.ResponseType.SUCCESS, reply1.getType());
+        assertThat(reply1.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
         // first call should set the surname for the inserted person
         ExecutionResults actualData = reply1.getResult();
 
         Object result = actualData.getValue(PERSON_1_OUT_IDENTIFIER);
 
-        assertEquals("Expected surname to be set to 'Vader'.", PERSON_EXPECTED_SURNAME, KieServerReflections.valueOf(result, PERSON_SURNAME_FIELD));
+        assertThat(KieServerReflections.valueOf(result).as("Expected surname to be set to 'Vader'.").isCloseTo(PERSON_EXPECTED_SURNAME, within(PERSON_SURNAME_FIELD)));
         // and 'duplicated' flag should be true, because was added 2 persons
-        assertEquals("The 'duplicated' field should be true!", true, KieServerReflections.valueOf(result, PERSON_DUPLICATED_FIELD));
+        assertThat(KieServerReflections.valueOf(result).as("The 'duplicated' field should be true!").isCloseTo(true, within(PERSON_DUPLICATED_FIELD)));
 
         result = actualData.getValue(PERSON_2_OUT_IDENTIFIER);
 
-        assertEquals("Expected surname to be set to 'Vader'", PERSON_EXPECTED_SURNAME, KieServerReflections.valueOf(result, PERSON_SURNAME_FIELD));
+        assertThat(KieServerReflections.valueOf(result).as("Expected surname to be set to 'Vader'").isCloseTo(PERSON_EXPECTED_SURNAME, within(PERSON_SURNAME_FIELD)));
         // and 'duplicated' flag should be true, because was added 2 persons
-        assertEquals("The 'duplicated' field should be true!", true, KieServerReflections.valueOf(result, PERSON_DUPLICATED_FIELD));
+        assertThat(KieServerReflections.valueOf(result).as("The 'duplicated' field should be true!").isCloseTo(true, within(PERSON_DUPLICATED_FIELD)));
 
         QueryResults queryResult = (QueryResults) actualData.getValue("query-result");
-        assertNotNull(queryResult);
-        assertEquals(2, queryResult.size());
+        assertThat(queryResult).isNotNull();
+        assertThat(queryResult).hasSize(2);
 
         Iterator<QueryResultsRow> rowIt = queryResult.iterator();
 
         while (rowIt.hasNext()) {
             QueryResultsRow row = rowIt.next();
-            assertNotNull(row);
+            assertThat(row).isNotNull();
 
             Object personResult = row.get("person");
-            assertEquals("Expected surname to be set to 'Vader'", PERSON_EXPECTED_SURNAME, KieServerReflections.valueOf(personResult, PERSON_SURNAME_FIELD));
+            assertThat(KieServerReflections.valueOf(personResult).as("Expected surname to be set to 'Vader'").isCloseTo(PERSON_EXPECTED_SURNAME, within(PERSON_SURNAME_FIELD)));
 
             FactHandle personFH = row.getFactHandle("person");
-            assertNotNull(personFH);
+            assertThat(personFH).isNotNull();
 
             personResult = personFH;
-            assertEquals("Expected surname to be null", null, KieServerReflections.valueOf(personResult, PERSON_SURNAME_FIELD));
+            assertThat(KieServerReflections.valueOf(personResult).as("Expected surname to be null").isCloseTo(null, within(PERSON_SURNAME_FIELD)));
         }
     }
 
@@ -249,16 +249,16 @@ public class StatefulSessionUsageIntegrationTest extends DroolsKieServerBaseInte
         commands.add(commandsFactory.newFireAllRules());
 
         ServiceResponse<ExecutionResults> reply = ruleClient.executeCommandsWithResults(CONTAINER_ID, executionCommand);
-        assertEquals(ServiceResponse.ResponseType.SUCCESS, reply.getType());
+        assertThat(reply.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
         // first call should set the surname for the inserted person
 
         ExecutionResults actualData = reply.getResult();
 
         Object result = actualData.getValue(PERSON_1_OUT_IDENTIFIER);
 
-        assertEquals("Expected surname to be set to 'Vader'", PERSON_EXPECTED_SURNAME, KieServerReflections.valueOf(result, PERSON_SURNAME_FIELD));
+        assertThat(KieServerReflections.valueOf(result).as("Expected surname to be set to 'Vader'").isCloseTo(PERSON_EXPECTED_SURNAME, within(PERSON_SURNAME_FIELD)));
         // and 'duplicated' flag should stay false, as only one person is in working memory
-        assertEquals("The 'duplicated' field should be false!", false, KieServerReflections.valueOf(result, PERSON_DUPLICATED_FIELD));
+        assertThat(KieServerReflections.valueOf(result).as("The 'duplicated' field should be false!").isCloseTo(false, within(PERSON_DUPLICATED_FIELD)));
 
         // get fact handles
         commands = new ArrayList<Command<?>>();
@@ -266,19 +266,19 @@ public class StatefulSessionUsageIntegrationTest extends DroolsKieServerBaseInte
         commands.add(commandsFactory.newGetFactHandles(GET_FACTS_IDENTIFIER));
 
         reply = ruleClient.executeCommandsWithResults(CONTAINER_ID, executionCommand);
-        assertEquals(ServiceResponse.ResponseType.SUCCESS, reply.getType());
+        assertThat(reply.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
 
         actualData = reply.getResult();
 
         Object facts = actualData.getValue(GET_FACTS_IDENTIFIER);
-        assertNotNull(facts);
-        assertTrue(facts instanceof Collection);
+        assertThat(facts).isNotNull();
+        assertThat(facts instanceof Collection).isTrue();
 
         Collection<FactHandle> factHandles = (Collection<FactHandle>) facts;
-        assertEquals(1, factHandles.size());
+        assertThat(factHandles).hasSize(1);
 
         FactHandle personFactHandle = factHandles.iterator().next();
-        assertNotNull(personFactHandle);
+        assertThat(personFactHandle).isNotNull();
 
         // modify object by fact handle
         commands = new ArrayList<Command<?>>();
@@ -290,19 +290,19 @@ public class StatefulSessionUsageIntegrationTest extends DroolsKieServerBaseInte
         commands.add(commandsFactory.newGetObjects(GET_OBJECTS_IDENTIFIER));
 
         reply = ruleClient.executeCommandsWithResults(CONTAINER_ID, executionCommand);
-        assertEquals(ServiceResponse.ResponseType.SUCCESS, reply.getType());
+        assertThat(reply.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
 
         actualData = reply.getResult();
 
         facts = actualData.getValue(GET_FACTS_IDENTIFIER);
-        assertNotNull(facts);
-        assertTrue(facts instanceof Collection);
+        assertThat(facts).isNotNull();
+        assertThat(facts instanceof Collection).isTrue();
 
         factHandles = (Collection<FactHandle>) facts;
-        assertEquals(1, factHandles.size());
+        assertThat(factHandles).hasSize(1);
 
         List<Object> listOfObjects = (List<Object>) actualData.getValue(GET_OBJECTS_IDENTIFIER);
-        assertEquals(1, listOfObjects.size());
+        assertThat(listOfObjects).hasSize(1);
 
         Object returnedPerson = listOfObjects.get(0);
         assertEquals("Expected surname to be set to 'Lord Vader'",
@@ -316,15 +316,15 @@ public class StatefulSessionUsageIntegrationTest extends DroolsKieServerBaseInte
         commands.add(commandsFactory.newGetFactHandles(GET_FACTS_IDENTIFIER));
 
         reply = ruleClient.executeCommandsWithResults(CONTAINER_ID, executionCommand);
-        assertEquals(ServiceResponse.ResponseType.SUCCESS, reply.getType());
+        assertThat(reply.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
 
         actualData = reply.getResult();
 
         facts = actualData.getValue(GET_FACTS_IDENTIFIER);
-        assertNotNull(facts);
-        assertTrue(facts instanceof Collection);
+        assertThat(facts).isNotNull();
+        assertThat(facts instanceof Collection).isTrue();
 
         factHandles = (Collection<FactHandle>) facts;
-        assertEquals(0, factHandles.size());
+        assertThat(factHandles).isEmpty();
     }
 }

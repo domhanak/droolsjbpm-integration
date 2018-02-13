@@ -30,7 +30,7 @@ import org.kie.server.api.model.ReleaseId;
 import org.kie.server.api.model.ServiceResponse;
 import org.kie.server.api.model.instance.TaskSummary;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 import org.kie.server.integrationtests.shared.KieServerDeployer;
 
 
@@ -62,18 +62,18 @@ public class RuleRelatedProcessIntegrationTest extends JbpmKieServerBaseIntegrat
     @Test
     public void testProcessWithBusinessRuleTask() throws Exception {
         Long processInstanceId = processClient.startProcess(CONTAINER_ID, "business-rule-task");
-        assertNotNull(processInstanceId);
-        assertTrue(processInstanceId.longValue() > 0);
+        assertThat(processInstanceId).isNotNull();
+        assertThat(processInstanceId.longValue() > 0).isTrue();
 
         Object person = createPersonInstance(USER_YODA);
 
         try {
             List<TaskSummary> taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             TaskSummary taskSummary = taskList.get(0);
-            assertEquals("Before rule", taskSummary.getName());
+            assertThat(taskSummary.getName()).isEqualTo("Before rule");
 
 
             // let insert person as fact into working memory
@@ -86,7 +86,7 @@ public class RuleRelatedProcessIntegrationTest extends JbpmKieServerBaseIntegrat
 
 
             ServiceResponse<ExecutionResults> reply = ruleClient.executeCommandsWithResults(CONTAINER_ID, executionCommand);
-            assertEquals(ServiceResponse.ResponseType.SUCCESS, reply.getType());
+            assertThat(reply.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
 
             // startTask and completeTask task
             taskClient.startTask(CONTAINER_ID, taskSummary.getId(), USER_YODA);
@@ -99,11 +99,11 @@ public class RuleRelatedProcessIntegrationTest extends JbpmKieServerBaseIntegrat
 
             // check if it was moved to another human task
             taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             taskSummary = taskList.get(0);
-            assertEquals("After rule", taskSummary.getName());
+            assertThat(taskSummary.getName()).isEqualTo("After rule");
 
             // now let's check if the rule fired
             commands.clear();
@@ -111,10 +111,10 @@ public class RuleRelatedProcessIntegrationTest extends JbpmKieServerBaseIntegrat
 
             executionCommand = commandsFactory.newBatchExecution(commands, CONTAINER_ID); // use container id as ksession id to use ksession from jBPM extension
             reply = ruleClient.executeCommandsWithResults(CONTAINER_ID, executionCommand);
-            assertEquals(ServiceResponse.ResponseType.SUCCESS, reply.getType());
+            assertThat(reply.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
 
             ExecutionResults actualData = reply.getResult();
-            assertNotNull(actualData);
+            assertThat(actualData).isNotNull();
 
         } finally {
             List<Command<?>> commands = new ArrayList<Command<?>>();
@@ -123,7 +123,7 @@ public class RuleRelatedProcessIntegrationTest extends JbpmKieServerBaseIntegrat
             commands.add(commandsFactory.newFireAllRules());
 
             ServiceResponse<ExecutionResults> reply = ruleClient.executeCommandsWithResults(CONTAINER_ID, executionCommand);
-            assertEquals(ServiceResponse.ResponseType.SUCCESS, reply.getType());
+            assertThat(reply.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
 
             processClient.abortProcessInstance(CONTAINER_ID, processInstanceId);
         }
@@ -133,15 +133,15 @@ public class RuleRelatedProcessIntegrationTest extends JbpmKieServerBaseIntegrat
     @Test
     public void testProcessWithConditionalEvent() throws Exception {
         Long processInstanceId = processClient.startProcess(CONTAINER_ID, "conditionalevent");
-        assertNotNull(processInstanceId);
-        assertTrue(processInstanceId.longValue() > 0);
+        assertThat(processInstanceId).isNotNull();
+        assertThat(processInstanceId.longValue() > 0).isTrue();
         try {
             List<TaskSummary> taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             TaskSummary taskSummary = taskList.get(0);
-            assertEquals("Before rule", taskSummary.getName());
+            assertThat(taskSummary.getName()).isEqualTo("Before rule");
 
             // startTask and completeTask task
             taskClient.startTask(CONTAINER_ID, taskSummary.getId(), USER_YODA);
@@ -153,9 +153,9 @@ public class RuleRelatedProcessIntegrationTest extends JbpmKieServerBaseIntegrat
             taskClient.completeTask(CONTAINER_ID, taskSummary.getId(), USER_YODA, taskOutcome);
 
             taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(0, taskList.size());
+            assertThat(taskList).isEmpty();
 
 
             // let insert person as fact into working memory
@@ -167,15 +167,15 @@ public class RuleRelatedProcessIntegrationTest extends JbpmKieServerBaseIntegrat
 
 
             ServiceResponse<ExecutionResults> reply = ruleClient.executeCommandsWithResults(CONTAINER_ID, executionCommand);
-            assertEquals(ServiceResponse.ResponseType.SUCCESS, reply.getType());
+            assertThat(reply.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
 
             // check if it was moved to another human task
             taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
+            assertThat(taskList).isNotNull();
 
-            assertEquals(1, taskList.size());
+            assertThat(taskList).hasSize(1);
             taskSummary = taskList.get(0);
-            assertEquals("After rule", taskSummary.getName());
+            assertThat(taskSummary.getName()).isEqualTo("After rule");
 
 
         } finally {
@@ -186,7 +186,7 @@ public class RuleRelatedProcessIntegrationTest extends JbpmKieServerBaseIntegrat
             commands.add(commandsFactory.newFireAllRules());
 
             ServiceResponse<ExecutionResults> reply = ruleClient.executeCommandsWithResults(CONTAINER_ID, executionCommand);
-            assertEquals(ServiceResponse.ResponseType.SUCCESS, reply.getType());
+            assertThat(reply.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
 
             processClient.abortProcessInstance(CONTAINER_ID, processInstanceId);
         }

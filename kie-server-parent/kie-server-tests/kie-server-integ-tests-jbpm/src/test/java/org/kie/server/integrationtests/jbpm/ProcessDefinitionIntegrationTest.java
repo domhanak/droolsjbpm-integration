@@ -32,7 +32,7 @@ import org.kie.server.api.model.definition.UserTaskDefinitionList;
 import org.kie.server.api.model.definition.VariablesDefinition;
 import org.kie.server.api.exception.KieServicesException;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 import org.kie.server.integrationtests.shared.KieServerDeployer;
 
 
@@ -58,45 +58,45 @@ public class ProcessDefinitionIntegrationTest extends JbpmKieServerBaseIntegrati
     public void testEvaluationProcessDefinition() {
         ProcessDefinition result = processClient.getProcessDefinition(CONTAINER_ID, PROCESS_ID_EVALUATION);
 
-        assertNotNull(result);
-        assertEquals(PROCESS_ID_EVALUATION, result.getId());
-        assertEquals("evaluation", result.getName());
-        assertEquals("org.jbpm", result.getPackageName());
-        assertEquals("1.0", result.getVersion());
-        assertEquals(CONTAINER_ID, result.getContainerId());
+        assertThat(result).isNotNull();
+        assertThat(result.getId()).isEqualTo(PROCESS_ID_EVALUATION);
+        assertThat(result.getName()).isEqualTo("evaluation");
+        assertThat(result.getPackageName()).isEqualTo("org.jbpm");
+        assertThat(result.getVersion()).isEqualTo("1.0");
+        assertThat(result.getContainerId()).isEqualTo(CONTAINER_ID);
 
         // assert variable definitions
         Map<String, String> variables = result.getProcessVariables();
-        assertNotNull(variables);
-        assertEquals(3, variables.size());
+        assertThat(variables).isNotNull();
+        assertThat(variables).hasSize(3);
 
-        assertTrue(variables.containsKey("name"));
-        assertTrue(variables.containsKey("item"));
-        assertTrue(variables.containsKey("outcome"));
+        assertThat(variables.containsKey("name")).isTrue();
+        assertThat(variables.containsKey("item")).isTrue();
+        assertThat(variables.containsKey("outcome")).isTrue();
 
-        assertEquals("String", variables.get("name"));
-        assertEquals("java.util.List", variables.get("item"));
-        assertEquals("Boolean", variables.get("outcome"));
+        assertThat(variables.get("name")).isEqualTo("String");
+        assertThat(variables.get("item")).isEqualTo("java.util.List");
+        assertThat(variables.get("outcome")).isEqualTo("Boolean");
 
         // assert associated entities - users and groups
         Map<String, String[]> entities = result.getAssociatedEntities();
-        assertNotNull(entities);
+        assertThat(entities).isNotNull();
 
-        assertTrue(entities.containsKey("Evaluate items?"));
+        assertThat(entities.containsKey("Evaluate items?")).isTrue();
 
         String[] evaluateItemsEntities = entities.get("Evaluate items?");
-        assertEquals(2, evaluateItemsEntities.length);
-        assertEquals(USER_YODA, evaluateItemsEntities[0]);
-        assertEquals("HR,PM", evaluateItemsEntities[1]);
+        assertThat(evaluateItemsEntities.length).isEqualTo(2);
+        assertThat(evaluateItemsEntities[0]).isEqualTo(USER_YODA);
+        assertThat(evaluateItemsEntities[1]).isEqualTo("HR,PM");
 
         // assert reusable subprocesses
-        assertEquals(0, result.getReusableSubProcesses().size());
+        assertThat(result.getReusableSubProcesses()).isEmpty();
 
         // assert services tasks
-        assertEquals(1, result.getServiceTasks().size());
-        assertTrue(result.getServiceTasks().containsKey("Email results"));
+        assertThat(result.getServiceTasks()).hasSize(1);
+        assertThat(result.getServiceTasks().containsKey("Email results")).isTrue();
         // assert type of the services task for 'Email results' name
-        assertEquals("Email", result.getServiceTasks().get("Email results"));
+        assertThat(result.getServiceTasks().get("Email results")).isEqualTo("Email");
 
     }
 
@@ -104,38 +104,38 @@ public class ProcessDefinitionIntegrationTest extends JbpmKieServerBaseIntegrati
     public void testCallEvaluationProcessDefinition() {
         ProcessDefinition result = processClient.getProcessDefinition(CONTAINER_ID, PROCESS_ID_CALL_EVALUATION);
 
-        assertNotNull(result);
-        assertEquals(PROCESS_ID_CALL_EVALUATION, result.getId());
-        assertEquals("call-evaluation", result.getName());
-        assertEquals("org.jbpm", result.getPackageName());
-        assertEquals("1.0", result.getVersion());
-        assertEquals(CONTAINER_ID, result.getContainerId());
+        assertThat(result).isNotNull();
+        assertThat(result.getId()).isEqualTo(PROCESS_ID_CALL_EVALUATION);
+        assertThat(result.getName()).isEqualTo("call-evaluation");
+        assertThat(result.getPackageName()).isEqualTo("org.jbpm");
+        assertThat(result.getVersion()).isEqualTo("1.0");
+        assertThat(result.getContainerId()).isEqualTo(CONTAINER_ID);
 
         // assert variable definitions
         Map<String, String> variables = result.getProcessVariables();
-        assertNotNull(variables);
-        assertEquals(1, variables.size());
+        assertThat(variables).isNotNull();
+        assertThat(variables).hasSize(1);
 
-        assertTrue(variables.containsKey("items"));
+        assertThat(variables.containsKey("items")).isTrue();
 
-        assertEquals("java.util.List", variables.get("items"));
+        assertThat(variables.get("items")).isEqualTo("java.util.List");
 
         // assert associated entities - users and groups
         Map<String, String[]> entities = result.getAssociatedEntities();
-        assertNotNull(entities);
+        assertThat(entities).isNotNull();
 
-        assertTrue(entities.containsKey("Prepare"));
+        assertThat(entities.containsKey("Prepare")).isTrue();
 
         String[] evaluateItemsEntities = entities.get("Prepare");
-        assertEquals(1, evaluateItemsEntities.length);
-        assertEquals(USER_YODA, evaluateItemsEntities[0]);
+        assertThat(evaluateItemsEntities.length).isEqualTo(1);
+        assertThat(evaluateItemsEntities[0]).isEqualTo(USER_YODA);
 
         // assert reusable subprocesses
-        assertEquals(1, result.getReusableSubProcesses().size());
-        assertEquals("definition-project.evaluation", result.getReusableSubProcesses().iterator().next());
+        assertThat(result.getReusableSubProcesses()).hasSize(1);
+        assertThat(result.getReusableSubProcesses().iterator().next()).isEqualTo("definition-project.evaluation");
 
         // assert services tasks
-        assertEquals(0, result.getServiceTasks().size());
+        assertThat(result.getServiceTasks()).isEmpty();
 
     }
 
@@ -150,10 +150,10 @@ public class ProcessDefinitionIntegrationTest extends JbpmKieServerBaseIntegrati
     public void testReusableSubProcessDefinition() {
         SubProcessesDefinition result = processClient.getReusableSubProcessDefinitions(CONTAINER_ID, PROCESS_ID_CALL_EVALUATION);
 
-        assertNotNull(result);
+        assertThat(result).isNotNull();
         // assert reusable subprocesses
-        assertEquals(1, result.getSubProcesses().size());
-        assertEquals(PROCESS_ID_EVALUATION, result.getSubProcesses().iterator().next());
+        assertThat(result.getSubProcesses()).hasSize(1);
+        assertThat(result.getSubProcesses().iterator().next()).isEqualTo(PROCESS_ID_EVALUATION);
 
     }
 
@@ -164,26 +164,26 @@ public class ProcessDefinitionIntegrationTest extends JbpmKieServerBaseIntegrati
         VariablesDefinition variablesDefinition = processClient.getProcessVariableDefinitions(CONTAINER_ID, PROCESS_ID_EVALUATION);
 
         Map<String, String> variables = variablesDefinition.getVariables();
-        assertNotNull(variables);
-        assertEquals(3, variables.size());
+        assertThat(variables).isNotNull();
+        assertThat(variables).hasSize(3);
 
-        assertTrue(variables.containsKey("name"));
-        assertTrue(variables.containsKey("item"));
-        assertTrue(variables.containsKey("outcome"));
+        assertThat(variables.containsKey("name")).isTrue();
+        assertThat(variables.containsKey("item")).isTrue();
+        assertThat(variables.containsKey("outcome")).isTrue();
 
-        assertEquals("String", variables.get("name"));
-        assertEquals("java.util.List", variables.get("item"));
-        assertEquals("Boolean", variables.get("outcome"));
+        assertThat(variables.get("name")).isEqualTo("String");
+        assertThat(variables.get("item")).isEqualTo("java.util.List");
+        assertThat(variables.get("outcome")).isEqualTo("Boolean");
     }
 
     @Test
     public void testServiceTasksDefinition() {
         ServiceTasksDefinition result = processClient.getServiceTaskDefinitions(CONTAINER_ID, PROCESS_ID_EVALUATION);
         // assert services tasks
-        assertEquals(1, result.getServiceTasks().size());
-        assertTrue(result.getServiceTasks().containsKey("Email results"));
+        assertThat(result.getServiceTasks()).hasSize(1);
+        assertThat(result.getServiceTasks().containsKey("Email results")).isTrue();
         // assert type of the services task for 'Email results' name
-        assertEquals("Email", result.getServiceTasks().get("Email results"));
+        assertThat(result.getServiceTasks().get("Email results")).isEqualTo("Email");
     }
 
 
@@ -193,69 +193,69 @@ public class ProcessDefinitionIntegrationTest extends JbpmKieServerBaseIntegrati
 
         // assert associated entities - users and groups
         Map<String, String[]> entities = result.getAssociatedEntities();
-        assertNotNull(entities);
+        assertThat(entities).isNotNull();
 
-        assertTrue(entities.containsKey("Evaluate items?"));
+        assertThat(entities.containsKey("Evaluate items?")).isTrue();
         String[] evaluateItemsEntities = entities.get("Evaluate items?");
 
-        assertEquals(2, evaluateItemsEntities.length);
-        assertEquals(USER_YODA, evaluateItemsEntities[0]);
-        assertEquals("HR,PM", evaluateItemsEntities[1]);
+        assertThat(evaluateItemsEntities.length).isEqualTo(2);
+        assertThat(evaluateItemsEntities[0]).isEqualTo(USER_YODA);
+        assertThat(evaluateItemsEntities[1]).isEqualTo("HR,PM");
     }
  
     @Test
     public void testUserTasksDefinition() {
         UserTaskDefinitionList result = processClient.getUserTaskDefinitions(CONTAINER_ID, PROCESS_ID_EVALUATION);
 
-        assertNotNull(result);
+        assertThat(result).isNotNull();
         UserTaskDefinition[] tasks = result.getTasks();
 
         // assert user tasks
-        assertNotNull(tasks);
-        assertEquals(1, tasks.length);
+        assertThat(tasks).isNotNull();
+        assertThat(tasks.length).isEqualTo(1);
 
         UserTaskDefinition task = tasks[0];
 
-        assertNotNull(task);
-        assertEquals("Evaluate items?", task.getName());
-        assertEquals("", task.getComment());
-        assertEquals("", task.getCreatedBy());
-        assertEquals(0, task.getPriority().intValue());
-        assertEquals(true, task.isSkippable());
-        assertEquals("2", task.getId());
-        assertEquals("", task.getFormName());
+        assertThat(task).isNotNull();
+        assertThat(task.getName()).isEqualTo("Evaluate items?");
+        assertThat(task.getComment()).isEqualTo("");
+        assertThat(task.getCreatedBy()).isEqualTo("");
+        assertThat(task.getPriority().intValue()).isEqualTo(0);
+        assertThat(task.isSkippable()).isEqualTo(true);
+        assertThat(task.getId()).isEqualTo("2");
+        assertThat(task.getFormName()).isEqualTo("");
 
         // assert associated entities - users and groups
         String[] evaluateItemsEntities = task.getAssociatedEntities();
 
-        assertEquals(2, evaluateItemsEntities.length);
-        assertEquals(USER_YODA, evaluateItemsEntities[0]);
-        assertEquals("HR,PM", evaluateItemsEntities[1]);
+        assertThat(evaluateItemsEntities.length).isEqualTo(2);
+        assertThat(evaluateItemsEntities[0]).isEqualTo(USER_YODA);
+        assertThat(evaluateItemsEntities[1]).isEqualTo("HR,PM");
 
         // assert task inputs and outputs
 
         Map<String, String> inputs = task.getTaskInputMappings();
-        assertNotNull(inputs);
-        assertEquals(4, inputs.size());
+        assertThat(inputs).isNotNull();
+        assertThat(inputs).hasSize(4);
 
-        assertTrue(inputs.containsKey("name_in"));
-        assertTrue(inputs.containsKey("list_in"));
-        assertTrue(inputs.containsKey("GroupId"));
-        assertTrue(inputs.containsKey("Skippable"));
+        assertThat(inputs.containsKey("name_in")).isTrue();
+        assertThat(inputs.containsKey("list_in")).isTrue();
+        assertThat(inputs.containsKey("GroupId")).isTrue();
+        assertThat(inputs.containsKey("Skippable")).isTrue();
 
 
-        assertEquals("String", inputs.get("name_in"));
-        assertEquals("java.util.List", inputs.get("list_in"));
-        assertEquals("java.lang.String", inputs.get("GroupId"));
-        assertEquals("java.lang.String", inputs.get("Skippable"));
+        assertThat(inputs.get("name_in")).isEqualTo("String");
+        assertThat(inputs.get("list_in")).isEqualTo("java.util.List");
+        assertThat(inputs.get("GroupId")).isEqualTo("java.lang.String");
+        assertThat(inputs.get("Skippable")).isEqualTo("java.lang.String");
 
         Map<String, String> outputs = task.getTaskOutputMappings();
-        assertNotNull(outputs);
-        assertEquals(1, outputs.size());
+        assertThat(outputs).isNotNull();
+        assertThat(outputs).hasSize(1);
 
-        assertTrue(outputs.containsKey("outcome"));
+        assertThat(outputs.containsKey("outcome")).isTrue();
 
-        assertEquals("Boolean", outputs.get("outcome"));
+        assertThat(outputs.get("outcome")).isEqualTo("Boolean");
 
     }
 
@@ -263,38 +263,38 @@ public class ProcessDefinitionIntegrationTest extends JbpmKieServerBaseIntegrati
     public void testUserTaskInputDefinition() {
         TaskInputsDefinition result = processClient.getUserTaskInputDefinitions(CONTAINER_ID, PROCESS_ID_EVALUATION, "Evaluate items?");
 
-        assertNotNull(result);
+        assertThat(result).isNotNull();
         // assert task inputs and outputs
 
         Map<String, String> inputs = result.getTaskInputs();
-        assertNotNull(inputs);
-        assertEquals(4, inputs.size());
+        assertThat(inputs).isNotNull();
+        assertThat(inputs).hasSize(4);
 
-        assertTrue(inputs.containsKey("name_in"));
-        assertTrue(inputs.containsKey("list_in"));
-        assertTrue(inputs.containsKey("GroupId"));
-        assertTrue(inputs.containsKey("Skippable"));
+        assertThat(inputs.containsKey("name_in")).isTrue();
+        assertThat(inputs.containsKey("list_in")).isTrue();
+        assertThat(inputs.containsKey("GroupId")).isTrue();
+        assertThat(inputs.containsKey("Skippable")).isTrue();
 
 
-        assertEquals("String", inputs.get("name_in"));
-        assertEquals("java.util.List", inputs.get("list_in"));
-        assertEquals("java.lang.String", inputs.get("GroupId"));
-        assertEquals("java.lang.String", inputs.get("Skippable"));
+        assertThat(inputs.get("name_in")).isEqualTo("String");
+        assertThat(inputs.get("list_in")).isEqualTo("java.util.List");
+        assertThat(inputs.get("GroupId")).isEqualTo("java.lang.String");
+        assertThat(inputs.get("Skippable")).isEqualTo("java.lang.String");
     }
 
     @Test
     public void testTaskOutputsDefinition() {
         TaskOutputsDefinition result = processClient.getUserTaskOutputDefinitions(CONTAINER_ID, PROCESS_ID_EVALUATION, "Evaluate items?");
 
-        assertNotNull(result);
+        assertThat(result).isNotNull();
         // assert task inputs and outputs
         Map<String, String> outputs = result.getTaskOutputs();
-        assertNotNull(outputs);
-        assertEquals(1, outputs.size());
+        assertThat(outputs).isNotNull();
+        assertThat(outputs).hasSize(1);
 
-        assertTrue(outputs.containsKey("outcome"));
+        assertThat(outputs.containsKey("outcome")).isTrue();
 
-        assertEquals("Boolean", outputs.get("outcome"));
+        assertThat(outputs.get("outcome")).isEqualTo("Boolean");
 
     }
 
@@ -302,46 +302,46 @@ public class ProcessDefinitionIntegrationTest extends JbpmKieServerBaseIntegrati
     public void testUserTasksDefinitionWithEmptyAssociatedEntities() {
         UserTaskDefinitionList result = processClient.getUserTaskDefinitions(CONTAINER_ID, PROCESS_ID_XYZ_TRANSLATIONS);
 
-        assertNotNull(result);
+        assertThat(result).isNotNull();
         UserTaskDefinition[] tasks = result.getTasks();
 
         // assert user tasks
-        assertNotNull(tasks);
-        assertEquals(3, tasks.length);
+        assertThat(tasks).isNotNull();
+        assertThat(tasks.length).isEqualTo(3);
 
         UserTaskDefinition task = tasks[0];
 
-        assertNotNull(task);
-        assertEquals("review-incoming", task.getName());
+        assertThat(task).isNotNull();
+        assertThat(task.getName()).isEqualTo("review-incoming");
 
         // assert associated entities - users and groups
         String[] evaluateItemsEntities = task.getAssociatedEntities();
 
-        assertEquals(2, evaluateItemsEntities.length);
-        assertEquals("yoda", evaluateItemsEntities[0]);
-        assertEquals("Reviewer", evaluateItemsEntities[1]);
+        assertThat(evaluateItemsEntities.length).isEqualTo(2);
+        assertThat(evaluateItemsEntities[0]).isEqualTo("yoda");
+        assertThat(evaluateItemsEntities[1]).isEqualTo("Reviewer");
 
         task = tasks[1];
 
-        assertNotNull(task);
-        assertEquals("translate", task.getName());
+        assertThat(task).isNotNull();
+        assertThat(task.getName()).isEqualTo("translate");
 
         // assert associated entities - users and groups
         evaluateItemsEntities = task.getAssociatedEntities();
 
-        assertEquals(2, evaluateItemsEntities.length);
-        assertEquals("yoda", evaluateItemsEntities[0]);
-        assertEquals("Writer", evaluateItemsEntities[1]);
+        assertThat(evaluateItemsEntities.length).isEqualTo(2);
+        assertThat(evaluateItemsEntities[0]).isEqualTo("yoda");
+        assertThat(evaluateItemsEntities[1]).isEqualTo("Writer");
 
         task = tasks[2];
 
-        assertNotNull(task);
-        assertEquals("review-translation", task.getName());
+        assertThat(task).isNotNull();
+        assertThat(task.getName()).isEqualTo("review-translation");
 
         // assert associated entities - users and groups
         evaluateItemsEntities = task.getAssociatedEntities();
 
-        assertEquals(0, evaluateItemsEntities.length);
+        assertThat(evaluateItemsEntities.length).isEqualTo(0);
     }
 
 }

@@ -17,7 +17,7 @@
 package org.kie.server.springboot.samples;
 
 import static org.appformer.maven.integration.MavenRepository.getMavenRepository;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.io.File;
 import java.util.HashMap;
@@ -106,31 +106,31 @@ public class KieServerTest {
         // query for all available process definitions
         QueryServicesClient queryClient = kieServicesClient.getServicesClient(QueryServicesClient.class);
         List<ProcessDefinition> processes = queryClient.findProcesses(0, 10);
-        assertEquals(1, processes.size());
+        assertThat(processes).hasSize(1);
 
         ProcessServicesClient processClient = kieServicesClient.getServicesClient(ProcessServicesClient.class);
         // get details of process definition
         ProcessDefinition definition = processClient.getProcessDefinition(containerId, processId);
-        assertNotNull(definition);
-        assertEquals(processId, definition.getId());
+        assertThat(definition).isNotNull();
+        assertThat(definition.getId()).isEqualTo(processId);
 
         // start process instance
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("employee", "john");
         params.put("reason", "test on spring boot");
         Long processInstanceId = processClient.startProcess(containerId, processId, params);
-        assertNotNull(processInstanceId);
+        assertThat(processInstanceId).isNotNull();
        
         // find active process instances
         List<ProcessInstance> instances = queryClient.findProcessInstances(0, 10);
-        assertEquals(1, instances.size());
+        assertThat(instances).hasSize(1);
 
         // at the end abort process instance
         processClient.abortProcessInstance(containerId, processInstanceId);
 
         ProcessInstance processInstance = queryClient.findProcessInstanceById(processInstanceId);
-        assertNotNull(processInstance);
-        assertEquals(3, processInstance.getState().intValue());        
+        assertThat(processInstance).isNotNull();
+        assertThat(processInstance.getState().intValue()).isEqualTo(3);        
     }
 
     @Test
@@ -139,25 +139,25 @@ public class KieServerTest {
         // query for all available process definitions
         QueryServicesClient queryClient = kieServicesClient.getServicesClient(QueryServicesClient.class);
         List<ProcessDefinition> processes = queryClient.findProcesses(0, 10);
-        assertEquals(1, processes.size());
+        assertThat(processes).hasSize(1);
 
         ProcessServicesClient processClient = kieServicesClient.getServicesClient(ProcessServicesClient.class);
         // get details of process definition
         ProcessDefinition definition = processClient.getProcessDefinition(containerId, processId);
-        assertNotNull(definition);
-        assertEquals(processId, definition.getId());
+        assertThat(definition).isNotNull();
+        assertThat(definition.getId()).isEqualTo(processId);
 
         // start process instance
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("employee", "john");
         params.put("reason", "test on spring boot");
         Long processInstanceId = processClient.startProcess(containerId, processId, params);
-        assertNotNull(processInstanceId);
+        assertThat(processInstanceId).isNotNull();
        
         UserTaskServicesClient taskClient = kieServicesClient.getServicesClient(UserTaskServicesClient.class);
         // find available tasks
         List<TaskSummary> tasks = taskClient.findTasksAssignedAsPotentialOwner(user, 0, 10);
-        assertEquals(1, tasks.size());
+        assertThat(tasks).hasSize(1);
 
         // complete task
         Long taskId = tasks.get(0).getId();
@@ -167,16 +167,16 @@ public class KieServerTest {
 
         // find active process instances
         List<ProcessInstance> instances = queryClient.findProcessInstances(0, 10);
-        assertEquals(1, instances.size());
+        assertThat(instances).hasSize(1);
         
         tasks = taskClient.findTasksAssignedAsPotentialOwner(user, 0, 10);
-        assertEquals(1, tasks.size());
+        assertThat(tasks).hasSize(1);
 
         // at the end abort process instance
         processClient.abortProcessInstance(containerId, processInstanceId);
 
         ProcessInstance processInstance = queryClient.findProcessInstanceById(processInstanceId);
-        assertNotNull(processInstance);
-        assertEquals(3, processInstance.getState().intValue());        
+        assertThat(processInstance).isNotNull();
+        assertThat(processInstance.getState().intValue()).isEqualTo(3);        
     }
 }

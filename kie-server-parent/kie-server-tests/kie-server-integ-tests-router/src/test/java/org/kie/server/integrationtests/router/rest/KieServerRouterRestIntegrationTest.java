@@ -84,7 +84,7 @@ public class KieServerRouterRestIntegrationTest extends RestOnlyBaseIntegrationT
             logger.info( "[GET] " + clientRequest.getUri());
 
             response = clientRequest.request(getMediaType()).get();
-            Assert.assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
+            Assert.assertThat(response.getStatus()).isEqualTo(Response.Status.NOT_FOUND.getStatusCode());
         } finally {
             if(response != null) {
                 response.close();

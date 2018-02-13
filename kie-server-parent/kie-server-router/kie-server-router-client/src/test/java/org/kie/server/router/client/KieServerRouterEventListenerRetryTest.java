@@ -223,7 +223,7 @@ public class KieServerRouterEventListenerRetryTest {
 
         wireMockServer.start();
         boolean met = successLatch.await(4L, TimeUnit.SECONDS);
-        assertFalse("On success should not be invoked", met);
+        assertThat(met).as("On success should not be invoked").isFalse();
 
         wireMockServer.verify(0, postRequestedFor(urlEqualTo("/mgmt/remove")));
     }

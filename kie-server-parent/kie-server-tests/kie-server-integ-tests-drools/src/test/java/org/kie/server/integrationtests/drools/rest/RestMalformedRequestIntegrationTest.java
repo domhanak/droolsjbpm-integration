@@ -15,7 +15,7 @@
 
 package org.kie.server.integrationtests.drools.rest;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
@@ -62,12 +62,12 @@ public class RestMalformedRequestIntegrationTest extends RestOnlyBaseIntegration
 
             WebTarget clientRequest = newRequest(TestConfig.getKieServerHttpUrl() + "/containers/instances/" + CONTAINER_ID);
             response = clientRequest.request(getMediaType()).post(createEntity(body));
-            assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+            assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
 
             ServiceResponse<KieContainerResource> serviceResponse =
                     response.readEntity(new GenericType<ServiceResponse<KieContainerResource>>(){});
-            assertEquals(ServiceResponse.ResponseType.FAILURE, serviceResponse.getType());
-            assertEquals("Bad request, no commands to be executed - either wrong format or no data", serviceResponse.getMsg());
+            assertThat(serviceResponse.getType()).isEqualTo(ServiceResponse.ResponseType.FAILURE);
+            assertThat(serviceResponse.getMsg()).isEqualTo("Bad request, no commands to be executed - either wrong format or no data");
         } catch (Exception e) {
             throw new RuntimeException("Unexpected exception on empty body", e);
         } finally {
@@ -87,17 +87,17 @@ public class RestMalformedRequestIntegrationTest extends RestOnlyBaseIntegration
 
             WebTarget clientRequest = newRequest(TestConfig.getKieServerHttpUrl() + "/containers/instances/" + CONTAINER_ID);
             response = clientRequest.request(getMediaType()).post(createEntity(body));
-            assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+            assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
 
             ServiceResponse<KieContainerResource> serviceResponse =
                     response.readEntity(new GenericType<ServiceResponse<KieContainerResource>>(){});
-            assertEquals(ServiceResponse.ResponseType.FAILURE, serviceResponse.getType());
+            assertThat(serviceResponse.getType()).isEqualTo(ServiceResponse.ResponseType.FAILURE);
             switch (marshallingFormat) {
                 case JAXB:
-                    assertEquals("Error calling container stateful-session: Can't unmarshall input string: invalid content that cannot be parsed", serviceResponse.getMsg());
+                    assertThat(serviceResponse.getMsg()).isEqualTo("Error calling container stateful-session: Can't unmarshall input string: invalid content that cannot be parsed");
                     break;
                 case JSON:
-                    assertEquals("Error calling container stateful-session: Error unmarshalling input", serviceResponse.getMsg());
+                    assertThat(serviceResponse.getMsg()).isEqualTo("Error calling container stateful-session: Error unmarshalling input");
                     break;
             }
         } catch (Exception e) {

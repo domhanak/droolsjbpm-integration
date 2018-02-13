@@ -29,7 +29,7 @@ import org.kie.server.api.model.instance.VariableInstance;
 import org.kie.server.integrationtests.config.TestConfig;
 import org.kie.server.integrationtests.shared.KieServerDeployer;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class DecisionTasksIntegrationTest extends JbpmKieServerBaseIntegrationTest {
 
@@ -76,19 +76,19 @@ public class DecisionTasksIntegrationTest extends JbpmKieServerBaseIntegrationTe
             parameters.put("person", john);
 
             processInstanceId = processClient.startProcess(CONTAINER_ID, RULE_PROCESS_ID, parameters);
-            assertNotNull(processInstanceId);
-            assertTrue(processInstanceId.longValue() > 0);
+            assertThat(processInstanceId).isNotNull();
+            assertThat(processInstanceId.longValue() > 0).isTrue();
 
             ProcessInstance processInstance = queryClient.findProcessInstanceById(processInstanceId);
-            assertNotNull(processInstance);
-            assertEquals(org.kie.api.runtime.process.ProcessInstance.STATE_COMPLETED, processInstance.getState().intValue());
+            assertThat(processInstance).isNotNull();
+            assertThat(processInstance.getState().intValue()).isEqualTo(org.kie.api.runtime.process.ProcessInstance.STATE_COMPLETED);
 
 
             List<VariableInstance> variables = queryClient.findVariablesCurrentState(processInstanceId);
-            assertNotNull(variables);
-            assertEquals(2, variables.size());
+            assertThat(variables).isNotNull();
+            assertThat(variables).hasSize(2);
             Map<String, String> mappedVars = variables.stream().collect(Collectors.toMap(VariableInstance::getVariableName, VariableInstance::getValue));
-            assertEquals("Person{name='john' age='35'}", mappedVars.get("person"));
+            assertThat(mappedVars.get("person")).isEqualTo("Person{name='john' age='35'}");
             processInstanceId = null;
 
         } finally {
@@ -109,19 +109,19 @@ public class DecisionTasksIntegrationTest extends JbpmKieServerBaseIntegrationTe
             parameters.put("yearsOfService", 1);
 
             processInstanceId = processClient.startProcess(CONTAINER_ID, DECISION_PROCESS_ID, parameters);
-            assertNotNull(processInstanceId);
-            assertTrue(processInstanceId.longValue() > 0);
+            assertThat(processInstanceId).isNotNull();
+            assertThat(processInstanceId.longValue() > 0).isTrue();
 
             ProcessInstance processInstance = queryClient.findProcessInstanceById(processInstanceId);
-            assertNotNull(processInstance);
-            assertEquals(org.kie.api.runtime.process.ProcessInstance.STATE_COMPLETED, processInstance.getState().intValue());
+            assertThat(processInstance).isNotNull();
+            assertThat(processInstance.getState().intValue()).isEqualTo(org.kie.api.runtime.process.ProcessInstance.STATE_COMPLETED);
 
 
             List<VariableInstance> variables = queryClient.findVariablesCurrentState(processInstanceId);
-            assertNotNull(variables);
-            assertEquals(4, variables.size());
+            assertThat(variables).isNotNull();
+            assertThat(variables).hasSize(4);
             Map<String, String> mappedVars = variables.stream().collect(Collectors.toMap(VariableInstance::getVariableName, VariableInstance::getValue));
-            assertEquals("27", mappedVars.get("vacationDays"));
+            assertThat(mappedVars.get("vacationDays")).isEqualTo("27");
             processInstanceId = null;
 
         } finally {

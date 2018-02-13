@@ -12,7 +12,7 @@ import org.kie.api.runtime.ExecutionResults;
 import org.kie.server.api.model.ReleaseId;
 import org.kie.server.api.model.ServiceResponse;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 import org.kie.server.integrationtests.shared.KieServerAssert;
 import org.kie.server.integrationtests.shared.KieServerDeployer;
 
@@ -55,7 +55,7 @@ public class AgendaIntegrationTest extends DroolsKieServerBaseIntegrationTest {
         ExecutionResults result = response.getResult();
 
         List<?> outcome = (List<?>) result.getValue(LIST_OUTPUT_NAME);
-        assertNotNull(outcome);
-        assertEquals(0, outcome.size());
+        assertThat(outcome).isNotNull();
+        assertThat(outcome).isEmpty();
     }
 }

@@ -29,7 +29,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import org.junit.After;
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
@@ -113,42 +113,42 @@ public class UserTaskEscalationIntegrationTest extends JbpmKieServerBaseIntegrat
     @Test
     public void testEscalation() throws InterruptedException, MessagingException, Exception {
         Long processInstanceId = processClient.startProcess(CONTAINER_ID, PROCESS_ID_USERTASK_ESCALATION, params);
-        assertNotNull(processInstanceId);
-        assertTrue(processInstanceId > 0);
+        assertThat(processInstanceId).isNotNull();
+        assertThat(processInstanceId > 0).isTrue();
         try {
             List<TaskSummary> taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertNotNull(taskList);
-            assertEquals(1, taskList.size());
+            assertThat(taskList).isNotNull();
+            assertThat(taskList).hasSize(1);
             TaskSummary taskSummary = taskList.get(0);
-            assertEquals("User Task", taskSummary.getName());
+            assertThat(taskSummary.getName()).isEqualTo("User Task");
             Long taskId = taskSummary.getId();
 
             TaskInstance taskInstance = taskClient.findTaskById(taskId);
-            assertNotNull(taskInstance);
-            assertEquals(USER_YODA, taskInstance.getActualOwner());
+            assertThat(taskInstance).isNotNull();
+            assertThat(taskInstance.getActualOwner()).isEqualTo(USER_YODA);
 
             changeUser(USER_JOHN);
             waitForAssign(taskId, USER_JOHN);
 
             taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_JOHN, 0, 10);
-            assertNotNull(taskList);
-            assertEquals(1, taskList.size());
+            assertThat(taskList).isNotNull();
+            assertThat(taskList).hasSize(1);
             taskId = taskList.get(0).getId();
             taskInstance = taskClient.findTaskById(taskId);
-            assertNotNull(taskInstance);
+            assertThat(taskInstance).isNotNull();
 
             taskClient.startTask(CONTAINER_ID, taskId, USER_JOHN);
 
             taskInstance = taskClient.findTaskById(taskId);
-            assertNotNull(taskInstance);
-            assertEquals(USER_JOHN, taskInstance.getActualOwner());
+            assertThat(taskInstance).isNotNull();
+            assertThat(taskInstance.getActualOwner()).isEqualTo(USER_JOHN);
 
             waitForEmailsRecieve(wiser);
             taskClient.completeTask(CONTAINER_ID, taskId, USER_JOHN, new HashMap<String, Object>());
 
             ProcessInstance processInstance = processClient.getProcessInstance(CONTAINER_ID, processInstanceId);
-            assertNotNull(processInstance);
-            assertEquals(org.kie.api.runtime.process.ProcessInstance.STATE_COMPLETED, processInstance.getState().intValue());
+            assertThat(processInstance).isNotNull();
+            assertThat(processInstance.getState().intValue()).isEqualTo(org.kie.api.runtime.process.ProcessInstance.STATE_COMPLETED);
 
             assertEmails("Escalation");
         } catch (Exception e) {
@@ -164,22 +164,22 @@ public class UserTaskEscalationIntegrationTest extends JbpmKieServerBaseIntegrat
     public void testCompleteTaskBeforeEscalation() throws InterruptedException {
         // Unstable on slow DBs where starting of task is called after escalation timeout.
         Long processInstanceId = processClient.startProcess(CONTAINER_ID, PROCESS_ID_USERTASK_ESCALATION, params);
-        assertNotNull(processInstanceId);
-        assertTrue(processInstanceId > 0);
+        assertThat(processInstanceId).isNotNull();
+        assertThat(processInstanceId > 0).isTrue();
 
         List<TaskSummary> taskList = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-        assertNotNull(taskList);
-        assertEquals(1, taskList.size());
+        assertThat(taskList).isNotNull();
+        assertThat(taskList).hasSize(1);
         TaskSummary taskSummary = taskList.get(0);
-        assertEquals("User Task", taskSummary.getName());
+        assertThat(taskSummary.getName()).isEqualTo("User Task");
         Long taskId = taskSummary.getId();
 
         taskClient.startTask(CONTAINER_ID, taskId, USER_YODA);
         taskClient.completeTask(CONTAINER_ID, taskId, USER_YODA, new HashMap<String, Object>());
 
         ProcessInstance processInstance = processClient.getProcessInstance(CONTAINER_ID, processInstanceId);
-        assertNotNull(processInstance);
-        assertEquals(org.kie.api.runtime.process.ProcessInstance.STATE_COMPLETED, processInstance.getState().intValue());
+        assertThat(processInstance).isNotNull();
+        assertThat(processInstance.getState().intValue()).isEqualTo(org.kie.api.runtime.process.ProcessInstance.STATE_COMPLETED);
 
         KieServerAssert.assertNullOrEmpty("Email recieved!", wiser.getMessages());
 
@@ -191,27 +191,27 @@ public class UserTaskEscalationIntegrationTest extends JbpmKieServerBaseIntegrat
     private void assertEmails(final String subj) throws MessagingException, IOException {
         //wiser shoudl catch 2 messages (one for John and one for Administrator)
         List<WiserMessage> messages = wiser.getMessages();
-        assertNotNull(messages);
-        assertEquals(2, messages.size());
+        assertThat(messages).isNotNull();
+        assertThat(messages).hasSize(2);
 
         for (WiserMessage message : messages) {
             MimeMessage receivedMessage = message.getMimeMessage();
-            assertNotNull(receivedMessage);
+            assertThat(receivedMessage).isNotNull();
 
-            assertEquals(subj, receivedMessage.getSubject());
-            assertEquals(ESCALATION_TEXT, (String) receivedMessage.getContent());
+            assertThat(receivedMessage.getSubject()).isEqualTo(subj);
+            assertThat((String) receivedMessage.getContent()).isEqualTo(ESCALATION_TEXT);
 
             InternetAddress[] from = (InternetAddress[]) receivedMessage.getFrom();
-            assertEquals(1, from.length);
-            assertEquals(FROM_EMAIL, from[0].getAddress());
+            assertThat(from.length).isEqualTo(1);
+            assertThat(from[0].getAddress()).isEqualTo(FROM_EMAIL);
             InternetAddress[] to = (InternetAddress[]) receivedMessage.getAllRecipients();
-            assertEquals(2, to.length);
+            assertThat(to.length).isEqualTo(2);
             if (to[0].getAddress().equals(USER_JOHN + EMAIL_DOMAIN)) {
-                assertEquals(USER_JOHN + EMAIL_DOMAIN, to[0].getAddress());
-                assertEquals(USER_ADMINISTRATOR + EMAIL_DOMAIN, to[1].getAddress());
+                assertThat(to[0].getAddress()).isEqualTo(USER_JOHN + EMAIL_DOMAIN);
+                assertThat(to[1].getAddress()).isEqualTo(USER_ADMINISTRATOR + EMAIL_DOMAIN);
             } else {
-                assertEquals(USER_ADMINISTRATOR + EMAIL_DOMAIN, to[0].getAddress());
-                assertEquals(USER_JOHN + EMAIL_DOMAIN, to[1].getAddress());
+                assertThat(to[0].getAddress()).isEqualTo(USER_ADMINISTRATOR + EMAIL_DOMAIN);
+                assertThat(to[1].getAddress()).isEqualTo(USER_JOHN + EMAIL_DOMAIN);
             }
         }
     }

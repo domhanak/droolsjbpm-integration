@@ -15,7 +15,7 @@
 
 package org.kie.server.integrationtests.jbpm.rest;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 import static org.kie.server.api.rest.RestURI.ABORT_PROCESS_INST_DEL_URI;
 import static org.kie.server.api.rest.RestURI.PROCESS_INST_ID;
@@ -67,10 +67,10 @@ public class ProcessServiceRestOnlyIntegrationTest extends RestJbpmBaseIntegrati
             WebTarget clientRequest = newRequest(build(TestConfig.getKieServerHttpUrl(), PROCESS_URI + "/" + START_PROCESS_POST_URI, valuesMap));
             logger.debug("[POST] " + clientRequest.getUri());
             response = clientRequest.request(getMediaType()).post(createEntity(""));
-            Assert.assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatus());
+            Assert.assertThat(response.getStatus()).isEqualTo(Response.Status.CREATED.getStatusCode());
 
             Long result = response.readEntity(JaxbLong.class).unwrap();
-            assertNotNull(result);
+            assertThat(result).isNotNull();
 
             // abort process instance
             valuesMap.clear();
@@ -80,14 +80,14 @@ public class ProcessServiceRestOnlyIntegrationTest extends RestJbpmBaseIntegrati
             logger.debug( "[DELETE] " + clientRequest.getUri());
 
             response = clientRequest.request(getMediaType()).delete();
-            assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
+            assertThat(response.getStatus()).isEqualTo(Response.Status.NO_CONTENT.getStatusCode());
 
             // abort process instance again
             clientRequest = newRequest(build(TestConfig.getKieServerHttpUrl(), PROCESS_URI + "/" + ABORT_PROCESS_INST_DEL_URI, valuesMap));
             logger.debug( "[DELETE] " + clientRequest.getUri());
 
             response = clientRequest.request(getMediaType()).delete();
-            assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
+            assertThat(response.getStatus()).isEqualTo(Response.Status.NOT_FOUND.getStatusCode());
         } finally {
             if(response != null) {
                 response.close();

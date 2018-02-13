@@ -33,9 +33,9 @@ import org.kie.server.integrationtests.shared.KieServerAssert;
 import org.kie.server.integrationtests.shared.KieServerDeployer;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
+import static org.assertj.core.api.Assertions.fail;
 
 public class DMNInputDataStringIntegrationTest
         extends DMNKieServerBaseIntegrationTest {
@@ -77,7 +77,7 @@ public class DMNInputDataStringIntegrationTest
         dmnContext.set( "Full Name", "John Doe" );
         ServiceResponse<DMNResult> evaluateAll = dmnClient.evaluateAll(CONTAINER_ID, dmnContext);
         
-        assertEquals(ResponseType.SUCCESS, evaluateAll.getType());
+        assertThat(evaluateAll.getType()).isEqualTo(ResponseType.SUCCESS);
         
         DMNResult dmnResult = evaluateAll.getResult();
         
@@ -92,14 +92,14 @@ public class DMNInputDataStringIntegrationTest
     @Test
     public void test_evaluateAll_withUpdate() {
         ServiceResponse<DMNModelInfoList> models = dmnClient.getModels(CONTAINER_ID);
-        assertEquals( ResponseType.SUCCESS, models.getType() );
-        assertEquals( 1, models.getResult().getModels().size() );
+        assertThat(models.getType() ).isEqualTo(ResponseType.SUCCESS);
+        assertThat(models.getResult().getModels().size() ).isEqualTo(1);
 
         DMNContext dmnContext = dmnClient.newContext();
         dmnContext.set( "Full Name", "John Doe" );
         ServiceResponse<DMNResult> evaluateAll = dmnClient.evaluateAll(CONTAINER_ID, dmnContext);
         
-        assertEquals(ResponseType.SUCCESS, evaluateAll.getType());
+        assertThat(evaluateAll.getType()).isEqualTo(ResponseType.SUCCESS);
         
         DMNResult dmnResult = evaluateAll.getResult();
         
@@ -113,11 +113,11 @@ public class DMNInputDataStringIntegrationTest
         KieServerAssert.assertSuccess(client.updateReleaseId(CONTAINER_ID, kjar_v101));
         
         models = dmnClient.getModels(CONTAINER_ID);
-        assertEquals( ResponseType.SUCCESS, models.getType() );
-        assertEquals( 1, models.getResult().getModels().size() );
+        assertThat(models.getType() ).isEqualTo(ResponseType.SUCCESS);
+        assertThat(models.getResult().getModels().size() ).isEqualTo(1);
         
         evaluateAll = dmnClient.evaluateAll(CONTAINER_ID, dmnContext);
-        assertEquals(ResponseType.SUCCESS, evaluateAll.getType());
+        assertThat(evaluateAll.getType()).isEqualTo(ResponseType.SUCCESS);
         
         dmnResult = evaluateAll.getResult();
         assertThat( dmnResult.getDecisionResults().size(), is( 1 ) );

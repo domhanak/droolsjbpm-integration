@@ -29,7 +29,7 @@ import org.kie.api.runtime.KieContainer;
 import org.kie.server.api.model.ReleaseId;
 import org.kie.server.api.model.ServiceResponse;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import org.kie.server.integrationtests.shared.KieServerAssert;
 import org.kie.server.integrationtests.shared.KieServerDeployer;
 import org.kie.server.integrationtests.shared.KieServerReflections;
@@ -81,7 +81,7 @@ public class MultiModuleProjectIntegrationTest extends DroolsKieServerBaseIntegr
         ExecutionResults result = response1.getResult();
 
         Object outcome = result.getValue(CAR_OUT_IDENTIFIER);
-        assertEquals("Driving car!", KieServerReflections.valueOf(outcome, "message"));
+        assertThat("message")).as("Driving car!").isEqualTo(KieServerReflections.valueOf(outcome);
 
         Object bus = createInstance(BUS_CLASS_NAME);
         commands = new ArrayList<Command<?>>();
@@ -96,7 +96,7 @@ public class MultiModuleProjectIntegrationTest extends DroolsKieServerBaseIntegr
         ExecutionResults result2 = response2.getResult();
 
         Object outcome2 = result2.getValue(BUS_OUT_IDENTIFIER);
-        assertEquals("Driving bus!", KieServerReflections.valueOf(outcome2, "message"));
+        assertThat("message")).as("Driving bus!").isEqualTo(KieServerReflections.valueOf(outcome2);
     }
 
 }

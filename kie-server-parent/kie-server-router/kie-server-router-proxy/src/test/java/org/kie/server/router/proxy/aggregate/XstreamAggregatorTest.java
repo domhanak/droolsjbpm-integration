@@ -15,7 +15,7 @@
 
 package org.kie.server.router.proxy.aggregate;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.ArrayList;
@@ -45,19 +45,19 @@ public class XstreamAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         NodeList processes = xml.getElementsByTagName("org.kie.server.api.model.definition.ProcessDefinitionList");
-        assertNotNull(processes);
-        assertEquals(1, processes.getLength());
+        assertThat(processes).isNotNull();
+        assertThat(processes.getLength()).isEqualTo(1);
 
         NodeList defs = xml.getElementsByTagName("processes");
-        assertNotNull(defs);
-        assertEquals(1, defs.getLength());
+        assertThat(defs).isNotNull();
+        assertThat(defs.getLength()).isEqualTo(1);
 
         NodeList processDefs = xml.getElementsByTagName("org.kie.server.api.model.definition.ProcessDefinition");
-        assertNotNull(processDefs);
-        assertEquals(5, processDefs.getLength());
+        assertThat(processDefs).isNotNull();
+        assertThat(processDefs.getLength()).isEqualTo(5);
     }
 
     @Test
@@ -74,19 +74,19 @@ public class XstreamAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         NodeList processes = xml.getElementsByTagName("org.kie.server.api.model.definition.ProcessDefinitionList");
-        assertNotNull(processes);
-        assertEquals(1, processes.getLength());
+        assertThat(processes).isNotNull();
+        assertThat(processes.getLength()).isEqualTo(1);
 
         NodeList defs = xml.getElementsByTagName("processes");
-        assertNotNull(defs);
-        assertEquals(1, defs.getLength());
+        assertThat(defs).isNotNull();
+        assertThat(defs.getLength()).isEqualTo(1);
 
         NodeList processDefs = xml.getElementsByTagName("org.kie.server.api.model.definition.ProcessDefinition");
-        assertNotNull(processDefs);
-        assertEquals(2, processDefs.getLength());
+        assertThat(processDefs).isNotNull();
+        assertThat(processDefs.getLength()).isEqualTo(2);
     }
 
     @Test
@@ -103,19 +103,19 @@ public class XstreamAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         NodeList processes = xml.getElementsByTagName("org.kie.server.api.model.definition.ProcessDefinitionList");
-        assertNotNull(processes);
-        assertEquals(1, processes.getLength());
+        assertThat(processes).isNotNull();
+        assertThat(processes.getLength()).isEqualTo(1);
 
         NodeList defs = xml.getElementsByTagName("processes");
-        assertNotNull(defs);
-        assertEquals(1, defs.getLength());
+        assertThat(defs).isNotNull();
+        assertThat(defs.getLength()).isEqualTo(1);
 
         NodeList processDefs = xml.getElementsByTagName("org.kie.server.api.model.definition.ProcessDefinition");
-        assertNotNull(processDefs);
-        assertEquals(3, processDefs.getLength());
+        assertThat(processDefs).isNotNull();
+        assertThat(processDefs.getLength()).isEqualTo(3);
     }
 
     @Test
@@ -132,19 +132,19 @@ public class XstreamAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         NodeList processes = xml.getElementsByTagName("org.kie.server.api.model.definition.ProcessDefinitionList");
-        assertNotNull(processes);
-        assertEquals(1, processes.getLength());
+        assertThat(processes).isNotNull();
+        assertThat(processes.getLength()).isEqualTo(1);
 
         NodeList defs = xml.getElementsByTagName("processes");
-        assertNotNull(defs);
-        assertEquals(1, defs.getLength());
+        assertThat(defs).isNotNull();
+        assertThat(defs.getLength()).isEqualTo(1);
 
         NodeList processDefs = xml.getElementsByTagName("org.kie.server.api.model.definition.ProcessDefinition");
-        assertNotNull(processDefs);
-        assertEquals(0, processDefs.getLength());
+        assertThat(processDefs).isNotNull();
+        assertThat(processDefs.getLength()).isEqualTo(0);
     }
 
     @Test
@@ -161,19 +161,19 @@ public class XstreamAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         NodeList processes = xml.getElementsByTagName("org.kie.server.api.model.instance.ProcessInstanceList");
-        assertNotNull(processes);
-        assertEquals(1, processes.getLength());
+        assertThat(processes).isNotNull();
+        assertThat(processes.getLength()).isEqualTo(1);
 
         NodeList instances = xml.getElementsByTagName("processInstances");
-        assertNotNull(instances);
-        assertEquals(1, instances.getLength());
+        assertThat(instances).isNotNull();
+        assertThat(instances.getLength()).isEqualTo(1);
 
         NodeList processInstances = xml.getElementsByTagName("org.kie.server.api.model.instance.ProcessInstance");
-        assertNotNull(processInstances);
-        assertEquals(3, processInstances.getLength());
+        assertThat(processInstances).isNotNull();
+        assertThat(processInstances.getLength()).isEqualTo(3);
     }
 
     @Test
@@ -190,19 +190,19 @@ public class XstreamAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         NodeList processes = xml.getElementsByTagName("org.kie.server.api.model.instance.ProcessInstanceList");
-        assertNotNull(processes);
-        assertEquals(1, processes.getLength());
+        assertThat(processes).isNotNull();
+        assertThat(processes.getLength()).isEqualTo(1);
 
         NodeList instances = xml.getElementsByTagName("processInstances");
-        assertNotNull(instances);
-        assertEquals(1, instances.getLength());
+        assertThat(instances).isNotNull();
+        assertThat(instances.getLength()).isEqualTo(1);
 
         NodeList processInstances = xml.getElementsByTagName("org.kie.server.api.model.instance.ProcessInstance");
-        assertNotNull(processInstances);
-        assertEquals(1, processInstances.getLength());
+        assertThat(processInstances).isNotNull();
+        assertThat(processInstances.getLength()).isEqualTo(1);
     }
 
     @Test
@@ -219,19 +219,19 @@ public class XstreamAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         NodeList processes = xml.getElementsByTagName("org.kie.server.api.model.instance.ProcessInstanceList");
-        assertNotNull(processes);
-        assertEquals(1, processes.getLength());
+        assertThat(processes).isNotNull();
+        assertThat(processes.getLength()).isEqualTo(1);
 
         NodeList instances = xml.getElementsByTagName("processInstances");
-        assertNotNull(instances);
-        assertEquals(1, instances.getLength());
+        assertThat(instances).isNotNull();
+        assertThat(instances.getLength()).isEqualTo(1);
 
         NodeList processInstances = xml.getElementsByTagName("org.kie.server.api.model.instance.ProcessInstance");
-        assertNotNull(processInstances);
-        assertEquals(2, processInstances.getLength());
+        assertThat(processInstances).isNotNull();
+        assertThat(processInstances.getLength()).isEqualTo(2);
     }
 
     @Test
@@ -248,19 +248,19 @@ public class XstreamAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         NodeList processes = xml.getElementsByTagName("org.kie.server.api.model.instance.ProcessInstanceList");
-        assertNotNull(processes);
-        assertEquals(1, processes.getLength());
+        assertThat(processes).isNotNull();
+        assertThat(processes.getLength()).isEqualTo(1);
 
         NodeList instances = xml.getElementsByTagName("processInstances");
-        assertNotNull(instances);
-        assertEquals(1, instances.getLength());
+        assertThat(instances).isNotNull();
+        assertThat(instances.getLength()).isEqualTo(1);
 
         NodeList processInstances = xml.getElementsByTagName("org.kie.server.api.model.instance.ProcessInstance");
-        assertNotNull(processInstances);
-        assertEquals(0, processInstances.getLength());
+        assertThat(processInstances).isNotNull();
+        assertThat(processInstances.getLength()).isEqualTo(0);
     }
 
     @Test
@@ -277,19 +277,19 @@ public class XstreamAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         NodeList processes = xml.getElementsByTagName("org.kie.server.api.model.instance.TaskSummaryList");
-        assertNotNull(processes);
-        assertEquals(1, processes.getLength());
+        assertThat(processes).isNotNull();
+        assertThat(processes.getLength()).isEqualTo(1);
 
         NodeList tasks = xml.getElementsByTagName("tasks");
-        assertNotNull(tasks);
-        assertEquals(1, tasks.getLength());
+        assertThat(tasks).isNotNull();
+        assertThat(tasks.getLength()).isEqualTo(1);
 
         NodeList processInstances = xml.getElementsByTagName("org.kie.server.api.model.instance.TaskSummary");
-        assertNotNull(processInstances);
-        assertEquals(5, processInstances.getLength());
+        assertThat(processInstances).isNotNull();
+        assertThat(processInstances.getLength()).isEqualTo(5);
     }
 
     @Test
@@ -306,19 +306,19 @@ public class XstreamAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         NodeList processes = xml.getElementsByTagName("org.kie.server.api.model.instance.TaskSummaryList");
-        assertNotNull(processes);
-        assertEquals(1, processes.getLength());
+        assertThat(processes).isNotNull();
+        assertThat(processes.getLength()).isEqualTo(1);
 
         NodeList tasks = xml.getElementsByTagName("tasks");
-        assertNotNull(tasks);
-        assertEquals(1, tasks.getLength());
+        assertThat(tasks).isNotNull();
+        assertThat(tasks.getLength()).isEqualTo(1);
 
         NodeList processInstances = xml.getElementsByTagName("org.kie.server.api.model.instance.TaskSummary");
-        assertNotNull(processInstances);
-        assertEquals(3, processInstances.getLength());
+        assertThat(processInstances).isNotNull();
+        assertThat(processInstances.getLength()).isEqualTo(3);
     }
 
     @Test
@@ -335,19 +335,19 @@ public class XstreamAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         NodeList processes = xml.getElementsByTagName("org.kie.server.api.model.instance.TaskSummaryList");
-        assertNotNull(processes);
-        assertEquals(1, processes.getLength());
+        assertThat(processes).isNotNull();
+        assertThat(processes.getLength()).isEqualTo(1);
 
         NodeList tasks = xml.getElementsByTagName("tasks");
-        assertNotNull(tasks);
-        assertEquals(1, tasks.getLength());
+        assertThat(tasks).isNotNull();
+        assertThat(tasks.getLength()).isEqualTo(1);
 
         NodeList processInstances = xml.getElementsByTagName("org.kie.server.api.model.instance.TaskSummary");
-        assertNotNull(processInstances);
-        assertEquals(2, processInstances.getLength());
+        assertThat(processInstances).isNotNull();
+        assertThat(processInstances.getLength()).isEqualTo(2);
     }
 
     @Test
@@ -364,19 +364,19 @@ public class XstreamAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         NodeList processes = xml.getElementsByTagName("org.kie.server.api.model.instance.TaskSummaryList");
-        assertNotNull(processes);
-        assertEquals(1, processes.getLength());
+        assertThat(processes).isNotNull();
+        assertThat(processes.getLength()).isEqualTo(1);
 
         NodeList tasks = xml.getElementsByTagName("tasks");
-        assertNotNull(tasks);
-        assertEquals(1, tasks.getLength());
+        assertThat(tasks).isNotNull();
+        assertThat(tasks.getLength()).isEqualTo(1);
 
         NodeList processInstances = xml.getElementsByTagName("org.kie.server.api.model.instance.TaskSummary");
-        assertNotNull(processInstances);
-        assertEquals(0, processInstances.getLength());
+        assertThat(processInstances).isNotNull();
+        assertThat(processInstances.getLength()).isEqualTo(0);
     }
 
     @Test
@@ -393,28 +393,28 @@ public class XstreamAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         NodeList processes = xml.getElementsByTagName("org.kie.server.api.model.definition.ProcessDefinitionList");
-        assertNotNull(processes);
-        assertEquals(1, processes.getLength());
+        assertThat(processes).isNotNull();
+        assertThat(processes.getLength()).isEqualTo(1);
 
         NodeList defs = xml.getElementsByTagName("processes");
-        assertNotNull(defs);
-        assertEquals(1, defs.getLength());
+        assertThat(defs).isNotNull();
+        assertThat(defs.getLength()).isEqualTo(1);
 
         NodeList processDefs = xml.getElementsByTagName("org.kie.server.api.model.definition.ProcessDefinition");
-        assertNotNull(processDefs);
-        assertEquals(2, processDefs.getLength());
+        assertThat(processDefs).isNotNull();
+        assertThat(processDefs.getLength()).isEqualTo(2);
 
         NodeList processDefIds = xml.getElementsByTagName("id");
-        assertNotNull(processDefIds);
-        assertEquals(2, processDefIds.getLength());
+        assertThat(processDefIds).isNotNull();
+        assertThat(processDefIds.getLength()).isEqualTo(2);
         // make sure it's properly sorted and paged
         String value1 = processDefIds.item(0).getFirstChild().getNodeValue();
-        assertEquals("1", value1);
+        assertThat(value1).isEqualTo("1");
         String value2 = processDefIds.item(1).getFirstChild().getNodeValue();
-        assertEquals("2", value2);
+        assertThat(value2).isEqualTo("2");
     }
 
     @Test
@@ -431,28 +431,28 @@ public class XstreamAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         NodeList processes = xml.getElementsByTagName("org.kie.server.api.model.definition.ProcessDefinitionList");
-        assertNotNull(processes);
-        assertEquals(1, processes.getLength());
+        assertThat(processes).isNotNull();
+        assertThat(processes.getLength()).isEqualTo(1);
 
         NodeList defs = xml.getElementsByTagName("processes");
-        assertNotNull(defs);
-        assertEquals(1, defs.getLength());
+        assertThat(defs).isNotNull();
+        assertThat(defs.getLength()).isEqualTo(1);
 
         NodeList processDefs = xml.getElementsByTagName("org.kie.server.api.model.definition.ProcessDefinition");
-        assertNotNull(processDefs);
-        assertEquals(2, processDefs.getLength());
+        assertThat(processDefs).isNotNull();
+        assertThat(processDefs.getLength()).isEqualTo(2);
 
         NodeList processDefIds = xml.getElementsByTagName("id");
-        assertNotNull(processDefIds);
-        assertEquals(2, processDefIds.getLength());
+        assertThat(processDefIds).isNotNull();
+        assertThat(processDefIds.getLength()).isEqualTo(2);
         // make sure it's properly sorted and paged
         String value1 = processDefIds.item(0).getFirstChild().getNodeValue();
-        assertEquals("5", value1);
+        assertThat(value1).isEqualTo("5");
         String value2 = processDefIds.item(1).getFirstChild().getNodeValue();
-        assertEquals("4", value2);
+        assertThat(value2).isEqualTo("4");
     }
 
     @Test
@@ -469,28 +469,28 @@ public class XstreamAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         NodeList processes = xml.getElementsByTagName("org.kie.server.api.model.definition.ProcessDefinitionList");
-        assertNotNull(processes);
-        assertEquals(1, processes.getLength());
+        assertThat(processes).isNotNull();
+        assertThat(processes.getLength()).isEqualTo(1);
 
         NodeList defs = xml.getElementsByTagName("processes");
-        assertNotNull(defs);
-        assertEquals(1, defs.getLength());
+        assertThat(defs).isNotNull();
+        assertThat(defs.getLength()).isEqualTo(1);
 
         NodeList processDefs = xml.getElementsByTagName("org.kie.server.api.model.definition.ProcessDefinition");
-        assertNotNull(processDefs);
-        assertEquals(2, processDefs.getLength());
+        assertThat(processDefs).isNotNull();
+        assertThat(processDefs.getLength()).isEqualTo(2);
 
         NodeList processDefIds = xml.getElementsByTagName("id");
-        assertNotNull(processDefIds);
-        assertEquals(2, processDefIds.getLength());
+        assertThat(processDefIds).isNotNull();
+        assertThat(processDefIds.getLength()).isEqualTo(2);
         // make sure it's properly sorted and paged
         String value1 = processDefIds.item(0).getFirstChild().getNodeValue();
-        assertEquals("3", value1);
+        assertThat(value1).isEqualTo("3");
         String value2 = processDefIds.item(1).getFirstChild().getNodeValue();
-        assertEquals("4", value2);
+        assertThat(value2).isEqualTo("4");
     }
 
     @Test
@@ -507,28 +507,28 @@ public class XstreamAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         NodeList processes = xml.getElementsByTagName("org.kie.server.api.model.definition.ProcessDefinitionList");
-        assertNotNull(processes);
-        assertEquals(1, processes.getLength());
+        assertThat(processes).isNotNull();
+        assertThat(processes.getLength()).isEqualTo(1);
 
         NodeList defs = xml.getElementsByTagName("processes");
-        assertNotNull(defs);
-        assertEquals(1, defs.getLength());
+        assertThat(defs).isNotNull();
+        assertThat(defs.getLength()).isEqualTo(1);
 
         NodeList processDefs = xml.getElementsByTagName("org.kie.server.api.model.definition.ProcessDefinition");
-        assertNotNull(processDefs);
-        assertEquals(2, processDefs.getLength());
+        assertThat(processDefs).isNotNull();
+        assertThat(processDefs.getLength()).isEqualTo(2);
 
         NodeList processDefIds = xml.getElementsByTagName("id");
-        assertNotNull(processDefIds);
-        assertEquals(2, processDefIds.getLength());
+        assertThat(processDefIds).isNotNull();
+        assertThat(processDefIds.getLength()).isEqualTo(2);
         // make sure it's properly sorted and paged
         String value1 = processDefIds.item(0).getFirstChild().getNodeValue();
-        assertEquals("3", value1);
+        assertThat(value1).isEqualTo("3");
         String value2 = processDefIds.item(1).getFirstChild().getNodeValue();
-        assertEquals("2", value2);
+        assertThat(value2).isEqualTo("2");
     }
 
     @Test
@@ -545,19 +545,19 @@ public class XstreamAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         NodeList processes = xml.getElementsByTagName("org.kie.server.api.model.definition.ProcessDefinitionList");
-        assertNotNull(processes);
-        assertEquals(1, processes.getLength());
+        assertThat(processes).isNotNull();
+        assertThat(processes.getLength()).isEqualTo(1);
 
         NodeList defs = xml.getElementsByTagName("processes");
-        assertNotNull(defs);
-        assertEquals(1, defs.getLength());
+        assertThat(defs).isNotNull();
+        assertThat(defs.getLength()).isEqualTo(1);
 
         NodeList processDefs = xml.getElementsByTagName("org.kie.server.api.model.definition.ProcessDefinition");
-        assertNotNull(processDefs);
-        assertEquals(0, processDefs.getLength());
+        assertThat(processDefs).isNotNull();
+        assertThat(processDefs.getLength()).isEqualTo(0);
 
     }
 
@@ -575,19 +575,19 @@ public class XstreamAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         NodeList processes = xml.getElementsByTagName("org.kie.server.api.model.ServiceResponse");
-        assertNotNull(processes);
-        assertEquals(1, processes.getLength());
+        assertThat(processes).isNotNull();
+        assertThat(processes.getLength()).isEqualTo(1);
 
         NodeList defs = xml.getElementsByTagName("result");
-        assertNotNull(defs);
-        assertEquals(1, defs.getLength());
+        assertThat(defs).isNotNull();
+        assertThat(defs.getLength()).isEqualTo(1);
 
         NodeList processDefs = xml.getElementsByTagName("kie-container");
-        assertNotNull(processDefs);
-        assertEquals(6, processDefs.getLength());
+        assertThat(processDefs).isNotNull();
+        assertThat(processDefs.getLength()).isEqualTo(6);
     }
 
     @Test
@@ -604,11 +604,11 @@ public class XstreamAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         NodeList processes = xml.getElementsByTagName("sql-timestamp");
-        assertNotNull(processes);
-        assertEquals(5, processes.getLength());
+        assertThat(processes).isNotNull();
+        assertThat(processes.getLength()).isEqualTo(5);
     }
 
     @Test
@@ -625,11 +625,11 @@ public class XstreamAggregatorTest extends AbstractAggregateTest {
         logger.debug(result);
 
         Document xml = toXml(result);
-        assertNotNull(xml);
+        assertThat(xml).isNotNull();
 
         NodeList processes = xml.getElementsByTagName("sql-timestamp");
-        assertNotNull(processes);
-        assertEquals(2, processes.getLength());
+        assertThat(processes).isNotNull();
+        assertThat(processes.getLength()).isEqualTo(2);
     }
 }
 

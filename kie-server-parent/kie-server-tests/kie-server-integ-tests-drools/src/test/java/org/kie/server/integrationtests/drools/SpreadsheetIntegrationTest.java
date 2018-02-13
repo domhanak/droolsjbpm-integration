@@ -28,7 +28,7 @@ import org.kie.api.runtime.ExecutionResults;
 import org.kie.server.api.model.ReleaseId;
 import org.kie.server.api.model.ServiceResponse;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 import org.kie.server.integrationtests.shared.KieServerAssert;
 import org.kie.server.integrationtests.shared.KieServerDeployer;
 import org.kie.server.integrationtests.shared.KieServerReflections;
@@ -76,6 +76,6 @@ public class SpreadsheetIntegrationTest extends DroolsKieServerBaseIntegrationTe
         KieServerAssert.assertSuccess(response);
         ExecutionResults results = response.getResult();
         Object value = results.getValue(PERSON_OUT_IDENTIFIER);
-        assertEquals(Boolean.TRUE, KieServerReflections.valueOf(value, PERSON_CAN_BUY_ALCOHOL_FIELD));
+        assertThat(KieServerReflections.valueOf(value).isCloseTo(Boolean.TRUE, within(PERSON_CAN_BUY_ALCOHOL_FIELD)));
     }
 }

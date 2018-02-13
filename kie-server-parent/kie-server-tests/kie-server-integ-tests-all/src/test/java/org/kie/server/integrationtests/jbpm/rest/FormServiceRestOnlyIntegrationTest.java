@@ -15,7 +15,7 @@
  */
 package org.kie.server.integrationtests.jbpm.rest;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.kie.server.api.rest.RestURI.*;
 
 import java.util.HashMap;
@@ -74,12 +74,12 @@ public class FormServiceRestOnlyIntegrationTest extends RestJbpmBaseIntegrationT
         logger.info("[GET] " + clientRequest.getUri());
 
         response = clientRequest.request(getMediaType()).get();
-        Assert.assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+        Assert.assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
 
         String result = response.readEntity(String.class);
         logger.debug("Form content is '{}'", result);
-        assertNotNull(result);
-        assertFalse(result.isEmpty());
+        assertThat(result).isNotNull();
+        assertThat(result.isEmpty()).isFalse();
     }
 
     @Test
@@ -97,10 +97,10 @@ public class FormServiceRestOnlyIntegrationTest extends RestJbpmBaseIntegrationT
         WebTarget clientRequest = newRequest(build(TestConfig.getKieServerHttpUrl(), PROCESS_URI + "/" + START_PROCESS_POST_URI, valuesMap));
         logger.info("[POST] " + clientRequest.getUri());
         response = clientRequest.request(getMediaType()).post(createEntity(marshaller.marshall(params)));
-        Assert.assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatus());
+        Assert.assertThat(response.getStatus()).isEqualTo(Response.Status.CREATED.getStatusCode());
 
         Long result = response.readEntity(JaxbLong.class).unwrap();
-        assertNotNull(result);
+        assertThat(result).isNotNull();
 
         // find tasks by process instance id
         valuesMap.put(RestURI.PROCESS_INST_ID, result);
@@ -109,14 +109,14 @@ public class FormServiceRestOnlyIntegrationTest extends RestJbpmBaseIntegrationT
         logger.info("[GET] " + clientRequest.getUri());
 
         response = clientRequest.request(getMediaType()).get();
-        Assert.assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+        Assert.assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
 
         TaskSummaryList taskSummaryList = marshaller.unmarshall(response.readEntity(String.class), TaskSummaryList.class);
         logger.debug("Form content is '{}'", taskSummaryList);
 
-        assertNotNull(taskSummaryList);
+        assertThat(taskSummaryList).isNotNull();
         TaskSummary[] task = taskSummaryList.getTasks();
-        assertEquals(1, task.length);
+        assertThat(task.length).isEqualTo(1);
 
         Long taskId = task[0].getId();
 
@@ -126,12 +126,12 @@ public class FormServiceRestOnlyIntegrationTest extends RestJbpmBaseIntegrationT
         logger.info("[GET] " + clientRequest.getUri());
 
         response = clientRequest.request(getMediaType()).get();
-        Assert.assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+        Assert.assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
 
         String formdata = response.readEntity(String.class);
         logger.debug("Form content is '{}'", formdata);
-        assertNotNull(formdata);
-        assertFalse(formdata.isEmpty());
+        assertThat(formdata).isNotNull();
+        assertThat(formdata.isEmpty()).isFalse();
 
         clientRequest = newRequest(build(TestConfig.getKieServerHttpUrl(), PROCESS_URI + "/" + ABORT_PROCESS_INST_DEL_URI, valuesMap));
         logger.info("[DELETE] " + clientRequest.getUri());
@@ -139,7 +139,7 @@ public class FormServiceRestOnlyIntegrationTest extends RestJbpmBaseIntegrationT
         response = clientRequest.request().delete();
         int noContentStatusCode = Response.Status.NO_CONTENT.getStatusCode();
         int okStatusCode = Response.Status.OK.getStatusCode();
-        assertTrue("Wrong status code returned: " + response.getStatus(),
+        assertThat("Wrong status code returned: " + response.getStatus().isTrue(),
                 response.getStatus() == noContentStatusCode || response.getStatus() == okStatusCode);
     }
 
@@ -154,7 +154,7 @@ public class FormServiceRestOnlyIntegrationTest extends RestJbpmBaseIntegrationT
         logger.info("[GET] " + clientRequest.getUri());
 
         response = clientRequest.request(getMediaType()).get();
-        Assert.assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
+        Assert.assertThat(response.getStatus()).isEqualTo(Response.Status.NOT_FOUND.getStatusCode());
     }
 
     @Test
@@ -167,6 +167,6 @@ public class FormServiceRestOnlyIntegrationTest extends RestJbpmBaseIntegrationT
         logger.info("[GET] " + clientRequest.getUri());
 
         response = clientRequest.request(getMediaType()).get();
-        Assert.assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
+        Assert.assertThat(response.getStatus()).isEqualTo(Response.Status.NOT_FOUND.getStatusCode());
     }
 }

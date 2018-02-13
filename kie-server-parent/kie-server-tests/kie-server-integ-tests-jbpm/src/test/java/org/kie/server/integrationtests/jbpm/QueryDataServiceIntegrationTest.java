@@ -15,12 +15,12 @@
 
 package org.kie.server.integrationtests.jbpm;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.assertj.core.api.Assertions.fail;
 import static org.junit.Assume.assumeFalse;
 
 import java.util.ArrayList;
@@ -82,18 +82,18 @@ public class QueryDataServiceIntegrationTest extends JbpmKieServerBaseIntegratio
         String expectedResolvedDS = System.getProperty("org.kie.server.persistence.ds", "jdbc/jbpm-ds");
 
         QueryDefinition registeredQuery = queryClient.getQuery("first-query");
-        assertNotNull(registeredQuery);
-        assertEquals("first-query", registeredQuery.getName());
-        assertEquals(expectedResolvedDS, registeredQuery.getSource());
-        assertEquals("select * from ProcessInstanceLog", registeredQuery.getExpression());
-        assertEquals("PROCESS", registeredQuery.getTarget());
+        assertThat(registeredQuery).isNotNull();
+        assertThat(registeredQuery.getName()).isEqualTo("first-query");
+        assertThat(registeredQuery.getSource()).isEqualTo(expectedResolvedDS);
+        assertThat(registeredQuery.getExpression()).isEqualTo("select * from ProcessInstanceLog");
+        assertThat(registeredQuery.getTarget()).isEqualTo("PROCESS");
 
         registeredQuery = queryClient.getQuery("second-query");
-        assertNotNull(registeredQuery);
-        assertEquals("second-query", registeredQuery.getName());
-        assertEquals(expectedResolvedDS, registeredQuery.getSource());
-        assertEquals("select * from NodeInstanceLog", registeredQuery.getExpression());
-        assertEquals("CUSTOM", registeredQuery.getTarget());
+        assertThat(registeredQuery).isNotNull();
+        assertThat(registeredQuery.getName()).isEqualTo("second-query");
+        assertThat(registeredQuery.getSource()).isEqualTo(expectedResolvedDS);
+        assertThat(registeredQuery.getExpression()).isEqualTo("select * from NodeInstanceLog");
+        assertThat(registeredQuery.getTarget()).isEqualTo("CUSTOM");
     }
 
     @Test
@@ -112,19 +112,19 @@ public class QueryDataServiceIntegrationTest extends JbpmKieServerBaseIntegratio
             List<QueryDefinition> queries = queryClient.getQueries(0, 100);
 
             QueryDefinition registeredQuery = queries.stream().filter(q -> q.getName().equals("allProcessInstances")).findFirst().orElse(null);
-            assertNotNull(registeredQuery);
-            assertEquals(query.getName(), registeredQuery.getName());
-            assertEquals(query.getSource(), registeredQuery.getSource());
-            assertEquals(query.getExpression(), registeredQuery.getExpression());
-            assertEquals(query.getTarget(), registeredQuery.getTarget());
+            assertThat(registeredQuery).isNotNull();
+            assertThat(registeredQuery.getName()).isEqualTo(query.getName());
+            assertThat(registeredQuery.getSource()).isEqualTo(query.getSource());
+            assertThat(registeredQuery.getExpression()).isEqualTo(query.getExpression());
+            assertThat(registeredQuery.getTarget()).isEqualTo(query.getTarget());
 
             registeredQuery = queryClient.getQuery(query.getName());
 
-            assertNotNull(registeredQuery);
-            assertEquals(query.getName(), registeredQuery.getName());
-            assertEquals(query.getSource(), registeredQuery.getSource());
-            assertEquals(query.getExpression(), registeredQuery.getExpression());
-            assertEquals(query.getTarget(), registeredQuery.getTarget());
+            assertThat(registeredQuery).isNotNull();
+            assertThat(registeredQuery.getName()).isEqualTo(query.getName());
+            assertThat(registeredQuery.getSource()).isEqualTo(query.getSource());
+            assertThat(registeredQuery.getExpression()).isEqualTo(query.getExpression());
+            assertThat(registeredQuery.getTarget()).isEqualTo(query.getTarget());
 
         } finally {
             abortProcessInstances(processInstanceIds);
@@ -147,19 +147,19 @@ public class QueryDataServiceIntegrationTest extends JbpmKieServerBaseIntegratio
             queryClient.registerQuery(query);
 
             List<ProcessInstance> instances = queryClient.query(query.getName(), QueryServicesClient.QUERY_MAP_PI, 0, 10, ProcessInstance.class);
-            assertNotNull(instances);
-            assertEquals(5, instances.size());
+            assertThat(instances).isNotNull();
+            assertThat(instances).hasSize(5);
 
             List<Long> found = collectInstances(instances);
-            assertEquals(processInstanceIds, found);
+            assertThat(found).isEqualTo(processInstanceIds);
 
             instances = queryClient.query(query.getName(), QueryServicesClient.QUERY_MAP_PI, 0, 3, ProcessInstance.class);
-            assertNotNull(instances);
-            assertEquals(3, instances.size());
+            assertThat(instances).isNotNull();
+            assertThat(instances).hasSize(3);
 
             instances = queryClient.query(query.getName(), QueryServicesClient.QUERY_MAP_PI, "status", 1, 3, ProcessInstance.class);
-            assertNotNull(instances);
-            assertEquals(2, instances.size());
+            assertThat(instances).isNotNull();
+            assertThat(instances).hasSize(2);
 
         } finally {
             abortProcessInstances(processInstanceIds);
@@ -183,19 +183,19 @@ public class QueryDataServiceIntegrationTest extends JbpmKieServerBaseIntegratio
             queryClient.registerQuery(query);
 
             final List<ProcessInstance> instances = queryClient.query(query.getName(), QueryServicesClient.QUERY_MAP_PI_WITH_VARS, 0, 20, ProcessInstance.class);
-            assertNotNull(instances);
+            assertThat(instances).isNotNull();
             final List<Long> found = collectInstances(instances);
-            assertEquals(processInstanceIds, found);
+            assertThat(found).isEqualTo(processInstanceIds);
 
             for (ProcessInstance instance : instances) {
                 final Map<String, Object> variables = instance.getVariables();
-                assertNotNull(variables);
-                assertEquals(4, variables.size());
+                assertThat(variables).isNotNull();
+                assertThat(variables).hasSize(4);
 
-                assertEquals(TestConfig.getUsername(), variables.get("initiator"));
-                assertEquals("waiting for signal", variables.get("stringData"));
-                assertEquals("Person{name='john'}", variables.get("personData"));
-                assertEquals("true", variables.get("nullAccepted"));
+                assertThat(variables.get("initiator")).isEqualTo(TestConfig.getUsername());
+                assertThat(variables.get("stringData")).isEqualTo("waiting for signal");
+                assertThat(variables.get("personData")).isEqualTo("Person{name='john'}");
+                assertThat(variables.get("nullAccepted")).isEqualTo("true");
             }
 
         } finally {
@@ -221,18 +221,18 @@ public class QueryDataServiceIntegrationTest extends JbpmKieServerBaseIntegratio
             QueryFilterSpec filterSpec = new QueryFilterSpecBuilder().greaterThan("processinstanceid", processInstanceIds.get(3)).get();
 
             List<ProcessInstance> instances = queryClient.query(query.getName(), QueryServicesClient.QUERY_MAP_PI_WITH_VARS, filterSpec, 0, 10, ProcessInstance.class);
-            assertNotNull(instances);
-            assertEquals(1, instances.size());
+            assertThat(instances).isNotNull();
+            assertThat(instances).hasSize(1);
 
             for (ProcessInstance instance : instances) {
                 final Map<String, Object> variables = instance.getVariables();
-                assertNotNull(variables);
-                assertEquals(4, variables.size());
+                assertThat(variables).isNotNull();
+                assertThat(variables).hasSize(4);
 
-                assertEquals(TestConfig.getUsername(), variables.get("initiator"));
-                assertEquals("waiting for signal", variables.get("stringData"));
-                assertEquals("Person{name='john'}", variables.get("personData"));
-                assertEquals("true", variables.get("nullAccepted"));
+                assertThat(variables.get("initiator")).isEqualTo(TestConfig.getUsername());
+                assertThat(variables.get("stringData")).isEqualTo("waiting for signal");
+                assertThat(variables.get("personData")).isEqualTo("Person{name='john'}");
+                assertThat(variables.get("nullAccepted")).isEqualTo("true");
             }
 
         } finally {
@@ -256,19 +256,19 @@ public class QueryDataServiceIntegrationTest extends JbpmKieServerBaseIntegratio
             queryClient.registerQuery(query);
 
             List<ProcessInstance> instances = queryClient.query(query.getName(), "CustomMapper", 0, 10, ProcessInstance.class);
-            assertNotNull(instances);
-            assertEquals(5, instances.size());
+            assertThat(instances).isNotNull();
+            assertThat(instances).hasSize(5);
 
             List<Long> found = collectInstances(instances);
-            assertEquals(processInstanceIds, found);
+            assertThat(found).isEqualTo(processInstanceIds);
 
             instances = queryClient.query(query.getName(), "CustomMapper", 0, 3, ProcessInstance.class);
-            assertNotNull(instances);
-            assertEquals(3, instances.size());
+            assertThat(instances).isNotNull();
+            assertThat(instances).hasSize(3);
 
             instances = queryClient.query(query.getName(), "CustomMapper", "status", 1, 3, ProcessInstance.class);
-            assertNotNull(instances);
-            assertEquals(2, instances.size());
+            assertThat(instances).isNotNull();
+            assertThat(instances).hasSize(2);
 
         } finally {
             abortProcessInstances(processInstanceIds);
@@ -295,8 +295,8 @@ public class QueryDataServiceIntegrationTest extends JbpmKieServerBaseIntegratio
             params.put("max", processInstanceIds.get(0));
 
             List<ProcessInstance> instances = queryClient.query(query.getName(), QueryServicesClient.QUERY_MAP_PI, "test", params, 0, 10, ProcessInstance.class);
-            assertNotNull(instances);
-            assertEquals(2, instances.size());
+            assertThat(instances).isNotNull();
+            assertThat(instances).hasSize(2);
 
         } finally {
             abortProcessInstances(processInstanceIds);
@@ -319,20 +319,20 @@ public class QueryDataServiceIntegrationTest extends JbpmKieServerBaseIntegratio
             queryClient.registerQuery(query);
 
             List<List> instances = queryClient.query(query.getName(), QueryServicesClient.QUERY_MAP_RAW, 0, 10, List.class);
-            assertNotNull(instances);
-            assertEquals(5, instances.size());
+            assertThat(instances).isNotNull();
+            assertThat(instances).hasSize(5);
 
             for (List row : instances) {
-                assertEquals(16, row.size());
+                assertThat(row).hasSize(16);
             }
 
             instances = queryClient.query(query.getName(), QueryServicesClient.QUERY_MAP_RAW, 0, 3, List.class);
-            assertNotNull(instances);
-            assertEquals(3, instances.size());
+            assertThat(instances).isNotNull();
+            assertThat(instances).hasSize(3);
 
             instances = queryClient.query(query.getName(), QueryServicesClient.QUERY_MAP_RAW, "status", 1, 3, List.class);
-            assertNotNull(instances);
-            assertEquals(2, instances.size());
+            assertThat(instances).isNotNull();
+            assertThat(instances).hasSize(2);
 
         } finally {
             abortProcessInstances(processInstanceIds);
@@ -359,8 +359,8 @@ public class QueryDataServiceIntegrationTest extends JbpmKieServerBaseIntegratio
             queryClient.registerQuery(query);
 
             List<TaskInstance> tasks = queryClient.query(query.getName(), QueryServicesClient.QUERY_MAP_TASK, 0, 10, TaskInstance.class);
-            assertNotNull(tasks);
-            assertEquals(1, tasks.size());
+            assertThat(tasks).isNotNull();
+            assertThat(tasks).hasSize(1);
             Long taskId = tasks.get(0).getId();
 
             query.setExpression("select * from AuditTaskImpl where status = 'InProgress'");
@@ -368,15 +368,15 @@ public class QueryDataServiceIntegrationTest extends JbpmKieServerBaseIntegratio
             queryClient.replaceQuery(query);
 
             tasks = queryClient.query(query.getName(), QueryServicesClient.QUERY_MAP_TASK, 0, 10, TaskInstance.class);
-            assertNotNull(tasks);
-            assertEquals(0, tasks.size());
+            assertThat(tasks).isNotNull();
+            assertThat(tasks).isEmpty();
 
             taskClient.startTask(CONTAINER_ID, taskId, USER_YODA);
 
             tasks = queryClient.query(query.getName(), QueryServicesClient.QUERY_MAP_TASK, 0, 10, TaskInstance.class);
-            assertNotNull(tasks);
-            assertEquals(1, tasks.size());
-            assertEquals(taskId, tasks.get(0).getId());
+            assertThat(tasks).isNotNull();
+            assertThat(tasks).hasSize(1);
+            assertThat(tasks.get(0).getId()).isEqualTo(taskId);
         } finally {
             processClient.abortProcessInstance(CONTAINER_ID, pid);
             queryClient.unregisterQuery(query.getName());
@@ -435,19 +435,19 @@ public class QueryDataServiceIntegrationTest extends JbpmKieServerBaseIntegratio
             List<QueryDefinition> queries = queryClient.getQueries(0, 100);
 
             QueryDefinition registeredQuery = queries.stream().filter(q -> q.getName().equals("allProcessInstances")).findFirst().orElse(null);
-            assertNotNull(registeredQuery);
-            assertEquals(query.getName(), registeredQuery.getName());
-            assertEquals(expectedResolvedDS, registeredQuery.getSource());
-            assertEquals(query.getExpression(), registeredQuery.getExpression());
-            assertEquals(query.getTarget(), registeredQuery.getTarget());
+            assertThat(registeredQuery).isNotNull();
+            assertThat(registeredQuery.getName()).isEqualTo(query.getName());
+            assertThat(registeredQuery.getSource()).isEqualTo(expectedResolvedDS);
+            assertThat(registeredQuery.getExpression()).isEqualTo(query.getExpression());
+            assertThat(registeredQuery.getTarget()).isEqualTo(query.getTarget());
 
             registeredQuery = queryClient.getQuery(query.getName());
 
-            assertNotNull(registeredQuery);
-            assertEquals(query.getName(), registeredQuery.getName());
-            assertEquals(expectedResolvedDS, registeredQuery.getSource());
-            assertEquals(query.getExpression(), registeredQuery.getExpression());
-            assertEquals(query.getTarget(), registeredQuery.getTarget());
+            assertThat(registeredQuery).isNotNull();
+            assertThat(registeredQuery.getName()).isEqualTo(query.getName());
+            assertThat(registeredQuery.getSource()).isEqualTo(expectedResolvedDS);
+            assertThat(registeredQuery.getExpression()).isEqualTo(query.getExpression());
+            assertThat(registeredQuery.getTarget()).isEqualTo(query.getTarget());
 
         } finally {
             abortProcessInstances(processInstanceIds);
@@ -476,15 +476,15 @@ public class QueryDataServiceIntegrationTest extends JbpmKieServerBaseIntegratio
             queryClient.registerQuery(query);
             // default user (yoda) does not have engineering role so should not be able to find any instances
             List<ProcessInstance> instances = queryClient.query(query.getName(), QueryServicesClient.QUERY_MAP_PI, 0, 10, ProcessInstance.class);
-            assertNotNull(instances);
-            assertEquals(0, instances.size());
+            assertThat(instances).isNotNull();
+            assertThat(instances).isEmpty();
 
             // switch to john user who has engineering role
             changeUser(USER_JOHN);
 
             instances = queryClient.query(query.getName(), QueryServicesClient.QUERY_MAP_PI, 0, 10, ProcessInstance.class);
-            assertNotNull(instances);
-            assertEquals(5, instances.size());
+            assertThat(instances).isNotNull();
+            assertThat(instances).hasSize(5);
 
         } finally {
             abortProcessInstances(processInstanceIds);
@@ -514,13 +514,13 @@ public class QueryDataServiceIntegrationTest extends JbpmKieServerBaseIntegratio
             params.put(KieServerConstants.QUERY_ASCENDING, false);
 
             List<ProcessInstance> instances = queryClient.query(query.getName(), QueryServicesClient.QUERY_MAP_PI, "test", params, 0, 10, ProcessInstance.class);
-            assertNotNull(instances);
-            assertEquals(2, instances.size());
+            assertThat(instances).isNotNull();
+            assertThat(instances).hasSize(2);
 
             long pi1 = instances.get(0).getId();
             long pi2 = instances.get(1).getId();
             // since sort order is descending first should be instance id which is bigger then second
-            assertTrue(pi1 > pi2);
+            assertThat(pi1 > pi2).isTrue();
 
         } finally {
             abortProcessInstances(processInstanceIds);
@@ -548,13 +548,13 @@ public class QueryDataServiceIntegrationTest extends JbpmKieServerBaseIntegratio
             params.put(KieServerConstants.QUERY_ORDER_BY_CLAUSE, "processId asc , processInstanceId desc");
 
             List<ProcessInstance> instances = queryClient.query(query.getName(), QueryServicesClient.QUERY_MAP_PI, "test", params, 0, 10, ProcessInstance.class);
-            assertNotNull(instances);
-            assertEquals(5, instances.size());
+            assertThat(instances).isNotNull();
+            assertThat(instances).hasSize(5);
 
             long pi1 = instances.get(0).getId();
             long pi2 = instances.get(1).getId();
             // since sort order is descending first should be instance id which is bigger then second
-            assertTrue(pi1 + " not greater than " + pi2, pi1 > pi2);
+            assertThat(pi1 + " not greater than " + pi2, pi1 > pi2).isTrue();
 
         } finally {
             abortProcessInstances(processInstanceIds);
@@ -588,21 +588,21 @@ public class QueryDataServiceIntegrationTest extends JbpmKieServerBaseIntegratio
             params.put(KieServerConstants.QUERY_COLUMN_MAPPING, columnMapping);
 
             List<ProcessInstance> instances = queryClient.query(query.getName(), QueryServicesClient.QUERY_MAP_PI_WITH_CUSTOM_VARS, "test", params, 0, 10, ProcessInstance.class);
-            assertNotNull(instances);
-            assertEquals(2, instances.size());
+            assertThat(instances).isNotNull();
+            assertThat(instances).hasSize(2);
 
             long pi1 = instances.get(0).getId();
             long pi2 = instances.get(1).getId();
             // since sort order is descending first should be instance id which is bigger then second
-            assertTrue(pi1 > pi2);
+            assertThat(pi1 > pi2).isTrue();
 
             for (ProcessInstance instance : instances) {
                 final Map<String, Object> variables = instance.getVariables();
-                assertNotNull(variables);
-                assertEquals(2, variables.size());
+                assertThat(variables).isNotNull();
+                assertThat(variables).hasSize(2);
 
-                assertTrue(variables.containsKey("variableId"));
-                assertTrue(variables.containsKey("value"));
+                assertThat(variables.containsKey("variableId")).isTrue();
+                assertThat(variables.containsKey("value")).isTrue();
             }
 
         } finally {
@@ -639,21 +639,21 @@ public class QueryDataServiceIntegrationTest extends JbpmKieServerBaseIntegratio
             params.put(KieServerConstants.QUERY_COLUMN_MAPPING, columnMapping);
 
             List<ProcessInstance> instances = queryClient.query(query.getName(), QueryServicesClient.QUERY_MAP_PI_WITH_CUSTOM_VARS, "test", params, 0, 10, ProcessInstance.class);
-            assertNotNull(instances);
-            assertEquals(2, instances.size());
+            assertThat(instances).isNotNull();
+            assertThat(instances).hasSize(2);
 
             long pi1 = instances.get(0).getId();
             long pi2 = instances.get(1).getId();
             // since sort order is descending first should be instance id which is bigger then second
-            assertTrue(pi1 + " not greater than " + pi2, pi1 > pi2);
+            assertThat(pi1 + " not greater than " + pi2, pi1 > pi2).isTrue();
 
             for (ProcessInstance instance : instances) {
                 final Map<String, Object> variables = instance.getVariables();
-                assertNotNull(variables);
-                assertEquals(2, variables.size());
+                assertThat(variables).isNotNull();
+                assertThat(variables).hasSize(2);
 
-                assertTrue(variables.containsKey("variableId"));
-                assertTrue(variables.containsKey("value"));
+                assertThat(variables.containsKey("variableId")).isTrue();
+                assertThat(variables.containsKey("value")).isTrue();
             }
 
         } finally {
@@ -680,16 +680,16 @@ public class QueryDataServiceIntegrationTest extends JbpmKieServerBaseIntegratio
             queryClient.registerQuery(query);
 
             List<ProcessInstance> instances = queryClient.query(query.getName(), QueryServicesClient.QUERY_MAP_PI, "processId asc, processInstanceId desc", 0, 10, ProcessInstance.class);
-            assertNotNull(instances);
-            assertEquals(5, instances.size());
+            assertThat(instances).isNotNull();
+            assertThat(instances).hasSize(5);
 
             List<Long> found = collectInstances(instances);
-            assertEquals(processInstanceIds, found);
+            assertThat(found).isEqualTo(processInstanceIds);
 
             long pi1 = instances.get(0).getId();
             long pi2 = instances.get(1).getId();
             // since sort order is descending first should be instance id which is bigger then second
-            assertTrue(pi1 + " not greater than " + pi2, pi1 > pi2);
+            assertThat(pi1 + " not greater than " + pi2, pi1 > pi2).isTrue();
 
         } finally {
             abortProcessInstances(processInstanceIds);
@@ -712,8 +712,8 @@ public class QueryDataServiceIntegrationTest extends JbpmKieServerBaseIntegratio
             processInstanceId = processClient.startProcess(CONTAINER_ID, PROCESS_ID_SIGNAL_PROCESS, parameters);
 
             List<ExecutionErrorInstance> errors = processAdminClient.getErrors(CONTAINER_ID, false, 0, 10);
-            assertNotNull(errors);
-            assertEquals(0, errors.size());
+            assertThat(errors).isNotNull();
+            assertThat(errors).isEmpty();
 
             try {
                 processClient.signalProcessInstance(CONTAINER_ID, processInstanceId, "Signal1", null);
@@ -723,41 +723,41 @@ public class QueryDataServiceIntegrationTest extends JbpmKieServerBaseIntegratio
             }
 
             errors = queryClient.query(query.getName(), QueryServicesClient.QUERY_MAP_ERROR, 0, 10, ExecutionErrorInstance.class);
-            assertNotNull(errors);
-            assertEquals(1, errors.size());
+            assertThat(errors).isNotNull();
+            assertThat(errors).hasSize(1);
             ExecutionErrorInstance errorInstance = errors.get(0);
-            assertNotNull(errorInstance.getErrorId());
-            assertNull(errorInstance.getError());
-            assertNotNull(errorInstance.getProcessInstanceId());
-            assertNotNull(errorInstance.getActivityId());
-            assertNotNull(errorInstance.getErrorDate());
+            assertThat(errorInstance.getErrorId()).isNotNull();
+            assertThat(errorInstance.getError()).isNull();
+            assertThat(errorInstance.getProcessInstanceId()).isNotNull();
+            assertThat(errorInstance.getActivityId()).isNotNull();
+            assertThat(errorInstance.getErrorDate()).isNotNull();
 
-            assertEquals(CONTAINER_ID, errorInstance.getContainerId());
-            assertEquals(PROCESS_ID_SIGNAL_PROCESS, errorInstance.getProcessId());
-            assertEquals("Signal 1 data", errorInstance.getActivityName());
+            assertThat(errorInstance.getContainerId()).isEqualTo(CONTAINER_ID);
+            assertThat(errorInstance.getProcessId()).isEqualTo(PROCESS_ID_SIGNAL_PROCESS);
+            assertThat(errorInstance.getActivityName()).isEqualTo("Signal 1 data");
 
-            assertFalse(errorInstance.isAcknowledged());
-            assertNull(errorInstance.getAcknowledgedAt());
-            assertNull(errorInstance.getAcknowledgedBy());
+            assertThat(errorInstance.isAcknowledged()).isFalse();
+            assertThat(errorInstance.getAcknowledgedAt()).isNull();
+            assertThat(errorInstance.getAcknowledgedBy()).isNull();
 
             errors = processAdminClient.getErrorsByProcessInstanceAndNode(CONTAINER_ID, processInstanceId, "Signal 1 data", false, 0, 10);
-            assertNotNull(errors);
-            assertEquals(1, errors.size());
+            assertThat(errors).isNotNull();
+            assertThat(errors).hasSize(1);
             ExecutionErrorInstance errorInstance2 = errors.get(0);
-            assertEquals(errorInstance.getErrorId(), errorInstance2.getErrorId());
+            assertThat(errorInstance2.getErrorId()).isEqualTo(errorInstance.getErrorId());
 
             processAdminClient.acknowledgeError(CONTAINER_ID, errorInstance.getErrorId());
 
             errors = processAdminClient.getErrors(CONTAINER_ID, false, 0, 10);
-            assertNotNull(errors);
-            assertEquals(0, errors.size());
+            assertThat(errors).isNotNull();
+            assertThat(errors).isEmpty();
 
             errorInstance = processAdminClient.getError(CONTAINER_ID, errorInstance.getErrorId());
-            assertNotNull(errorInstance);
-            assertNotNull(errorInstance.getErrorId());
-            assertTrue(errorInstance.isAcknowledged());
-            assertNotNull(errorInstance.getAcknowledgedAt());
-            assertEquals(USER_YODA, errorInstance.getAcknowledgedBy());
+            assertThat(errorInstance).isNotNull();
+            assertThat(errorInstance.getErrorId()).isNotNull();
+            assertThat(errorInstance.isAcknowledged()).isTrue();
+            assertThat(errorInstance.getAcknowledgedAt()).isNotNull();
+            assertThat(errorInstance.getAcknowledgedBy()).isEqualTo(USER_YODA);
         } catch (Exception e) {
             logger.error("Unexpected error", e);
             fail(e.getMessage());
@@ -793,8 +793,8 @@ public class QueryDataServiceIntegrationTest extends JbpmKieServerBaseIntegratio
             queryClient.registerQuery(query);
 
             List<TaskInstance> tasks = queryClient.query(query.getName(), QueryServicesClient.QUERY_MAP_TASK_WITH_PO, 0, 10, TaskInstance.class);
-            assertNotNull(tasks);
-            assertEquals(1, tasks.size());
+            assertThat(tasks).isNotNull();
+            assertThat(tasks).hasSize(1);
             
         } finally {
             processClient.abortProcessInstance(CONTAINER_ID, pid);
@@ -829,8 +829,8 @@ public class QueryDataServiceIntegrationTest extends JbpmKieServerBaseIntegratio
             queryClient.registerQuery(query);
 
             List<TaskInstance> tasks = queryClient.query(query.getName(), QueryServicesClient.QUERY_MAP_TASK_WITH_MODIF, 0, 10, TaskInstance.class);
-            assertNotNull(tasks);
-            assertEquals(1, tasks.size());
+            assertThat(tasks).isNotNull();
+            assertThat(tasks).hasSize(1);
             
         } finally {
             processClient.abortProcessInstance(CONTAINER_ID, pid);

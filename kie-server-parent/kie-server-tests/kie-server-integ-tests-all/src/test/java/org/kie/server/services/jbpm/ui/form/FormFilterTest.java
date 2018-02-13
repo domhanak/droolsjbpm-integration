@@ -35,7 +35,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class FormFilterTest {
 
@@ -163,7 +163,7 @@ public class FormFilterTest {
     }
 
     private void validateFormXML(String formXML) throws Exception {
-        assertNotNull(formXML);
+        assertThat(formXML).isNotNull();
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
@@ -172,7 +172,7 @@ public class FormFilterTest {
 
         Document doc = builder.parse(new ByteArrayInputStream(formXML.getBytes()));
 
-        assertNotNull(doc);
+        assertThat(doc).isNotNull();
 
         NodeList allForms = doc.getElementsByTagName(RemoteFormModellerFormProvider.NODE_FORM);
 

@@ -15,7 +15,7 @@
 
 package org.kie.server.router.repository;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
@@ -58,33 +58,33 @@ public class FileRepositoryTest {
         
         Configuration loaded = repo.load();
         
-        assertNotNull(loaded);
-        assertNotNull(loaded.getHostsPerContainer());
-        assertNotNull(loaded.getHostsPerServer());
-        assertEquals(2, loaded.getHostsPerContainer().size());
-        assertEquals(2, loaded.getHostsPerServer().size());
-        assertEquals(2, loaded.getContainerInfosPerContainer().size());
+        assertThat(loaded).isNotNull();
+        assertThat(loaded.getHostsPerContainer()).isNotNull();
+        assertThat(loaded.getHostsPerServer()).isNotNull();
+        assertThat(loaded.getHostsPerContainer()).hasSize(2);
+        assertThat(loaded.getHostsPerServer()).hasSize(2);
+        assertThat(loaded.getContainerInfosPerContainer()).hasSize(2);
         
-        assertEquals(1, loaded.getHostsPerContainer().get("container1").size());
-        assertEquals(1, loaded.getHostsPerContainer().get("container2").size());
+        assertThat(loaded.getHostsPerContainer().get("container1")).hasSize(1);
+        assertThat(loaded.getHostsPerContainer().get("container2")).hasSize(1);
         
-        assertEquals("http://localhost:8080/server", loaded.getHostsPerContainer().get("container1").iterator().next());
-        assertEquals("http://localhost:8180/server", loaded.getHostsPerContainer().get("container2").iterator().next());
+        assertThat(loaded.getHostsPerContainer().get("container1").iterator().next()).isEqualTo("http://localhost:8080/server");
+        assertThat(loaded.getHostsPerContainer().get("container2").iterator().next()).isEqualTo("http://localhost:8180/server");
         
-        assertEquals(1, loaded.getHostsPerServer().get("server1").size());
-        assertEquals(1, loaded.getHostsPerServer().get("server2").size());
+        assertThat(loaded.getHostsPerServer().get("server1")).hasSize(1);
+        assertThat(loaded.getHostsPerServer().get("server2")).hasSize(1);
         
-        assertEquals("http://localhost:8080/server", loaded.getHostsPerServer().get("server1").iterator().next());
-        assertEquals("http://localhost:8180/server", loaded.getHostsPerServer().get("server2").iterator().next());
+        assertThat(loaded.getHostsPerServer().get("server1").iterator().next()).isEqualTo("http://localhost:8080/server");
+        assertThat(loaded.getHostsPerServer().get("server2").iterator().next()).isEqualTo("http://localhost:8180/server");
 
-        assertEquals(1, loaded.getContainerInfosPerContainer().get("test").size());
-        assertEquals(1, loaded.getContainerInfosPerContainer().get("test1.0").size());
+        assertThat(loaded.getContainerInfosPerContainer().get("test")).hasSize(1);
+        assertThat(loaded.getContainerInfosPerContainer().get("test1.0")).hasSize(1);
 
         ContainerInfo loadedCI = loaded.getContainerInfosPerContainer().get("test").iterator().next();
-        assertEquals(containerInfo, loadedCI);
+        assertThat(loadedCI).isEqualTo(containerInfo);
 
         loadedCI = loaded.getContainerInfosPerContainer().get("test1.0").iterator().next();
-        assertEquals(containerInfo, loadedCI);
+        assertThat(loadedCI).isEqualTo(containerInfo);
         
         repo.clean();
     }
@@ -124,15 +124,15 @@ public class FileRepositoryTest {
             
         });
         
-        assertNotNull(loaded);
-        assertNotNull(loaded.getHostsPerContainer());
-        assertNotNull(loaded.getHostsPerServer());
-        assertEquals(2, loaded.getHostsPerContainer().size());
-        assertEquals(2, loaded.getHostsPerServer().size());
-        assertEquals(2, loaded.getContainerInfosPerContainer().size());
+        assertThat(loaded).isNotNull();
+        assertThat(loaded.getHostsPerContainer()).isNotNull();
+        assertThat(loaded.getHostsPerServer()).isNotNull();
+        assertThat(loaded.getHostsPerContainer()).hasSize(2);
+        assertThat(loaded.getHostsPerServer()).hasSize(2);
+        assertThat(loaded.getContainerInfosPerContainer()).hasSize(2);
         
-        assertEquals(1, loaded.getHostsPerContainer().get("container1").size());
-        assertEquals(1, loaded.getHostsPerContainer().get("container2").size());
+        assertThat(loaded.getHostsPerContainer().get("container1")).hasSize(1);
+        assertThat(loaded.getHostsPerContainer().get("container2")).hasSize(1);
         
         config.removeContainerHost("container2", "http://localhost:8180/server");
         config.removeServerHost("server2", "http://localhost:8180/server");
@@ -144,15 +144,15 @@ public class FileRepositoryTest {
         boolean reloaded = latch.await(20, TimeUnit.SECONDS);
         
         if (reloaded) {
-            assertNotNull(loaded);
-            assertNotNull(loaded.getHostsPerContainer());
-            assertNotNull(loaded.getHostsPerServer());
-            assertEquals(2, loaded.getHostsPerContainer().size());
-            assertEquals(2, loaded.getHostsPerServer().size());
-            assertEquals(2, loaded.getContainerInfosPerContainer().size());
+            assertThat(loaded).isNotNull();
+            assertThat(loaded.getHostsPerContainer()).isNotNull();
+            assertThat(loaded.getHostsPerServer()).isNotNull();
+            assertThat(loaded.getHostsPerContainer()).hasSize(2);
+            assertThat(loaded.getHostsPerServer()).hasSize(2);
+            assertThat(loaded.getContainerInfosPerContainer()).hasSize(2);
             
-            assertEquals(1, loaded.getHostsPerContainer().get("container1").size());
-            assertEquals(0, loaded.getHostsPerContainer().get("container2").size());
+            assertThat(loaded.getHostsPerContainer().get("container1")).hasSize(1);
+            assertThat(loaded.getHostsPerContainer().get("container2")).isEmpty();
         }
         repoWithWatcher.close();
         repoWithWatcher.clean();

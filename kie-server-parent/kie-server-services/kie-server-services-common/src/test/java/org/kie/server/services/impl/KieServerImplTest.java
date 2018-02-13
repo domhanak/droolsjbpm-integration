@@ -15,7 +15,7 @@
 
 package org.kie.server.services.impl;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -108,7 +108,7 @@ public class KieServerImplTest {
     @Test
     public void testReadinessCheck() {
         
-        assertTrue(kieServer.isKieServerReady());
+        assertThat(kieServer.isKieServerReady()).isTrue();
     }
     
     @Test(timeout=10000)
@@ -118,11 +118,11 @@ public class KieServerImplTest {
         kieServer.destroy();
         kieServer = delayedKieServer(latch, startedlatch);
         
-        assertFalse(kieServer.isKieServerReady());
+        assertThat(kieServer.isKieServerReady()).isFalse();
         latch.countDown();
         
         startedlatch.await();        
-        assertTrue(kieServer.isKieServerReady());
+        assertThat(kieServer.isKieServerReady()).isTrue();
     }
     
     @Test
@@ -130,7 +130,7 @@ public class KieServerImplTest {
         
         List<Message> healthMessages = kieServer.healthCheck(false);
         
-        assertEquals(healthMessages.size(), 0);
+        assertThat(0).isEqualTo(healthMessages.size());
     }
     
     @Test
@@ -138,14 +138,14 @@ public class KieServerImplTest {
         
         List<Message> healthMessages = kieServer.healthCheck(true);
         
-        assertEquals(healthMessages.size(), 2);
+        assertThat(2).isEqualTo(healthMessages.size());
         Message header = healthMessages.get(0);
-        assertEquals(Severity.INFO, header.getSeverity());
-        assertEquals(2, header.getMessages().size());
+        assertThat(header.getSeverity()).isEqualTo(Severity.INFO);
+        assertThat(header.getMessages()).hasSize(2);
         
         Message footer = healthMessages.get(1);
-        assertEquals(Severity.INFO, footer.getSeverity());
-        assertEquals(1, footer.getMessages().size());
+        assertThat(footer.getSeverity()).isEqualTo(Severity.INFO);
+        assertThat(footer.getMessages()).hasSize(1);
     }
     
     @Test(timeout=10000)
@@ -155,22 +155,22 @@ public class KieServerImplTest {
         kieServer.destroy();
         kieServer = delayedKieServer(latch, startedlatch);
         
-        assertFalse(kieServer.isKieServerReady());        
+        assertThat(kieServer.isKieServerReady()).isFalse();        
         
         List<Message> healthMessages = kieServer.healthCheck(false);
-        assertEquals(healthMessages.size(), 1);
+        assertThat(1).isEqualTo(healthMessages.size());
         
         Message notReady = healthMessages.get(0);
-        assertEquals(Severity.ERROR, notReady.getSeverity());
-        assertEquals(1, notReady.getMessages().size());
+        assertThat(notReady.getSeverity()).isEqualTo(Severity.ERROR);
+        assertThat(notReady.getMessages()).hasSize(1);
         
         latch.countDown();
         startedlatch.await();        
-        assertTrue(kieServer.isKieServerReady());
+        assertThat(kieServer.isKieServerReady()).isTrue();
         
         healthMessages = kieServer.healthCheck(false);
         
-        assertEquals(healthMessages.size(), 0);
+        assertThat(0).isEqualTo(healthMessages.size());
     }
     
     @Test
@@ -190,11 +190,11 @@ public class KieServerImplTest {
         kieServer.init();
         List<Message> healthMessages = kieServer.healthCheck(false);
         
-        assertEquals(healthMessages.size(), 1);
+        assertThat(1).isEqualTo(healthMessages.size());
         Message failedContainer = healthMessages.get(0);
-        assertEquals(Severity.ERROR, failedContainer.getSeverity());
-        assertEquals(1, failedContainer.getMessages().size());
-        assertEquals("KIE Container 'test' is in FAILED state", failedContainer.getMessages().iterator().next());
+        assertThat(failedContainer.getSeverity()).isEqualTo(Severity.ERROR);
+        assertThat(failedContainer.getMessages()).hasSize(1);
+        assertThat(failedContainer.getMessages().iterator().next()).isEqualTo("KIE Container 'test' is in FAILED state");
     }
     
     @Test
@@ -286,17 +286,17 @@ public class KieServerImplTest {
         kieServer.init();
         List<Message> healthMessages = kieServer.healthCheck(false);
         
-        assertEquals(healthMessages.size(), 1);
+        assertThat(1).isEqualTo(healthMessages.size());
         Message failedContainer = healthMessages.get(0);
-        assertEquals(Severity.ERROR, failedContainer.getSeverity());
-        assertEquals(1, failedContainer.getMessages().size());
-        assertEquals("TEST extension is unhealthy", failedContainer.getMessages().iterator().next());
+        assertThat(failedContainer.getSeverity()).isEqualTo(Severity.ERROR);
+        assertThat(failedContainer.getMessages()).hasSize(1);
+        assertThat(failedContainer.getMessages().iterator().next()).isEqualTo("TEST extension is unhealthy");
     }
     
     @Test
     public void testManagementDisabledDefault() {
         
-        assertNull(kieServer.checkAccessability());
+        assertThat(kieServer.checkAccessability()).isNull();
     }
     
     @Test
@@ -331,10 +331,10 @@ public class KieServerImplTest {
             
             CommandScript commandScript = new CommandScript(commands);
             ServiceResponsesList responseList = commandService.executeScript(commandScript, MarshallingFormat.JAXB, null);
-            assertNotNull(responseList);
+            assertThat(responseList).isNotNull();
             
             List<ServiceResponse<?>> responses = responseList.getResponses();
-            assertEquals(4, responses.size());
+            assertThat(responses).hasSize(4);
             
             for (ServiceResponse<?> forbidden : responses) {
             
@@ -408,12 +408,12 @@ public class KieServerImplTest {
         String executorJMSQueue = state.getConfiguration().getConfigItemValue(KieServerConstants.CFG_EXECUTOR_JMS_QUEUE);
         String executorDisabled = state.getConfiguration().getConfigItemValue(KieServerConstants.CFG_EXECUTOR_DISABLED);
 
-        assertNull(executorInterval);
-        assertNull(executorRetries);
-        assertNull(executorPool);
-        assertNull(executorTimeUnit);
-        assertNull(executorJMSQueue);
-        assertNull(executorDisabled);
+        assertThat(executorInterval).isNull();
+        assertThat(executorRetries).isNull();
+        assertThat(executorPool).isNull();
+        assertThat(executorTimeUnit).isNull();
+        assertThat(executorJMSQueue).isNull();
+        assertThat(executorDisabled).isNull();
         try {
             System.setProperty(KieServerConstants.CFG_EXECUTOR_INTERVAL, "4");
             System.setProperty(KieServerConstants.CFG_EXECUTOR_RETRIES, "7");
@@ -433,19 +433,19 @@ public class KieServerImplTest {
             executorJMSQueue = state.getConfiguration().getConfigItemValue(KieServerConstants.CFG_EXECUTOR_JMS_QUEUE);
             executorDisabled = state.getConfiguration().getConfigItemValue(KieServerConstants.CFG_EXECUTOR_DISABLED);
 
-            assertNotNull(executorInterval);
-            assertNotNull(executorRetries);
-            assertNotNull(executorPool);
-            assertNotNull(executorTimeUnit);
-            assertNotNull(executorJMSQueue);
-            assertNotNull(executorDisabled);
+            assertThat(executorInterval).isNotNull();
+            assertThat(executorRetries).isNotNull();
+            assertThat(executorPool).isNotNull();
+            assertThat(executorTimeUnit).isNotNull();
+            assertThat(executorJMSQueue).isNotNull();
+            assertThat(executorDisabled).isNotNull();
 
-            assertEquals("4", executorInterval);
-            assertEquals("7", executorRetries);
-            assertEquals("11", executorPool);
-            assertEquals("HOURS", executorTimeUnit);
-            assertEquals("queue/MY.OWN.QUEUE", executorJMSQueue);
-            assertEquals("true", executorDisabled);
+            assertThat(executorInterval).isEqualTo("4");
+            assertThat(executorRetries).isEqualTo("7");
+            assertThat(executorPool).isEqualTo("11");
+            assertThat(executorTimeUnit).isEqualTo("HOURS");
+            assertThat(executorJMSQueue).isEqualTo("queue/MY.OWN.QUEUE");
+            assertThat(executorDisabled).isEqualTo("true");
         } finally {
             System.clearProperty(KieServerConstants.CFG_EXECUTOR_INTERVAL);
             System.clearProperty(KieServerConstants.CFG_EXECUTOR_RETRIES);
@@ -542,10 +542,10 @@ public class KieServerImplTest {
     }
     
     private void assertForbiddenResponse(ServiceResponse<?> forbidden) {        
-        assertNotNull(forbidden);
+        assertThat(forbidden).isNotNull();
         
-        assertEquals(ResponseType.FAILURE, forbidden.getType());
-        assertEquals("KIE Server management api is disabled", forbidden.getMsg());
+        assertThat(forbidden.getType()).isEqualTo(ResponseType.FAILURE);
+        assertThat(forbidden.getMsg()).isEqualTo("KIE Server management api is disabled");
     }
 
 }

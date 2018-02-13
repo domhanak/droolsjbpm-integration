@@ -31,7 +31,7 @@ import org.kie.server.integrationtests.shared.KieServerAssert;
 import org.kie.server.integrationtests.shared.KieServerDeployer;
 import org.kie.server.integrationtests.shared.KieServerReflections;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class KieServerRouterDroolsIntegrationTest extends KieServerRouterBaseIntegrationTest {
     private static final ReleaseId kjar1 = new ReleaseId("org.kie.server.testing", "container-isolation-kjar1",
@@ -71,6 +71,6 @@ public class KieServerRouterDroolsIntegrationTest extends KieServerRouterBaseInt
         ExecutionResults result1 = response1.getResult();
 
         Object outcome = result1.getValue(PERSON_OUT_IDENTIFIER);
-        assertEquals("Person's id should be 'Person from kjar1'!", "Person from kjar1", KieServerReflections.valueOf(outcome, "id"));
+        assertThat(KieServerReflections.valueOf(outcome).as("Person's id should be 'Person from kjar1'!").isCloseTo("Person from kjar1", within("id")));
     }
 }

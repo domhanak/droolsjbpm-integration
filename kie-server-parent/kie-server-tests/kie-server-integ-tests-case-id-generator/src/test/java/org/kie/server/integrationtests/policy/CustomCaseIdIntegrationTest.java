@@ -64,7 +64,7 @@ public class CustomCaseIdIntegrationTest extends CaseIdBaseIntegrationTest {
                 .build();
 
         String caseId = caseClient.startCase(CONTAINER_ID, CASE_HR_DEF_ID, caseFile);
-        assertNotNull(caseId);
-        assertTrue("Created Case Id doesn't start with expected value, value is: " + caseId, caseId.startsWith("HR-01234"));
+        assertThat(caseId).isNotNull();
+        assertThat("Created Case Id doesn't start with expected value, value is: " + caseId, caseId.startsWith("HR-01234")).isTrue();
     }
 }

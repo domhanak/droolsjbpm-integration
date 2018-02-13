@@ -28,7 +28,7 @@ import org.kie.server.api.model.KieServiceResponse.ResponseType;
 import java.math.BigDecimal;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
@@ -65,7 +65,7 @@ public class DMNIntegrationTest
         dmnContext.set( "b", 5 );
         ServiceResponse<DMNResult> evaluateAll = dmnClient.evaluateAll(CONTAINER_1_ID, dmnContext);
         
-        assertEquals(ResponseType.SUCCESS, evaluateAll.getType());
+        assertThat(evaluateAll.getType()).isEqualTo(ResponseType.SUCCESS);
         
         DMNResult dmnResult = evaluateAll.getResult();
         
@@ -86,7 +86,7 @@ public class DMNIntegrationTest
                 "https://www.drools.org/kie-dmn/function-definition", "function-definition",
                 dmnContext);
         
-        assertEquals(ResponseType.SUCCESS, evaluateAll.getType());
+        assertThat(evaluateAll.getType()).isEqualTo(ResponseType.SUCCESS);
         
         DMNResult dmnResult = evaluateAll.getResult();
         
@@ -103,7 +103,7 @@ public class DMNIntegrationTest
         dmnContext.set( "a", 10 );
         ServiceResponse<DMNResult> evaluateAll = dmnClient.evaluateAll(CONTAINER_1_ID, dmnContext);
         
-        assertEquals(ResponseType.SUCCESS, evaluateAll.getType());
+        assertThat(evaluateAll.getType()).isEqualTo(ResponseType.SUCCESS);
         
         DMNResult dmnResult = evaluateAll.getResult();
         

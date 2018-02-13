@@ -17,7 +17,7 @@ package org.kie.server.router;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNull;
 
 public class ConfigurationTest {
@@ -37,23 +37,23 @@ public class ConfigurationTest {
         ContainerInfo containerInfo = new ContainerInfo("test1.0", "test", "org.kie:test:1.0");
         config.addContainerInfo(containerInfo);
 
-        assertEquals(2, config.getHostsPerContainer().size());
-        assertEquals(2, config.getHostsPerServer().size());
+        assertThat(config.getHostsPerContainer()).hasSize(2);
+        assertThat(config.getHostsPerServer()).hasSize(2);
 
-        assertEquals(1, config.getHostsPerContainer().get("container1").size());
-        assertEquals(1, config.getHostsPerContainer().get("container2").size());
-        assertEquals(1, config.getHostsPerServer().get("server1").size());
-        assertEquals(1, config.getHostsPerServer().get("server2").size());
+        assertThat(config.getHostsPerContainer().get("container1")).hasSize(1);
+        assertThat(config.getHostsPerContainer().get("container2")).hasSize(1);
+        assertThat(config.getHostsPerServer().get("server1")).hasSize(1);
+        assertThat(config.getHostsPerServer().get("server2")).hasSize(1);
 
         config.removeUnavailableServer("http://localhost:8180/server");
 
-        assertEquals(2, config.getHostsPerContainer().size());
-        assertEquals(2, config.getHostsPerServer().size());
+        assertThat(config.getHostsPerContainer()).hasSize(2);
+        assertThat(config.getHostsPerServer()).hasSize(2);
 
-        assertEquals(1, config.getHostsPerContainer().get("container1").size());
-        assertEquals(0, config.getHostsPerContainer().get("container2").size());
-        assertEquals(1, config.getHostsPerServer().get("server1").size());
-        assertEquals(0, config.getHostsPerServer().get("server2").size());
+        assertThat(config.getHostsPerContainer().get("container1")).hasSize(1);
+        assertThat(config.getHostsPerContainer().get("container2")).isEmpty();
+        assertThat(config.getHostsPerServer().get("server1")).hasSize(1);
+        assertThat(config.getHostsPerServer().get("server2")).isEmpty();
     }
 
     @Test
@@ -70,23 +70,23 @@ public class ConfigurationTest {
         ContainerInfo containerInfo = new ContainerInfo("test1.0", "test", "org.kie:test:1.0");
         config.addContainerInfo(containerInfo);
 
-        assertEquals(2, config.getHostsPerContainer().size());
-        assertEquals(2, config.getHostsPerServer().size());
+        assertThat(config.getHostsPerContainer()).hasSize(2);
+        assertThat(config.getHostsPerServer()).hasSize(2);
 
-        assertEquals(1, config.getHostsPerContainer().get("container1").size());
-        assertEquals(1, config.getHostsPerContainer().get("container2").size());
-        assertEquals(1, config.getHostsPerServer().get("server1").size());
-        assertEquals(1, config.getHostsPerServer().get("server2").size());
+        assertThat(config.getHostsPerContainer().get("container1")).hasSize(1);
+        assertThat(config.getHostsPerContainer().get("container2")).hasSize(1);
+        assertThat(config.getHostsPerServer().get("server1")).hasSize(1);
+        assertThat(config.getHostsPerServer().get("server2")).hasSize(1);
 
         config.removeUnavailableServer("http://localhost:8180/server/containers/instances/1");
 
-        assertEquals(2, config.getHostsPerContainer().size());
-        assertEquals(2, config.getHostsPerServer().size());
+        assertThat(config.getHostsPerContainer()).hasSize(2);
+        assertThat(config.getHostsPerServer()).hasSize(2);
 
-        assertEquals(1, config.getHostsPerContainer().get("container1").size());
-        assertEquals(0, config.getHostsPerContainer().get("container2").size());
-        assertEquals(1, config.getHostsPerServer().get("server1").size());
-        assertEquals(0, config.getHostsPerServer().get("server2").size());
+        assertThat(config.getHostsPerContainer().get("container1")).hasSize(1);
+        assertThat(config.getHostsPerContainer().get("container2")).isEmpty();
+        assertThat(config.getHostsPerServer().get("server1")).hasSize(1);
+        assertThat(config.getHostsPerServer().get("server2")).isEmpty();
     }
     
     @Test
@@ -109,11 +109,11 @@ public class ConfigurationTest {
         ContainerInfo containerInfo2 = new ContainerInfo("test1.0", "test", "org.kie:test:1.0");
         config.addContainerInfo(containerInfo2);
 
-        assertEquals(2, config.getHostsPerContainer().size());
-        assertEquals(1, config.getHostsPerServer().size());
+        assertThat(config.getHostsPerContainer()).hasSize(2);
+        assertThat(config.getHostsPerServer()).hasSize(1);
 
-        assertEquals(2, config.getHostsPerContainer().get("container1").size());        
-        assertEquals(2, config.getHostsPerServer().get("server1").size());
+        assertThat(config.getHostsPerContainer().get("container1")).hasSize(2);        
+        assertThat(config.getHostsPerServer().get("server1")).hasSize(2);
 
         config.removeContainerHost("container1", "http://localhost:8080/server");
         config.removeContainerHost("container", "http://localhost:8080/server");
@@ -121,11 +121,11 @@ public class ConfigurationTest {
 
         config.removeContainerInfo(containerInfo);
 
-        assertEquals(2, config.getHostsPerContainer().size());
-        assertEquals(1, config.getHostsPerServer().size());
+        assertThat(config.getHostsPerContainer()).hasSize(2);
+        assertThat(config.getHostsPerServer()).hasSize(1);
 
-        assertEquals(1, config.getHostsPerContainer().get("container1").size());       
-        assertEquals(1, config.getHostsPerServer().get("server1").size());
+        assertThat(config.getHostsPerContainer().get("container1")).hasSize(1);       
+        assertThat(config.getHostsPerServer().get("server1")).hasSize(1);
     }
     
     @Test
@@ -137,11 +137,11 @@ public class ConfigurationTest {
         ContainerInfo containerInfo = new ContainerInfo("test1.0", "test", "org.kie:test:1.0");
         config.addContainerInfo(containerInfo);
 
-        assertEquals(1, config.getHostsPerContainer().size());
-        assertEquals(1, config.getHostsPerServer().size());
+        assertThat(config.getHostsPerContainer()).hasSize(1);
+        assertThat(config.getHostsPerServer()).hasSize(1);
 
-        assertEquals(1, config.getHostsPerContainer().get("container1").size());        
-        assertEquals(1, config.getHostsPerServer().get("server1").size());
+        assertThat(config.getHostsPerContainer().get("container1")).hasSize(1);        
+        assertThat(config.getHostsPerServer().get("server1")).hasSize(1);
         
         Configuration updated = new Configuration();
         updated.addContainerHost("container1", "http://localhost:8080/server");
@@ -153,13 +153,13 @@ public class ConfigurationTest {
         
         config.reloadFrom(updated);
         
-        assertEquals(2, config.getHostsPerContainer().size());
-        assertEquals(2, config.getHostsPerServer().size());
+        assertThat(config.getHostsPerContainer()).hasSize(2);
+        assertThat(config.getHostsPerServer()).hasSize(2);
 
-        assertEquals(1, config.getHostsPerContainer().get("container1").size());        
-        assertEquals(1, config.getHostsPerServer().get("server1").size());
-        assertEquals(1, config.getHostsPerContainer().get("container2").size());        
-        assertEquals(1, config.getHostsPerServer().get("server2").size());
+        assertThat(config.getHostsPerContainer().get("container1")).hasSize(1);        
+        assertThat(config.getHostsPerServer().get("server1")).hasSize(1);
+        assertThat(config.getHostsPerContainer().get("container2")).hasSize(1);        
+        assertThat(config.getHostsPerServer().get("server2")).hasSize(1);
     }
     
     @Test
@@ -171,11 +171,11 @@ public class ConfigurationTest {
         ContainerInfo containerInfo = new ContainerInfo("test1.0", "test", "org.kie:test:1.0");
         config.addContainerInfo(containerInfo);
 
-        assertEquals(1, config.getHostsPerContainer().size());
-        assertEquals(1, config.getHostsPerServer().size());
+        assertThat(config.getHostsPerContainer()).hasSize(1);
+        assertThat(config.getHostsPerServer()).hasSize(1);
 
-        assertEquals(1, config.getHostsPerContainer().get("container1").size());        
-        assertEquals(1, config.getHostsPerServer().get("server1").size());
+        assertThat(config.getHostsPerContainer().get("container1")).hasSize(1);        
+        assertThat(config.getHostsPerServer().get("server1")).hasSize(1);
         
         Configuration updated = new Configuration();
         updated.addContainerHost("container2", "http://localhost:8081/server");
@@ -185,13 +185,13 @@ public class ConfigurationTest {
         
         config.reloadFrom(updated);
         
-        assertEquals(1, config.getHostsPerContainer().size());
-        assertEquals(1, config.getHostsPerServer().size());
+        assertThat(config.getHostsPerContainer()).hasSize(1);
+        assertThat(config.getHostsPerServer()).hasSize(1);
 
-        assertNull(config.getHostsPerContainer().get("container1"));        
-        assertNull(config.getHostsPerServer().get("server1"));
-        assertEquals(1, config.getHostsPerContainer().get("container2").size());        
-        assertEquals(1, config.getHostsPerServer().get("server2").size());
+        assertThat(config.getHostsPerContainer().get("container1")).isNull();        
+        assertThat(config.getHostsPerServer().get("server1")).isNull();
+        assertThat(config.getHostsPerContainer().get("container2")).hasSize(1);        
+        assertThat(config.getHostsPerServer().get("server2")).hasSize(1);
     }
     
     @Test
@@ -203,14 +203,14 @@ public class ConfigurationTest {
         ContainerInfo containerInfo = new ContainerInfo("test1.0", "test", "org.kie:test:1.0");
         config.addContainerInfo(containerInfo);
 
-        assertEquals(1, config.getHostsPerContainer().size());
-        assertEquals(1, config.getHostsPerServer().size());
+        assertThat(config.getHostsPerContainer()).hasSize(1);
+        assertThat(config.getHostsPerServer()).hasSize(1);
 
-        assertEquals(1, config.getHostsPerContainer().get("container1").size());        
-        assertEquals(1, config.getHostsPerServer().get("server1").size());
+        assertThat(config.getHostsPerContainer().get("container1")).hasSize(1);        
+        assertThat(config.getHostsPerServer().get("server1")).hasSize(1);
         
-        assertEquals("http://localhost:8080/server", config.getHostsPerContainer().get("container1").get(0));        
-        assertEquals("http://localhost:8080/server", config.getHostsPerServer().get("server1").get(0));
+        assertThat(config.getHostsPerContainer().get("container1").get(0)).isEqualTo("http://localhost:8080/server");        
+        assertThat(config.getHostsPerServer().get("server1").get(0)).isEqualTo("http://localhost:8080/server");
                
         Configuration updated = new Configuration();
         updated.addContainerHost("container1", "http://localhost:8081/server");
@@ -220,14 +220,14 @@ public class ConfigurationTest {
         
         config.reloadFrom(updated);
         
-        assertEquals(1, config.getHostsPerContainer().size());
-        assertEquals(1, config.getHostsPerServer().size());
+        assertThat(config.getHostsPerContainer()).hasSize(1);
+        assertThat(config.getHostsPerServer()).hasSize(1);
 
-        assertEquals(1, config.getHostsPerContainer().get("container1").size());        
-        assertEquals(1, config.getHostsPerServer().get("server1").size());
+        assertThat(config.getHostsPerContainer().get("container1")).hasSize(1);        
+        assertThat(config.getHostsPerServer().get("server1")).hasSize(1);
 
-        assertEquals("http://localhost:8081/server", config.getHostsPerContainer().get("container1").get(0));        
-        assertEquals("http://localhost:8081/server", config.getHostsPerServer().get("server1").get(0));
+        assertThat(config.getHostsPerContainer().get("container1").get(0)).isEqualTo("http://localhost:8081/server");        
+        assertThat(config.getHostsPerServer().get("server1").get(0)).isEqualTo("http://localhost:8081/server");
     }
     
     @Test
@@ -239,14 +239,14 @@ public class ConfigurationTest {
         ContainerInfo containerInfo = new ContainerInfo("test1.0", "test", "org.kie:test:1.0");
         config.addContainerInfo(containerInfo);
 
-        assertEquals(1, config.getHostsPerContainer().size());
-        assertEquals(1, config.getHostsPerServer().size());
+        assertThat(config.getHostsPerContainer()).hasSize(1);
+        assertThat(config.getHostsPerServer()).hasSize(1);
 
-        assertEquals(1, config.getHostsPerContainer().get("container1").size());        
-        assertEquals(1, config.getHostsPerServer().get("server1").size());
+        assertThat(config.getHostsPerContainer().get("container1")).hasSize(1);        
+        assertThat(config.getHostsPerServer().get("server1")).hasSize(1);
         
-        assertEquals("http://localhost:8080/server", config.getHostsPerContainer().get("container1").get(0));        
-        assertEquals("http://localhost:8080/server", config.getHostsPerServer().get("server1").get(0));
+        assertThat(config.getHostsPerContainer().get("container1").get(0)).isEqualTo("http://localhost:8080/server");        
+        assertThat(config.getHostsPerServer().get("server1").get(0)).isEqualTo("http://localhost:8080/server");
                
         Configuration updated = new Configuration();
         updated.addContainerHost("container1", "http://localhost:8081/server");
@@ -258,15 +258,15 @@ public class ConfigurationTest {
         
         config.reloadFrom(updated);
         
-        assertEquals(1, config.getHostsPerContainer().size());
-        assertEquals(1, config.getHostsPerServer().size());
+        assertThat(config.getHostsPerContainer()).hasSize(1);
+        assertThat(config.getHostsPerServer()).hasSize(1);
 
-        assertEquals(2, config.getHostsPerContainer().get("container1").size());        
-        assertEquals(2, config.getHostsPerServer().get("server1").size());
+        assertThat(config.getHostsPerContainer().get("container1")).hasSize(2);        
+        assertThat(config.getHostsPerServer().get("server1")).hasSize(2);
 
-        assertEquals("http://localhost:8080/server", config.getHostsPerContainer().get("container1").get(0));        
-        assertEquals("http://localhost:8080/server", config.getHostsPerServer().get("server1").get(0));
-        assertEquals("http://localhost:8081/server", config.getHostsPerContainer().get("container1").get(1));        
-        assertEquals("http://localhost:8081/server", config.getHostsPerServer().get("server1").get(1));
+        assertThat(config.getHostsPerContainer().get("container1").get(0)).isEqualTo("http://localhost:8080/server");        
+        assertThat(config.getHostsPerServer().get("server1").get(0)).isEqualTo("http://localhost:8080/server");
+        assertThat(config.getHostsPerContainer().get("container1").get(1)).isEqualTo("http://localhost:8081/server");        
+        assertThat(config.getHostsPerServer().get("server1").get(1)).isEqualTo("http://localhost:8081/server");
     }
 }

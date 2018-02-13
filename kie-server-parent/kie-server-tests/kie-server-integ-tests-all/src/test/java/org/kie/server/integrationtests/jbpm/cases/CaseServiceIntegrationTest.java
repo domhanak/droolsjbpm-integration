@@ -15,7 +15,7 @@
 
 package org.kie.server.integrationtests.jbpm.cases;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.ArrayList;
@@ -115,7 +115,7 @@ public class CaseServiceIntegrationTest extends JbpmKieServerBaseIntegrationTest
         assertCarInsuranceCaseInstance(caseInstance, caseId, USER_YODA);
 
         List<TaskSummary> tasks = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-        assertEquals(1, tasks.size());
+        assertThat(tasks).hasSize(1);
 
         TaskSummary task = tasks.get(0);
         Assertions.assertThat(task).isNotNull();
@@ -216,7 +216,7 @@ public class CaseServiceIntegrationTest extends JbpmKieServerBaseIntegrationTest
         assertCarInsuranceCaseInstance(caseInstance, caseId, USER_YODA);
 
         List<TaskSummary> tasks = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-        assertEquals(1, tasks.size());
+        assertThat(tasks).hasSize(1);
 
         caseClient.destroyCaseInstance(CONTAINER_ID, caseId);
 
@@ -504,7 +504,7 @@ public class CaseServiceIntegrationTest extends JbpmKieServerBaseIntegrationTest
                 .build();
 
         String caseId = caseClient.startCase(CONTAINER_ID, CLAIM_CASE_DEF_ID, caseFile);
-        assertNotNull(caseId);
+        assertThat(caseId).isNotNull();
         return caseId;
     }
 }

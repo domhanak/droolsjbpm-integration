@@ -19,7 +19,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class MarshallingFormatTest {
 
@@ -46,33 +46,33 @@ public class MarshallingFormatTest {
 
     @Test
     public void testExpectedMarshallingFormats() {
-        assertEquals(MarshallingFormat.JSON, MarshallingFormat.fromType("json"));
-        assertEquals(MarshallingFormat.JAXB, MarshallingFormat.fromType("xml"));
-        assertEquals(MarshallingFormat.XSTREAM, MarshallingFormat.fromType("xstream"));
+        assertThat(MarshallingFormat.fromType("json")).isEqualTo(MarshallingFormat.JSON);
+        assertThat(MarshallingFormat.fromType("xml")).isEqualTo(MarshallingFormat.JAXB);
+        assertThat(MarshallingFormat.fromType("xstream")).isEqualTo(MarshallingFormat.XSTREAM);
 
-        assertEquals(MarshallingFormat.JSON, MarshallingFormat.fromType("application/json"));
-        assertEquals(MarshallingFormat.JAXB, MarshallingFormat.fromType("application/xml"));
-        assertEquals(MarshallingFormat.XSTREAM, MarshallingFormat.fromType("application/xstream"));
+        assertThat(MarshallingFormat.fromType("application/json")).isEqualTo(MarshallingFormat.JSON);
+        assertThat(MarshallingFormat.fromType("application/xml")).isEqualTo(MarshallingFormat.JAXB);
+        assertThat(MarshallingFormat.fromType("application/xstream")).isEqualTo(MarshallingFormat.XSTREAM);
     }
 
     @Test
     public void testMarshallingFormatsWithExtraneousParameters() {
-        assertEquals(MarshallingFormat.JSON, MarshallingFormat.fromType("application/json;"));
-        assertEquals(MarshallingFormat.JAXB, MarshallingFormat.fromType("application/xml;"));
-        assertEquals(MarshallingFormat.XSTREAM, MarshallingFormat.fromType("application/xstream;"));
-        assertEquals(MarshallingFormat.JSON, MarshallingFormat.fromType("application/json;encode="));
-        assertEquals(MarshallingFormat.JAXB, MarshallingFormat.fromType("application/xml;encode=utf-8"));
-        assertEquals(MarshallingFormat.XSTREAM, MarshallingFormat.fromType("application/xstream;utf-8"));
+        assertThat(MarshallingFormat.fromType("application/json;")).isEqualTo(MarshallingFormat.JSON);
+        assertThat(MarshallingFormat.fromType("application/xml;")).isEqualTo(MarshallingFormat.JAXB);
+        assertThat(MarshallingFormat.fromType("application/xstream;")).isEqualTo(MarshallingFormat.XSTREAM);
+        assertThat(MarshallingFormat.fromType("application/json;encode=")).isEqualTo(MarshallingFormat.JSON);
+        assertThat(MarshallingFormat.fromType("application/xml;encode=utf-8")).isEqualTo(MarshallingFormat.JAXB);
+        assertThat(MarshallingFormat.fromType("application/xstream;utf-8")).isEqualTo(MarshallingFormat.XSTREAM);
     }
 
     @Test
     public void testMarshallingFormatCase() {
-        assertEquals(MarshallingFormat.JSON, MarshallingFormat.fromType("JSON"));
+        assertThat(MarshallingFormat.fromType("JSON")).isEqualTo(MarshallingFormat.JSON);
     }
 
     @Test
     public void testEdgeCaseWithJaxb() {
-        assertEquals(MarshallingFormat.JAXB, MarshallingFormat.fromType("jaxb"));
-        assertEquals(MarshallingFormat.JAXB, MarshallingFormat.fromType("JAXB"));
+        assertThat(MarshallingFormat.fromType("jaxb")).isEqualTo(MarshallingFormat.JAXB);
+        assertThat(MarshallingFormat.fromType("JAXB")).isEqualTo(MarshallingFormat.JAXB);
     }
 }

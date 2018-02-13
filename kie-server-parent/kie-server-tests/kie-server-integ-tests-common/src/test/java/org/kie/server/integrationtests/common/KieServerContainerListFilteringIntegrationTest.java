@@ -21,7 +21,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 import org.junit.Assert;
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
@@ -131,15 +131,15 @@ public class KieServerContainerListFilteringIntegrationTest extends RestJmsShare
         if (expectedContainersIds.isEmpty()) {
             KieServerAssert.assertNullOrEmpty("Should be return empty list", contianers);
         } else {
-            assertNotNull(contianers);
-            assertEquals(expectedContainersIds.size(), contianers.size());
+            assertThat(contianers).isNotNull();
+            assertThat(contianers.size()).isEqualTo(expectedContainersIds.size());
             checkContainersList(contianers);
         }
     }
 
     private void checkContainersList(List<KieContainerResource> containers) {
         for (KieContainerResource container : containers) {
-            assertTrue(isContainerExpected(container));
+            assertThat(isContainerExpected(container)).isTrue();
             checkReleaseIdByFilter(container.getReleaseId());
             checkContainerStatusByFilter(container.getStatus());
         }
@@ -155,13 +155,13 @@ public class KieServerContainerListFilteringIntegrationTest extends RestJmsShare
         String groupId = releaseIdFilter.getGroupId();
 
         if (version != null) {
-            assertEquals(version, releaseId.getVersion());
+            assertThat(releaseId.getVersion()).isEqualTo(version);
         }
         if (artifactId != null) {
-            assertEquals(artifactId, releaseId.getArtifactId());
+            assertThat(releaseId.getArtifactId()).isEqualTo(artifactId);
         }
         if (groupId != null) {
-            assertEquals(groupId, releaseId.getGroupId());
+            assertThat(releaseId.getGroupId()).isEqualTo(groupId);
         }
     }
 

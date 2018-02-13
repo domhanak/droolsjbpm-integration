@@ -15,7 +15,7 @@
 
 package org.kie.server.integrationtests.jbpm.cases;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.Arrays;
@@ -112,7 +112,7 @@ public class CarInsuranceClaimCaseIntegrationTest extends JbpmKieServerBaseInteg
         assertAndAcceptClaimOffer(USER_YODA);
         // there should be no process instances for the case
         Collection<ProcessInstance> caseProcesInstances = caseClient.getProcessInstances(CONTAINER_ID, caseId, Arrays.asList(org.kie.api.runtime.process.ProcessInstance.STATE_ACTIVE), 0, 10);
-        assertEquals(0, caseProcesInstances.size());
+        assertThat(caseProcesInstances).isEmpty();
     }
     
     @Test
@@ -132,14 +132,14 @@ public class CarInsuranceClaimCaseIntegrationTest extends JbpmKieServerBaseInteg
         caseClient.putCaseInstanceData(CONTAINER_ID, caseId, "document", document);
         
         Map<String, Object> alldata = caseClient.getCaseInstanceData(CONTAINER_ID, caseId);
-        assertNotNull(alldata);
+        assertThat(alldata).isNotNull();
         
         Document caseDoc = (Document) alldata.get("document");
-        assertEquals("test.txt", caseDoc.getName());
-        assertNotNull(caseDoc.getContent());
+        assertThat(caseDoc.getName()).isEqualTo("test.txt");
+        assertThat(caseDoc.getContent()).isNotNull();
         
         String storedContent = new String(caseDoc.getContent());
-        assertEquals("just a test data", storedContent);
+        assertThat(storedContent).isEqualTo("just a test data");
         // since the first task assigned to insured is with auto start it should be already active
         // the same task can be claimed by insuranceRepresentative in case claim is reported over phone
         long taskId = assertBuildClaimReportAvailableForBothRoles(USER_YODA, USER_JOHN);
@@ -161,7 +161,7 @@ public class CarInsuranceClaimCaseIntegrationTest extends JbpmKieServerBaseInteg
         assertAndAcceptClaimOffer(USER_YODA);
         // there should be no process instances for the case
         Collection<ProcessInstance> caseProcesInstances = caseClient.getProcessInstances(CONTAINER_ID, caseId, Arrays.asList(org.kie.api.runtime.process.ProcessInstance.STATE_ACTIVE), 0, 10);
-        assertEquals(0, caseProcesInstances.size());
+        assertThat(caseProcesInstances).isEmpty();
     }
     
     @Test
@@ -196,35 +196,35 @@ public class CarInsuranceClaimCaseIntegrationTest extends JbpmKieServerBaseInteg
         assertAndAcceptClaimOffer(USER_YODA);
         // there should be no process instances for the case
         Collection<ProcessInstance> caseProcesInstances = caseClient.getProcessInstances(CONTAINER_ID, caseId, Arrays.asList(org.kie.api.runtime.process.ProcessInstance.STATE_ACTIVE), 0, 10);
-        assertEquals(0, caseProcesInstances.size());
+        assertThat(caseProcesInstances).isEmpty();
     }
 
     private void assertTask(TaskSummary task, String actor, String name, String status) {
-        assertNotNull(task);
-        assertEquals(name, task.getName());
-        assertEquals(actor, task.getActualOwner());
-        assertEquals(status, task.getStatus());
+        assertThat(task).isNotNull();
+        assertThat(task.getName()).isEqualTo(name);
+        assertThat(task.getActualOwner()).isEqualTo(actor);
+        assertThat(task.getStatus()).isEqualTo(status);
     }
 
     private void assertCaseInstance(String caseId) {
         CaseInstance cInstance = caseClient.getCaseInstance(CONTAINER_ID, caseId);
-        assertNotNull(cInstance);
-        assertEquals(caseId, cInstance.getCaseId());
-        assertEquals(CLAIM_CASE_DEF_ID, cInstance.getCaseDefinitionId());
+        assertThat(cInstance).isNotNull();
+        assertThat(cInstance.getCaseId()).isEqualTo(caseId);
+        assertThat(cInstance.getCaseDefinitionId()).isEqualTo(CLAIM_CASE_DEF_ID);
     }
 
     private void assertBuildClaimReportStage(String caseId) {
         List<CaseStage> activeStages = caseClient.getStages(CONTAINER_ID, caseId, true, 0, 10);
-        assertEquals(1, activeStages.size());
+        assertThat(activeStages).hasSize(1);
         CaseStage stage = activeStages.iterator().next();
-        assertEquals("Build claim report", stage.getName());
+        assertThat(stage.getName()).isEqualTo("Build claim report");
     }
 
     private void assertClaimAssesmentStage(String caseId) {
         List<CaseStage> activeStages = caseClient.getStages(CONTAINER_ID, caseId, true, 0, 10);
-        assertEquals(1, activeStages.size());
+        assertThat(activeStages).hasSize(1);
         CaseStage stage = activeStages.iterator().next();
-        assertEquals("Claim assesment", stage.getName());
+        assertThat(stage.getName()).isEqualTo("Claim assesment");
     }
 
     private long assertBuildClaimReportAvailableForBothRoles(String insured, String insuranceRep) throws Exception {
@@ -239,16 +239,16 @@ public class CarInsuranceClaimCaseIntegrationTest extends JbpmKieServerBaseInteg
         changeUser(insured);
 
         List<TaskSummary> tasks = taskClient.findTasksAssignedAsPotentialOwner(insured, 0, 10);
-        assertNotNull(tasks);
-        assertEquals(1, tasks.size());
+        assertThat(tasks).isNotNull();
+        assertThat(tasks).hasSize(1);
         assertTask(tasks.get(0), null, taskName, status);
 
         changeUser(insuranceRep);
 
         // the same task can be claimed by insuranceRepresentative in case claim is reported over phone
         tasks = taskClient.findTasksAssignedAsPotentialOwner(insuranceRep, 0, 10);
-        assertNotNull(tasks);
-        assertEquals(1, tasks.size());
+        assertThat(tasks).isNotNull();
+        assertThat(tasks).hasSize(1);
         assertTask(tasks.get(0), null, taskName, status);
 
         changeUser(TestConfig.getUsername());
@@ -269,11 +269,11 @@ public class CarInsuranceClaimCaseIntegrationTest extends JbpmKieServerBaseInteg
 
         // claim report should be stored in case file data
         Object caseClaimReport = caseClient.getCaseInstanceData(CONTAINER_ID, caseId, "claimReport");
-        assertNotNull(caseClaimReport);
-        assertEquals("John Doe", KieServerReflections.valueOf(caseClaimReport, "name"));
-        assertEquals("Main street, NY", KieServerReflections.valueOf(caseClaimReport, "address"));
-        assertEquals("It happened so sudden...", KieServerReflections.valueOf(caseClaimReport, "accidentDescription"));
-        assertNotNull(KieServerReflections.valueOf(caseClaimReport, "accidentDate"));
+        assertThat(caseClaimReport).isNotNull();
+        assertThat("name")).as("John Doe").isEqualTo(KieServerReflections.valueOf(caseClaimReport);
+        assertThat("address")).as("Main street, NY").isEqualTo(KieServerReflections.valueOf(caseClaimReport);
+        assertThat("accidentDescription")).as("It happened so sudden...").isEqualTo(KieServerReflections.valueOf(caseClaimReport);
+        assertThat(KieServerReflections.valueOf(caseClaimReport, "accidentDate")).isNotNull();
     }
 
     private void provideAndAssertPropertyDamageReport(String caseId, Long taskId, String insured) {
@@ -287,17 +287,17 @@ public class CarInsuranceClaimCaseIntegrationTest extends JbpmKieServerBaseInteg
 
         // property damage report should be stored in case file data
         Object casePropertyDamageReport = caseClient.getCaseInstanceData(CONTAINER_ID, caseId, "propertyDamageReport");
-        assertNotNull(casePropertyDamageReport);
-        assertEquals("Car is completely destroyed", KieServerReflections.valueOf(casePropertyDamageReport, "description"));
-        assertEquals(1000.0, ((Double)KieServerReflections.valueOf(casePropertyDamageReport, "value")).doubleValue(), 0);
+        assertThat(casePropertyDamageReport).isNotNull();
+        assertThat("description")).as("Car is completely destroyed").isEqualTo(KieServerReflections.valueOf(casePropertyDamageReport);
+        assertThat(0).isEqualTo(1000.0, ((Double)KieServerReflections.valueOf(casePropertyDamageReport, "value")).doubleValue());
     }
 
     private void assertAndAcceptClaimOffer(String insured) throws Exception {
         changeUser(insured);
 
         List<TaskSummary> tasks = taskClient.findTasksAssignedAsPotentialOwner(insured, 0, 10);
-        assertNotNull(tasks);
-        assertEquals(1, tasks.size());
+        assertThat(tasks).isNotNull();
+        assertThat(tasks).hasSize(1);
         assertTask(tasks.get(0), insured, "Present calculated claim", Status.Reserved.toString());
 
         changeUser(TestConfig.getUsername());
@@ -316,7 +316,7 @@ public class CarInsuranceClaimCaseIntegrationTest extends JbpmKieServerBaseInteg
                 .build();
 
         String caseId = caseClient.startCase(CONTAINER_ID, CLAIM_CASE_DEF_ID, caseFile);
-        assertNotNull(caseId);
+        assertThat(caseId).isNotNull();
         return caseId;
     }
 }

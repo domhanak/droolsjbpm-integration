@@ -28,7 +28,7 @@ import org.kie.api.runtime.ExecutionResults;
 import org.kie.server.api.model.ReleaseId;
 import org.kie.server.api.model.ServiceResponse;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 import org.kie.server.integrationtests.shared.KieServerAssert;
 import org.kie.server.integrationtests.shared.KieServerDeployer;
 import org.kie.server.integrationtests.shared.KieServerReflections;
@@ -76,6 +76,6 @@ public class RuleTemplateIntegrationTest extends DroolsKieServerBaseIntegrationT
         KieServerAssert.assertSuccess(response);
         ExecutionResults results = response.getResult();
         Object value = results.getValue(PERSON_OUT_IDENTIFIER);
-        assertEquals("Bob", KieServerReflections.valueOf(value, PERSON_SURNAME_FIELD));
+        assertThat(PERSON_SURNAME_FIELD)).as("Bob").isEqualTo(KieServerReflections.valueOf(value);
     }
 }

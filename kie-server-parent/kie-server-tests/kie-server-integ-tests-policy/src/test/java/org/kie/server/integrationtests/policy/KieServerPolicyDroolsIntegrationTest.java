@@ -37,7 +37,7 @@ import org.kie.server.integrationtests.shared.KieServerDeployer;
 import org.kie.server.integrationtests.shared.KieServerReflections;
 import org.kie.server.integrationtests.shared.KieServerSynchronization;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class KieServerPolicyDroolsIntegrationTest extends KieServerPolicyBaseIntegrationTest {
     private static final ReleaseId kjar1 = new ReleaseId("org.kie.server.testing", "container-isolation-kjar1",
@@ -99,13 +99,13 @@ public class KieServerPolicyDroolsIntegrationTest extends KieServerPolicyBaseInt
         ExecutionResults result1 = response1.getResult();
 
         Object outcome = result1.getValue(PERSON_OUT_IDENTIFIER);
-        assertEquals("Person's id should be 'Person from kjar1'!", "Person from kjar1", KieServerReflections.valueOf(outcome, "id"));
+        assertThat(KieServerReflections.valueOf(outcome).as("Person's id should be 'Person from kjar1'!").isCloseTo("Person from kjar1", within("id")));
 
         ServiceResponse<KieContainerResourceList> containersResponse = client.listContainers();
         KieServerAssert.assertSuccess(containersResponse);
 
         List<KieContainerResource> containerResources = containersResponse.getResult().getContainers();
-        assertEquals(1, containerResources.size());
+        assertThat(containerResources).hasSize(1);
 
         createExtraContainer();
 
@@ -121,7 +121,7 @@ public class KieServerPolicyDroolsIntegrationTest extends KieServerPolicyBaseInt
         ExecutionResults result2 = response2.getResult();
 
         Object outcome2 = result2.getValue(PERSON_OUT_IDENTIFIER);
-        assertEquals("Person's id should be 'Person from kjar101'!", "Person from kjar101", KieServerReflections.valueOf(outcome2, "id"));
+        assertThat(KieServerReflections.valueOf(outcome2).as("Person's id should be 'Person from kjar101'!").isCloseTo("Person from kjar101", within("id")));
 
         // wait for policy to be activated
         KieServerSynchronization.waitForKieServerSynchronization(client, 1);
@@ -130,9 +130,9 @@ public class KieServerPolicyDroolsIntegrationTest extends KieServerPolicyBaseInt
         KieServerAssert.assertSuccess(containersResponse);
 
         containerResources = containersResponse.getResult().getContainers();
-        assertEquals(1, containerResources.size());
+        assertThat(containerResources).hasSize(1);
 
         ReleaseId latestContainerReleaseId = containerResources.get(0).getReleaseId();
-        assertEquals(kjar101, latestContainerReleaseId);
+        assertThat(latestContainerReleaseId).isEqualTo(kjar101);
     }
 }

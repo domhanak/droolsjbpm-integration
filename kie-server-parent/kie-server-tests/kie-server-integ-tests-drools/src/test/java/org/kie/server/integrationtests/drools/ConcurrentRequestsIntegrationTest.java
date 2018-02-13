@@ -15,7 +15,7 @@
 
 package org.kie.server.integrationtests.drools;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,7 +78,7 @@ public class ConcurrentRequestsIntegrationTest extends DroolsKieServerBaseIntegr
         }
         es.shutdown();
         for (Future<String> future : futureResults) {
-            assertEquals("SUCCESS", future.get());
+            assertThat(future.get()).isEqualTo("SUCCESS");
         }
     }
 
@@ -105,7 +105,7 @@ public class ConcurrentRequestsIntegrationTest extends DroolsKieServerBaseIntegr
                 logger.trace("Container call #{}, thread-id={}", i, threadId);
                 reply = ruleServicesClient.executeCommandsWithResults(CONTAINER_ID, batchExecution);
                 logger.trace("Container reply for request #{}: {}, thread-id={}", i, reply, threadId);
-                assertEquals(ServiceResponse.ResponseType.SUCCESS, reply.getType());
+                assertThat(reply.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
             }
             return "SUCCESS";
         }

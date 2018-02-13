@@ -12,7 +12,7 @@ import org.kie.api.runtime.ExecutionResults;
 import org.kie.server.api.model.ReleaseId;
 import org.kie.server.api.model.ServiceResponse;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 import org.kie.server.integrationtests.shared.KieServerAssert;
 import org.kie.server.integrationtests.shared.KieServerDeployer;
 
@@ -54,11 +54,11 @@ public class AgendaGroupIntegrationTest extends DroolsKieServerBaseIntegrationTe
         ExecutionResults result = response.getResult();
 
         List<?> outcome = (List<?>) result.getValue(LIST_OUTPUT_NAME);
-        assertNotNull(outcome);
-        assertEquals(2, outcome.size());
+        assertThat(outcome).isNotNull();
+        assertThat(outcome).hasSize(2);
 
-        assertEquals("Rule in first agenda group executed", outcome.get(0));
-        assertEquals("Rule without agenda group executed", outcome.get(1));
+        assertThat(outcome.get(0)).isEqualTo("Rule in first agenda group executed");
+        assertThat(outcome.get(1)).isEqualTo("Rule without agenda group executed");
     }
 
     /**
@@ -83,10 +83,10 @@ public class AgendaGroupIntegrationTest extends DroolsKieServerBaseIntegrationTe
         ExecutionResults result = response.getResult();
 
         List<?> outcome = (List<?>) result.getValue(LIST_OUTPUT_NAME);
-        assertNotNull(outcome);
-        assertEquals(1, outcome.size());
+        assertThat(outcome).isNotNull();
+        assertThat(outcome).hasSize(1);
 
-        assertEquals("Rule without agenda group executed", outcome.get(0));
+        assertThat(outcome.get(0)).isEqualTo("Rule without agenda group executed");
 
     }
 }

@@ -42,7 +42,7 @@ import org.kie.server.controller.impl.storage.InMemoryKieServerTemplateStorage;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
@@ -86,13 +86,13 @@ public class SpecManagementServiceImplTest extends AbstractServiceImplTest {
         specManagementService.saveServerTemplate(serverTemplate);
 
         ServerTemplateKeyList existing = specManagementService.listServerTemplateKeys();
-        assertNotNull(existing);
-        assertEquals(1, existing.getServerTemplates().length);
+        assertThat(existing).isNotNull();
+        assertThat(existing.getServerTemplates().length).isEqualTo(1);
 
         org.kie.server.controller.api.model.spec.ServerTemplateKey saved = existing.getServerTemplates()[0];
 
-        assertEquals(serverTemplate.getName(), saved.getName());
-        assertEquals(serverTemplate.getId(), saved.getId());
+        assertThat(saved.getName()).isEqualTo(serverTemplate.getName());
+        assertThat(saved.getId()).isEqualTo(serverTemplate.getId());
     }
 
     @Test
@@ -106,8 +106,8 @@ public class SpecManagementServiceImplTest extends AbstractServiceImplTest {
         specManagementService.saveServerTemplate(serverTemplate);
 
         ServerTemplateKeyList existing = specManagementService.listServerTemplateKeys();
-        assertNotNull(existing);
-        assertEquals(1, existing.getServerTemplates().length);
+        assertThat(existing).isNotNull();
+        assertThat(existing.getServerTemplates().length).isEqualTo(1);
 
         Map<Capability, ContainerConfig> configs = new HashMap<Capability, ContainerConfig>();
         RuleConfig ruleConfig = new RuleConfig();
@@ -134,35 +134,35 @@ public class SpecManagementServiceImplTest extends AbstractServiceImplTest {
         specManagementService.saveContainerSpec(serverTemplate.getId(), containerSpec);
 
         org.kie.server.controller.api.model.spec.ServerTemplate createdServerTemplate = specManagementService.getServerTemplate(serverTemplate.getId());
-        assertNotNull(createdServerTemplate);
-        assertNotNull(createdServerTemplate.getContainersSpec());
-        assertEquals(1, createdServerTemplate.getContainersSpec().size());
+        assertThat(createdServerTemplate).isNotNull();
+        assertThat(createdServerTemplate.getContainersSpec()).isNotNull();
+        assertThat(createdServerTemplate.getContainersSpec()).hasSize(1);
 
         org.kie.server.controller.api.model.spec.ContainerSpec container = createdServerTemplate.getContainersSpec().iterator().next();
-        assertNotNull(container);
+        assertThat(container).isNotNull();
 
-        assertEquals(containerSpec.getId(), container.getId());
-        assertEquals(containerSpec.getStatus(), container.getStatus());
-        assertEquals(containerSpec.getServerTemplateKey(), container.getServerTemplateKey());
-        assertEquals(containerSpec.getReleasedId(), container.getReleasedId());
+        assertThat(container.getId()).isEqualTo(containerSpec.getId());
+        assertThat(container.getStatus()).isEqualTo(containerSpec.getStatus());
+        assertThat(container.getServerTemplateKey()).isEqualTo(containerSpec.getServerTemplateKey());
+        assertThat(container.getReleasedId()).isEqualTo(containerSpec.getReleasedId());
 
-        assertNotNull(container.getConfigs());
-        assertEquals(containerSpec.getConfigs().size(), container.getConfigs().size());
+        assertThat(container.getConfigs()).isNotNull();
+        assertThat(container.getConfigs().size()).isEqualTo(containerSpec.getConfigs().size());
 
         ContainerSpecList specs = specManagementService.listContainerSpec(serverTemplate.getId());
-        assertNotNull(specs);
-        assertEquals(1, specs.getContainerSpecs().length);
+        assertThat(specs).isNotNull();
+        assertThat(specs.getContainerSpecs().length).isEqualTo(1);
 
         container = specs.getContainerSpecs()[0];
-        assertNotNull(container);
+        assertThat(container).isNotNull();
 
-        assertEquals(containerSpec.getId(), container.getId());
-        assertEquals(containerSpec.getStatus(), container.getStatus());
-        assertEquals(containerSpec.getServerTemplateKey(), container.getServerTemplateKey());
-        assertEquals(containerSpec.getReleasedId(), container.getReleasedId());
+        assertThat(container.getId()).isEqualTo(containerSpec.getId());
+        assertThat(container.getStatus()).isEqualTo(containerSpec.getStatus());
+        assertThat(container.getServerTemplateKey()).isEqualTo(containerSpec.getServerTemplateKey());
+        assertThat(container.getReleasedId()).isEqualTo(containerSpec.getReleasedId());
 
-        assertNotNull(container.getConfigs());
-        assertEquals(containerSpec.getConfigs().size(), container.getConfigs().size());
+        assertThat(container.getConfigs()).isNotNull();
+        assertThat(container.getConfigs().size()).isEqualTo(containerSpec.getConfigs().size());
     }
 
     @Test
@@ -178,12 +178,12 @@ public class SpecManagementServiceImplTest extends AbstractServiceImplTest {
             specManagementService.saveServerTemplate(serverTemplate);
         }
         ServerTemplateKeyList existing = specManagementService.listServerTemplateKeys();
-        assertNotNull(existing);
-        assertEquals(limit, existing.getServerTemplates().length);
+        assertThat(existing).isNotNull();
+        assertThat(existing.getServerTemplates().length).isEqualTo(limit);
 
         ServerTemplateList allTemplates = specManagementService.listServerTemplates();
-        assertNotNull(allTemplates);
-        assertEquals(limit, allTemplates.getServerTemplates().length);
+        assertThat(allTemplates).isNotNull();
+        assertThat(allTemplates.getServerTemplates().length).isEqualTo(limit);
     }
 
     @Test
@@ -197,18 +197,18 @@ public class SpecManagementServiceImplTest extends AbstractServiceImplTest {
         specManagementService.saveServerTemplate(serverTemplate);
 
         ServerTemplateKeyList existing = specManagementService.listServerTemplateKeys();
-        assertNotNull(existing);
-        assertEquals(1, existing.getServerTemplates().length);
+        assertThat(existing).isNotNull();
+        assertThat(existing.getServerTemplates().length).isEqualTo(1);
 
         org.kie.server.controller.api.model.spec.ServerTemplateKey saved = existing.getServerTemplates()[0];
 
-        assertEquals(serverTemplate.getName(), saved.getName());
-        assertEquals(serverTemplate.getId(), saved.getId());
+        assertThat(saved.getName()).isEqualTo(serverTemplate.getName());
+        assertThat(saved.getId()).isEqualTo(serverTemplate.getId());
 
         specManagementService.deleteServerTemplate(serverTemplate.getId());
         existing = specManagementService.listServerTemplateKeys();
-        assertNotNull(existing);
-        assertEquals(0, existing.getServerTemplates().length);
+        assertThat(existing).isNotNull();
+        assertThat(existing.getServerTemplates().length).isEqualTo(0);
     }
 
     @Test
@@ -222,8 +222,8 @@ public class SpecManagementServiceImplTest extends AbstractServiceImplTest {
         specManagementService.saveServerTemplate(serverTemplate);
 
         ServerTemplateKeyList existing = specManagementService.listServerTemplateKeys();
-        assertNotNull(existing);
-        assertEquals(1, existing.getServerTemplates().length);
+        assertThat(existing).isNotNull();
+        assertThat(existing.getServerTemplates().length).isEqualTo(1);
 
         int limit = getRandomInt(3, 6);
         for (int x = 0; x < limit; x++) {
@@ -250,17 +250,17 @@ public class SpecManagementServiceImplTest extends AbstractServiceImplTest {
         }
 
         org.kie.server.controller.api.model.spec.ServerTemplate createdServerTemplate = specManagementService.getServerTemplate(serverTemplate.getId());
-        assertNotNull(createdServerTemplate);
-        assertNotNull(createdServerTemplate.getContainersSpec());
-        assertEquals(limit, createdServerTemplate.getContainersSpec().size());
+        assertThat(createdServerTemplate).isNotNull();
+        assertThat(createdServerTemplate.getContainersSpec()).isNotNull();
+        assertThat(createdServerTemplate.getContainersSpec().size()).isEqualTo(limit);
 
         // remove first container with suffix 0
         specManagementService.deleteContainerSpec(serverTemplate.getId(), "test container " + 0);
 
         createdServerTemplate = specManagementService.getServerTemplate(serverTemplate.getId());
-        assertNotNull(createdServerTemplate);
-        assertNotNull(createdServerTemplate.getContainersSpec());
-        assertEquals(limit - 1, createdServerTemplate.getContainersSpec().size());
+        assertThat(createdServerTemplate).isNotNull();
+        assertThat(createdServerTemplate.getContainersSpec()).isNotNull();
+        assertThat(createdServerTemplate.getContainersSpec().size()).isEqualTo(limit - 1);
     }
 
     @Test
@@ -274,8 +274,8 @@ public class SpecManagementServiceImplTest extends AbstractServiceImplTest {
         specManagementService.saveServerTemplate(serverTemplate);
 
         ServerTemplateKeyList existing = specManagementService.listServerTemplateKeys();
-        assertNotNull(existing);
-        assertEquals(1, existing.getServerTemplates().length);
+        assertThat(existing).isNotNull();
+        assertThat(existing.getServerTemplates().length).isEqualTo(1);
 
         Map<Capability, ContainerConfig> configs = new HashMap<Capability, ContainerConfig>();
         RuleConfig ruleConfig = new RuleConfig();
@@ -298,20 +298,20 @@ public class SpecManagementServiceImplTest extends AbstractServiceImplTest {
         specManagementService.saveContainerSpec(serverTemplate.getId(), containerSpec);
 
         org.kie.server.controller.api.model.spec.ServerTemplate createdServerTemplate = specManagementService.getServerTemplate(serverTemplate.getId());
-        assertNotNull(createdServerTemplate);
-        assertNotNull(createdServerTemplate.getContainersSpec());
-        assertEquals(1, createdServerTemplate.getContainersSpec().size());
+        assertThat(createdServerTemplate).isNotNull();
+        assertThat(createdServerTemplate.getContainersSpec()).isNotNull();
+        assertThat(createdServerTemplate.getContainersSpec()).hasSize(1);
 
         org.kie.server.controller.api.model.spec.ContainerSpec container = createdServerTemplate.getContainersSpec().iterator().next();
-        assertNotNull(container);
+        assertThat(container).isNotNull();
 
-        assertEquals(containerSpec.getId(), container.getId());
-        assertEquals(containerSpec.getStatus(), container.getStatus());
-        assertEquals(containerSpec.getServerTemplateKey(), container.getServerTemplateKey());
-        assertEquals(containerSpec.getReleasedId(), container.getReleasedId());
+        assertThat(container.getId()).isEqualTo(containerSpec.getId());
+        assertThat(container.getStatus()).isEqualTo(containerSpec.getStatus());
+        assertThat(container.getServerTemplateKey()).isEqualTo(containerSpec.getServerTemplateKey());
+        assertThat(container.getReleasedId()).isEqualTo(containerSpec.getReleasedId());
 
-        assertNotNull(container.getConfigs());
-        assertEquals(containerSpec.getConfigs().size(), container.getConfigs().size());
+        assertThat(container.getConfigs()).isNotNull();
+        assertThat(container.getConfigs().size()).isEqualTo(containerSpec.getConfigs().size());
 
         String newServerTemplateId = "Copied server id";
         String newServerTemplateName = "Copied server name";
@@ -319,27 +319,27 @@ public class SpecManagementServiceImplTest extends AbstractServiceImplTest {
         specManagementService.copyServerTemplate(serverTemplate.getId(), newServerTemplateId, newServerTemplateName);
 
         existing = specManagementService.listServerTemplateKeys();
-        assertNotNull(existing);
-        assertEquals(2, existing.getServerTemplates().length);
+        assertThat(existing).isNotNull();
+        assertThat(existing.getServerTemplates().length).isEqualTo(2);
 
         createdServerTemplate = specManagementService.getServerTemplate(newServerTemplateId);
-        assertNotNull(createdServerTemplate);
-        assertEquals(newServerTemplateName, createdServerTemplate.getName());
-        assertEquals(newServerTemplateId, createdServerTemplate.getId());
-        assertNotNull(createdServerTemplate.getContainersSpec());
-        assertEquals(1, createdServerTemplate.getContainersSpec().size());
+        assertThat(createdServerTemplate).isNotNull();
+        assertThat(createdServerTemplate.getName()).isEqualTo(newServerTemplateName);
+        assertThat(createdServerTemplate.getId()).isEqualTo(newServerTemplateId);
+        assertThat(createdServerTemplate.getContainersSpec()).isNotNull();
+        assertThat(createdServerTemplate.getContainersSpec()).hasSize(1);
 
         container = createdServerTemplate.getContainersSpec().iterator().next();
-        assertNotNull(container);
+        assertThat(container).isNotNull();
 
-        assertEquals(containerSpec.getId(), container.getId());
-        assertEquals(containerSpec.getStatus(), container.getStatus());
-        assertEquals(newServerTemplateId, container.getServerTemplateKey().getId());
-        assertEquals(newServerTemplateName, container.getServerTemplateKey().getName());
-        assertEquals(containerSpec.getReleasedId(), container.getReleasedId());
+        assertThat(container.getId()).isEqualTo(containerSpec.getId());
+        assertThat(container.getStatus()).isEqualTo(containerSpec.getStatus());
+        assertThat(container.getServerTemplateKey().getId()).isEqualTo(newServerTemplateId);
+        assertThat(container.getServerTemplateKey().getName()).isEqualTo(newServerTemplateName);
+        assertThat(container.getReleasedId()).isEqualTo(containerSpec.getReleasedId());
 
-        assertNotNull(container.getConfigs());
-        assertEquals(containerSpec.getConfigs().size(), container.getConfigs().size());
+        assertThat(container.getConfigs()).isNotNull();
+        assertThat(container.getConfigs().size()).isEqualTo(containerSpec.getConfigs().size());
     }
 
     @Test
@@ -353,8 +353,8 @@ public class SpecManagementServiceImplTest extends AbstractServiceImplTest {
         specManagementService.saveServerTemplate(serverTemplate);
 
         ServerTemplateKeyList existing = specManagementService.listServerTemplateKeys();
-        assertNotNull(existing);
-        assertEquals(1, existing.getServerTemplates().length);
+        assertThat(existing).isNotNull();
+        assertThat(existing.getServerTemplates().length).isEqualTo(1);
 
         Map<Capability, ContainerConfig> configs = new HashMap<Capability, ContainerConfig>();
         RuleConfig ruleConfig = new RuleConfig();
@@ -381,26 +381,26 @@ public class SpecManagementServiceImplTest extends AbstractServiceImplTest {
         specManagementService.saveContainerSpec(serverTemplate.getId(), containerSpec);
 
         org.kie.server.controller.api.model.spec.ServerTemplate createdServerTemplate = specManagementService.getServerTemplate(serverTemplate.getId());
-        assertNotNull(createdServerTemplate);
-        assertNotNull(createdServerTemplate.getContainersSpec());
-        assertEquals(1, createdServerTemplate.getContainersSpec().size());
+        assertThat(createdServerTemplate).isNotNull();
+        assertThat(createdServerTemplate.getContainersSpec()).isNotNull();
+        assertThat(createdServerTemplate.getContainersSpec()).hasSize(1);
 
         org.kie.server.controller.api.model.spec.ContainerSpec container = createdServerTemplate.getContainersSpec().iterator().next();
-        assertNotNull(container);
+        assertThat(container).isNotNull();
 
-        assertEquals(containerSpec.getId(), container.getId());
-        assertEquals(containerSpec.getStatus(), container.getStatus());
-        assertEquals(containerSpec.getServerTemplateKey(), container.getServerTemplateKey());
-        assertEquals(containerSpec.getReleasedId(), container.getReleasedId());
+        assertThat(container.getId()).isEqualTo(containerSpec.getId());
+        assertThat(container.getStatus()).isEqualTo(containerSpec.getStatus());
+        assertThat(container.getServerTemplateKey()).isEqualTo(containerSpec.getServerTemplateKey());
+        assertThat(container.getReleasedId()).isEqualTo(containerSpec.getReleasedId());
 
-        assertNotNull(container.getConfigs());
-        assertEquals(containerSpec.getConfigs().size(), container.getConfigs().size());
+        assertThat(container.getConfigs()).isNotNull();
+        assertThat(container.getConfigs().size()).isEqualTo(containerSpec.getConfigs().size());
 
         ContainerConfig ruleConfigCurrent = containerSpec.getConfigs().get(Capability.RULE);
-        assertNotNull(ruleConfigCurrent);
-        assertTrue(ruleConfigCurrent instanceof org.kie.server.controller.api.model.spec.RuleConfig);
-        assertEquals(ruleConfig.getPollInterval(), ((org.kie.server.controller.api.model.spec.RuleConfig) ruleConfigCurrent).getPollInterval());
-        assertEquals(ruleConfig.getScannerStatus(), ((org.kie.server.controller.api.model.spec.RuleConfig) ruleConfigCurrent).getScannerStatus());
+        assertThat(ruleConfigCurrent).isNotNull();
+        assertThat(ruleConfigCurrent instanceof org.kie.server.controller.api.model.spec.RuleConfig).isTrue();
+        assertThat(((org.kie.server.controller.api.model.spec.RuleConfig) ruleConfigCurrent).getPollInterval()).isEqualTo(ruleConfig.getPollInterval());
+        assertThat(((org.kie.server.controller.api.model.spec.RuleConfig) ruleConfigCurrent).getScannerStatus()).isEqualTo(ruleConfig.getScannerStatus());
 
         ContainerConfig containerConfig = new RuleConfig();
         ((RuleConfig) containerConfig).setScannerStatus(KieScannerStatus.SCANNING);
@@ -409,25 +409,25 @@ public class SpecManagementServiceImplTest extends AbstractServiceImplTest {
         specManagementService.updateContainerConfig(serverTemplate.getId(), containerSpec.getId(), Capability.RULE, containerConfig);
 
         ContainerSpecList specs = specManagementService.listContainerSpec(serverTemplate.getId());
-        assertNotNull(specs);
-        assertEquals(1, specs.getContainerSpecs().length);
+        assertThat(specs).isNotNull();
+        assertThat(specs.getContainerSpecs().length).isEqualTo(1);
 
         container = specs.getContainerSpecs()[0];
-        assertNotNull(container);
+        assertThat(container).isNotNull();
 
-        assertEquals(containerSpec.getId(), container.getId());
-        assertEquals(containerSpec.getStatus(), container.getStatus());
-        assertEquals(containerSpec.getServerTemplateKey(), container.getServerTemplateKey());
-        assertEquals(containerSpec.getReleasedId(), container.getReleasedId());
+        assertThat(container.getId()).isEqualTo(containerSpec.getId());
+        assertThat(container.getStatus()).isEqualTo(containerSpec.getStatus());
+        assertThat(container.getServerTemplateKey()).isEqualTo(containerSpec.getServerTemplateKey());
+        assertThat(container.getReleasedId()).isEqualTo(containerSpec.getReleasedId());
 
-        assertNotNull(container.getConfigs());
-        assertEquals(containerSpec.getConfigs().size(), container.getConfigs().size());
+        assertThat(container.getConfigs()).isNotNull();
+        assertThat(container.getConfigs().size()).isEqualTo(containerSpec.getConfigs().size());
 
         ContainerConfig ruleConfigCurrent2 = containerSpec.getConfigs().get(Capability.RULE);
-        assertNotNull(ruleConfigCurrent2);
-        assertTrue(ruleConfigCurrent2 instanceof org.kie.server.controller.api.model.spec.RuleConfig);
-        assertEquals(((org.kie.server.controller.api.model.spec.RuleConfig) containerConfig).getPollInterval(), ((org.kie.server.controller.api.model.spec.RuleConfig) ruleConfigCurrent2).getPollInterval());
-        assertEquals(((org.kie.server.controller.api.model.spec.RuleConfig) containerConfig).getScannerStatus(), ((org.kie.server.controller.api.model.spec.RuleConfig) ruleConfigCurrent2).getScannerStatus());
+        assertThat(ruleConfigCurrent2).isNotNull();
+        assertThat(ruleConfigCurrent2 instanceof org.kie.server.controller.api.model.spec.RuleConfig).isTrue();
+        assertThat(((org.kie.server.controller.api.model.spec.RuleConfig) ruleConfigCurrent2).getPollInterval()).isEqualTo(((org.kie.server.controller.api.model.spec.RuleConfig) containerConfig).getPollInterval());
+        assertThat(((org.kie.server.controller.api.model.spec.RuleConfig) ruleConfigCurrent2).getScannerStatus()).isEqualTo(((org.kie.server.controller.api.model.spec.RuleConfig) containerConfig).getScannerStatus());
     }
 
     @Test
@@ -442,12 +442,12 @@ public class SpecManagementServiceImplTest extends AbstractServiceImplTest {
         verify(kieServerInstanceManager, times(1)).startContainer(any(ServerTemplate.class), any(ContainerSpec.class));
 
         ServerTemplate updated = specManagementService.getServerTemplate(serverTemplate.getId());
-        assertNotNull(updated);
+        assertThat(updated).isNotNull();
 
         ContainerSpec updatedContainer = updated.getContainerSpec(containerSpec.getId());
-        assertNotNull(updatedContainer);
+        assertThat(updatedContainer).isNotNull();
 
-        assertEquals(KieContainerStatus.STARTED, updatedContainer.getStatus());
+        assertThat(updatedContainer.getStatus()).isEqualTo(KieContainerStatus.STARTED);
     }
 
     @Test
@@ -462,12 +462,12 @@ public class SpecManagementServiceImplTest extends AbstractServiceImplTest {
         verify(kieServerInstanceManager, times(1)).stopContainer(any(ServerTemplate.class), any(ContainerSpec.class));
 
         ServerTemplate updated = specManagementService.getServerTemplate(serverTemplate.getId());
-        assertNotNull(updated);
+        assertThat(updated).isNotNull();
 
         ContainerSpec updatedContainer = updated.getContainerSpec(containerSpec.getId());
-        assertNotNull(updatedContainer);
+        assertThat(updatedContainer).isNotNull();
 
-        assertEquals(KieContainerStatus.STOPPED, updatedContainer.getStatus());
+        assertThat(updatedContainer.getStatus()).isEqualTo(KieContainerStatus.STOPPED);
     }
 
     @Test
@@ -489,7 +489,7 @@ public class SpecManagementServiceImplTest extends AbstractServiceImplTest {
                                                                                              ruleConfig,
                                                                                              serverTemplate,
                                                                                              containerSpec);
-        assertEquals(expectedContainers, actualContainers);
+        assertThat(actualContainers).isEqualTo(expectedContainers);
     }
 
     @Test
@@ -512,7 +512,7 @@ public class SpecManagementServiceImplTest extends AbstractServiceImplTest {
                                                                                              processConfig,
                                                                                              serverTemplate,
                                                                                              containerSpec);
-        assertEquals(expectedContainers, actualContainers);
+        assertThat(actualContainers).isEqualTo(expectedContainers);
     }
 
     @Test
@@ -649,7 +649,7 @@ public class SpecManagementServiceImplTest extends AbstractServiceImplTest {
                                                                                              containerConfig,
                                                                                              serverTemplate,
                                                                                              containerSpec);
-        assertEquals(expectedContainers, actualContainers);
+        assertThat(actualContainers).isEqualTo(expectedContainers);
     }
 
     @Test
@@ -671,7 +671,7 @@ public class SpecManagementServiceImplTest extends AbstractServiceImplTest {
                                                                                                     serverTemplate,
                                                                                                     containerSpec);
 
-        assertEquals(expectedContainers, actualContainers);
+        assertThat(actualContainers).isEqualTo(expectedContainers);
     }
 
     @Test
@@ -692,7 +692,7 @@ public class SpecManagementServiceImplTest extends AbstractServiceImplTest {
                                                                                                  serverTemplate,
                                                                                                  containerSpec);
 
-        assertEquals(expectedContainers, actualContainers);
+        assertThat(actualContainers).isEqualTo(expectedContainers);
     }
 
     @Test
@@ -709,7 +709,7 @@ public class SpecManagementServiceImplTest extends AbstractServiceImplTest {
 
         final List<Container> actualContainers = specManagementService.updateContainerRuleConfig(ruleConfig, serverTemplate, containerSpec);
 
-        assertEquals(expectedContainers, actualContainers);
+        assertThat(actualContainers).isEqualTo(expectedContainers);
     }
 
     @Test
@@ -725,7 +725,7 @@ public class SpecManagementServiceImplTest extends AbstractServiceImplTest {
 
         final List<Container> actualContainers = specManagementService.updateContainerRuleConfig(ruleConfig, serverTemplate, containerSpec);
 
-        assertEquals(expectedContainers, actualContainers);
+        assertThat(actualContainers).isEqualTo(expectedContainers);
     }
 
     protected int getRandomInt(int min, int max) {

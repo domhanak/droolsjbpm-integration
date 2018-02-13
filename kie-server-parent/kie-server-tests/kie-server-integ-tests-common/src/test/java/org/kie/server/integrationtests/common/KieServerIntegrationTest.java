@@ -30,7 +30,7 @@ import org.kie.server.api.model.KieServiceResponse.ResponseType;
 import org.kie.server.integrationtests.shared.KieServerDeployer;
 import org.kie.server.integrationtests.shared.basetests.RestJmsSharedBaseIntegrationTest;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -47,15 +47,15 @@ public class KieServerIntegrationTest extends RestJmsSharedBaseIntegrationTest {
     @Test
     public void testGetServerInfo() throws Exception {
         ServiceResponse<KieServerInfo> reply = client.getServerInfo();
-        assertEquals(ServiceResponse.ResponseType.SUCCESS, reply.getType());
+        assertThat(reply.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
 
         KieServerInfo info = reply.getResult();
-        assertEquals(getServerVersion(), info.getVersion());
+        assertThat(info.getVersion()).isEqualTo(getServerVersion());
 
         // Kie server has all extensions disabled, available just default capability.
-        assertEquals(2, info.getCapabilities().size());
-        assertEquals("KieServer", info.getCapabilities().get(0));
-        assertEquals("Swagger", info.getCapabilities().get(1));
+        assertThat(info.getCapabilities()).hasSize(2);
+        assertThat(info.getCapabilities().get(0)).isEqualTo("KieServer");
+        assertThat(info.getCapabilities().get(1)).isEqualTo("Swagger");
     }
 
     private String getServerVersion() {
@@ -72,112 +72,112 @@ public class KieServerIntegrationTest extends RestJmsSharedBaseIntegrationTest {
     @Test
     public void testScanner() throws Exception {
         ServiceResponse<KieScannerResource> si = client.getScannerInfo(CONTAINER_ID);
-        Assert.assertEquals( ResponseType.SUCCESS, si.getType() );
+        Assert.assertThat(si.getType() ).isEqualTo(ResponseType.SUCCESS);
         KieScannerResource info = si.getResult();
-        Assert.assertEquals( KieScannerStatus.DISPOSED, info.getStatus() );
+        Assert.assertThat(info.getStatus() ).isEqualTo(KieScannerStatus.DISPOSED);
         
         si = client.updateScanner(CONTAINER_ID, new KieScannerResource(KieScannerStatus.STARTED, 10000L));
-        Assert.assertEquals( si.getMsg(), ResponseType.SUCCESS, si.getType() );
+        Assert.assertThat(ResponseType.SUCCESS).isCloseTo(si.getMsg(), within(si.getType() ));
         info = si.getResult();
-        Assert.assertEquals( KieScannerStatus.STARTED, info.getStatus() );
+        Assert.assertThat(info.getStatus() ).isEqualTo(KieScannerStatus.STARTED);
         
         si = client.getScannerInfo(CONTAINER_ID);
-        Assert.assertEquals( si.getMsg(), ResponseType.SUCCESS, si.getType() );
+        Assert.assertThat(ResponseType.SUCCESS).isCloseTo(si.getMsg(), within(si.getType() ));
         info = si.getResult();
-        Assert.assertEquals( KieScannerStatus.STARTED, info.getStatus() );
+        Assert.assertThat(info.getStatus() ).isEqualTo(KieScannerStatus.STARTED);
         
         si = client.updateScanner(CONTAINER_ID, new KieScannerResource(KieScannerStatus.STOPPED, 10000L));
-        Assert.assertEquals( si.getMsg(), ResponseType.SUCCESS, si.getType() );
+        Assert.assertThat(ResponseType.SUCCESS).isCloseTo(si.getMsg(), within(si.getType() ));
         info = si.getResult();
-        Assert.assertEquals( KieScannerStatus.STOPPED, info.getStatus() );
+        Assert.assertThat(info.getStatus() ).isEqualTo(KieScannerStatus.STOPPED);
         
         si = client.getScannerInfo(CONTAINER_ID);
-        Assert.assertEquals( si.getMsg(), ResponseType.SUCCESS, si.getType() );
+        Assert.assertThat(ResponseType.SUCCESS).isCloseTo(si.getMsg(), within(si.getType() ));
         info = si.getResult();
-        Assert.assertEquals( KieScannerStatus.STOPPED, info.getStatus() );
+        Assert.assertThat(info.getStatus() ).isEqualTo(KieScannerStatus.STOPPED);
         
         si = client.updateScanner(CONTAINER_ID, new KieScannerResource(KieScannerStatus.DISPOSED, 10000L));
-        Assert.assertEquals( si.getMsg(), ResponseType.SUCCESS, si.getType() );
+        Assert.assertThat(ResponseType.SUCCESS).isCloseTo(si.getMsg(), within(si.getType() ));
         info = si.getResult();
-        Assert.assertEquals( KieScannerStatus.DISPOSED, info.getStatus() );
+        Assert.assertThat(info.getStatus() ).isEqualTo(KieScannerStatus.DISPOSED);
         
         si = client.getScannerInfo(CONTAINER_ID);
-        Assert.assertEquals( si.getMsg(), ResponseType.SUCCESS, si.getType() );
+        Assert.assertThat(ResponseType.SUCCESS).isCloseTo(si.getMsg(), within(si.getType() ));
         info = si.getResult();
-        Assert.assertEquals( KieScannerStatus.DISPOSED, info.getStatus() );
+        Assert.assertThat(info.getStatus() ).isEqualTo(KieScannerStatus.DISPOSED);
     }
 
     @Test
     public void testScannerScanNow() throws Exception {
         ServiceResponse<KieScannerResource> si = client.getScannerInfo(CONTAINER_ID);
-        Assert.assertEquals( ResponseType.SUCCESS, si.getType() );
+        Assert.assertThat(si.getType() ).isEqualTo(ResponseType.SUCCESS);
         KieScannerResource info = si.getResult();
-        Assert.assertEquals( KieScannerStatus.DISPOSED, info.getStatus() );
+        Assert.assertThat(info.getStatus() ).isEqualTo(KieScannerStatus.DISPOSED);
 
         si = client.updateScanner(CONTAINER_ID, new KieScannerResource(KieScannerStatus.SCANNING, 0L));
-        Assert.assertEquals( si.getMsg(), ResponseType.SUCCESS, si.getType() );
+        Assert.assertThat(ResponseType.SUCCESS).isCloseTo(si.getMsg(), within(si.getType() ));
         info = si.getResult();
-        Assert.assertEquals( KieScannerStatus.STOPPED, info.getStatus() );
+        Assert.assertThat(info.getStatus() ).isEqualTo(KieScannerStatus.STOPPED);
 
         si = client.getScannerInfo(CONTAINER_ID);
-        Assert.assertEquals( si.getMsg(), ResponseType.SUCCESS, si.getType() );
+        Assert.assertThat(ResponseType.SUCCESS).isCloseTo(si.getMsg(), within(si.getType() ));
         info = si.getResult();
-        Assert.assertEquals( KieScannerStatus.STOPPED, info.getStatus() );
+        Assert.assertThat(info.getStatus() ).isEqualTo(KieScannerStatus.STOPPED);
 
         si = client.updateScanner(CONTAINER_ID, new KieScannerResource(KieScannerStatus.DISPOSED, 10000L));
-        Assert.assertEquals( si.getMsg(), ResponseType.SUCCESS, si.getType() );
+        Assert.assertThat(ResponseType.SUCCESS).isCloseTo(si.getMsg(), within(si.getType() ));
         info = si.getResult();
-        Assert.assertEquals( KieScannerStatus.DISPOSED, info.getStatus() );
+        Assert.assertThat(info.getStatus() ).isEqualTo(KieScannerStatus.DISPOSED);
 
         si = client.getScannerInfo(CONTAINER_ID);
-        Assert.assertEquals( si.getMsg(), ResponseType.SUCCESS, si.getType() );
+        Assert.assertThat(ResponseType.SUCCESS).isCloseTo(si.getMsg(), within(si.getType() ));
         info = si.getResult();
-        Assert.assertEquals( KieScannerStatus.DISPOSED, info.getStatus() );
+        Assert.assertThat(info.getStatus() ).isEqualTo(KieScannerStatus.DISPOSED);
     }
 
     @Test
     public void testScannerStatusOnContainerInfo() throws Exception {
         ServiceResponse<KieContainerResource> reply = client.getContainerInfo(CONTAINER_ID);
-        Assert.assertEquals(ServiceResponse.ResponseType.SUCCESS, reply.getType());
+        Assert.assertThat(reply.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
 
         KieContainerResource kci = reply.getResult();
-        Assert.assertEquals( KieScannerStatus.DISPOSED, kci.getScanner().getStatus() );
+        Assert.assertThat(kci.getScanner().getStatus() ).isEqualTo(KieScannerStatus.DISPOSED);
 
         ServiceResponse<KieScannerResource> si = client.updateScanner(CONTAINER_ID, new KieScannerResource(KieScannerStatus.STARTED, 10000L));
-        Assert.assertEquals( si.getMsg(), ResponseType.SUCCESS, si.getType() );
+        Assert.assertThat(ResponseType.SUCCESS).isCloseTo(si.getMsg(), within(si.getType() ));
         KieScannerResource info = si.getResult();
-        Assert.assertEquals( KieScannerStatus.STARTED, info.getStatus() );
+        Assert.assertThat(info.getStatus() ).isEqualTo(KieScannerStatus.STARTED);
 
         kci = client.getContainerInfo( CONTAINER_ID ).getResult();
-        Assert.assertEquals( KieScannerStatus.STARTED, kci.getScanner().getStatus() );
-        Assert.assertEquals( 10000, kci.getScanner().getPollInterval().longValue() );
+        Assert.assertThat(kci.getScanner().getStatus() ).isEqualTo(KieScannerStatus.STARTED);
+        Assert.assertThat(kci.getScanner().getPollInterval().longValue() ).isEqualTo(10000);
 
         si = client.updateScanner(CONTAINER_ID, new KieScannerResource(KieScannerStatus.STOPPED, 10000L));
-        Assert.assertEquals( si.getMsg(), ResponseType.SUCCESS, si.getType() );
+        Assert.assertThat(ResponseType.SUCCESS).isCloseTo(si.getMsg(), within(si.getType() ));
         info = si.getResult();
-        Assert.assertEquals( KieScannerStatus.STOPPED, info.getStatus() );
+        Assert.assertThat(info.getStatus() ).isEqualTo(KieScannerStatus.STOPPED);
 
         kci = client.getContainerInfo( CONTAINER_ID ).getResult();
-        Assert.assertEquals( KieScannerStatus.STOPPED, kci.getScanner().getStatus() );
+        Assert.assertThat(kci.getScanner().getStatus() ).isEqualTo(KieScannerStatus.STOPPED);
 
         si = client.updateScanner(CONTAINER_ID, new KieScannerResource(KieScannerStatus.DISPOSED, 10000L));
-        Assert.assertEquals( si.getMsg(), ResponseType.SUCCESS, si.getType() );
+        Assert.assertThat(ResponseType.SUCCESS).isCloseTo(si.getMsg(), within(si.getType() ));
         info = si.getResult();
-        Assert.assertEquals( KieScannerStatus.DISPOSED, info.getStatus() );
+        Assert.assertThat(info.getStatus() ).isEqualTo(KieScannerStatus.DISPOSED);
 
         kci = client.getContainerInfo( CONTAINER_ID ).getResult();
-        Assert.assertEquals( KieScannerStatus.DISPOSED, kci.getScanner().getStatus() );
+        Assert.assertThat(kci.getScanner().getStatus() ).isEqualTo(KieScannerStatus.DISPOSED);
     }
 
     @Test
     public void testConversationIdHandling() throws Exception {
         client.getContainerInfo(CONTAINER_ID);
         String conversationId = client.getConversationId();
-        assertNotNull(conversationId);
+        assertThat(conversationId).isNotNull();
 
         client.getContainerInfo(CONTAINER_ID);
         String afterNextCallConversationId = client.getConversationId();
-        assertEquals(conversationId, afterNextCallConversationId);
+        assertThat(afterNextCallConversationId).isEqualTo(conversationId);
 
         // complete conversation to start with new one
         client.completeConversation();

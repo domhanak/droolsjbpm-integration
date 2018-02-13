@@ -39,8 +39,8 @@ public class JBPMKieServerTypePermissionTest {
         
         KieServerTypePermission permission = new KieServerTypePermission(new HashSet<>());
         
-        assertTrue(permission.allows(Document.class));
-        assertTrue(permission.allows(DocumentImpl.class));
-        assertTrue(permission.allows(Documents.class));
+        assertThat(permission.allows(Document.class)).isTrue();
+        assertThat(permission.allows(DocumentImpl.class)).isTrue();
+        assertThat(permission.allows(Documents.class)).isTrue();
     }   
 }

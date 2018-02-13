@@ -29,7 +29,7 @@ import org.kie.api.runtime.ExecutionResults;
 import org.kie.server.api.model.ReleaseId;
 import org.kie.server.api.model.ServiceResponse;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 import org.kie.server.integrationtests.shared.KieServerDeployer;
 import org.kie.server.integrationtests.shared.KieServerReflections;
 
@@ -79,15 +79,15 @@ public class ClassesInludedInKJarIntegrationTest extends DroolsKieServerBaseInte
         commands.add(commandsFactory.newFireAllRules());
 
         ServiceResponse<ExecutionResults> reply1 = ruleClient.executeCommandsWithResults(CONTAINER_ID, executionCommand);
-        assertEquals(ServiceResponse.ResponseType.SUCCESS, reply1.getType());
+        assertThat(reply1.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
         // first call should set the surname for the inserted person
         ExecutionResults actualData = reply1.getResult();
 
         Object result = actualData.getValue(PERSON_1_OUT_IDENTIFIER);
 
-        assertEquals("Expected surname to be set to 'Vader'", PERSON_EXPECTED_SURNAME, KieServerReflections.valueOf(result, PERSON_SURNAME_FIELD));
+        assertThat(KieServerReflections.valueOf(result).as("Expected surname to be set to 'Vader'").isCloseTo(PERSON_EXPECTED_SURNAME, within(PERSON_SURNAME_FIELD)));
         // and 'duplicated' flag should stay false, as only one person is in working memory
-        assertEquals("The 'duplicated' field should be false!", false, KieServerReflections.valueOf(result, PERSON_DUPLICATED_FIELD));
+        assertThat(KieServerReflections.valueOf(result).as("The 'duplicated' field should be false!").isCloseTo(false, within(PERSON_DUPLICATED_FIELD)));
 
 
         // insert second person and fire the rules. The duplicated field will be set to true if there are two
@@ -103,13 +103,13 @@ public class ClassesInludedInKJarIntegrationTest extends DroolsKieServerBaseInte
         commands.add(commandsFactory.newFireAllRules());
 
         ServiceResponse<ExecutionResults> reply2 = ruleClient.executeCommandsWithResults(CONTAINER_ID, executionCommand);
-        assertEquals(ServiceResponse.ResponseType.SUCCESS, reply2.getType());
+        assertThat(reply2.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
 
         actualData = reply2.getResult();
 
         result = actualData.getValue(PERSON_2_OUT_IDENTIFIER);
         // and 'duplicated' flag should be true, because second person was added.
-        assertEquals("The 'duplicated' field should be true!", true, KieServerReflections.valueOf(result, PERSON_DUPLICATED_FIELD));
+        assertThat(KieServerReflections.valueOf(result).as("The 'duplicated' field should be true!").isCloseTo(true, within(PERSON_DUPLICATED_FIELD)));
 
     }
 

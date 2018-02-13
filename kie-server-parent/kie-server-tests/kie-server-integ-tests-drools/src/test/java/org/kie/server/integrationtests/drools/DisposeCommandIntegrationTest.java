@@ -15,7 +15,7 @@
 
 package org.kie.server.integrationtests.drools;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,7 +82,7 @@ public class DisposeCommandIntegrationTest extends DroolsKieServerBaseIntegratio
         commands.add(commandsFactory.newFireAllRules());
 
         ServiceResponse<ExecutionResults> reply = ruleClient.executeCommandsWithResults(CONTAINER_ID, executionCommand);
-        assertEquals(ServiceResponse.ResponseType.SUCCESS, reply.getType());
+        assertThat(reply.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
         
         
         //for session 2
@@ -94,7 +94,7 @@ public class DisposeCommandIntegrationTest extends DroolsKieServerBaseIntegratio
         commands.add(commandsFactory.newFireAllRules());
 
         reply = ruleClient.executeCommandsWithResults(CONTAINER_ID, executionCommand);
-        assertEquals(ServiceResponse.ResponseType.SUCCESS, reply.getType());
+        assertThat(reply.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
         
         
         // command dispose session 2
@@ -106,7 +106,7 @@ public class DisposeCommandIntegrationTest extends DroolsKieServerBaseIntegratio
         commands.add(commandsFactory.newDispose());
         
         reply = ruleClient.executeCommandsWithResults(CONTAINER_ID, executionCommand);
-        assertEquals(ServiceResponse.ResponseType.SUCCESS, reply.getType());
+        assertThat(reply.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
         
         
         // command get object session 1: Size=1
@@ -117,11 +117,11 @@ public class DisposeCommandIntegrationTest extends DroolsKieServerBaseIntegratio
         commands.add(commandsFactory.newGetObjects(GET_OBJECTS_OUT_IDENTIFIER));
         
         reply = ruleClient.executeCommandsWithResults(CONTAINER_ID, executionCommand);
-        assertEquals(ServiceResponse.ResponseType.SUCCESS, reply.getType());
+        assertThat(reply.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
         
         ExecutionResults actualData = reply.getResult();
         List<?> value = (List<?>) actualData.getValue(GET_OBJECTS_OUT_IDENTIFIER);
-        assertEquals(1, value.size());
+        assertThat(value).hasSize(1);
         
         // command get object session 2: Size=0 because I disposed earlier a default session and now it would be recreated 
         
@@ -131,11 +131,11 @@ public class DisposeCommandIntegrationTest extends DroolsKieServerBaseIntegratio
         commands.add(commandsFactory.newGetObjects(GET_OBJECTS_OUT_IDENTIFIER));
         
         reply = ruleClient.executeCommandsWithResults(CONTAINER_ID, executionCommand);
-        assertEquals(ServiceResponse.ResponseType.SUCCESS, reply.getType());
+        assertThat(reply.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
         
         actualData = reply.getResult();
         value = (List<?>) actualData.getValue(GET_OBJECTS_OUT_IDENTIFIER);
-        assertEquals(0, value.size());
+        assertThat(value).isEmpty();
     }    
 
 }

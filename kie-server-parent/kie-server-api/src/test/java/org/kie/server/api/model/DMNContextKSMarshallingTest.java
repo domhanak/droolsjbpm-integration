@@ -18,9 +18,9 @@ import java.io.StringReader;
 import java.util.Collections;
 import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.assertj.core.api.Assertions.fail;
 
 public class DMNContextKSMarshallingTest {
 
@@ -99,7 +99,7 @@ public class DMNContextKSMarshallingTest {
   @Test
   public void testXStreamMarshalling() throws XPathExpressionException {
     final String result = xStreamMarshaller.marshall( BEAN );
-    assertNotNull( result );
+    assertThat(result ).isNotNull();
     checkXPath( result, NAMESPACE_XPATH, NAMESPACE );
     checkXPath( result, MODEL_NAME_XPATH, MODEL_NAME );
     checkXPath( result, DECISION_ID_XPATH, DECISION_ID );
@@ -111,9 +111,9 @@ public class DMNContextKSMarshallingTest {
     try (StringReader reader = new StringReader(source)) {
       final InputSource src = new InputSource( reader );
       NodeList nodeList = (NodeList) xpath.evaluate(xPath, src, XPathConstants.NODESET);
-      assertEquals( nodeList.getLength(), expectedValues.length );
+      assertThat(expectedValues.length ).isEqualTo(nodeList.getLength());
       for ( int i = 0; i < expectedValues.length; i++ ) {
-        assertEquals( nodeList.item(i).getTextContent(), expectedValues[i] );
+        assertThat(expectedValues[i] ).isEqualTo(nodeList.item(i).getTextContent());
       }
     } catch (XPathExpressionException e) {
       fail(e.getMessage());
@@ -127,24 +127,24 @@ public class DMNContextKSMarshallingTest {
   }
 
   private static void checkBean(DMNContextKS bean) {
-    assertNotNull( bean );
-    assertEquals( bean.getNamespace(), NAMESPACE );
-    assertEquals( bean.getModelName(), MODEL_NAME) ;
-    assertNotNull( bean.getDecisionIds() );
-    assertEquals( bean.getDecisionIds().size(), 1 );
-    assertEquals( bean.getDecisionIds().get( 0 ), DECISION_ID );
-    assertNotNull( bean.getDecisionNames() );
-    assertEquals( bean.getDecisionNames().size(), 1 );
-    assertEquals( bean.getDecisionNames().get( 0 ), DECISION_NAME );
-    assertNotNull( bean.getDmnContext() );
-    assertEquals( bean.getDmnContext().size(), 1 );
-    assertEquals( bean.getDmnContext().get(DMN_CONTEXT_KEY), DMN_CONTEXT_VALUE );
+    assertThat(bean ).isNotNull();
+    assertThat(NAMESPACE ).isEqualTo(bean.getNamespace());
+    assertThat(MODEL_NAME).isEqualTo(bean.getModelName()) ;
+    assertThat(bean.getDecisionIds() ).isNotNull();
+    assertThat(1 ).isEqualTo(bean.getDecisionIds().size());
+    assertThat(DECISION_ID ).isEqualTo(bean.getDecisionIds().get( 0 ));
+    assertThat(bean.getDecisionNames() ).isNotNull();
+    assertThat(1 ).isEqualTo(bean.getDecisionNames().size());
+    assertThat(DECISION_NAME ).isEqualTo(bean.getDecisionNames().get( 0 ));
+    assertThat(bean.getDmnContext() ).isNotNull();
+    assertThat(1 ).isEqualTo(bean.getDmnContext().size());
+    assertThat(DMN_CONTEXT_VALUE ).isEqualTo(bean.getDmnContext().get(DMN_CONTEXT_KEY));
   }
 
   @Test
   public void testJaxbMarshalling() {
     final String result = jaxbMarshaller.marshall( BEAN );
-    assertNotNull( result );
+    assertThat(result ).isNotNull();
     checkXPath( result, NAMESPACE_XPATH, NAMESPACE );
     checkXPath( result, MODEL_NAME_XPATH, MODEL_NAME );
     checkXPath( result, DECISION_ID_XPATH, DECISION_ID );
@@ -162,7 +162,7 @@ public class DMNContextKSMarshallingTest {
   @Test
   public void testJsonMarshalling() {
     final String result = jsonMarshaller.marshall( BEAN );
-    assertEquals( JSON, result ); // TODO: jsonpath?
+    assertThat(result ).isEqualTo(JSON); // TODO: jsonpath?
   }
 
   @Test

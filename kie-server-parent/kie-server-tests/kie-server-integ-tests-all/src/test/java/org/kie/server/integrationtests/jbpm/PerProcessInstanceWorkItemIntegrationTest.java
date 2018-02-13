@@ -16,7 +16,7 @@
 
 package org.kie.server.integrationtests.jbpm;
 
-import static org.junit.Assert.fail;
+import static org.assertj.core.api.Assertions.fail;
 
 import java.util.List;
 
@@ -49,12 +49,12 @@ public class PerProcessInstanceWorkItemIntegrationTest extends JbpmKieServerBase
         Long instanceId = processClient.startProcess(CONTAINER_ID, PROCESS_ID);
 
         List<WorkItemInstance> workItemByProcessInstance = processClient.getWorkItemByProcessInstance(CONTAINER_ID, instanceId);
-        Assert.assertNotNull(workItemByProcessInstance);
-        Assert.assertEquals(1, workItemByProcessInstance.size());
+        Assert.assertThat(workItemByProcessInstance).isNotNull();
+        Assert.assertThat(workItemByProcessInstance).hasSize(1);
 
         WorkItemInstance workItem = workItemByProcessInstance.get(0);
-        Assert.assertEquals("Email", workItem.getName());
-        Assert.assertEquals(instanceId, workItem.getProcessInstanceId());
+        Assert.assertThat(workItem.getName()).isEqualTo("Email");
+        Assert.assertThat(workItem.getProcessInstanceId()).isEqualTo(instanceId);
     }
 
     @Test

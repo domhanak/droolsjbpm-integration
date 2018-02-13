@@ -40,7 +40,7 @@ import org.kie.server.integrationtests.shared.KieServerExecutor;
 import org.kie.server.integrationtests.shared.basetests.KieServerBaseIntegrationTest;
 import org.mockito.InOrder;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class WebSocketKieControllerNotificationIntegrationTest extends KieServerBaseIntegrationTest {
@@ -106,7 +106,7 @@ public class WebSocketKieControllerNotificationIntegrationTest extends KieServer
         runAsync(() -> {
             // Check that there are no kie servers deployed in controller.
             ServerTemplateList instanceList = controllerClient.listServerTemplates();
-            assertNotNull(instanceList);
+            assertThat(instanceList).isNotNull();
             KieServerAssert.assertNullOrEmpty("Active kie server instance found!",
                                               instanceList.getServerTemplates());
 
@@ -117,7 +117,7 @@ public class WebSocketKieControllerNotificationIntegrationTest extends KieServer
 
             // Check that kie server is registered in controller.
             instanceList = controllerClient.listServerTemplates();
-            assertNotNull(instanceList);
+            assertThat(instanceList).isNotNull();
             assertEquals(1,
                          instanceList.getServerTemplates().length);
 
@@ -136,7 +136,7 @@ public class WebSocketKieControllerNotificationIntegrationTest extends KieServer
         runAsync(() -> {
             // Check that there are no kie servers deployed in controller.
             ServerTemplateList instanceList = controllerClient.listServerTemplates();
-            assertNotNull(instanceList);
+            assertThat(instanceList).isNotNull();
             KieServerAssert.assertNullOrEmpty("Active kie server instance found!",
                                               instanceList.getServerTemplates());
 
@@ -146,7 +146,7 @@ public class WebSocketKieControllerNotificationIntegrationTest extends KieServer
 
             // Check that kie server is registered in controller.
             instanceList = controllerClient.listServerTemplates();
-            assertNotNull(instanceList);
+            assertThat(instanceList).isNotNull();
             assertEquals(1,
                          instanceList.getServerTemplates().length);
 

@@ -22,7 +22,7 @@ import org.junit.Test;
 import org.kie.server.api.ConversationId;
 import org.kie.server.api.model.ReleaseId;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class ConversationIdTest {
 
@@ -31,36 +31,36 @@ public class ConversationIdTest {
          String conversationId = "'kie-server-id':'my-container':'org.kie:kjar:1.0':'12345abcdef'";
 
         ConversationId instance = ConversationId.fromString(conversationId);
-        assertNotNull(instance);
+        assertThat(instance).isNotNull();
 
-        assertEquals("kie-server-id", instance.getKieServerId());
-        assertEquals("my-container", instance.getContainerId());
-        assertEquals("org.kie:kjar:1.0", instance.getReleaseId().toExternalForm());
-        assertEquals("12345abcdef", instance.getUniqueString());
+        assertThat(instance.getKieServerId()).isEqualTo("kie-server-id");
+        assertThat(instance.getContainerId()).isEqualTo("my-container");
+        assertThat(instance.getReleaseId().toExternalForm()).isEqualTo("org.kie:kjar:1.0");
+        assertThat(instance.getUniqueString()).isEqualTo("12345abcdef");
 
         String conversationIdUrlEncoded = URLEncoder.encode(conversationId, "UTF-8");
-        assertEquals(conversationIdUrlEncoded, instance.toString());
+        assertThat(instance.toString()).isEqualTo(conversationIdUrlEncoded);
     }
 
     @Test
     public void testParseConversationId() {
         ConversationId instance = ConversationId.from("kie-server-id", "my-container", new ReleaseId("org.kie", "kjar", "1.0"));
-        assertNotNull(instance);
+        assertThat(instance).isNotNull();
 
-        assertEquals("kie-server-id", instance.getKieServerId());
-        assertEquals("my-container", instance.getContainerId());
-        assertEquals("org.kie:kjar:1.0", instance.getReleaseId().toExternalForm());
+        assertThat(instance.getKieServerId()).isEqualTo("kie-server-id");
+        assertThat(instance.getContainerId()).isEqualTo("my-container");
+        assertThat(instance.getReleaseId().toExternalForm()).isEqualTo("org.kie:kjar:1.0");
 
     }
 
     @Test
     public void testParseConversationIdWithColonInName() {
         ConversationId instance = ConversationId.from("kie:server:id", "my:container", new ReleaseId("org.kie", "kjar", "1.0"));
-        assertNotNull(instance);
+        assertThat(instance).isNotNull();
 
-        assertEquals("kie:server:id", instance.getKieServerId());
-        assertEquals("my:container", instance.getContainerId());
-        assertEquals("org.kie:kjar:1.0", instance.getReleaseId().toExternalForm());
+        assertThat(instance.getKieServerId()).isEqualTo("kie:server:id");
+        assertThat(instance.getContainerId()).isEqualTo("my:container");
+        assertThat(instance.getReleaseId().toExternalForm()).isEqualTo("org.kie:kjar:1.0");
 
     }
 
@@ -69,27 +69,27 @@ public class ConversationIdTest {
         String conversationId = "'kie-server-id':'my-container':'org.kie:kjar:1.0':'12345abcdef'";
 
         ConversationId instance = ConversationId.fromString(conversationId);
-        assertNotNull(instance);
+        assertThat(instance).isNotNull();
 
-        assertEquals("kie-server-id", instance.getKieServerId());
-        assertEquals("my-container", instance.getContainerId());
-        assertEquals("org.kie:kjar:1.0", instance.getReleaseId().toExternalForm());
-        assertEquals("12345abcdef", instance.getUniqueString());
+        assertThat(instance.getKieServerId()).isEqualTo("kie-server-id");
+        assertThat(instance.getContainerId()).isEqualTo("my-container");
+        assertThat(instance.getReleaseId().toExternalForm()).isEqualTo("org.kie:kjar:1.0");
+        assertThat(instance.getUniqueString()).isEqualTo("12345abcdef");
 
         // check the incoming toString
         String conversationIdUrlEncoded = URLEncoder.encode(conversationId, "UTF-8");
-        assertEquals(conversationIdUrlEncoded, instance.toString());
+        assertThat(instance.toString()).isEqualTo(conversationIdUrlEncoded);
 
         // url decode it and check with raw conversationId
-        assertEquals(conversationId, URLDecoder.decode(instance.toString(), "UTF-8"));
+        assertThat("UTF-8")).isEqualTo(conversationId, URLDecoder.decode(instance.toString());
 
         // now build ConversationId from url encoded string
         instance = ConversationId.fromString(instance.toString());
-        assertNotNull(instance);
+        assertThat(instance).isNotNull();
 
-        assertEquals("kie-server-id", instance.getKieServerId());
-        assertEquals("my-container", instance.getContainerId());
-        assertEquals("org.kie:kjar:1.0", instance.getReleaseId().toExternalForm());
-        assertEquals("12345abcdef", instance.getUniqueString());
+        assertThat(instance.getKieServerId()).isEqualTo("kie-server-id");
+        assertThat(instance.getContainerId()).isEqualTo("my-container");
+        assertThat(instance.getReleaseId().toExternalForm()).isEqualTo("org.kie:kjar:1.0");
+        assertThat(instance.getUniqueString()).isEqualTo("12345abcdef");
     }
 }

@@ -15,7 +15,7 @@
 
 package org.kie.server.remote.rest.jbpm;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
@@ -65,9 +65,9 @@ public class JbpmApplicationComponentsServiceTest {
         }
 
         int numComponents = 9;
-        assertEquals("Unexpected num application components!", numComponents, appComponentsList.size());
+        assertThat(appComponentsList.size()).as("Unexpected num application components!").isEqualTo(numComponents);
         for( Object appComponent : appComponentsList ) {
-            assertTrue("Unexpected app component type: " + Object.class.getSimpleName(),
+            assertThat("Unexpected app component type: " + Object.class.getSimpleName().isTrue(),
                     appComponent instanceof ProcessResource
                     || appComponent instanceof RuntimeDataResource
                     || appComponent instanceof DefinitionResource

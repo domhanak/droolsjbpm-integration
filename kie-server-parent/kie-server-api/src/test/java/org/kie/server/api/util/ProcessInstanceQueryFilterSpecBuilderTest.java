@@ -1,6 +1,6 @@
 package org.kie.server.api.util;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -19,12 +19,12 @@ public class ProcessInstanceQueryFilterSpecBuilderTest {
 		ProcessInstanceQueryFilterSpec filterSpec = new ProcessInstanceQueryFilterSpecBuilder().equalsTo(ProcessInstanceField.PROCESSID, "test-process").get();
 		
 		QueryParam[] params = filterSpec.getParameters();
-		assertEquals(1, params.length);
+		assertThat(params.length).isEqualTo(1);
 		
 		QueryParam param = params[0];
-		assertEquals(ProcessInstanceField.PROCESSID.toString(), param.getColumn());
-		assertEquals("EQUALS_TO", param.getOperator());
-		assertEquals("test-process", param.getValue().stream().findFirst().get());
+		assertThat(param.getColumn()).isEqualTo(ProcessInstanceField.PROCESSID.toString());
+		assertThat(param.getOperator()).isEqualTo("EQUALS_TO");
+		assertThat(param.getValue().stream().findFirst().get()).isEqualTo("test-process");
 	}
 	
 	@Test
@@ -43,15 +43,15 @@ public class ProcessInstanceQueryFilterSpecBuilderTest {
 		ProcessInstanceQueryFilterSpec filterSpec = new ProcessInstanceQueryFilterSpecBuilder().between(ProcessInstanceField.START_DATE, from, to).get();
 		
 		QueryParam[] params = filterSpec.getParameters();
-		assertEquals(1, params.length);
+		assertThat(params.length).isEqualTo(1);
 		
 		QueryParam param = params[0];
-		assertEquals(ProcessInstanceField.START_DATE.toString(), param.getColumn());
-		assertEquals("BETWEEN", param.getOperator());
+		assertThat(param.getColumn()).isEqualTo(ProcessInstanceField.START_DATE.toString());
+		assertThat(param.getOperator()).isEqualTo("BETWEEN");
 		List<?> values = param.getValue();
-		assertEquals(2, values.size());
-		assertEquals(from, values.get(0));
-		assertEquals(to, values.get(1));
+		assertThat(values).hasSize(2);
+		assertThat(values.get(0)).isEqualTo(from);
+		assertThat(values.get(1)).isEqualTo(to);
 	}
 	
 	@Test
@@ -70,20 +70,20 @@ public class ProcessInstanceQueryFilterSpecBuilderTest {
 		ProcessInstanceQueryFilterSpec filterSpec = new ProcessInstanceQueryFilterSpecBuilder().equalsTo(ProcessInstanceField.PROCESSID, "test-process").between(ProcessInstanceField.START_DATE, from, to).get();
 		
 		QueryParam[] params = filterSpec.getParameters();
-		assertEquals(2, params.length);
+		assertThat(params.length).isEqualTo(2);
 		
 		QueryParam paramEqualsTo = params[0];
-		assertEquals(ProcessInstanceField.PROCESSID.toString(), paramEqualsTo.getColumn());
-		assertEquals("EQUALS_TO", paramEqualsTo.getOperator());
-		assertEquals("test-process", paramEqualsTo.getValue().stream().findFirst().get());
+		assertThat(paramEqualsTo.getColumn()).isEqualTo(ProcessInstanceField.PROCESSID.toString());
+		assertThat(paramEqualsTo.getOperator()).isEqualTo("EQUALS_TO");
+		assertThat(paramEqualsTo.getValue().stream().findFirst().get()).isEqualTo("test-process");
 		
 		QueryParam paramBetween = params[1];
-		assertEquals(ProcessInstanceField.START_DATE.toString(), paramBetween.getColumn());
-		assertEquals("BETWEEN", paramBetween.getOperator());
+		assertThat(paramBetween.getColumn()).isEqualTo(ProcessInstanceField.START_DATE.toString());
+		assertThat(paramBetween.getOperator()).isEqualTo("BETWEEN");
 		List<?> values = paramBetween.getValue();
-		assertEquals(2, values.size());
-		assertEquals(from, values.get(0));
-		assertEquals(to, values.get(1));
+		assertThat(values).hasSize(2);
+		assertThat(values.get(0)).isEqualTo(from);
+		assertThat(values.get(1)).isEqualTo(to);
 	}
 		
 }

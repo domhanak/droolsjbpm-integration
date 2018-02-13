@@ -22,7 +22,7 @@ import org.kie.server.api.model.KieServerConfigItem;
 import org.kie.server.api.model.ReleaseId;
 import org.kie.server.integrationtests.shared.KieServerDeployer;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class ImageServiceIncludedKieBaseIntegrationTest extends JbpmKieServerBaseIntegrationTest {
 
@@ -61,7 +61,7 @@ public class ImageServiceIncludedKieBaseIntegrationTest extends JbpmKieServerBas
     @Test
     public void testGetProcessInstanceImageViaUIClientTest() throws Exception {
         long processInstanceId = processClient.startProcess(CONTAINER_ID, HIRING_PROCESS_ID);
-        assertTrue(processInstanceId > 0);
+        assertThat(processInstanceId > 0).isTrue();
         try {
             // image coming from root of dependency kjar
             String result = uiServicesClient.getProcessInstanceImage(CONTAINER_ID, processInstanceId);
@@ -71,7 +71,7 @@ public class ImageServiceIncludedKieBaseIntegrationTest extends JbpmKieServerBas
         }
 
         processInstanceId = processClient.startProcess(CONTAINER_ID, HIRING_2_PROCESS_ID);
-        assertTrue(processInstanceId > 0);
+        assertThat(processInstanceId > 0).isTrue();
         try {
             // image coming from org.kie.server package of dependency kjar
             String result = uiServicesClient.getProcessInstanceImage(CONTAINER_ID, processInstanceId);
@@ -81,7 +81,7 @@ public class ImageServiceIncludedKieBaseIntegrationTest extends JbpmKieServerBas
         }
 
         processInstanceId = processClient.startProcess(CONTAINER_ID, HIRING_3_PROCESS_ID);
-        assertTrue(processInstanceId > 0);
+        assertThat(processInstanceId > 0).isTrue();
         try {
             // image coming from org.kie.server package of main kjar
             String result = uiServicesClient.getProcessInstanceImage(CONTAINER_ID, processInstanceId);
@@ -93,7 +93,7 @@ public class ImageServiceIncludedKieBaseIntegrationTest extends JbpmKieServerBas
 
     protected void assertImageContent(String result) {
         logger.debug("Image content is '{}'", result);
-        assertNotNull(result);
-        assertFalse(result.isEmpty());
+        assertThat(result).isNotNull();
+        assertThat(result.isEmpty()).isFalse();
     }
 }

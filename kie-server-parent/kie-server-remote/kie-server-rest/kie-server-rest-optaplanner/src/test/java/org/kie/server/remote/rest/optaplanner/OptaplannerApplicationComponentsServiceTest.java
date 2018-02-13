@@ -27,7 +27,7 @@ import org.kie.server.services.optaplanner.OptaplannerKieServerExtension;
 import org.kie.server.services.optaplanner.SolverServiceBase;
 import org.mockito.Mockito;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
@@ -50,7 +50,7 @@ public class OptaplannerApplicationComponentsServiceTest {
         }
 
         int numComponents = 1;
-        assertEquals( "Unexpected num application components!", numComponents, appComponentsList.size() );
+        assertThat(appComponentsList.size() ).isEqualTo("Unexpected num application components!", numComponents);
         for ( Object appComponent : appComponentsList ) {
             assertTrue(
                     "Unexpected app component type: " + Object.class.getSimpleName(),

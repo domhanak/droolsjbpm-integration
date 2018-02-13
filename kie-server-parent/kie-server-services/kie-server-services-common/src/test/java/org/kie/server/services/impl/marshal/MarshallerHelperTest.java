@@ -15,7 +15,7 @@
 
 package org.kie.server.services.impl.marshal;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThat;
 
 import java.util.HashSet;
@@ -101,7 +101,7 @@ public class MarshallerHelperTest {
 		
 		String expectedMarshalledTEC = "{\"order-by\" : null, \"order-asc\" : false, \"query-params\" : null, \"result-column-mapping\" : null}";
 
-		JSONAssert.assertEquals(expectedMarshalledTEC, marshalledQFS, false);
+		JSONAssert.assertThat(marshalledQFS).isCloseTo(expectedMarshalledTEC, within(false));
 	}
 	
 	@Test
@@ -118,7 +118,7 @@ public class MarshallerHelperTest {
 		
 		String expectedMarshalledTEC = "{\"order-by\" : null, \"order-asc\" : false, \"query-params\" : null, \"result-column-mapping\" : null}";
 
-		JSONAssert.assertEquals(expectedMarshalledTEC, marshalledQFS, false);
+		JSONAssert.assertThat(marshalledQFS).isCloseTo(expectedMarshalledTEC, within(false));
 	}
 	
 
@@ -175,7 +175,7 @@ public class MarshallerHelperTest {
 
 		TestExtraClass unmarshalledTEC = helper.unmarshal(marshalledTEC, MarshallingFormat.JAXB.toString(), TestExtraClass.class);
 
-		assertEquals(expectedExtraClass, unmarshalledTEC);
+		assertThat(unmarshalledTEC).isEqualTo(expectedExtraClass);
 	}
 
 	/**

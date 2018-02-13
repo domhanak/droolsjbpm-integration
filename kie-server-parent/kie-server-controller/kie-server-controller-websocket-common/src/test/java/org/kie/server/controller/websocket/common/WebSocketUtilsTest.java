@@ -38,7 +38,7 @@ import org.kie.server.controller.api.service.SpecManagementService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class WebSocketUtilsTest {
 
@@ -69,7 +69,7 @@ public class WebSocketUtilsTest {
         final ContainerSpec specResult = WebSocketUtils.unmarshal(specContent,
                                                                   ContainerSpec.class);
 
-        assertNotNull(specResult);
+        assertThat(specResult).isNotNull();
         assertEquals(spec,
                      specResult);
         assertEquals(spec.getId(),
@@ -80,17 +80,17 @@ public class WebSocketUtilsTest {
                      specResult.getContainerName());
         assertEquals(spec.getReleasedId(),
                      specResult.getReleasedId());
-        assertNotNull(specResult.getConfigs());
+        assertThat(specResult.getConfigs()).isNotNull();
         assertEquals(spec.getConfigs().size(),
                      specResult.getConfigs().size());
         final ContainerConfig processConfigResult = specResult.getConfigs().get(Capability.PROCESS);
-        assertNotNull(processConfigResult);
-        assertTrue(processConfigResult instanceof ProcessConfig);
+        assertThat(processConfigResult).isNotNull();
+        assertThat(processConfigResult instanceof ProcessConfig).isTrue();
         assertEquals(processConfig,
                      processConfigResult);
         final ContainerConfig ruleConfigResult = specResult.getConfigs().get(Capability.RULE);
-        assertNotNull(ruleConfigResult);
-        assertTrue(ruleConfigResult instanceof RuleConfig);
+        assertThat(ruleConfigResult).isNotNull();
+        assertThat(ruleConfigResult instanceof RuleConfig).isTrue();
         assertEquals(ruleConfig,
                      ruleConfigResult);
     }
@@ -120,18 +120,18 @@ public class WebSocketUtilsTest {
                     content);
         final KieServerControllerDescriptorCommand commandResult = WebSocketUtils.unmarshal(content,
                                                                                             KieServerControllerDescriptorCommand.class);
-        assertNotNull(commandResult);
+        assertThat(commandResult).isNotNull();
         assertEquals(command.getService(),
                      commandResult.getService());
         assertEquals(command.getMethod(),
                      commandResult.getMethod());
         assertEquals(command.getArguments().size(),
                      commandResult.getArguments().size());
-        assertTrue(commandResult.getArguments().contains(serverTemplateId));
-        assertTrue(commandResult.getArguments().contains(containerSpecId));
-        assertTrue(commandResult.getArguments().contains(capability));
-        assertTrue(commandResult.getArguments().contains(processConfig));
-        assertTrue(commandResult.getArguments().contains(ruleConfig));
+        assertThat(commandResult.getArguments().contains(serverTemplateId)).isTrue();
+        assertThat(commandResult.getArguments().contains(containerSpecId)).isTrue();
+        assertThat(commandResult.getArguments().contains(capability)).isTrue();
+        assertThat(commandResult.getArguments().contains(processConfig)).isTrue();
+        assertThat(commandResult.getArguments().contains(ruleConfig)).isTrue();
     }
 
     @Test
@@ -158,7 +158,7 @@ public class WebSocketUtilsTest {
                     content);
         final KieServerControllerServiceResponse<ContainerList> responseResult = WebSocketUtils.unmarshal(content,
                                                                                                           KieServerControllerServiceResponse.class);
-        assertNotNull(responseResult);
+        assertThat(responseResult).isNotNull();
         assertEquals(response.getMsg(),
                      responseResult.getMsg());
         assertArrayEquals(response.getResult().getContainers(),

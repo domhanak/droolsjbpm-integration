@@ -45,12 +45,12 @@ import static java.net.HttpURLConnection.HTTP_OK;
 import static javax.ws.rs.core.HttpHeaders.IF_NONE_MATCH;
 import static javax.ws.rs.core.HttpHeaders.USER_AGENT;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.assertj.core.api.Assertions.fail;
 import static org.kie.server.common.rest.KieServerHttpRequest.CHARSET_UTF8;
 import static org.kie.server.common.rest.KieServerHttpRequest.appendQueryParameters;
 import static org.kie.server.common.rest.KieServerHttpRequest.deleteRequest;
@@ -141,7 +141,7 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             KieServerHttpRequest.newRequest("\\m/");
             fail("Exception not thrown");
         } catch( KieServerHttpRequestException e ) {
-            assertNotNull(e.getCause());
+            assertThat(e.getCause()).isNotNull();
         }
     }
 
@@ -171,22 +171,22 @@ public class KieServerHttpRequestTest extends ServerTestCase {
         };
         
         KieServerHttpRequest request = getRequest(new URL(url));
-        assertNotNull(request.getConnection());
-        assertEquals(30000, request.timeout(30000).getConnection().getReadTimeout());
-        assertEquals(2500, request.bufferSize(2500).bufferSize());
-        assertFalse(request.ignoreCloseExceptions(false).ignoreCloseExceptions());
+        assertThat(request.getConnection()).isNotNull();
+        assertThat(request.timeout(30000).getConnection().getReadTimeout()).isEqualTo(30000);
+        assertThat(request.bufferSize(2500).bufferSize()).isEqualTo(2500);
+        assertThat(request.ignoreCloseExceptions(false).ignoreCloseExceptions()).isFalse();
         int code = request.get().response().code();
-        assertEquals(200, code);
-        assertEquals("GET", method.get());
-        assertEquals("OK", request.response().message());
-        assertEquals(HTTP_OK, code);
-        assertEquals("", request.response().body());
-        assertNotNull(request.toString());
-        assertFalse(request.toString().length() == 0);
-        assertEquals(request, request.disconnect());
-        assertTrue(request.response().contentLength() == 0);
-        assertEquals(request.getUrl().toString(), url);
-        assertEquals("GET", request.getMethod());
+        assertThat(code).isEqualTo(200);
+        assertThat(method.get()).isEqualTo("GET");
+        assertThat(request.response().message()).isEqualTo("OK");
+        assertThat(code).isEqualTo(HTTP_OK);
+        assertThat(request.response().body()).isEqualTo("");
+        assertThat(request.toString()).isNotNull();
+        assertThat(request.toString().length() == 0).isFalse();
+        assertThat(request.disconnect()).isEqualTo(request);
+        assertThat(request.response().contentLength() == 0).isTrue();
+        assertThat(url).isEqualTo(request.getUrl().toString());
+        assertThat(request.getMethod()).isEqualTo("GET");
     }
 
     /**
@@ -206,13 +206,13 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = getRequest(new URL(url));
-        assertNotNull(request.getConnection());
+        assertThat(request.getConnection()).isNotNull();
         int code = request.response().code();
-        assertEquals(200, code);
-        assertEquals("GET", method.get());
-        assertEquals("OK", request.response().message());
-        assertEquals(HTTP_OK, code);
-        assertEquals("", request.response().body());
+        assertThat(code).isEqualTo(200);
+        assertThat(method.get()).isEqualTo("GET");
+        assertThat(request.response().message()).isEqualTo("OK");
+        assertThat(code).isEqualTo(HTTP_OK);
+        assertThat(request.response().body()).isEqualTo("");
     }
 
     /**
@@ -232,13 +232,13 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = getRequest(new URL(url));
-        assertNotNull(request.getConnection());
+        assertThat(request.getConnection()).isNotNull();
         int code = request.response().code();
-        assertEquals(HTTP_NO_CONTENT, code);
-        assertEquals("GET", method.get());
-        assertEquals("No Content", request.response().message());
-        assertEquals(HTTP_NO_CONTENT, code);
-        assertEquals("", request.response().body());
+        assertThat(code).isEqualTo(HTTP_NO_CONTENT);
+        assertThat(method.get()).isEqualTo("GET");
+        assertThat(request.response().message()).isEqualTo("No Content");
+        assertThat(code).isEqualTo(HTTP_NO_CONTENT);
+        assertThat(request.response().body()).isEqualTo("");
     }
 
     /**
@@ -259,8 +259,8 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url + unencoded);
-        assertEquals(200, request.get().response().code());
-        assertEquals(unencoded, path.get());
+        assertThat(request.get().response().code()).isEqualTo(200);
+        assertThat(path.get()).isEqualTo(unencoded);
     }
 
     /**
@@ -281,8 +281,8 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url + unencoded);
-        assertEquals(200, request.get().response().code());
-        assertEquals(unencoded, path.get());
+        assertThat(request.get().response().code()).isEqualTo(200);
+        assertThat(path.get()).isEqualTo(unencoded);
     }
 
     /**
@@ -303,8 +303,8 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url + unencoded);
-        assertEquals(200, request.get().response().code());
-        assertEquals(unencoded, path.get());
+        assertThat(request.get().response().code()).isEqualTo(200);
+        assertThat(path.get()).isEqualTo(unencoded);
     }
 
     /**
@@ -324,11 +324,11 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = deleteRequest(new URL(url));
-        assertNotNull(request.getConnection());
-        assertEquals(200, request.delete().response().code());
-        assertEquals("DELETE", method.get());
-        assertEquals("", request.response().body());
-        assertEquals("DELETE", request.getMethod());
+        assertThat(request.getConnection()).isNotNull();
+        assertThat(request.delete().response().code()).isEqualTo(200);
+        assertThat(method.get()).isEqualTo("DELETE");
+        assertThat(request.response().body()).isEqualTo("");
+        assertThat(request.getMethod()).isEqualTo("DELETE");
     }
 
     /**
@@ -348,10 +348,10 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = deleteRequest(new URL(url));
-        assertNotNull(request.getConnection());
-        assertEquals(200, request.response().code());
-        assertEquals("DELETE", method.get());
-        assertEquals("", request.response().body());
+        assertThat(request.getConnection()).isNotNull();
+        assertThat(request.response().code()).isEqualTo(200);
+        assertThat(method.get()).isEqualTo("DELETE");
+        assertThat(request.response().body()).isEqualTo("");
     }
 
     /**
@@ -371,8 +371,8 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url);
-        assertEquals(HTTP_CREATED, request.post().response().code());
-        assertEquals("POST", method.get());
+        assertThat(request.post().response().code()).isEqualTo(HTTP_CREATED);
+        assertThat(method.get()).isEqualTo("POST");
     }
 
     /**
@@ -392,8 +392,8 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = getRequest(new URL(url));
-        assertEquals(HTTP_CREATED, request.post().response().code());
-        assertEquals("POST", method.get());
+        assertThat(request.post().response().code()).isEqualTo(HTTP_CREATED);
+        assertThat(method.get()).isEqualTo("POST");
     }
 
     /**
@@ -413,8 +413,8 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         int code = postRequest(new URL(url)).body("hello").response().code();
-        assertEquals(HTTP_OK, code);
-        assertEquals("hello", body.get());
+        assertThat(code).isEqualTo(HTTP_OK);
+        assertThat(body.get()).isEqualTo("hello");
     }
 
     /**
@@ -438,9 +438,9 @@ public class KieServerHttpRequestTest extends ServerTestCase {
         String data = "hello";
         int sent = data.getBytes().length;
         int code = newRequest(new URL(url)).body(data).post().response().code();
-        assertEquals(HTTP_OK, code);
-        assertEquals(sent, length.get().intValue());
-        assertEquals(data, body.get());
+        assertThat(code).isEqualTo(HTTP_OK);
+        assertThat(length.get().intValue()).isEqualTo(sent);
+        assertThat(body.get()).isEqualTo(data);
     }
 
     /**
@@ -465,9 +465,9 @@ public class KieServerHttpRequestTest extends ServerTestCase {
         data.put("name", "user");
         data.put("number", "100");
         int code = postRequest(new URL(url)).form(data).form("zip", "12345").response().code();
-        assertEquals(HTTP_OK, code);
-        assertEquals("name=user&number=100&zip=12345", body.get());
-        assertEquals("application/x-www-form-urlencoded; charset=UTF-8", contentType.get());
+        assertThat(code).isEqualTo(HTTP_OK);
+        assertThat(body.get()).isEqualTo("name=user&number=100&zip=12345");
+        assertThat(contentType.get()).isEqualTo("application/x-www-form-urlencoded; charset=UTF-8");
     }
 
     /**
@@ -492,9 +492,9 @@ public class KieServerHttpRequestTest extends ServerTestCase {
         data.put("name", "user");
         data.put("number", "100");
         int code = postRequest(new URL(url)).form(data, null).form("zip", "12345").response().code();
-        assertEquals(HTTP_OK, code);
-        assertEquals("name=user&number=100&zip=12345", body.get());
-        assertEquals("application/x-www-form-urlencoded", contentType.get());
+        assertThat(code).isEqualTo(HTTP_OK);
+        assertThat(body.get()).isEqualTo("name=user&number=100&zip=12345");
+        assertThat(contentType.get()).isEqualTo("application/x-www-form-urlencoded");
     }
 
     /**
@@ -514,8 +514,8 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         int code = postRequest(new URL(url)).form(new HashMap<String, String>()).response().code();
-        assertEquals(HTTP_OK, code);
-        assertEquals("", body.get());
+        assertThat(code).isEqualTo(HTTP_OK);
+        assertThat(body.get()).isEqualTo("");
     }
 
     /**
@@ -534,10 +534,10 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url);
-        assertEquals(HTTP_OK, request.get().response().code());
-        assertEquals("hello", request.response().body());
-        assertEquals("hello".getBytes().length, request.response().contentLength());
-        assertFalse(request.response().contentLength() == 0);
+        assertThat(request.get().response().code()).isEqualTo(HTTP_OK);
+        assertThat(request.response().body()).isEqualTo("hello");
+        assertThat(request.response().contentLength()).isEqualTo("hello".getBytes().length);
+        assertThat(request.response().contentLength() == 0).isFalse();
     }
 
     /**
@@ -556,8 +556,8 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url);
-        assertEquals(HTTP_OK, request.get().response().code());
-        assertEquals(CHARSET_UTF8, request.response().charset());
+        assertThat(request.get().response().code()).isEqualTo(HTTP_OK);
+        assertThat(request.response().charset()).isEqualTo(CHARSET_UTF8);
     }
 
     /**
@@ -576,8 +576,8 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url);
-        assertEquals(HTTP_OK, request.get().response().code());
-        assertEquals(CHARSET_UTF8, request.response().charset());
+        assertThat(request.get().response().code()).isEqualTo(HTTP_OK);
+        assertThat(request.response().charset()).isEqualTo(CHARSET_UTF8);
     }
 
     /**
@@ -603,9 +603,9 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url).basicAuthorization("user", "p4ssw0rd");
-        assertEquals(200, request.post().response().code());
-        assertEquals("user", user.get());
-        assertEquals("p4ssw0rd", password.get());
+        assertThat(request.post().response().code()).isEqualTo(200);
+        assertThat(user.get()).isEqualTo("user");
+        assertThat(password.get()).isEqualTo("p4ssw0rd");
     }
 
     /**
@@ -626,11 +626,11 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url).useProxy("localhost", proxyPort).proxyBasic("user", "p4ssw0rd");
-        assertEquals(HTTP_OK, request.get().response().code());
-        assertEquals("user", proxyUser.get());
-        assertEquals("p4ssw0rd", proxyPassword.get());
-        assertEquals(true, finalHostReached.get());
-        assertEquals(1, proxyHitCount.get());
+        assertThat(request.get().response().code()).isEqualTo(HTTP_OK);
+        assertThat(proxyUser.get()).isEqualTo("user");
+        assertThat(proxyPassword.get()).isEqualTo("p4ssw0rd");
+        assertThat(finalHostReached.get()).isEqualTo(true);
+        assertThat(proxyHitCount.get()).isEqualTo(1);
     }
 
     /**
@@ -649,8 +649,8 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url);
-        assertEquals(HTTP_OK, request.get().response().code());
-        assertTrue(Arrays.equals("hello".getBytes(), request.response().bytes()));
+        assertThat(request.get().response().code()).isEqualTo(HTTP_OK);
+        assertThat(Arrays.equals("hello".getBytes(), request.response().bytes())).isTrue();
     }
 
     /**
@@ -669,8 +669,8 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url);
-        assertEquals(HttpServletResponse.SC_NOT_FOUND, request.get().response().code());
-        assertEquals("error", request.response().body());
+        assertThat(request.get().response().code()).isEqualTo(HttpServletResponse.SC_NOT_FOUND);
+        assertThat(request.response().body()).isEqualTo("error");
     }
 
     /**
@@ -688,8 +688,8 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url);
-        assertEquals(HTTP_OK, request.get().response().code());
-        assertEquals("", request.response().body());
+        assertThat(request.get().response().code()).isEqualTo(HTTP_OK);
+        assertThat(request.response().body()).isEqualTo("");
     }
 
     /**
@@ -707,7 +707,7 @@ public class KieServerHttpRequestTest extends ServerTestCase {
                 response.setHeader("Content-Encoding", "gzip");
             }
         };
-        assertEquals("gzip", newRequest(url).get().response().contentEncoding());
+        assertThat(newRequest(url).get().response().contentEncoding()).isEqualTo("gzip");
     }
 
     /**
@@ -725,7 +725,7 @@ public class KieServerHttpRequestTest extends ServerTestCase {
                 response.setHeader("Content-Type", "text/html");
             }
         };
-        assertEquals("text/html", newRequest(url).get().response().contentType());
+        assertThat(newRequest(url).get().response().contentType()).isEqualTo("text/html");
     }
 
     /**
@@ -745,8 +745,8 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url).contentType("text/html", "UTF-8");
-        assertEquals(HTTP_OK, request.post().response().code());
-        assertEquals("text/html; charset=UTF-8", contentType.get());
+        assertThat(request.post().response().code()).isEqualTo(HTTP_OK);
+        assertThat(contentType.get()).isEqualTo("text/html; charset=UTF-8");
     }
 
     /**
@@ -766,8 +766,8 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url).contentType("text/html", null);
-        assertEquals(HTTP_OK, request.post().response().code());
-        assertEquals("text/html", contentType.get());
+        assertThat(request.post().response().code()).isEqualTo(HTTP_OK);
+        assertThat(contentType.get()).isEqualTo("text/html");
     }
 
     /**
@@ -787,8 +787,8 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url).contentType("text/html", "");
-        assertEquals(HTTP_OK, request.post().response().code());
-        assertEquals("text/html", contentType.get());
+        assertThat(request.post().response().code()).isEqualTo(HTTP_OK);
+        assertThat(contentType.get()).isEqualTo("text/html");
     }
 
     /**
@@ -813,9 +813,9 @@ public class KieServerHttpRequestTest extends ServerTestCase {
         headers.put("h1", "v1");
         headers.put("h2", "v2");
         KieServerHttpRequest request = newRequest(url).headers(headers);
-        assertEquals(HTTP_OK, request.get().response().code());
-        assertEquals("v1", h1.get());
-        assertEquals("v2", h2.get());
+        assertThat(request.get().response().code()).isEqualTo(HTTP_OK);
+        assertThat(h1.get()).isEqualTo("v1");
+        assertThat(h2.get()).isEqualTo("v2");
     }
 
     /**
@@ -833,7 +833,7 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url).headers(Collections.<String, String> emptyMap());
-        assertEquals(HTTP_OK, request.get().response().code());
+        assertThat(request.get().response().code()).isEqualTo(HTTP_OK);
     }
 
     /**
@@ -854,9 +854,9 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         Map<String, List<String>> headers = newRequest(url).get().response().headers();
-        assertEquals(headers.size(), 6);
-        assertEquals(headers.get("a").size(), 2);
-        assertTrue(headers.get("b").get(0).equals("b"));
+        assertThat(6).isEqualTo(headers.size());
+        assertThat(2).isEqualTo(headers.get("a").size());
+        assertThat(headers.get("b").get(0).equals("b")).isTrue();
     }
 
     /**
@@ -878,9 +878,9 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url).header("h1", 5).header("h2", (Number) null);
-        assertEquals(HTTP_OK, request.get().response().code());
-        assertEquals("5", h1.get());
-        assertEquals(null, h2.get());
+        assertThat(request.get().response().code()).isEqualTo(HTTP_OK);
+        assertThat(h1.get()).isEqualTo("5");
+        assertThat(h2.get()).isEqualTo(null);
     }
 
     /**
@@ -900,8 +900,8 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url).header(USER_AGENT, "browser 1.0");
-        assertEquals(HTTP_OK, request.get().response().code());
-        assertEquals("browser 1.0", header.get());
+        assertThat(request.get().response().code()).isEqualTo(HTTP_OK);
+        assertThat(header.get()).isEqualTo("browser 1.0");
     }
 
     /**
@@ -921,8 +921,8 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url).accept("application/json");
-        assertEquals(HTTP_OK, request.get().response().code());
-        assertEquals("application/json", header.get());
+        assertThat(request.get().response().code()).isEqualTo(HTTP_OK);
+        assertThat(header.get()).isEqualTo("application/json");
     }
 
     /**
@@ -942,8 +942,8 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url).accept(APPLICATION_JSON);
-        assertEquals(HTTP_OK, request.get().response().code());
-        assertEquals("application/json", header.get());
+        assertThat(request.get().response().code()).isEqualTo(HTTP_OK);
+        assertThat(header.get()).isEqualTo("application/json");
     }
 
     /**
@@ -963,8 +963,8 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url).header(IF_NONE_MATCH, "eid");
-        assertEquals(HTTP_OK, request.get().response().code());
-        assertEquals("eid", header.get());
+        assertThat(request.get().response().code()).isEqualTo(HTTP_OK);
+        assertThat(header.get()).isEqualTo("eid");
     }
 
     /**
@@ -984,8 +984,8 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url).acceptCharset(CHARSET_UTF8);
-        assertEquals(HTTP_OK, request.get().response().code());
-        assertEquals(CHARSET_UTF8, header.get());
+        assertThat(request.get().response().code()).isEqualTo(HTTP_OK);
+        assertThat(header.get()).isEqualTo(CHARSET_UTF8);
     }
 
     /**
@@ -1005,8 +1005,8 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url).acceptEncoding("compress");
-        assertEquals(HTTP_OK, request.get().response().code());
-        assertEquals("compress", header.get());
+        assertThat(request.get().response().code()).isEqualTo(HTTP_OK);
+        assertThat(header.get()).isEqualTo("compress");
     }
 
     /**
@@ -1016,7 +1016,7 @@ public class KieServerHttpRequestTest extends ServerTestCase {
      */
     @Test
     public void httpsTrust() throws Exception {
-        assertNotNull(getRequest("https://localhost").trustAllCerts().trustAllHosts());
+        assertThat(getRequest("https://localhost").trustAllCerts().trustAllHosts()).isNotNull();
     }
 
     /**
@@ -1026,7 +1026,7 @@ public class KieServerHttpRequestTest extends ServerTestCase {
      */
     @Test
     public void httpTrust() throws Exception {
-        assertNotNull(getRequest("http://localhost").trustAllCerts().trustAllHosts());
+        assertThat(getRequest("http://localhost").trustAllCerts().trustAllHosts()).isNotNull();
     }
 
     /**
@@ -1037,8 +1037,8 @@ public class KieServerHttpRequestTest extends ServerTestCase {
         KieServerHttpRequest request = getRequest("https://localhost");
         HttpsURLConnection connection = (HttpsURLConnection) request.getConnection();
         request.trustAllHosts();
-        assertNotNull(connection.getHostnameVerifier());
-        assertTrue(connection.getHostnameVerifier().verify(null, null));
+        assertThat(connection.getHostnameVerifier()).isNotNull();
+        assertThat(connection.getHostnameVerifier().verify(null, null)).isTrue();
     }
 
     /**
@@ -1048,8 +1048,8 @@ public class KieServerHttpRequestTest extends ServerTestCase {
     public void singleVerifier() {
         KieServerHttpRequest request1 = getRequest("https://localhost").trustAllHosts();
         KieServerHttpRequest request2 = getRequest("https://localhost").trustAllHosts();
-        assertNotNull(((HttpsURLConnection) request1.getConnection()).getHostnameVerifier());
-        assertNotNull(((HttpsURLConnection) request2.getConnection()).getHostnameVerifier());
+        assertThat(((HttpsURLConnection) request1.getConnection()).getHostnameVerifier()).isNotNull();
+        assertThat(((HttpsURLConnection) request2.getConnection()).getHostnameVerifier()).isNotNull();
         assertEquals(((HttpsURLConnection) request1.getConnection()).getHostnameVerifier(),
                 ((HttpsURLConnection) request2.getConnection()).getHostnameVerifier());
     }
@@ -1061,8 +1061,8 @@ public class KieServerHttpRequestTest extends ServerTestCase {
     public void singleSslSocketFactory() {
         KieServerHttpRequest request1 = getRequest("https://localhost").trustAllCerts();
         KieServerHttpRequest request2 = getRequest("https://localhost").trustAllCerts();
-        assertNotNull(((HttpsURLConnection) request1.getConnection()).getSSLSocketFactory());
-        assertNotNull(((HttpsURLConnection) request2.getConnection()).getSSLSocketFactory());
+        assertThat(((HttpsURLConnection) request1.getConnection()).getSSLSocketFactory()).isNotNull();
+        assertThat(((HttpsURLConnection) request2.getConnection()).getSSLSocketFactory()).isNotNull();
         assertEquals(((HttpsURLConnection) request1.getConnection()).getSSLSocketFactory(),
                 ((HttpsURLConnection) request2.getConnection()).getSSLSocketFactory());
     }
@@ -1103,8 +1103,8 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = getRequest(url).acceptEncoding("gzip").setUncompress(true);
-        assertEquals(HTTP_OK, request.response().code());
-        assertEquals("hello compressed", request.response().body());
+        assertThat(request.response().code()).isEqualTo(HTTP_OK);
+        assertThat(request.response().body()).isEqualTo("hello compressed");
     }
 
     /**
@@ -1126,8 +1126,8 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = getRequest(url).acceptEncoding("gzip").setUncompress(true);
-        assertEquals(HTTP_OK, request.response().code());
-        assertEquals("hello not compressed", request.response().body());
+        assertThat(request.response().code()).isEqualTo(HTTP_OK);
+        assertThat(request.response().body()).isEqualTo("hello not compressed");
     }
 
     /**
@@ -1147,12 +1147,12 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = getRequest(url);
-        assertEquals(HTTP_OK, request.response().code());
+        assertThat(request.response().code()).isEqualTo(HTTP_OK);
         String[] values = request.response().headers("a");
-        assertNotNull(values);
-        assertEquals(2, values.length);
-        assertTrue(Arrays.asList(values).contains("1"));
-        assertTrue(Arrays.asList(values).contains("2"));
+        assertThat(values).isNotNull();
+        assertThat(values.length).isEqualTo(2);
+        assertThat(Arrays.asList(values).contains("1")).isTrue();
+        assertThat(Arrays.asList(values).contains("2")).isTrue();
     }
 
     /**
@@ -1170,10 +1170,10 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = getRequest(url);
-        assertEquals(HTTP_OK, request.response().code());
+        assertThat(request.response().code()).isEqualTo(HTTP_OK);
         String[] values = request.response().headers("a");
-        assertNotNull(values);
-        assertEquals(0, values.length);
+        assertThat(values).isNotNull();
+        assertThat(values.length).isEqualTo(0);
     }
 
     /**
@@ -1192,8 +1192,8 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = getRequest(url);
-        assertEquals(HTTP_OK, request.response().code());
-        assertEquals("d", request.response().headerParameter("a", "c"));
+        assertThat(request.response().code()).isEqualTo(HTTP_OK);
+        assertThat("c")).as("d").isEqualTo(request.response().headerParameter("a");
     }
 
     /**
@@ -1212,9 +1212,9 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = getRequest(url);
-        assertEquals(HTTP_OK, request.response().code());
-        assertEquals("d", request.response().headerParameter("a", "c"));
-        assertEquals("f", request.response().headerParameter("a", "e"));
+        assertThat(request.response().code()).isEqualTo(HTTP_OK);
+        assertThat("c")).as("d").isEqualTo(request.response().headerParameter("a");
+        assertThat("e")).as("f").isEqualTo(request.response().headerParameter("a");
     }
 
     /**
@@ -1233,8 +1233,8 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = getRequest(url);
-        assertEquals(HTTP_OK, request.response().code());
-        assertEquals("d", request.response().headerParameter("a", "c"));
+        assertThat(request.response().code()).isEqualTo(HTTP_OK);
+        assertThat("c")).as("d").isEqualTo(request.response().headerParameter("a");
     }
 
     /**
@@ -1253,9 +1253,9 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = getRequest(url);
-        assertEquals(HTTP_OK, request.response().code());
-        assertEquals("d", request.response().headerParameter("a", "c"));
-        assertEquals("f", request.response().headerParameter("a", "e"));
+        assertThat(request.response().code()).isEqualTo(HTTP_OK);
+        assertThat("c")).as("d").isEqualTo(request.response().headerParameter("a");
+        assertThat("e")).as("f").isEqualTo(request.response().headerParameter("a");
     }
 
     /**
@@ -1274,8 +1274,8 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url);
-        assertEquals(HTTP_OK, request.get().response().code());
-        assertNull(request.response().headerParameter("a", "e"));
+        assertThat(request.get().response().code()).isEqualTo(HTTP_OK);
+        assertThat(request.response().headerParameter("a", "e")).isNull();
     }
 
     /**
@@ -1294,9 +1294,9 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url);
-        assertEquals(HTTP_OK, request.get().response().code());
-        assertNull(request.response().headerParameter("b", "c"));
-        assertTrue(request.response().headerParameters("b").isEmpty());
+        assertThat(request.get().response().code()).isEqualTo(HTTP_OK);
+        assertThat(request.response().headerParameter("b", "c")).isNull();
+        assertThat(request.response().headerParameters("b").isEmpty()).isTrue();
     }
 
     /**
@@ -1315,9 +1315,9 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url);
-        assertEquals(HTTP_OK, request.get().response().code());
-        assertNull(request.response().headerParameter("a", "c"));
-        assertTrue(request.response().headerParameters("a").isEmpty());
+        assertThat(request.get().response().code()).isEqualTo(HTTP_OK);
+        assertThat(request.response().headerParameter("a", "c")).isNull();
+        assertThat(request.response().headerParameters("a").isEmpty()).isTrue();
     }
 
     /**
@@ -1336,9 +1336,9 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url);
-        assertEquals(HTTP_OK, request.get().response().code());
-        assertNull(request.response().headerParameter("a", "c"));
-        assertTrue(request.response().headerParameters("a").isEmpty());
+        assertThat(request.get().response().code()).isEqualTo(HTTP_OK);
+        assertThat(request.response().headerParameter("a", "c")).isNull();
+        assertThat(request.response().headerParameters("a").isEmpty()).isTrue();
     }
 
     /**
@@ -1357,12 +1357,12 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url);
-        assertEquals(HTTP_OK, request.get().response().code());
+        assertThat(request.get().response().code()).isEqualTo(HTTP_OK);
         Map<String, String> params = request.response().headerParameters("a");
-        assertNotNull(params);
-        assertEquals(2, params.size());
-        assertEquals("c", params.get("b"));
-        assertEquals("e", params.get("d"));
+        assertThat(params).isNotNull();
+        assertThat(params).hasSize(2);
+        assertThat(params.get("b")).isEqualTo("c");
+        assertThat(params.get("d")).isEqualTo("e");
     }
 
     /**
@@ -1381,12 +1381,12 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url);
-        assertEquals(HTTP_OK, request.get().response().code());
+        assertThat(request.get().response().code()).isEqualTo(HTTP_OK);
         Map<String, String> params = request.response().headerParameters("a");
-        assertNotNull(params);
-        assertEquals(2, params.size());
-        assertEquals("c", params.get("b"));
-        assertEquals("e", params.get("d"));
+        assertThat(params).isNotNull();
+        assertThat(params).hasSize(2);
+        assertThat(params.get("b")).isEqualTo("c");
+        assertThat(params.get("d")).isEqualTo("e");
     }
 
     /**
@@ -1405,12 +1405,12 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url);
-        assertEquals(HTTP_OK, request.get().response().code());
+        assertThat(request.get().response().code()).isEqualTo(HTTP_OK);
         Map<String, String> params = request.response().headerParameters("a");
-        assertNotNull(params);
-        assertEquals(2, params.size());
-        assertEquals("c", params.get("b"));
-        assertEquals("e", params.get("d"));
+        assertThat(params).isNotNull();
+        assertThat(params).hasSize(2);
+        assertThat(params.get("b")).isEqualTo("c");
+        assertThat(params.get("d")).isEqualTo("e");
     }
 
     /**
@@ -1434,8 +1434,8 @@ public class KieServerHttpRequestTest extends ServerTestCase {
         data.put("number", "100");
         KieServerHttpRequest request = newRequest(url).form(data);
         int code = request.post().response().code();
-        assertEquals(HTTP_OK, code);
-        assertEquals("name=user&number=100", body.get());
+        assertThat(code).isEqualTo(HTTP_OK);
+        assertThat(body.get()).isEqualTo("name=user&number=100");
     }
 
     /**
@@ -1458,8 +1458,8 @@ public class KieServerHttpRequestTest extends ServerTestCase {
         data.put("name", null);
         KieServerHttpRequest request = newRequest(url).form(data);
         int code = request.post().response().code();
-        assertEquals(HTTP_OK, code);
-        assertEquals("name=", body.get());
+        assertThat(code).isEqualTo(HTTP_OK);
+        assertThat(body.get()).isEqualTo("name=");
     }
 
     /**
@@ -1485,10 +1485,10 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url).query(inputParams);
-        assertEquals(HTTP_OK, request.post().response().code());
-        assertEquals("POST", method.get());
-        assertEquals("user", outputParams.get("name"));
-        assertEquals("100", outputParams.get("number"));
+        assertThat(request.post().response().code()).isEqualTo(HTTP_OK);
+        assertThat(method.get()).isEqualTo("POST");
+        assertThat(outputParams.get("name")).isEqualTo("user");
+        assertThat(outputParams.get("number")).isEqualTo("100");
     }
 
     /**
@@ -1511,10 +1511,10 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url).query("name", "user").query("number", "100");
-        assertEquals(HTTP_OK, request.post().response().code());
-        assertEquals("POST", method.get());
-        assertEquals("user", outputParams.get("name"));
-        assertEquals("100", outputParams.get("number"));
+        assertThat(request.post().response().code()).isEqualTo(HTTP_OK);
+        assertThat(method.get()).isEqualTo("POST");
+        assertThat(outputParams.get("name")).isEqualTo("user");
+        assertThat(outputParams.get("number")).isEqualTo("100");
     }
 
     /**
@@ -1540,10 +1540,10 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url).query(inputParams);
-        assertEquals(HTTP_OK, request.post().response().code());
-        assertEquals("POST", method.get());
-        assertEquals("us er", outputParams.get("name"));
-        assertEquals("100", outputParams.get("number"));
+        assertThat(request.post().response().code()).isEqualTo(HTTP_OK);
+        assertThat(method.get()).isEqualTo("POST");
+        assertThat(outputParams.get("name")).isEqualTo("us er");
+        assertThat(outputParams.get("number")).isEqualTo("100");
     }
 
     /**
@@ -1566,10 +1566,10 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url).query("name", "us er").query("number", "100");
-        assertEquals(HTTP_OK, request.post().response().code());
-        assertEquals("POST", method.get());
-        assertEquals("us er", outputParams.get("name"));
-        assertEquals("100", outputParams.get("number"));
+        assertThat(request.post().response().code()).isEqualTo(HTTP_OK);
+        assertThat(method.get()).isEqualTo("POST");
+        assertThat(outputParams.get("name")).isEqualTo("us er");
+        assertThat(outputParams.get("number")).isEqualTo("100");
     }
 
     /**
@@ -1595,10 +1595,10 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url).query(inputParams);
-        assertEquals(HTTP_OK, request.post().response().code());
-        assertEquals("POST", method.get());
-        assertEquals("2", outputParams.get("1"));
-        assertEquals("4", outputParams.get("3"));
+        assertThat(request.post().response().code()).isEqualTo(HTTP_OK);
+        assertThat(method.get()).isEqualTo("POST");
+        assertThat(outputParams.get("1")).isEqualTo("2");
+        assertThat(outputParams.get("3")).isEqualTo("4");
     }
 
     /**
@@ -1624,10 +1624,10 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url).query(inputParams);
-        assertEquals(HTTP_OK, request.get().response().code());
-        assertEquals("GET", method.get());
-        assertEquals("user", outputParams.get("name"));
-        assertEquals("100", outputParams.get("number"));
+        assertThat(request.get().response().code()).isEqualTo(HTTP_OK);
+        assertThat(method.get()).isEqualTo("GET");
+        assertThat(outputParams.get("name")).isEqualTo("user");
+        assertThat(outputParams.get("number")).isEqualTo("100");
     }
 
     /**
@@ -1650,10 +1650,10 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url).query("name", "user").query("number", "100");
-        assertEquals(HTTP_OK, request.get().response().code());
-        assertEquals("GET", method.get());
-        assertEquals("user", outputParams.get("name"));
-        assertEquals("100", outputParams.get("number"));
+        assertThat(request.get().response().code()).isEqualTo(HTTP_OK);
+        assertThat(method.get()).isEqualTo("GET");
+        assertThat(outputParams.get("name")).isEqualTo("user");
+        assertThat(outputParams.get("number")).isEqualTo("100");
     }
 
     /**
@@ -1679,10 +1679,10 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url).query(inputParams);
-        assertEquals(HTTP_OK, request.get().response().code());
-        assertEquals("GET", method.get());
-        assertEquals("us er", outputParams.get("name"));
-        assertEquals("100", outputParams.get("number"));
+        assertThat(request.get().response().code()).isEqualTo(HTTP_OK);
+        assertThat(method.get()).isEqualTo("GET");
+        assertThat(outputParams.get("name")).isEqualTo("us er");
+        assertThat(outputParams.get("number")).isEqualTo("100");
     }
 
     /**
@@ -1705,10 +1705,10 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url).query("name", "us er").query("number", "100");
-        assertEquals(HTTP_OK, request.get().response().code());
-        assertEquals("GET", method.get());
-        assertEquals("us er", outputParams.get("name"));
-        assertEquals("100", outputParams.get("number"));
+        assertThat(request.get().response().code()).isEqualTo(HTTP_OK);
+        assertThat(method.get()).isEqualTo("GET");
+        assertThat(outputParams.get("name")).isEqualTo("us er");
+        assertThat(outputParams.get("number")).isEqualTo("100");
     }
 
     /**
@@ -1734,10 +1734,10 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url).query(inputParams);
-        assertEquals(HTTP_OK, request.delete().response().code());
-        assertEquals("DELETE", method.get());
-        assertEquals("user", outputParams.get("name"));
-        assertEquals("100", outputParams.get("number"));
+        assertThat(request.delete().response().code()).isEqualTo(HTTP_OK);
+        assertThat(method.get()).isEqualTo("DELETE");
+        assertThat(outputParams.get("name")).isEqualTo("user");
+        assertThat(outputParams.get("number")).isEqualTo("100");
     }
 
     /**
@@ -1760,10 +1760,10 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url).query("name", "user").query("number", "100");
-        assertEquals(HTTP_OK, request.delete().response().code());
-        assertEquals("DELETE", method.get());
-        assertEquals("user", outputParams.get("name"));
-        assertEquals("100", outputParams.get("number"));
+        assertThat(request.delete().response().code()).isEqualTo(HTTP_OK);
+        assertThat(method.get()).isEqualTo("DELETE");
+        assertThat(outputParams.get("name")).isEqualTo("user");
+        assertThat(outputParams.get("number")).isEqualTo("100");
     }
 
     /**
@@ -1789,10 +1789,10 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url).query(inputParams);
-        assertEquals(HTTP_OK, request.delete().response().code());
-        assertEquals("DELETE", method.get());
-        assertEquals("us er", outputParams.get("name"));
-        assertEquals("100", outputParams.get("number"));
+        assertThat(request.delete().response().code()).isEqualTo(HTTP_OK);
+        assertThat(method.get()).isEqualTo("DELETE");
+        assertThat(outputParams.get("name")).isEqualTo("us er");
+        assertThat(outputParams.get("number")).isEqualTo("100");
     }
 
     /**
@@ -1815,10 +1815,10 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url).query("name", "us er").query("number", "100");
-        assertEquals(HTTP_OK, request.delete().response().code());
-        assertEquals("DELETE", method.get());
-        assertEquals("us er", outputParams.get("name"));
-        assertEquals("100", outputParams.get("number"));
+        assertThat(request.delete().response().code()).isEqualTo(HTTP_OK);
+        assertThat(method.get()).isEqualTo("DELETE");
+        assertThat(outputParams.get("name")).isEqualTo("us er");
+        assertThat(outputParams.get("number")).isEqualTo("100");
     }
 
     /**
@@ -1841,10 +1841,10 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url).query("name", "user").query("number", "100");
-        assertEquals(HTTP_OK, request.post().response().code());
-        assertEquals("POST", method.get());
-        assertEquals("user", outputParams.get("name"));
-        assertEquals("100", outputParams.get("number"));
+        assertThat(request.post().response().code()).isEqualTo(HTTP_OK);
+        assertThat(method.get()).isEqualTo("POST");
+        assertThat(outputParams.get("name")).isEqualTo("user");
+        assertThat(outputParams.get("number")).isEqualTo("100");
     }
 
     /**
@@ -1854,7 +1854,7 @@ public class KieServerHttpRequestTest extends ServerTestCase {
      */
     @Test
     public void appendMappedQueryParamsWithNoPath() throws Exception {
-        assertEquals("http://test.com/?a=b", appendQueryParameters("http://test.com", Collections.singletonMap("a", "b")));
+        assertThat(Collections.singletonMap("a").as("http://test.com/?a=b").isCloseTo(appendQueryParameters("http://test.com", within("b"))));
     }
 
     /**
@@ -1864,7 +1864,7 @@ public class KieServerHttpRequestTest extends ServerTestCase {
      */
     @Test
     public void appendVarargsQueryParmasWithNoPath() throws Exception {
-        assertEquals("http://test.com/?a=b", appendQueryParameters("http://test.com", "a", "b"));
+        assertThat("a").as("http://test.com/?a=b").isCloseTo(appendQueryParameters("http://test.com", within("b")));
     }
 
     /**
@@ -1876,7 +1876,7 @@ public class KieServerHttpRequestTest extends ServerTestCase {
     public void appendMappedQueryParamsWithPath() throws Exception {
         assertEquals("http://test.com/segment1?a=b",
                 appendQueryParameters("http://test.com/segment1", Collections.singletonMap("a", "b")));
-        assertEquals("http://test.com/?a=b", appendQueryParameters("http://test.com/", Collections.singletonMap("a", "b")));
+        assertThat(Collections.singletonMap("a").as("http://test.com/?a=b").isCloseTo(appendQueryParameters("http://test.com/", within("b"))));
     }
 
     /**
@@ -1886,8 +1886,8 @@ public class KieServerHttpRequestTest extends ServerTestCase {
      */
     @Test
     public void appendVarargsQueryParamsWithPath() throws Exception {
-        assertEquals("http://test.com/segment1?a=b", appendQueryParameters("http://test.com/segment1", "a", "b"));
-        assertEquals("http://test.com/?a=b", appendQueryParameters("http://test.com/", "a", "b"));
+        assertThat("a").as("http://test.com/segment1?a=b").isCloseTo(appendQueryParameters("http://test.com/segment1", within("b")));
+        assertThat("a").as("http://test.com/?a=b").isCloseTo(appendQueryParameters("http://test.com/", within("b")));
     }
 
     /**
@@ -1900,7 +1900,7 @@ public class KieServerHttpRequestTest extends ServerTestCase {
         Map<String, Object> params = new LinkedHashMap<String, Object>();
         params.put("a", "b");
         params.put("c", "d");
-        assertEquals("http://test.com/1?a=b&c=d", appendQueryParameters("http://test.com/1", params));
+        assertThat(params)).as("http://test.com/1?a=b&c=d").isEqualTo(appendQueryParameters("http://test.com/1");
     }
 
     /**
@@ -1910,7 +1910,7 @@ public class KieServerHttpRequestTest extends ServerTestCase {
      */
     @Test
     public void appendMultipleVarargsQueryParams() throws Exception {
-        assertEquals("http://test.com/1?a=b&c=d", appendQueryParameters("http://test.com/1", "a", "b", "c", "d"));
+        assertThat("c").as("http://test.com/1?a=b&c=d", appendQueryParameters("http://test.com/1", "a").isCloseTo("b", within("d")));
     }
 
     /**
@@ -1920,7 +1920,7 @@ public class KieServerHttpRequestTest extends ServerTestCase {
      */
     @Test
     public void appendNullMappedQueryParams() throws Exception {
-        assertEquals("http://test.com/1", appendQueryParameters("http://test.com/1", (Map<?, ?>) null));
+        assertThat((Map<?).as("http://test.com/1").isCloseTo(appendQueryParameters("http://test.com/1", within(?>) null)));
     }
 
     /**
@@ -1930,7 +1930,7 @@ public class KieServerHttpRequestTest extends ServerTestCase {
      */
     @Test
     public void appendNullVaragsQueryParams() throws Exception {
-        assertEquals("http://test.com/1", appendQueryParameters("http://test.com/1", (Object[]) null));
+        assertThat((Object[]) null)).as("http://test.com/1").isEqualTo(appendQueryParameters("http://test.com/1");
     }
 
     /**
@@ -1940,7 +1940,7 @@ public class KieServerHttpRequestTest extends ServerTestCase {
      */
     @Test
     public void appendEmptyMappedQueryParams() throws Exception {
-        assertEquals("http://test.com/1", appendQueryParameters("http://test.com/1", Collections.<String, String> emptyMap()));
+        assertThat(Collections.<String).as("http://test.com/1").isCloseTo(appendQueryParameters("http://test.com/1", within(String> emptyMap())));
     }
 
     /**
@@ -1950,7 +1950,7 @@ public class KieServerHttpRequestTest extends ServerTestCase {
      */
     @Test
     public void appendEmptyVarargsQueryParams() throws Exception {
-        assertEquals("http://test.com/1", appendQueryParameters("http://test.com/1", new Object[0]));
+        assertThat(new Object[0])).as("http://test.com/1").isEqualTo(appendQueryParameters("http://test.com/1");
     }
 
     /**
@@ -1963,7 +1963,7 @@ public class KieServerHttpRequestTest extends ServerTestCase {
         Map<String, Object> params = new LinkedHashMap<String, Object>();
         params.put("a", null);
         params.put("b", null);
-        assertEquals("http://test.com/1?a=&b=", appendQueryParameters("http://test.com/1", params));
+        assertThat(params)).as("http://test.com/1?a=&b=").isEqualTo(appendQueryParameters("http://test.com/1");
     }
 
     /**
@@ -1973,7 +1973,7 @@ public class KieServerHttpRequestTest extends ServerTestCase {
      */
     @Test
     public void appendWithNullVaragsQueryParamValues() throws Exception {
-        assertEquals("http://test.com/1?a=&b=", appendQueryParameters("http://test.com/1", "a", null, "b", null));
+        assertThat("b").as("http://test.com/1?a=&b=", appendQueryParameters("http://test.com/1", "a").isCloseTo(null, within(null)));
     }
 
     /**
@@ -1989,7 +1989,7 @@ public class KieServerHttpRequestTest extends ServerTestCase {
      */
     @Test
     public void appendMappedQueryParamsWithExistingQueryStart() {
-        assertEquals("http://test.com/1?a=b", appendQueryParameters("http://test.com/1?", Collections.singletonMap("a", "b")));
+        assertThat(Collections.singletonMap("a").as("http://test.com/1?a=b").isCloseTo(appendQueryParameters("http://test.com/1?", within("b"))));
     }
 
     /**
@@ -1997,7 +1997,7 @@ public class KieServerHttpRequestTest extends ServerTestCase {
      */
     @Test
     public void appendVarargsQueryParamsWithExistingQueryStart() {
-        assertEquals("http://test.com/1?a=b", appendQueryParameters("http://test.com/1?", "a", "b"));
+        assertThat("a").as("http://test.com/1?a=b").isCloseTo(appendQueryParameters("http://test.com/1?", within("b")));
     }
 
     /**
@@ -2017,8 +2017,8 @@ public class KieServerHttpRequestTest extends ServerTestCase {
      */
     @Test
     public void appendWithVarargsQueryParamsWithExistingParams() {
-        assertEquals("http://test.com/1?a=b&c=d", appendQueryParameters("http://test.com/1?a=b", "c", "d"));
-        assertEquals("http://test.com/1?a=b&c=d", appendQueryParameters("http://test.com/1?a=b&", "c", "d"));
+        assertThat("c").as("http://test.com/1?a=b&c=d").isCloseTo(appendQueryParameters("http://test.com/1?a=b", within("d")));
+        assertThat("c").as("http://test.com/1?a=b&c=d").isCloseTo(appendQueryParameters("http://test.com/1?a=b&", within("d")));
     }
 
     /**
@@ -2036,8 +2036,8 @@ public class KieServerHttpRequestTest extends ServerTestCase {
             }
         };
         KieServerHttpRequest request = newRequest(url);
-        assertNotNull(request);
-        assertEquals(HTTP_BAD_REQUEST, request.get().response().code());
+        assertThat(request).isNotNull();
+        assertThat(request.get().response().code()).isEqualTo(HTTP_BAD_REQUEST);
     }
 
     /**
@@ -2063,8 +2063,8 @@ public class KieServerHttpRequestTest extends ServerTestCase {
         };
 
         KieServerHttpRequest request = newRequest(new URL(url)).ignoreCloseExceptions(false);
-        assertEquals("world", request.body("hello").post().response().body());
-        assertEquals("hello", body.get());
+        assertThat(request.body("hello").post().response().body()).isEqualTo("world");
+        assertThat(body.get()).isEqualTo("hello");
     }
 
     /**
@@ -2088,9 +2088,9 @@ public class KieServerHttpRequestTest extends ServerTestCase {
 
         KieServerHttpRequest request = newRequest(new URL(url)).ignoreCloseExceptions(false);
         Map<String, List<String>> headers = request.body("hello").post().response().headers();
-        assertEquals("v1", headers.get("h1").get(0));
-        assertEquals("v2", headers.get("h2").get(0));
-        assertEquals("hello", body.get());
+        assertThat(headers.get("h1").get(0)).isEqualTo("v1");
+        assertThat(headers.get("h2").get(0)).isEqualTo("v2");
+        assertThat(body.get()).isEqualTo("hello");
     }
 
     /**
@@ -2113,8 +2113,8 @@ public class KieServerHttpRequestTest extends ServerTestCase {
         };
 
         KieServerHttpRequest request = newRequest(new URL(url)).ignoreCloseExceptions(false);
-        assertEquals(9876, request.body("hello").post().response().intHeader("Width"));
-        assertEquals("hello", body.get());
+        assertThat(request.body("hello").post().response().intHeader("Width")).isEqualTo(9876);
+        assertThat(body.get()).isEqualTo("hello");
     }
 
     /**
@@ -2131,7 +2131,7 @@ public class KieServerHttpRequestTest extends ServerTestCase {
                 response.setStatus(200);
             }
         };
-        assertEquals("", newRequest(url).get().response().body());
+        assertThat(newRequest(url).get().response().body()).isEqualTo("");
     }
 
     /**
@@ -2148,7 +2148,7 @@ public class KieServerHttpRequestTest extends ServerTestCase {
                 response.setStatus(HTTP_BAD_REQUEST);
             }
         };
-        assertEquals("", newRequest(url).get().response().body());
+        assertThat(newRequest(url).get().response().body()).isEqualTo("");
     }
 
     /**
@@ -2170,7 +2170,7 @@ public class KieServerHttpRequestTest extends ServerTestCase {
                 }
             }
         };
-        assertEquals("error", newRequest(url).get().response().body());
+        assertThat(newRequest(url).get().response().body()).isEqualTo("error");
     }
 
 }

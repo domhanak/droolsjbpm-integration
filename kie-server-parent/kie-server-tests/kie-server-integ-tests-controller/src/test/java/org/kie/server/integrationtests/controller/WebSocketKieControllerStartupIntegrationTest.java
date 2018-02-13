@@ -15,7 +15,7 @@
 
 package org.kie.server.integrationtests.controller;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 
 import java.net.MalformedURLException;
@@ -127,7 +127,7 @@ public class WebSocketKieControllerStartupIntegrationTest extends KieControllerM
 
         // Check that there are no kie servers deployed in controller.
         ServerTemplateList instanceList = controllerClient.listServerTemplates();
-        assertNotNull(instanceList);
+        assertThat(instanceList).isNotNull();
         KieServerAssert.assertNullOrEmpty("Active kie server instance found!", instanceList.getServerTemplates());
 
         // Turn on new kie server.
@@ -135,54 +135,54 @@ public class WebSocketKieControllerStartupIntegrationTest extends KieControllerM
 
         // Check that kie server is registered in controller.
         instanceList = controllerClient.listServerTemplates();
-        assertNotNull(instanceList);
-        assertEquals(1, instanceList.getServerTemplates().length);
+        assertThat(instanceList).isNotNull();
+        assertThat(instanceList.getServerTemplates().length).isEqualTo(1);
 
         // Getting info from currently started kie server.
         ServiceResponse<KieServerInfo> reply = client.getServerInfo();
-        assertNotNull(reply);
-        assertEquals(ServiceResponse.ResponseType.SUCCESS, reply.getType());
-        assertNotNull(reply.getResult());
+        assertThat(reply).isNotNull();
+        assertThat(reply.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
+        assertThat(reply.getResult()).isNotNull();
 
         ServerTemplate deployedServerInstance = instanceList.getServerTemplates()[0];
-        assertNotNull(deployedServerInstance);
-        assertEquals(reply.getResult().getServerId(), deployedServerInstance.getId());
+        assertThat(deployedServerInstance).isNotNull();
+        assertThat(deployedServerInstance.getId()).isEqualTo(reply.getResult().getServerId());
     }
 
     @Test
     public void testTurnOffKieServerAfterShutdown() {
         // Register kie server in controller.
         ServiceResponse<KieServerInfo> kieServerInfo = client.getServerInfo();
-        assertEquals(ServiceResponse.ResponseType.SUCCESS, kieServerInfo.getType());
-        assertNotNull(kieServerInfo.getResult());
+        assertThat(kieServerInfo.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
+        assertThat(kieServerInfo.getResult()).isNotNull();
 
         ServerTemplate serverTemplate = new ServerTemplate(kieServerInfo.getResult().getServerId(), kieServerInfo.getResult().getName());
         controllerClient.saveServerTemplate(serverTemplate);
 
         // Check that kie server is registered.
         ServerTemplateList instanceList = controllerClient.listServerTemplates();
-        assertEquals(1, instanceList.getServerTemplates().length);
-        assertEquals(kieServerInfo.getResult().getServerId(), instanceList.getServerTemplates()[0].getId()); //maybe change to avoid next -> null
+        assertThat(instanceList.getServerTemplates().length).isEqualTo(1);
+        assertThat(instanceList.getServerTemplates()[0].getId()).isEqualTo(kieServerInfo.getResult().getServerId()); //maybe change to avoid next -> null
 
         // Turn off embedded kie server.
         server.stopKieServer();
 
         // Check that kie server is down in controller.
         instanceList = controllerClient.listServerTemplates();
-        assertEquals(1, instanceList.getServerTemplates().length);
-        assertEquals(kieServerInfo.getResult().getServerId(), instanceList.getServerTemplates()[0].getId()); //maybe change to avoid next -> null
+        assertThat(instanceList.getServerTemplates().length).isEqualTo(1);
+        assertThat(instanceList.getServerTemplates()[0].getId()).isEqualTo(kieServerInfo.getResult().getServerId()); //maybe change to avoid next -> null
     }
 
     @Test
     public void testContainerCreatedAfterStartup() throws Exception {
         // Getting info from currently started kie server.
         ServiceResponse<KieServerInfo> kieServerInfo = client.getServerInfo();
-        assertEquals(ServiceResponse.ResponseType.SUCCESS, kieServerInfo.getType());
-        assertNotNull(kieServerInfo.getResult());
+        assertThat(kieServerInfo.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
+        assertThat(kieServerInfo.getResult()).isNotNull();
 
         // Check that there are no containers in kie server.
         ServiceResponse<KieContainerResourceList> containersList = client.listContainers();
-        assertEquals(ServiceResponse.ResponseType.SUCCESS, containersList.getType());
+        assertThat(containersList.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
         KieServerAssert.assertNullOrEmpty("Active containers found!", containersList.getResult().getContainers());
 
         // Check that there are no kie servers deployed in controller.
@@ -199,10 +199,10 @@ public class WebSocketKieControllerStartupIntegrationTest extends KieControllerM
         controllerClient.saveContainerSpec(serverTemplate.getId(), containerSpec);
         ContainerSpec deployedContainer = controllerClient.getContainerInfo(kieServerInfo.getResult().getServerId(), CONTAINER_ID);
 
-        assertNotNull(deployedContainer);
-        assertEquals(CONTAINER_ID, deployedContainer.getId());
-        assertEquals(releaseId, deployedContainer.getReleasedId());
-        assertEquals(KieContainerStatus.STOPPED, deployedContainer.getStatus());
+        assertThat(deployedContainer).isNotNull();
+        assertThat(deployedContainer.getId()).isEqualTo(CONTAINER_ID);
+        assertThat(deployedContainer.getReleasedId()).isEqualTo(releaseId);
+        assertThat(deployedContainer.getStatus()).isEqualTo(KieContainerStatus.STOPPED);
 
         controllerClient.startContainer(containerSpec);
 
@@ -210,18 +210,18 @@ public class WebSocketKieControllerStartupIntegrationTest extends KieControllerM
 
         // Check that container is deployed on kie server.
         ServiceResponse<KieContainerResource> containerInfo = client.getContainerInfo(CONTAINER_ID);
-        assertEquals(ServiceResponse.ResponseType.SUCCESS, containerInfo.getType());
-        assertNotNull(containerInfo.getResult());
-        assertEquals(CONTAINER_ID, containerInfo.getResult().getContainerId());
-        assertEquals(KieContainerStatus.STARTED, containerInfo.getResult().getStatus());
+        assertThat(containerInfo.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
+        assertThat(containerInfo.getResult()).isNotNull();
+        assertThat(containerInfo.getResult().getContainerId()).isEqualTo(CONTAINER_ID);
+        assertThat(containerInfo.getResult().getStatus()).isEqualTo(KieContainerStatus.STARTED);
     }
 
     @Test
     public void testContainerDisposedAfterStartup() throws Exception {
         // Getting info from currently started kie server.
         ServiceResponse<KieServerInfo> kieServerInfo = client.getServerInfo();
-        assertEquals(ServiceResponse.ResponseType.SUCCESS, kieServerInfo.getType());
-        assertNotNull(kieServerInfo.getResult());
+        assertThat(kieServerInfo.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
+        assertThat(kieServerInfo.getResult()).isNotNull();
 
         // Create container.
         ServerTemplate serverTemplate = new ServerTemplate(kieServerInfo.getResult().getServerId(), kieServerInfo.getResult().getName());
@@ -241,12 +241,12 @@ public class WebSocketKieControllerStartupIntegrationTest extends KieControllerM
             KieServerSynchronization.waitForKieServerSynchronization(client, 1);
         }
         ServiceResponse<KieContainerResourceList> containersList = client.listContainers();
-        assertEquals(ServiceResponse.ResponseType.SUCCESS, containersList.getType());
-        assertNotNull(containersList.getResult().getContainers());
-        assertEquals(1, containersList.getResult().getContainers().size());
+        assertThat(containersList.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
+        assertThat(containersList.getResult().getContainers()).isNotNull();
+        assertThat(containersList.getResult().getContainers()).hasSize(1);
 
         ServerTemplateList instanceList = controllerClient.listServerTemplates();
-        assertEquals(1, instanceList.getServerTemplates().length);
+        assertThat(instanceList.getServerTemplates().length).isEqualTo(1);
 
         // Turn kie server off, dispose container and start kie server again.
         server.stopKieServer();
@@ -262,7 +262,7 @@ public class WebSocketKieControllerStartupIntegrationTest extends KieControllerM
 
         // Check that no container is deployed on kie server.
         containersList = client.listContainers();
-        assertEquals(ServiceResponse.ResponseType.SUCCESS, containersList.getType());
+        assertThat(containersList.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
         KieServerAssert.assertNullOrEmpty("Active containers found!", containersList.getResult().getContainers());
     }
 }

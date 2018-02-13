@@ -35,7 +35,7 @@ import org.kie.server.controller.impl.KieServerInstanceManager;
 import org.kie.server.controller.impl.storage.InMemoryKieServerTemplateStorage;
 import org.mockito.Mockito;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class RuleCapabilitiesServiceImplTest extends AbstractServiceImplTest {
@@ -91,16 +91,16 @@ public class RuleCapabilitiesServiceImplTest extends AbstractServiceImplTest {
         ServerTemplate updated = specManagementService.getServerTemplate(serverTemplate.getId());
 
         Collection<ContainerSpec> containerSpecs = updated.getContainersSpec();
-        assertNotNull(containerSpecs);
+        assertThat(containerSpecs).isNotNull();
         assertEquals(1,
                      containerSpecs.size());
 
         ContainerSpec updatedContainer = containerSpecs.iterator().next();
-        assertNotNull(updatedContainer);
+        assertThat(updatedContainer).isNotNull();
 
         ContainerConfig ruleConfig = updatedContainer.getConfigs().get(Capability.RULE);
-        assertNotNull(ruleConfig);
-        assertTrue(ruleConfig instanceof RuleConfig);
+        assertThat(ruleConfig).isNotNull();
+        assertThat(ruleConfig instanceof RuleConfig).isTrue();
 
         RuleConfig ruleCg = (RuleConfig) ruleConfig;
 
@@ -126,22 +126,22 @@ public class RuleCapabilitiesServiceImplTest extends AbstractServiceImplTest {
         ServerTemplate updated = specManagementService.getServerTemplate(serverTemplate.getId());
 
         Collection<ContainerSpec> containerSpecs = updated.getContainersSpec();
-        assertNotNull(containerSpecs);
+        assertThat(containerSpecs).isNotNull();
         assertEquals(1,
                      containerSpecs.size());
 
         ContainerSpec updatedContainer = containerSpecs.iterator().next();
-        assertNotNull(updatedContainer);
+        assertThat(updatedContainer).isNotNull();
 
         ContainerConfig ruleConfig = updatedContainer.getConfigs().get(Capability.RULE);
-        assertNotNull(ruleConfig);
-        assertTrue(ruleConfig instanceof RuleConfig);
+        assertThat(ruleConfig).isNotNull();
+        assertThat(ruleConfig instanceof RuleConfig).isTrue();
 
         RuleConfig ruleCg = (RuleConfig) ruleConfig;
 
         assertEquals(KieScannerStatus.STOPPED,
                      ruleCg.getScannerStatus());
-        assertNull(ruleCg.getPollInterval());
+        assertThat(ruleCg.getPollInterval()).isNull();
     }
 
     @Test
@@ -166,16 +166,16 @@ public class RuleCapabilitiesServiceImplTest extends AbstractServiceImplTest {
 
         final Collection<ContainerSpec> containerSpecs = updated.getContainersSpec();
 
-        assertNotNull(containerSpecs);
-        assertEquals(1, containerSpecs.size());
+        assertThat(containerSpecs).isNotNull();
+        assertThat(containerSpecs).hasSize(1);
 
         ContainerSpec updatedContainer = containerSpecs.iterator().next();
-        assertNotNull(updatedContainer);
+        assertThat(updatedContainer).isNotNull();
 
-        assertNotNull(updatedContainer.getReleasedId());
+        assertThat(updatedContainer.getReleasedId()).isNotNull();
         assertNotEquals(initial, updatedContainer.getReleasedId());
-        assertEquals(upgradeTo, updatedContainer.getReleasedId());
-        assertEquals(updatedContainer.getStatus(), KieContainerStatus.STARTED);
+        assertThat(updatedContainer.getReleasedId()).isEqualTo(upgradeTo);
+        assertThat(KieContainerStatus.STARTED).isEqualTo(updatedContainer.getStatus());
     }
 
     @Test
@@ -200,15 +200,15 @@ public class RuleCapabilitiesServiceImplTest extends AbstractServiceImplTest {
 
         final Collection<ContainerSpec> containerSpecs = updated.getContainersSpec();
 
-        assertNotNull(containerSpecs);
-        assertEquals(1, containerSpecs.size());
+        assertThat(containerSpecs).isNotNull();
+        assertThat(containerSpecs).hasSize(1);
 
         ContainerSpec updatedContainer = containerSpecs.iterator().next();
-        assertNotNull(updatedContainer);
+        assertThat(updatedContainer).isNotNull();
 
-        assertNotNull(updatedContainer.getReleasedId());
+        assertThat(updatedContainer.getReleasedId()).isNotNull();
         assertNotEquals(initial, updatedContainer.getReleasedId());
-        assertEquals(upgradeTo, updatedContainer.getReleasedId());
-        assertEquals(updatedContainer.getStatus(), KieContainerStatus.STARTED);
+        assertThat(updatedContainer.getReleasedId()).isEqualTo(upgradeTo);
+        assertThat(KieContainerStatus.STARTED).isEqualTo(updatedContainer.getStatus());
     }
 }

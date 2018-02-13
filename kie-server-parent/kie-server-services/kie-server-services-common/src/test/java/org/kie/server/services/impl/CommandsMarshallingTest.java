@@ -39,7 +39,7 @@ import org.kie.server.api.marshalling.Marshaller;
 import org.kie.server.api.marshalling.MarshallerFactory;
 import org.kie.server.api.marshalling.MarshallingFormat;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class CommandsMarshallingTest {
     private Marshaller marshaller = MarshallerFactory.getMarshaller( MarshallingFormat.XSTREAM, Thread.currentThread().getContextClassLoader() );
@@ -50,9 +50,9 @@ public class CommandsMarshallingTest {
                             "  <string>String value</string>\n" +
                             "</insert>";
         InsertObjectCommand command = marshaller.unmarshall( xmlCommand, InsertObjectCommand.class );
-        assertEquals( "String value", command.getObject().toString() );
+        assertThat(command.getObject().toString() ).isEqualTo("String value");
 
-        assertEquals( xmlCommand, marshaller.marshall( command ) );
+        assertThat(marshaller.marshall( command ) ).isEqualTo(xmlCommand);
     }
 
     @Test
@@ -61,7 +61,7 @@ public class CommandsMarshallingTest {
                             "  <set accessor=\"age\" value=\"30\"/>\n" +
                             "</modify>";
         ModifyCommand command = marshaller.unmarshall(xmlCommand, ModifyCommand.class);
-        assertEquals(1, command.getSetters().size());
+        assertThat(command.getSetters()).hasSize(1);
 
         assertEquals("<modify fact-handle=\"0:234:345:456:567:789:NON_TRAIT:null\">\n" +
                 "  <set accessor=\"age\" value=\"30\"/>\n" +
@@ -72,9 +72,9 @@ public class CommandsMarshallingTest {
     public void testMarshallGetObjectCommand() {
         String xmlCommand = "<get-object fact-handle=\"0:234:345:456:567:789\" out-identifier=\"test\"/>";
         GetObjectCommand command = marshaller.unmarshall(xmlCommand, GetObjectCommand.class);
-        assertEquals("test", command.getOutIdentifier());
+        assertThat(command.getOutIdentifier()).isEqualTo("test");
 
-        assertEquals("<get-object fact-handle=\"0:234:345:456:567:789:NON_TRAIT:null\" out-identifier=\"test\"/>", marshaller.marshall(command));
+        assertThat(marshaller.marshall(command)).isEqualTo("<get-object fact-handle=\"0:234:345:456:567:789:NON_TRAIT:null\" out-identifier=\"test\"/>");
     }
 
     @Test
@@ -84,18 +84,18 @@ public class CommandsMarshallingTest {
                 "  <string>test2</string>\n" +
                 "</insert-elements>";
         InsertElementsCommand command = marshaller.unmarshall(xmlCommand, InsertElementsCommand.class);
-        assertEquals(2, command.getObjects().size());
+        assertThat(command.getObjects()).hasSize(2);
 
-        assertEquals(xmlCommand, marshaller.marshall(command));
+        assertThat(marshaller.marshall(command)).isEqualTo(xmlCommand);
     }
 
     @Test
     public void testMarshallFireAllRulesCommand() {
         String xmlCommand = "<fire-all-rules max=\"10\" out-identifier=\"result\"/>";
         FireAllRulesCommand command = marshaller.unmarshall(xmlCommand, FireAllRulesCommand.class);
-        assertEquals(10, command.getMax());
+        assertThat(command.getMax()).isEqualTo(10);
 
-        assertEquals(xmlCommand, marshaller.marshall(command));
+        assertThat(marshaller.marshall(command)).isEqualTo(xmlCommand);
     }
     
     @Test
@@ -103,25 +103,25 @@ public class CommandsMarshallingTest {
         String xmlCommand = "<dispose/>";
         DisposeCommand command = marshaller.unmarshall(xmlCommand, DisposeCommand.class);
 
-        assertEquals(xmlCommand, marshaller.marshall(command));
+        assertThat(marshaller.marshall(command)).isEqualTo(xmlCommand);
     }
 
     @Test
     public void testMarshallStartProcessCommand() {
         String xmlCommand = "<start-process processId=\"org.drools.task.processOne\" out-identifier=\"id\"/>";
         StartProcessCommand command = marshaller.unmarshall(xmlCommand, StartProcessCommand.class);
-        assertEquals("org.drools.task.processOne", command.getProcessId());
+        assertThat(command.getProcessId()).isEqualTo("org.drools.task.processOne");
 
-        assertEquals(xmlCommand, marshaller.marshall(command));
+        assertThat(marshaller.marshall(command)).isEqualTo(xmlCommand);
     }
 
     @Test
     public void testMarshallQueryCommand() {
         String xmlCommand = "<query out-identifier=\"persons-out\" name=\"persons\"/>";
         QueryCommand command = marshaller.unmarshall(xmlCommand, QueryCommand.class);
-        assertEquals("persons", command.getName());
+        assertThat(command.getName()).isEqualTo("persons");
 
-        assertEquals(xmlCommand, marshaller.marshall(command));
+        assertThat(marshaller.marshall(command)).isEqualTo(xmlCommand);
     }
 
     @Test
@@ -130,27 +130,27 @@ public class CommandsMarshallingTest {
                 "  <list/>\n" +
                 "</set-global>";
         SetGlobalCommand command = marshaller.unmarshall(xmlCommand, SetGlobalCommand.class);
-        assertEquals("helper", command.getIdentifier());
+        assertThat(command.getIdentifier()).isEqualTo("helper");
 
-        assertEquals(xmlCommand, marshaller.marshall(command));
+        assertThat(marshaller.marshall(command)).isEqualTo(xmlCommand);
     }
 
     @Test
     public void testMarshallGetGlobalCommand() {
         String xmlCommand = "<get-global identifier=\"helper\" out-identifier=\"helperOutput\"/>";
         GetGlobalCommand command = marshaller.unmarshall(xmlCommand, GetGlobalCommand.class);
-        assertEquals("helper", command.getIdentifier());
+        assertThat(command.getIdentifier()).isEqualTo("helper");
 
-        assertEquals(xmlCommand, marshaller.marshall(command));
+        assertThat(marshaller.marshall(command)).isEqualTo(xmlCommand);
     }
 
     @Test
     public void testMarshallGetObjectsCommand() {
         String xmlCommand = "<get-objects out-identifier=\"objects\"/>";
         GetObjectsCommand command = marshaller.unmarshall(xmlCommand, GetObjectsCommand.class);
-        assertEquals("objects", command.getOutIdentifier());
+        assertThat(command.getOutIdentifier()).isEqualTo("objects");
 
-        assertEquals(xmlCommand, marshaller.marshall(command));
+        assertThat(marshaller.marshall(command)).isEqualTo(xmlCommand);
     }
 
     @Test
@@ -158,9 +158,9 @@ public class CommandsMarshallingTest {
     public void testMarshallAgendaGroupSetFocusCommand() {
         String xmlCommand = "<agenda-group-set-focus name=\"my-agenda-group\"/>";
         AgendaGroupSetFocusCommand command = marshaller.unmarshall(xmlCommand, AgendaGroupSetFocusCommand.class);
-        assertEquals("my-agenda-group", command.getName());
+        assertThat(command.getName()).isEqualTo("my-agenda-group");
 
-        assertEquals(xmlCommand, marshaller.marshall(command));
+        assertThat(marshaller.marshall(command)).isEqualTo(xmlCommand);
     }
 
     @Test
@@ -168,7 +168,7 @@ public class CommandsMarshallingTest {
         String xmlCommand = "<delete fact-handle=\"0:234:345:456:567:789\"/>";
         DeleteCommand command = marshaller.unmarshall(xmlCommand, DeleteCommand.class);
 
-        assertEquals("<delete fact-handle=\"0:234:345:456:567:789:NON_TRAIT:null\"/>", marshaller.marshall(command));
+        assertThat(marshaller.marshall(command)).isEqualTo("<delete fact-handle=\"0:234:345:456:567:789:NON_TRAIT:null\"/>");
     }
 
     @Test
@@ -176,23 +176,23 @@ public class CommandsMarshallingTest {
         String xmlCommand = "<get-fact-handles/>";
         GetFactHandlesCommand command = marshaller.unmarshall( xmlCommand, GetFactHandlesCommand.class );
 
-        assertEquals("<get-fact-handles disconnected=\"false\"/>", marshaller.marshall(command));
+        assertThat(marshaller.marshall(command)).isEqualTo("<get-fact-handles disconnected=\"false\"/>");
     }
 
     @Test
     public void testMarshallGetSessionTimeCommand() {
         String xmlCommand = "<get-session-time out-identifier=\"session-currenttime\"/>";
         GetSessionTimeCommand command = marshaller.unmarshall( xmlCommand, GetSessionTimeCommand.class );
-        assertEquals(xmlCommand, marshaller.marshall(command));
+        assertThat(marshaller.marshall(command)).isEqualTo(xmlCommand);
     }
 
     @Test
     public void testMarshallAdvanceSessionTimeCommand() {
         String xmlCommand = "<advance-session-time out-identifier=\"session-advancecurrenttime\" amount=\"2\" unit=\"DAYS\"/>";
         AdvanceSessionTimeCommand command = marshaller.unmarshall( xmlCommand, AdvanceSessionTimeCommand.class );
-        assertEquals( 2L, command.getAmount() );
-        assertEquals( TimeUnit.DAYS, command.getUnit() );
-        assertEquals(xmlCommand, marshaller.marshall(command));
+        assertThat(command.getAmount() ).isEqualTo(2L);
+        assertThat(command.getUnit() ).isEqualTo(TimeUnit.DAYS);
+        assertThat(marshaller.marshall(command)).isEqualTo(xmlCommand);
     }
 
     // TODO determine what other commands are supported and add tests for them

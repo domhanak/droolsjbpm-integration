@@ -36,7 +36,7 @@ import org.kie.server.client.balancer.impl.RoundRobinBalancerStrategy;
 import org.kie.server.client.impl.AbstractKieServicesClientImpl;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class LoadBalancerClientTest {
 
@@ -110,16 +110,16 @@ public class LoadBalancerClientTest {
     @Test
     public void testCloneConfigurationWithLoadBalancer() {
         KieServicesConfiguration cloned = config.clone();
-        assertNotNull(cloned);
-        assertNull(cloned.getLoadBalancer());
+        assertThat(cloned).isNotNull();
+        assertThat(cloned.getLoadBalancer()).isNull();
 
         cloned.setLoadBalancer(LoadBalancer.getDefault("test url"));
 
         KieServicesConfiguration cloneOfCloned = cloned.clone();
-        assertNotNull(cloned);
-        assertNotNull(cloned.getLoadBalancer());
+        assertThat(cloned).isNotNull();
+        assertThat(cloned.getLoadBalancer()).isNotNull();
 
-        assertEquals(cloned.getLoadBalancer(), cloneOfCloned.getLoadBalancer());
+        assertThat(cloneOfCloned.getLoadBalancer()).isEqualTo(cloned.getLoadBalancer());
     }
 
     @Test
@@ -128,20 +128,20 @@ public class LoadBalancerClientTest {
         KieServicesClient client = KieServicesFactory.newKieServicesClient(config);
 
         List<String> available = ((AbstractKieServicesClientImpl)client).getLoadBalancer().getAvailableEndpoints();
-        assertNotNull(available);
-        assertEquals(3, available.size());
+        assertThat(available).isNotNull();
+        assertThat(available).hasSize(3);
 
         ServiceResponse<KieServerInfo> response = client.getServerInfo();
         assertSuccess(response);
-        assertEquals("Server version", "1", response.getResult().getVersion());
+        assertThat(response.getResult().getVersion()).as("Server version").isEqualTo("1");
 
         response = client.getServerInfo();
         assertSuccess(response);
-        assertEquals("Server version", "2", response.getResult().getVersion());
+        assertThat(response.getResult().getVersion()).as("Server version").isEqualTo("2");
 
         response = client.getServerInfo();
         assertSuccess(response);
-        assertEquals("Server version", "3", response.getResult().getVersion());
+        assertThat(response.getResult().getVersion()).as("Server version").isEqualTo("3");
     }
 
     @Test
@@ -150,20 +150,20 @@ public class LoadBalancerClientTest {
         KieServicesClient client = KieServicesFactory.newKieServicesClient(config);
 
         List<String> available = ((AbstractKieServicesClientImpl)client).getLoadBalancer().getAvailableEndpoints();
-        assertNotNull(available);
-        assertEquals(3, available.size());
+        assertThat(available).isNotNull();
+        assertThat(available).hasSize(3);
 
         ServiceResponse<KieServerInfo> response = client.getServerInfo();
         assertSuccess(response);
-//        assertEquals("Server version", "1", response.getResult().getVersion());
+//        assertThat(response.getResult().getVersion()).as("Server version").isEqualTo("1");
 
         response = client.getServerInfo();
         assertSuccess(response);
-//        assertEquals("Server version", "2", response.getResult().getVersion());
+//        assertThat(response.getResult().getVersion()).as("Server version").isEqualTo("2");
 
         response = client.getServerInfo();
         assertSuccess(response);
-//        assertEquals("Server version", "3", response.getResult().getVersion());
+//        assertThat(response.getResult().getVersion()).as("Server version").isEqualTo("3");
     }
 
     @Test
@@ -175,23 +175,23 @@ public class LoadBalancerClientTest {
 
         ServiceResponse<KieServerInfo> response = client.getServerInfo();
         assertSuccess(response);
-        assertEquals("Server version", "2", response.getResult().getVersion());
+        assertThat(response.getResult().getVersion()).as("Server version").isEqualTo("2");
 
         response = client.getServerInfo();
         assertSuccess(response);
-        assertEquals("Server version", "3", response.getResult().getVersion());
+        assertThat(response.getResult().getVersion()).as("Server version").isEqualTo("3");
 
         response = client.getServerInfo();
         assertSuccess(response);
-        assertEquals("Server version", "2", response.getResult().getVersion());
+        assertThat(response.getResult().getVersion()).as("Server version").isEqualTo("2");
 
         response = client.getServerInfo();
         assertSuccess(response);
-        assertEquals("Server version", "3", response.getResult().getVersion());
+        assertThat(response.getResult().getVersion()).as("Server version").isEqualTo("3");
 
         List<String> available = ((AbstractKieServicesClientImpl)client).getLoadBalancer().getAvailableEndpoints();
-        assertNotNull(available);
-        assertEquals(2, available.size());
+        assertThat(available).isNotNull();
+        assertThat(available).hasSize(2);
 
         // now let's put back online server 1
         wireMockServer1.start();
@@ -200,20 +200,20 @@ public class LoadBalancerClientTest {
         waitForResult.get(5, TimeUnit.SECONDS);
 
         available = ((AbstractKieServicesClientImpl)client).getLoadBalancer().getAvailableEndpoints();
-        assertNotNull(available);
-        assertEquals(3, available.size());
+        assertThat(available).isNotNull();
+        assertThat(available).hasSize(3);
 
         response = client.getServerInfo();
         assertSuccess(response);
-        assertEquals("Server version", "2", response.getResult().getVersion());
+        assertThat(response.getResult().getVersion()).as("Server version").isEqualTo("2");
 
         response = client.getServerInfo();
         assertSuccess(response);
-        assertEquals("Server version", "3", response.getResult().getVersion());
+        assertThat(response.getResult().getVersion()).as("Server version").isEqualTo("3");
         // this is the most important as it was offline before (server 1)
         response = client.getServerInfo();
         assertSuccess(response);
-        assertEquals("Server version", "1", response.getResult().getVersion());
+        assertThat(response.getResult().getVersion()).as("Server version").isEqualTo("1");
     }
 
     @Test
@@ -233,7 +233,7 @@ public class LoadBalancerClientTest {
         KieServicesClient client = KieServicesFactory.newKieServicesClient(config);
         ServiceResponse<KieServerInfo> response = client.getServerInfo();
         assertSuccess(response);
-        assertEquals("Server version", "1", response.getResult().getVersion());
+        assertThat(response.getResult().getVersion()).as("Server version").isEqualTo("1");
 
         wireMockServer1.stop();
         wireMockServer2.stop();
@@ -243,7 +243,7 @@ public class LoadBalancerClientTest {
             client.getServerInfo();
             fail("No servers available as all of them were stopped");
         } catch (KieServerHttpRequestException e) {
-            assertEquals("No available endpoints found", e.getMessage());
+            assertThat(e.getMessage()).isEqualTo("No available endpoints found");
         }
 
         // now let's put back online server 1
@@ -253,16 +253,16 @@ public class LoadBalancerClientTest {
             client.getServerInfo();
             fail("No servers available even though one was started as load balancer was not refreshed");
         } catch (KieServerHttpRequestException e) {
-            assertEquals("No available endpoints found", e.getMessage());
+            assertThat(e.getMessage()).isEqualTo("No available endpoints found");
         }
         
-        assertEquals(2, checkFailedEndpointsJob.size());
+        assertThat(checkFailedEndpointsJob).hasSize(2);
         Future<?> waitingForJobsToComplete = checkFailedEndpointsJob.get(1);
         waitingForJobsToComplete.get(5, TimeUnit.SECONDS);
         
         response = client.getServerInfo();
         assertSuccess(response);
-        assertEquals("Server version", "1", response.getResult().getVersion());
+        assertThat(response.getResult().getVersion()).as("Server version").isEqualTo("1");
     }
 
     @Test
@@ -281,13 +281,13 @@ public class LoadBalancerClientTest {
         }
 
         List<String> failed = ((AbstractKieServicesClientImpl)client).getLoadBalancer().getFailedEndpoints();
-        assertEquals(1, failed.size());
+        assertThat(failed).hasSize(1);
 
         ((AbstractKieServicesClientImpl)client).getLoadBalancer().activate(mockServerBaseUri1);
 
         ServiceResponse<KieServerInfo> response = client.getServerInfo();
         assertSuccess(response);
-        assertEquals("Server version", "1", response.getResult().getVersion());
+        assertThat(response.getResult().getVersion()).as("Server version").isEqualTo("1");
     }
 
     @Test
@@ -302,6 +302,6 @@ public class LoadBalancerClientTest {
     }
 
     private void assertSuccess(ServiceResponse<?> response) {
-        assertEquals("Response type", ServiceResponse.ResponseType.SUCCESS, response.getType());
+        assertThat(response.getType()).as("Response type").isEqualTo(ServiceResponse.ResponseType.SUCCESS);
     }
 }

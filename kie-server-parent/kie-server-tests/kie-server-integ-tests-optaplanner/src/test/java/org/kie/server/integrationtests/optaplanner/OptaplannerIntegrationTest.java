@@ -35,7 +35,7 @@ import org.kie.server.integrationtests.shared.KieServerReflections;
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 import org.optaplanner.core.impl.solver.ProblemFactChange;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class OptaplannerIntegrationTest
         extends OptaplannerKieServerBaseIntegrationTest {
@@ -150,7 +150,7 @@ public class OptaplannerIntegrationTest
         SolverInstance solverInstance = solverClient.createSolver(CONTAINER_1_ID,
                                                                   SOLVER_1_ID,
                                                                   SOLVER_1_CONFIG);
-        assertNotNull(solverInstance);
+        assertThat(solverInstance).isNotNull();
 
         try {
             solverClient.createSolver(CONTAINER_1_ID,
@@ -180,11 +180,11 @@ public class OptaplannerIntegrationTest
         SolverInstance solverInstance = solverClient.createSolver(CONTAINER_1_ID,
                                                                   SOLVER_1_ID,
                                                                   SOLVER_1_CONFIG);
-        assertNotNull(solverInstance);
+        assertThat(solverInstance).isNotNull();
 
         solverInstance = solverClient.getSolver(CONTAINER_1_ID,
                                                 SOLVER_1_ID);
-        assertNotNull(solverInstance);
+        assertThat(solverInstance).isNotNull();
         assertEquals(CONTAINER_1_ID,
                      solverInstance.getContainerId());
         assertEquals(SOLVER_1_CONFIG,
@@ -196,8 +196,8 @@ public class OptaplannerIntegrationTest
                      solverInstance.getSolverInstanceKey());
         assertEquals(SolverInstance.SolverStatus.NOT_SOLVING,
                      solverInstance.getStatus());
-        assertNotNull(solverInstance.getScoreWrapper());
-        assertNull(solverInstance.getScoreWrapper().toScore());
+        assertThat(solverInstance.getScoreWrapper()).isNotNull();
+        assertThat(solverInstance.getScoreWrapper().toScore()).isNull();
     }
 
     @Test
@@ -215,7 +215,7 @@ public class OptaplannerIntegrationTest
     @Test
     public void testGetSolvers() {
         List<SolverInstance> solverInstanceList = solverClient.getSolvers(CONTAINER_1_ID);
-        assertNotNull(solverInstanceList);
+        assertThat(solverInstanceList).isNotNull();
         assertEquals(0,
                      solverInstanceList.size());
 
@@ -224,7 +224,7 @@ public class OptaplannerIntegrationTest
                                   SOLVER_1_CONFIG);
 
         solverInstanceList = solverClient.getSolvers(CONTAINER_1_ID);
-        assertNotNull(solverInstanceList);
+        assertThat(solverInstanceList).isNotNull();
         assertEquals(1,
                      solverInstanceList.size());
 
@@ -240,8 +240,8 @@ public class OptaplannerIntegrationTest
                      returnedInstance.getSolverInstanceKey());
         assertEquals(SolverInstance.SolverStatus.NOT_SOLVING,
                      returnedInstance.getStatus());
-        assertNotNull(returnedInstance.getScoreWrapper());
-        assertNull(returnedInstance.getScoreWrapper().toScore());
+        assertThat(returnedInstance.getScoreWrapper()).isNotNull();
+        assertThat(returnedInstance.getScoreWrapper().toScore()).isNull();
     }
 
     @Test
@@ -249,7 +249,7 @@ public class OptaplannerIntegrationTest
         SolverInstance solverInstance = solverClient.createSolver(CONTAINER_1_ID,
                                                                   SOLVER_1_ID,
                                                                   SOLVER_1_CONFIG);
-        assertNotNull(solverInstance);
+        assertThat(solverInstance).isNotNull();
         assertEquals(SolverInstance.SolverStatus.NOT_SOLVING,
                      solverInstance.getStatus());
 
@@ -268,7 +268,7 @@ public class OptaplannerIntegrationTest
             Thread.sleep(3000);
             solverInstance = solverClient.getSolver(CONTAINER_1_ID,
                                                     SOLVER_1_ID);
-            assertNotNull(solverInstance);
+            assertThat(solverInstance).isNotNull();
         }
 
         assertEquals(SolverInstance.SolverStatus.NOT_SOLVING,
@@ -292,7 +292,7 @@ public class OptaplannerIntegrationTest
         SolverInstance solverInstance = solverClient.createSolver(CONTAINER_1_ID,
                                                                   SOLVER_1_ID,
                                                                   daemon ? SOLVER_1_REALTIME_DAEMON_CONFIG : SOLVER_1_REALTIME_CONFIG);
-        assertNotNull(solverInstance);
+        assertThat(solverInstance).isNotNull();
         assertEquals(SolverInstance.SolverStatus.NOT_SOLVING,
                      solverInstance.getStatus());
 
@@ -330,7 +330,7 @@ public class OptaplannerIntegrationTest
 
         Thread.sleep(3000);
 
-        assertNotNull(computerList);
+        assertThat(computerList).isNotNull();
 
         for (int i = 0; i < numberOfComputersToAdd; i++) {
             ProblemFactChange<?> problemFactChange = loadDeleteProblemFactChange(computerList.get(i));
@@ -366,7 +366,7 @@ public class OptaplannerIntegrationTest
         SolverInstance solverInstance = solverClient.createSolver(CONTAINER_1_ID,
                                                                   SOLVER_1_ID,
                                                                   daemon ? SOLVER_1_REALTIME_DAEMON_CONFIG : SOLVER_1_REALTIME_CONFIG);
-        assertNotNull(solverInstance);
+        assertThat(solverInstance).isNotNull();
         assertEquals(SolverInstance.SolverStatus.NOT_SOLVING,
                      solverInstance.getStatus());
 
@@ -399,7 +399,7 @@ public class OptaplannerIntegrationTest
             computerList = getCloudBalanceComputerList(bestSolution);
         } while (initialComputerCount + numberOfComputersToAdd != computerList.size());
 
-        assertNotNull(computerList);
+        assertThat(computerList).isNotNull();
         assertTrue(solverClient.isEveryProblemFactChangeProcessed(CONTAINER_1_ID,
                                                                   SOLVER_1_ID));
 
@@ -448,7 +448,7 @@ public class OptaplannerIntegrationTest
         SolverInstance solverInstance = solverClient.createSolver(CONTAINER_1_ID,
                                                                   SOLVER_1_ID,
                                                                   SOLVER_1_CONFIG);
-        assertNotNull(solverInstance);
+        assertThat(solverInstance).isNotNull();
         assertEquals(SolverInstance.SolverStatus.NOT_SOLVING,
                      solverInstance.getStatus());
 
@@ -494,11 +494,11 @@ public class OptaplannerIntegrationTest
         while (!Thread.currentThread().isInterrupted()) {
             solverInstance = solverClient.getSolverWithBestSolution(CONTAINER_1_ID,
                                                                     SOLVER_1_ID);
-            assertNotNull(solverInstance);
+            assertThat(solverInstance).isNotNull();
             solution = solverInstance.getBestSolution();
 
             ScoreWrapper scoreWrapper = solverInstance.getScoreWrapper();
-            assertNotNull(scoreWrapper);
+            assertThat(scoreWrapper).isNotNull();
 
             if (scoreWrapper.toScore() != null) {
                 assertEquals(HardSoftScore.class,
@@ -512,11 +512,11 @@ public class OptaplannerIntegrationTest
             }
             Thread.sleep(1000);
         }
-        assertNotNull(score);
-        assertTrue(score.isSolutionInitialized());
-        assertTrue(score.getHardScore() <= 0);
+        assertThat(score).isNotNull();
+        assertThat(score.isSolutionInitialized()).isTrue();
+        assertThat(score.getHardScore() <= 0).isTrue();
         // A soft score of 0 is impossible because we'll always need at least 1 computer
-        assertTrue(score.getSoftScore() < 0);
+        assertThat(score.getSoftScore() < 0).isTrue();
 
         List<?> computerList = (List<?>) KieServerReflections.valueOf(solution,
                                                                       "computerList");
@@ -529,9 +529,9 @@ public class OptaplannerIntegrationTest
         for (Object process : processList) {
             Object computer = KieServerReflections.valueOf(process,
                                                            "computer");
-            assertNotNull(computer);
+            assertThat(computer).isNotNull();
             // TODO: Change to identity comparation after @XmlID is implemented
-            assertTrue(computerList.contains(computer));
+            assertThat(computerList.contains(computer)).isTrue();
         }
 
         solverClient.disposeSolver(CONTAINER_1_ID,
@@ -601,7 +601,7 @@ public class OptaplannerIntegrationTest
 
         instance = solverClient.getSolver(CONTAINER_1_ID,
                                           SOLVER_1_ID);
-        assertTrue(instance.getStatus() == SolverInstance.SolverStatus.TERMINATING_EARLY
+        assertThat(instance.getStatus().isTrue() == SolverInstance.SolverStatus.TERMINATING_EARLY
                            || instance.getStatus() == SolverInstance.SolverStatus.NOT_SOLVING);
 
         solverClient.disposeSolver(CONTAINER_1_ID,

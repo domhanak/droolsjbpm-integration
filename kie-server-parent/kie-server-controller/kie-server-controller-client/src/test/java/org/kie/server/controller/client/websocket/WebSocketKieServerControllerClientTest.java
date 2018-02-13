@@ -36,7 +36,7 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
@@ -83,7 +83,7 @@ public class WebSocketKieServerControllerClientTest {
 
             final DescriptorCommand command = WebSocketUtils.unmarshal(contentCaptor.getValue(),
                                                                  DescriptorCommand.class);
-            assertNotNull(command);
+            assertThat(command).isNotNull();
             assertEquals(name,
                          command.getService());
             assertEquals(m.getName(),

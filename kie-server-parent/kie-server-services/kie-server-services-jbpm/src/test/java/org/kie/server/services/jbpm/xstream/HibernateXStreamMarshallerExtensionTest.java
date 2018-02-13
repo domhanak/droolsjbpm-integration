@@ -36,6 +36,6 @@ public class HibernateXStreamMarshallerExtensionTest {
         PersistentBag bag = new PersistentBag(session, new ArrayList<String>());
         String expectedOutput = "<list/>";
         Marshaller marshaller = MarshallerFactory.getMarshaller(MarshallingFormat.XSTREAM, getClass().getClassLoader());
-        Assert.assertEquals(expectedOutput, marshaller.marshall(bag));
+        Assert.assertThat(marshaller.marshall(bag)).isEqualTo(expectedOutput);
     }
 }

@@ -30,7 +30,7 @@ import org.kie.server.api.exception.KieServicesException;
 import org.kie.server.integrationtests.jbpm.JbpmKieServerBaseIntegrationTest;
 import org.kie.server.integrationtests.shared.KieServerDeployer;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class ProcessInstanceMigrationIntegrationTest extends JbpmKieServerBaseIntegrationTest {
 
@@ -63,40 +63,40 @@ public class ProcessInstanceMigrationIntegrationTest extends JbpmKieServerBaseIn
 
         try {
             List<TaskSummary> tasks = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertEquals(1, tasks.size());
+            assertThat(tasks).hasSize(1);
             TaskSummary task = tasks.get(0);
-            assertEquals("Evaluate items?", tasks.get(0).getName());
+            assertThat(tasks.get(0).getName()).isEqualTo("Evaluate items?");
 
-            assertEquals(CONTAINER_ID, task.getContainerId());
-            assertEquals(PROCESS_ID_EVALUATION, task.getProcessId());
-            assertEquals(processInstanceId, task.getProcessInstanceId());
+            assertThat(task.getContainerId()).isEqualTo(CONTAINER_ID);
+            assertThat(task.getProcessId()).isEqualTo(PROCESS_ID_EVALUATION);
+            assertThat(task.getProcessInstanceId()).isEqualTo(processInstanceId);
 
             // migrate process instance to evaluation 2 in container 2
             MigrationReportInstance report = processAdminClient.migrateProcessInstance(CONTAINER_ID, processInstanceId, CONTAINER_ID_2, PROCESS_ID_EVALUATION_2);
-            assertNotNull(report);
-            assertTrue(report.isSuccessful());
+            assertThat(report).isNotNull();
+            assertThat(report.isSuccessful()).isTrue();
 
             // it stays in the same task
             tasks = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertEquals(1, tasks.size());
+            assertThat(tasks).hasSize(1);
 
             task = tasks.get(0);
-            assertEquals("Evaluate items?", task.getName());
-            assertEquals(CONTAINER_ID_2, task.getContainerId());
-            assertEquals(PROCESS_ID_EVALUATION_2, task.getProcessId());
-            assertEquals(processInstanceId, task.getProcessInstanceId());
+            assertThat(task.getName()).isEqualTo("Evaluate items?");
+            assertThat(task.getContainerId()).isEqualTo(CONTAINER_ID_2);
+            assertThat(task.getProcessId()).isEqualTo(PROCESS_ID_EVALUATION_2);
+            assertThat(task.getProcessInstanceId()).isEqualTo(processInstanceId);
 
             taskClient.completeAutoProgress(CONTAINER_ID_2, task.getId(), USER_YODA, null);
 
             // but next task should be Approve user task
             tasks = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertEquals(1, tasks.size());
+            assertThat(tasks).hasSize(1);
 
             task = tasks.get(0);
-            assertEquals("Approve", task.getName());
-            assertEquals(CONTAINER_ID_2, task.getContainerId());
-            assertEquals(PROCESS_ID_EVALUATION_2, task.getProcessId());
-            assertEquals(processInstanceId, task.getProcessInstanceId());
+            assertThat(task.getName()).isEqualTo("Approve");
+            assertThat(task.getContainerId()).isEqualTo(CONTAINER_ID_2);
+            assertThat(task.getProcessId()).isEqualTo(PROCESS_ID_EVALUATION_2);
+            assertThat(task.getProcessInstanceId()).isEqualTo(processInstanceId);
 
         } finally {
             try {
@@ -114,30 +114,30 @@ public class ProcessInstanceMigrationIntegrationTest extends JbpmKieServerBaseIn
         Long processInstanceId = processClient.startProcess(CONTAINER_ID, PROCESS_ID_EVALUATION);
         try {
             List<TaskSummary> tasks = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertEquals(1, tasks.size());
+            assertThat(tasks).hasSize(1);
             TaskSummary task = tasks.get(0);
-            assertEquals("Evaluate items?", tasks.get(0).getName());
+            assertThat(tasks.get(0).getName()).isEqualTo("Evaluate items?");
 
-            assertEquals(CONTAINER_ID, task.getContainerId());
-            assertEquals(PROCESS_ID_EVALUATION, task.getProcessId());
-            assertEquals(processInstanceId, task.getProcessInstanceId());
+            assertThat(task.getContainerId()).isEqualTo(CONTAINER_ID);
+            assertThat(task.getProcessId()).isEqualTo(PROCESS_ID_EVALUATION);
+            assertThat(task.getProcessInstanceId()).isEqualTo(processInstanceId);
 
             Map<String, String> nodeMapping = new HashMap<String, String>();
             nodeMapping.put("_4E8E7545-FB70-494E-9136-2B9ABE655889", "_56FB3E50-DEDD-415B-94DD-0357C91836B9");
             // migrate process instance to evaluation 2 in container 2
             MigrationReportInstance report = processAdminClient.migrateProcessInstance(CONTAINER_ID, processInstanceId, CONTAINER_ID_2, PROCESS_ID_EVALUATION_2, nodeMapping);
-            assertNotNull(report);
-            assertTrue(report.isSuccessful());
+            assertThat(report).isNotNull();
+            assertThat(report.isSuccessful()).isTrue();
 
             // migrated to Approve user task
             tasks = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertEquals(1, tasks.size());
+            assertThat(tasks).hasSize(1);
 
             task = tasks.get(0);
-            assertEquals("Approve", task.getName());
-            assertEquals(CONTAINER_ID_2, task.getContainerId());
-            assertEquals(PROCESS_ID_EVALUATION_2, task.getProcessId());
-            assertEquals(processInstanceId, task.getProcessInstanceId());
+            assertThat(task.getName()).isEqualTo("Approve");
+            assertThat(task.getContainerId()).isEqualTo(CONTAINER_ID_2);
+            assertThat(task.getProcessId()).isEqualTo(PROCESS_ID_EVALUATION_2);
+            assertThat(task.getProcessInstanceId()).isEqualTo(processInstanceId);
 
         } finally {
             try {
@@ -161,44 +161,44 @@ public class ProcessInstanceMigrationIntegrationTest extends JbpmKieServerBaseIn
         }
         try {
             List<TaskSummary> tasks = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertEquals(5, tasks.size());
+            assertThat(tasks).hasSize(5);
 
             for (TaskSummary task : tasks) {
-                assertEquals("Evaluate items?", tasks.get(0).getName());
+                assertThat(tasks.get(0).getName()).isEqualTo("Evaluate items?");
 
-                assertEquals(CONTAINER_ID, task.getContainerId());
-                assertEquals(PROCESS_ID_EVALUATION, task.getProcessId());
+                assertThat(task.getContainerId()).isEqualTo(CONTAINER_ID);
+                assertThat(task.getProcessId()).isEqualTo(PROCESS_ID_EVALUATION);
             }
 
 
             // migrate process instance to evaluation 2 in container 2
             List<MigrationReportInstance> reports = processAdminClient.migrateProcessInstances(CONTAINER_ID, ids, CONTAINER_ID_2, PROCESS_ID_EVALUATION_2);
-            assertNotNull(reports);
+            assertThat(reports).isNotNull();
 
             for (MigrationReportInstance report : reports) {
-                assertTrue(report.isSuccessful());
+                assertThat(report.isSuccessful()).isTrue();
             }
 
             // it stays in the same task
             tasks = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertEquals(5, tasks.size());
+            assertThat(tasks).hasSize(5);
 
             for (TaskSummary task : tasks) {
-                assertEquals("Evaluate items?", tasks.get(0).getName());
+                assertThat(tasks.get(0).getName()).isEqualTo("Evaluate items?");
 
-                assertEquals(CONTAINER_ID_2, task.getContainerId());
-                assertEquals(PROCESS_ID_EVALUATION_2, task.getProcessId());
+                assertThat(task.getContainerId()).isEqualTo(CONTAINER_ID_2);
+                assertThat(task.getProcessId()).isEqualTo(PROCESS_ID_EVALUATION_2);
 
                 taskClient.completeAutoProgress(CONTAINER_ID_2, task.getId(), USER_YODA, null);
             }
             // but next task should be Approve user task
             tasks = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertEquals(5, tasks.size());
+            assertThat(tasks).hasSize(5);
 
             for (TaskSummary task : tasks) {
-                assertEquals("Approve", task.getName());
-                assertEquals(CONTAINER_ID_2, task.getContainerId());
-                assertEquals(PROCESS_ID_EVALUATION_2, task.getProcessId());
+                assertThat(task.getName()).isEqualTo("Approve");
+                assertThat(task.getContainerId()).isEqualTo(CONTAINER_ID_2);
+                assertThat(task.getProcessId()).isEqualTo(PROCESS_ID_EVALUATION_2);
             }
         } finally {
             for (Long processInstanceId : ids) {
@@ -224,33 +224,33 @@ public class ProcessInstanceMigrationIntegrationTest extends JbpmKieServerBaseIn
         }
         try {
             List<TaskSummary> tasks = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertEquals(5, tasks.size());
+            assertThat(tasks).hasSize(5);
 
             for (TaskSummary task : tasks) {
-                assertEquals("Evaluate items?", tasks.get(0).getName());
+                assertThat(tasks.get(0).getName()).isEqualTo("Evaluate items?");
 
-                assertEquals(CONTAINER_ID, task.getContainerId());
-                assertEquals(PROCESS_ID_EVALUATION, task.getProcessId());
+                assertThat(task.getContainerId()).isEqualTo(CONTAINER_ID);
+                assertThat(task.getProcessId()).isEqualTo(PROCESS_ID_EVALUATION);
             }
 
             Map<String, String> nodeMapping = new HashMap<String, String>();
             nodeMapping.put("_4E8E7545-FB70-494E-9136-2B9ABE655889", "_56FB3E50-DEDD-415B-94DD-0357C91836B9");
             // migrate process instance to evaluation 2 in container 2
             List<MigrationReportInstance> reports = processAdminClient.migrateProcessInstances(CONTAINER_ID, ids, CONTAINER_ID_2, PROCESS_ID_EVALUATION_2, nodeMapping);
-            assertNotNull(reports);
+            assertThat(reports).isNotNull();
 
             for (MigrationReportInstance report : reports) {
-                assertTrue(report.isSuccessful());
+                assertThat(report.isSuccessful()).isTrue();
             }
 
             // but next task should be Approve user task
             tasks = taskClient.findTasksAssignedAsPotentialOwner(USER_YODA, 0, 10);
-            assertEquals(5, tasks.size());
+            assertThat(tasks).hasSize(5);
 
             for (TaskSummary task : tasks) {
-                assertEquals("Approve", task.getName());
-                assertEquals(CONTAINER_ID_2, task.getContainerId());
-                assertEquals(PROCESS_ID_EVALUATION_2, task.getProcessId());
+                assertThat(task.getName()).isEqualTo("Approve");
+                assertThat(task.getContainerId()).isEqualTo(CONTAINER_ID_2);
+                assertThat(task.getProcessId()).isEqualTo(PROCESS_ID_EVALUATION_2);
             }
         } finally {
             for (Long processInstanceId : ids) {

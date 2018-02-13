@@ -28,7 +28,7 @@ import org.kie.server.api.model.ReleaseId;
 import org.kie.server.api.model.instance.TaskSummary;
 import org.kie.server.integrationtests.config.TestConfig;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 import org.kie.server.integrationtests.shared.KieServerAssert;
 import org.kie.server.integrationtests.shared.KieServerDeployer;
 
@@ -68,28 +68,28 @@ public class BARuntimeDataServiceIntegrationTest extends JbpmKieServerBaseIntegr
         try {
 
             List<TaskSummary> tasks = taskClient.findTasksAssignedAsBusinessAdministrator(USER_ADMINISTRATOR, 0, 10);
-            assertNotNull(tasks);
-            assertEquals(1, tasks.size());
+            assertThat(tasks).isNotNull();
+            assertThat(tasks).hasSize(1);
 
             TaskSummary taskInstance = tasks.get(0);
-            assertNotNull(taskInstance);
-            assertEquals("First task", taskInstance.getName());
+            assertThat(taskInstance).isNotNull();
+            assertThat(taskInstance.getName()).isEqualTo("First task");
             KieServerAssert.assertNullOrEmpty(taskInstance.getDescription());
-            assertEquals("Reserved", taskInstance.getStatus());
-            assertEquals(0, taskInstance.getPriority().intValue());
-            assertEquals(USER_YODA, taskInstance.getActualOwner());
-            assertEquals(USER_YODA, taskInstance.getCreatedBy());
-            assertEquals(PROCESS_ID_USERTASK, taskInstance.getProcessId());
-            assertEquals(CONTAINER_ID, taskInstance.getContainerId());
-            assertEquals(-1, taskInstance.getParentId().longValue());
-            assertEquals(processInstanceId, taskInstance.getProcessInstanceId());
+            assertThat(taskInstance.getStatus()).isEqualTo("Reserved");
+            assertThat(taskInstance.getPriority().intValue()).isEqualTo(0);
+            assertThat(taskInstance.getActualOwner()).isEqualTo(USER_YODA);
+            assertThat(taskInstance.getCreatedBy()).isEqualTo(USER_YODA);
+            assertThat(taskInstance.getProcessId()).isEqualTo(PROCESS_ID_USERTASK);
+            assertThat(taskInstance.getContainerId()).isEqualTo(CONTAINER_ID);
+            assertThat(taskInstance.getParentId().longValue()).isEqualTo(-1);
+            assertThat(taskInstance.getProcessInstanceId()).isEqualTo(processInstanceId);
 
             List<String> status = new ArrayList<String>();
             status.add(Status.InProgress.toString());
 
             tasks = taskClient.findTasksAssignedAsBusinessAdministrator(USER_ADMINISTRATOR, status, 0, 10);
-            assertNotNull(tasks);
-            assertEquals(0, tasks.size());
+            assertThat(tasks).isNotNull();
+            assertThat(tasks).isEmpty();
 
 
         } finally {
@@ -112,28 +112,28 @@ public class BARuntimeDataServiceIntegrationTest extends JbpmKieServerBaseIntegr
         try {
 
             List<TaskSummary> tasks = taskClient.findTasksAssignedAsBusinessAdministrator(USER_ADMINISTRATOR, 0, 10, "t.taskData.processInstanceId", true);
-            assertNotNull(tasks);
-            assertEquals(2, tasks.size());
+            assertThat(tasks).isNotNull();
+            assertThat(tasks).hasSize(2);
             if (processInstanceId < processInstanceId2) {
-                assertEquals(processInstanceId, tasks.get(0).getProcessInstanceId());
-                assertEquals(processInstanceId2, tasks.get(1).getProcessInstanceId());
+                assertThat(tasks.get(0).getProcessInstanceId()).isEqualTo(processInstanceId);
+                assertThat(tasks.get(1).getProcessInstanceId()).isEqualTo(processInstanceId2);
             } else {
-                assertEquals(processInstanceId2, tasks.get(0).getProcessInstanceId());
-                assertEquals(processInstanceId, tasks.get(1).getProcessInstanceId());
+                assertThat(tasks.get(0).getProcessInstanceId()).isEqualTo(processInstanceId2);
+                assertThat(tasks.get(1).getProcessInstanceId()).isEqualTo(processInstanceId);
             }
 
             List<String> status = new ArrayList<>();
             status.add(Status.Reserved.toString());
 
             tasks = taskClient.findTasksAssignedAsBusinessAdministrator(USER_ADMINISTRATOR, status, 0, 10, "t.taskData.processInstanceId", false);
-            assertNotNull(tasks);
-            assertEquals(2, tasks.size());
+            assertThat(tasks).isNotNull();
+            assertThat(tasks).hasSize(2);
             if (processInstanceId < processInstanceId2) {
-                assertEquals(processInstanceId2, tasks.get(0).getProcessInstanceId());
-                assertEquals(processInstanceId, tasks.get(1).getProcessInstanceId());
+                assertThat(tasks.get(0).getProcessInstanceId()).isEqualTo(processInstanceId2);
+                assertThat(tasks.get(1).getProcessInstanceId()).isEqualTo(processInstanceId);
             } else {
-                assertEquals(processInstanceId, tasks.get(0).getProcessInstanceId());
-                assertEquals(processInstanceId2, tasks.get(1).getProcessInstanceId());
+                assertThat(tasks.get(0).getProcessInstanceId()).isEqualTo(processInstanceId);
+                assertThat(tasks.get(1).getProcessInstanceId()).isEqualTo(processInstanceId2);
             }
         } finally {
             processClient.abortProcessInstance(CONTAINER_ID, processInstanceId);

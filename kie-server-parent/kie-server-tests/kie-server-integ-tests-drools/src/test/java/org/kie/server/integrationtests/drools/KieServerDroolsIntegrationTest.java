@@ -44,7 +44,7 @@ import org.kie.server.api.model.ServiceResponse;
 import org.kie.server.api.model.ServiceResponsesList;
 import org.kie.server.integrationtests.category.Smoke;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 import org.kie.server.integrationtests.shared.KieServerDeployer;
 import org.kie.server.integrationtests.shared.KieServerReflections;
 
@@ -93,10 +93,10 @@ public class KieServerDroolsIntegrationTest extends DroolsKieServerBaseIntegrati
         commands.add(commandsFactory.newFireAllRules());
 
         ServiceResponse<ExecutionResults> reply = ruleClient.executeCommandsWithResults(CONTAINER_ID, batchExecution);
-        Assert.assertEquals(ServiceResponse.ResponseType.SUCCESS, reply.getType());
+        Assert.assertThat(reply.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
         ExecutionResults results = reply.getResult();
         Object value = results.getValue(MESSAGE_OUT_IDENTIFIER);
-        Assert.assertEquals(MESSAGE_RESPONSE, KieServerReflections.valueOf(value, MESSAGE_TEXT_FIELD));
+        Assert.assertThat(KieServerReflections.valueOf(value).isCloseTo(MESSAGE_RESPONSE, within(MESSAGE_TEXT_FIELD)));
     }
 
     @Test
@@ -115,10 +115,10 @@ public class KieServerDroolsIntegrationTest extends DroolsKieServerBaseIntegrati
         String marshalledCommands = marshaller.marshall(batchExecution);
 
         ServiceResponse<ExecutionResults> reply = ruleClient.executeCommandsWithResults(CONTAINER_ID, marshalledCommands);
-        Assert.assertEquals(ServiceResponse.ResponseType.SUCCESS, reply.getType());
+        Assert.assertThat(reply.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
         ExecutionResults results = reply.getResult();
         Object value = results.getValue(MESSAGE_OUT_IDENTIFIER);
-        Assert.assertEquals(MESSAGE_RESPONSE, KieServerReflections.valueOf(value, MESSAGE_TEXT_FIELD));
+        Assert.assertThat(KieServerReflections.valueOf(value).isCloseTo(MESSAGE_RESPONSE, within(MESSAGE_TEXT_FIELD)));
     }
 
     @Test
@@ -145,7 +145,7 @@ public class KieServerDroolsIntegrationTest extends DroolsKieServerBaseIntegrati
         ServiceResponsesList reply = client.executeScript(script);
 
         for (ServiceResponse<? extends Object> r : reply.getResponses()) {
-            Assert.assertEquals(ServiceResponse.ResponseType.SUCCESS, r.getType());
+            Assert.assertThat(r.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
         }
     }
 
@@ -155,7 +155,7 @@ public class KieServerDroolsIntegrationTest extends DroolsKieServerBaseIntegrati
         BatchExecutionCommand batchExecution = commandsFactory.newBatchExecution(commands, "xyz");
 
         ServiceResponse<ExecutionResults> reply = ruleClient.executeCommandsWithResults(CONTAINER_ID, batchExecution);
-        Assert.assertEquals(ServiceResponse.ResponseType.FAILURE, reply.getType());
+        Assert.assertThat(reply.getType()).isEqualTo(ServiceResponse.ResponseType.FAILURE);
     }
 
     @Test
@@ -163,7 +163,7 @@ public class KieServerDroolsIntegrationTest extends DroolsKieServerBaseIntegrati
         // Call container info to get conversation Id.
         client.getContainerInfo(CONTAINER_ID);
         String conversationId = client.getConversationId();
-        assertNotNull(conversationId);
+        assertThat(conversationId).isNotNull();
 
         Object message = createInstance(MESSAGE_CLASS_NAME);
         KieServerReflections.setValue(message, MESSAGE_TEXT_FIELD, MESSAGE_REQUEST);
@@ -175,12 +175,12 @@ public class KieServerDroolsIntegrationTest extends DroolsKieServerBaseIntegrati
         commands.add(commandsFactory.newFireAllRules());
 
         ServiceResponse<ExecutionResults> reply = ruleClient.executeCommandsWithResults(CONTAINER_ID, batchExecution);
-        Assert.assertEquals(ServiceResponse.ResponseType.SUCCESS, reply.getType());
+        Assert.assertThat(reply.getType()).isEqualTo(ServiceResponse.ResponseType.SUCCESS);
         ExecutionResults results = reply.getResult();
         Object value = results.getValue(MESSAGE_OUT_IDENTIFIER);
-        Assert.assertEquals(MESSAGE_RESPONSE, KieServerReflections.valueOf(value, MESSAGE_TEXT_FIELD));
+        Assert.assertThat(KieServerReflections.valueOf(value).isCloseTo(MESSAGE_RESPONSE, within(MESSAGE_TEXT_FIELD)));
 
         String afterNextCallConversationId = client.getConversationId();
-        assertEquals(conversationId, afterNextCallConversationId);
+        assertThat(afterNextCallConversationId).isEqualTo(conversationId);
     }
 }

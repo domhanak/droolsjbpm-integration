@@ -27,7 +27,7 @@ import org.kie.server.api.marshalling.Marshaller;
 import org.kie.server.api.marshalling.MarshallerFactory;
 import org.kie.server.api.marshalling.MarshallingFormat;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class JSONMarshallerExtensionTest {
     private static final DateFormat FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
@@ -39,10 +39,10 @@ public class JSONMarshallerExtensionTest {
         Calendar calendar = GregorianCalendar.getInstance();
         
         String marshall = marshaller.marshall(calendar);
-        assertEquals(marshall, "\""+ FORMATTER.format(calendar.getTime()) +"\"" );
+        assertThat("\""+ FORMATTER.format(calendar.getTime()) +"\"" ).isEqualTo(marshall);
         
         GregorianCalendar unmarshall = marshaller.unmarshall(marshall, GregorianCalendar.class);
-        assertEquals(unmarshall, calendar);
+        assertThat(calendar).isEqualTo(unmarshall);
     }
     
 }

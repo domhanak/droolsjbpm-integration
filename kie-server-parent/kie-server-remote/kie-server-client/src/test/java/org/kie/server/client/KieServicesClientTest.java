@@ -30,7 +30,7 @@ import org.kie.server.api.model.ServiceResponse;
 import org.kie.server.client.credentials.EnteredTokenCredentialsProvider;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class KieServicesClientTest extends BaseKieServicesClientTest {
 
@@ -56,7 +56,7 @@ public class KieServicesClientTest extends BaseKieServicesClientTest {
         KieServicesClient client = KieServicesFactory.newKieServicesClient(config);
         ServiceResponse<KieServerInfo> response = client.getServerInfo();
         assertSuccess(response);
-        assertEquals("Server version", "1.2.3", response.getResult().getVersion());
+        assertThat(response.getResult().getVersion()).as("Server version").isEqualTo("1.2.3");
     }
 
     @Test
@@ -86,7 +86,7 @@ public class KieServicesClientTest extends BaseKieServicesClientTest {
         KieServicesClient client = KieServicesFactory.newKieServicesClient(config);
         ServiceResponse<KieContainerResourceList> response = client.listContainers();
         assertSuccess(response);
-        assertEquals("Number of listed containers", 2, response.getResult().getContainers().size());
+        assertThat(response.getResult().getContainers()).as("Number of listed containers").hasSize(2);
     }
 
     @Test
@@ -127,9 +127,9 @@ public class KieServicesClientTest extends BaseKieServicesClientTest {
         ServiceResponse<KieContainerResource> response = client.createContainer("kie1", resource);
         assertSuccess(response);
         KieContainerResource container = response.getResult();
-        assertEquals("Container id", "kie1", container.getContainerId());
-        assertEquals("Release id", releaseId, container.getReleaseId());
-        assertEquals("Resolved release Id", releaseId, container.getResolvedReleaseId());
+        assertThat(container.getContainerId()).as("Container id").isEqualTo("kie1");
+        assertThat(container.getReleaseId()).as("Release id").isEqualTo(releaseId);
+        assertThat(container.getResolvedReleaseId()).as("Resolved release Id").isEqualTo(releaseId);
     }
 
     @Test
@@ -154,7 +154,7 @@ public class KieServicesClientTest extends BaseKieServicesClientTest {
         KieServicesClient client = KieServicesFactory.newKieServicesClient(config);
         ServiceResponse<KieServerInfo> response = client.getServerInfo();
         assertSuccess(response);
-        assertEquals("Server version", "1.2.3", response.getResult().getVersion());
+        assertThat(response.getResult().getVersion()).as("Server version").isEqualTo("1.2.3");
     }
 
     @Test
@@ -173,7 +173,7 @@ public class KieServicesClientTest extends BaseKieServicesClientTest {
         KieServicesClient client = KieServicesFactory.newKieServicesClient(config);
         ServiceResponse<KieServerInfo> response = client.getServerInfo();
         assertSuccess(response);
-        assertEquals("Server version", "1.2.3", response.getResult().getVersion());
+        assertThat(response.getResult().getVersion()).as("Server version").isEqualTo("1.2.3");
 
         verify(1, getRequestedFor(urlEqualTo("/")).withHeader("Authorization", equalTo("Basic bnVsbDpudWxs")));
         verify(0, getRequestedFor(urlEqualTo("/")).withHeader("Authorization", equalTo("Bearer abcdefghijk")));
@@ -196,7 +196,7 @@ public class KieServicesClientTest extends BaseKieServicesClientTest {
         KieServicesClient client = KieServicesFactory.newKieServicesClient(config);
         ServiceResponse<KieServerInfo> response = client.getServerInfo();
         assertSuccess(response);
-        assertEquals("Server version", "1.2.3", response.getResult().getVersion());
+        assertThat(response.getResult().getVersion()).as("Server version").isEqualTo("1.2.3");
 
         verify(1, getRequestedFor(urlEqualTo("/")).withHeader("Authorization", equalTo("Bearer abcdefghijk")));
         verify(0, getRequestedFor(urlEqualTo("/")).withHeader("Authorization", equalTo("Basic bnVsbDpudWxs")));
@@ -222,7 +222,7 @@ public class KieServicesClientTest extends BaseKieServicesClientTest {
         KieServicesClient client = KieServicesFactory.newKieServicesClient(config);
         ServiceResponse<KieServerInfo> response = client.getServerInfo();
         assertSuccess(response);
-        assertEquals("Server version", "1.2.3", response.getResult().getVersion());
+        assertThat(response.getResult().getVersion()).as("Server version").isEqualTo("1.2.3");
 
         verify(1, getRequestedFor(urlEqualTo("/")).withHeader("X-KIE-First-Header", equalTo("first-value")));
         verify(1, getRequestedFor(urlEqualTo("/")).withHeader("X-KIE-Second-Header", equalTo("second value")));
@@ -248,15 +248,15 @@ public class KieServicesClientTest extends BaseKieServicesClientTest {
         assertSuccess(response);
 
         ReleaseId releaseId = response.getResult();
-        assertNotNull(releaseId);
-        assertEquals("Artifact ID", ARTIFACT_ID, releaseId.getArtifactId());
-        assertEquals("Group ID", GROUP_ID, releaseId.getGroupId());
-        assertEquals("Version", VERSION, releaseId.getVersion());
+        assertThat(releaseId).isNotNull();
+        assertThat(releaseId.getArtifactId()).as("Artifact ID").isEqualTo(ARTIFACT_ID);
+        assertThat(releaseId.getGroupId()).as("Group ID").isEqualTo(GROUP_ID);
+        assertThat(releaseId.getVersion()).as("Version").isEqualTo(VERSION);
     }
 
     // TODO create more tests for other operations
 
     private void assertSuccess(ServiceResponse<?> response) {
-        assertEquals("Response type", ServiceResponse.ResponseType.SUCCESS, response.getType());
+        assertThat(response.getType()).as("Response type").isEqualTo(ServiceResponse.ResponseType.SUCCESS);
     }
 }

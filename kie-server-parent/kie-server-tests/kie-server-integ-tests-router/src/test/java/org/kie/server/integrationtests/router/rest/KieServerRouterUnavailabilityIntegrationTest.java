@@ -15,8 +15,8 @@
 
 package org.kie.server.integrationtests.router.rest;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 import java.io.File;
 import java.io.IOException;
@@ -106,34 +106,34 @@ public class KieServerRouterUnavailabilityIntegrationTest extends RestOnlyBaseIn
         Response response = null;
         try (KieServerRouterClient routerClient = new KieServerRouterClient(serverUrl)) {
             Configuration initialConfig = routerClient.getRouterConfig();
-            assertEquals(3, initialConfig.getHostsPerContainer().size());
-            assertEquals(3, initialConfig.getHostsPerServer().size());
+            assertThat(initialConfig.getHostsPerContainer()).hasSize(3);
+            assertThat(initialConfig.getHostsPerServer()).hasSize(3);
 
-            assertEquals(1, initialConfig.getHostsPerContainer().get("container1").size());
-            assertEquals(1, initialConfig.getHostsPerContainer().get("container2").size());
-            assertEquals(1, initialConfig.getHostsPerContainer().get("container3").size());
-            assertEquals(1, initialConfig.getHostsPerServer().get("server1").size());
-            assertEquals(1, initialConfig.getHostsPerServer().get("server2").size());
-            assertEquals(1, initialConfig.getHostsPerServer().get("server3").size());
+            assertThat(initialConfig.getHostsPerContainer().get("container1")).hasSize(1);
+            assertThat(initialConfig.getHostsPerContainer().get("container2")).hasSize(1);
+            assertThat(initialConfig.getHostsPerContainer().get("container3")).hasSize(1);
+            assertThat(initialConfig.getHostsPerServer().get("server1")).hasSize(1);
+            assertThat(initialConfig.getHostsPerServer().get("server2")).hasSize(1);
+            assertThat(initialConfig.getHostsPerServer().get("server3")).hasSize(1);
 
             WebTarget clientRequest = newRequest(serverUrl + "/containers/container1/instances");
             logger.debug("[GET] " + clientRequest.getUri());
 
             response = clientRequest.request(getMediaType()).get();
-            Assert.assertEquals(Response.Status.SERVICE_UNAVAILABLE.getStatusCode(), response.getStatus());
+            Assert.assertThat(response.getStatus()).isEqualTo(Response.Status.SERVICE_UNAVAILABLE.getStatusCode());
             response.close();
 
             Configuration config = routerClient.getRouterConfig();
 
-            assertEquals(3, config.getHostsPerContainer().size());
-            assertEquals(3, config.getHostsPerServer().size());
+            assertThat(config.getHostsPerContainer()).hasSize(3);
+            assertThat(config.getHostsPerServer()).hasSize(3);
 
-            assertEquals(0, config.getHostsPerContainer().get("container1").size());
-            assertEquals(1, config.getHostsPerContainer().get("container2").size());
-            assertEquals(1, config.getHostsPerContainer().get("container3").size());
-            assertEquals(0, config.getHostsPerServer().get("server1").size());
-            assertEquals(1, config.getHostsPerServer().get("server2").size());
-            assertEquals(1, config.getHostsPerServer().get("server3").size());
+            assertThat(config.getHostsPerContainer().get("container1")).isEmpty();
+            assertThat(config.getHostsPerContainer().get("container2")).hasSize(1);
+            assertThat(config.getHostsPerContainer().get("container3")).hasSize(1);
+            assertThat(config.getHostsPerServer().get("server1")).isEmpty();
+            assertThat(config.getHostsPerServer().get("server2")).hasSize(1);
+            assertThat(config.getHostsPerServer().get("server3")).hasSize(1);
         } finally {
             if(response != null) {
                 response.close();
@@ -147,34 +147,34 @@ public class KieServerRouterUnavailabilityIntegrationTest extends RestOnlyBaseIn
         Response response = null;
         try (KieServerRouterClient routerClient = new KieServerRouterClient(serverUrl)) {
             Configuration initialConfig = routerClient.getRouterConfig();
-            assertEquals(3, initialConfig.getHostsPerContainer().size());
-            assertEquals(3, initialConfig.getHostsPerServer().size());
+            assertThat(initialConfig.getHostsPerContainer()).hasSize(3);
+            assertThat(initialConfig.getHostsPerServer()).hasSize(3);
 
-            assertEquals(1, initialConfig.getHostsPerContainer().get("container1").size());
-            assertEquals(1, initialConfig.getHostsPerContainer().get("container2").size());
-            assertEquals(1, initialConfig.getHostsPerContainer().get("container3").size());
-            assertEquals(1, initialConfig.getHostsPerServer().get("server1").size());
-            assertEquals(1, initialConfig.getHostsPerServer().get("server2").size());
-            assertEquals(1, initialConfig.getHostsPerServer().get("server3").size());
+            assertThat(initialConfig.getHostsPerContainer().get("container1")).hasSize(1);
+            assertThat(initialConfig.getHostsPerContainer().get("container2")).hasSize(1);
+            assertThat(initialConfig.getHostsPerContainer().get("container3")).hasSize(1);
+            assertThat(initialConfig.getHostsPerServer().get("server1")).hasSize(1);
+            assertThat(initialConfig.getHostsPerServer().get("server2")).hasSize(1);
+            assertThat(initialConfig.getHostsPerServer().get("server3")).hasSize(1);
 
             WebTarget clientRequest = newRequest(serverUrl + "/containers");
             logger.debug( "[GET] " + clientRequest.getUri());
 
             response = clientRequest.request(getMediaType()).get();
-            Assert.assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
+            Assert.assertThat(response.getStatus()).isEqualTo(Response.Status.NOT_FOUND.getStatusCode());
             response.close();
 
             // since there are no servers connected and query operations are broadcasts all should be cleared
             Configuration config = routerClient.getRouterConfig();
-            assertEquals(3, config.getHostsPerContainer().size());
-            assertEquals(3, config.getHostsPerServer().size());
+            assertThat(config.getHostsPerContainer()).hasSize(3);
+            assertThat(config.getHostsPerServer()).hasSize(3);
 
-            assertEquals(0, config.getHostsPerContainer().get("container1").size());
-            assertEquals(0, config.getHostsPerContainer().get("container2").size());
-            assertEquals(0, config.getHostsPerContainer().get("container3").size());
-            assertEquals(0, config.getHostsPerServer().get("server1").size());
-            assertEquals(0, config.getHostsPerServer().get("server2").size());
-            assertEquals(0, config.getHostsPerServer().get("server3").size());
+            assertThat(config.getHostsPerContainer().get("container1")).isEmpty();
+            assertThat(config.getHostsPerContainer().get("container2")).isEmpty();
+            assertThat(config.getHostsPerContainer().get("container3")).isEmpty();
+            assertThat(config.getHostsPerServer().get("server1")).isEmpty();
+            assertThat(config.getHostsPerServer().get("server2")).isEmpty();
+            assertThat(config.getHostsPerServer().get("server3")).isEmpty();
 
         } finally {
             if(response != null) {
@@ -189,15 +189,15 @@ public class KieServerRouterUnavailabilityIntegrationTest extends RestOnlyBaseIn
         Response response = null;
         try (KieServerRouterClient routerClient = new KieServerRouterClient(serverUrl)) {
             Configuration initialConfig = routerClient.getRouterConfig();
-            assertEquals(3, initialConfig.getHostsPerContainer().size());
-            assertEquals(3, initialConfig.getHostsPerServer().size());
+            assertThat(initialConfig.getHostsPerContainer()).hasSize(3);
+            assertThat(initialConfig.getHostsPerServer()).hasSize(3);
 
-            assertEquals(1, initialConfig.getHostsPerContainer().get("container1").size());
-            assertEquals(1, initialConfig.getHostsPerContainer().get("container2").size());
-            assertEquals(1, initialConfig.getHostsPerContainer().get("container3").size());
-            assertEquals(1, initialConfig.getHostsPerServer().get("server1").size());
-            assertEquals(1, initialConfig.getHostsPerServer().get("server2").size());
-            assertEquals(1, initialConfig.getHostsPerServer().get("server3").size());
+            assertThat(initialConfig.getHostsPerContainer().get("container1")).hasSize(1);
+            assertThat(initialConfig.getHostsPerContainer().get("container2")).hasSize(1);
+            assertThat(initialConfig.getHostsPerContainer().get("container3")).hasSize(1);
+            assertThat(initialConfig.getHostsPerServer().get("server1")).hasSize(1);
+            assertThat(initialConfig.getHostsPerServer().get("server2")).hasSize(1);
+            assertThat(initialConfig.getHostsPerServer().get("server3")).hasSize(1);
 
             WebTarget clientRequest = newRequest(serverUrl + "/containers/container3/instances");
             logger.debug("[GET] " + clientRequest.getUri());
@@ -214,15 +214,15 @@ public class KieServerRouterUnavailabilityIntegrationTest extends RestOnlyBaseIn
 
             Configuration config = routerClient.getRouterConfig();
 
-            assertEquals(3, config.getHostsPerContainer().size());
-            assertEquals(3, config.getHostsPerServer().size());
+            assertThat(config.getHostsPerContainer()).hasSize(3);
+            assertThat(config.getHostsPerServer()).hasSize(3);
 
-            assertEquals(1, config.getHostsPerContainer().get("container1").size());
-            assertEquals(1, config.getHostsPerContainer().get("container2").size());
-            assertEquals(0, config.getHostsPerContainer().get("container3").size());
-            assertEquals(1, config.getHostsPerServer().get("server1").size());
-            assertEquals(1, config.getHostsPerServer().get("server2").size());
-            assertEquals(0, config.getHostsPerServer().get("server3").size());
+            assertThat(config.getHostsPerContainer().get("container1")).hasSize(1);
+            assertThat(config.getHostsPerContainer().get("container2")).hasSize(1);
+            assertThat(config.getHostsPerContainer().get("container3")).isEmpty();
+            assertThat(config.getHostsPerServer().get("server1")).hasSize(1);
+            assertThat(config.getHostsPerServer().get("server2")).hasSize(1);
+            assertThat(config.getHostsPerServer().get("server3")).isEmpty();
         } finally {
             if(response != null) {
                 response.close();

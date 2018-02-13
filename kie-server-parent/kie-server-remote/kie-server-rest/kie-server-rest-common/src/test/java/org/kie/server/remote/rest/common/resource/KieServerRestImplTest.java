@@ -15,7 +15,7 @@
 
 package org.kie.server.remote.rest.common.resource;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
@@ -120,12 +120,12 @@ public class KieServerRestImplTest {
     }
     
     private void assertForbiddenResponse(Response response) {   
-        assertNotNull(response);        
-        assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+        assertThat(response).isNotNull();        
+        assertThat(response.getStatus()).isEqualTo(Response.Status.BAD_REQUEST.getStatusCode());
         ServiceResponse<?> serviceResponse = marshaller.unmarshall((String) response.getEntity(), ServiceResponse.class);
-        assertNotNull(serviceResponse);
+        assertThat(serviceResponse).isNotNull();
         
-        assertEquals(ResponseType.FAILURE, serviceResponse.getType());
-        assertEquals("KIE Server management api is disabled", serviceResponse.getMsg());
+        assertThat(serviceResponse.getType()).isEqualTo(ResponseType.FAILURE);
+        assertThat(serviceResponse.getMsg()).isEqualTo("KIE Server management api is disabled");
     }
 }

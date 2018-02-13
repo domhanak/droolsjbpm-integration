@@ -15,7 +15,7 @@
 
 package org.kie.server.integrationtests.jbpm.rest;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.kie.server.api.rest.RestURI.*;
 
 import java.util.Date;
@@ -100,8 +100,8 @@ public class JbpmRestIntegrationTest extends RestJbpmBaseIntegrationTest {
             WebTarget clientRequest = newRequest(build(TestConfig.getKieServerHttpUrl(), PROCESS_URI + "/" + START_PROCESS_POST_URI, valuesMap));
             logger.info( "[POST] " + clientRequest.getUri());
             response = clientRequest.request().post(createEntity(""));
-            Assert.assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatus());
-            Assert.assertEquals(getMediaType().toString(), response.getHeaders().getFirst("Content-Type"));
+            Assert.assertThat(response.getStatus()).isEqualTo(Response.Status.CREATED.getStatusCode());
+            Assert.assertThat(response.getHeaders().getFirst("Content-Type")).isEqualTo(getMediaType().toString());
 
             JaxbLong pId = response.readEntity(JaxbLong.class);
             valuesMap.put(PROCESS_INST_ID, pId.unwrap());
@@ -111,7 +111,7 @@ public class JbpmRestIntegrationTest extends RestJbpmBaseIntegrationTest {
             response = clientRequest.request(getMediaType()).delete();
             int noContentStatusCode = Response.Status.NO_CONTENT.getStatusCode();
             int okStatusCode = Response.Status.OK.getStatusCode();
-            assertTrue("Wrong status code returned: " + response.getStatus(),
+            assertThat("Wrong status code returned: " + response.getStatus().isTrue(),
                     response.getStatus() == noContentStatusCode || response.getStatus() == okStatusCode);
 
         } finally {
@@ -127,10 +127,10 @@ public class JbpmRestIntegrationTest extends RestJbpmBaseIntegrationTest {
 
         final KieModuleMetaData kieModuleMetaData = KieModuleMetaData.Factory.newKieModuleMetaData( releaseId );
 
-        assertNotNull(kieModuleMetaData);
+        assertThat(kieModuleMetaData).isNotNull();
 
-        assertFalse( kieModuleMetaData.getProcesses().isEmpty() );
-        assertTrue( kieModuleMetaData.getProcesses().containsKey("humanTaskWithOwnType.bpmn" ) );
+        assertThat(kieModuleMetaData.getProcesses().isEmpty() ).isFalse();
+        assertThat(kieModuleMetaData.getProcesses().containsKey("humanTaskWithOwnType.bpmn" ) ).isTrue();
     }
 
     @Test
@@ -146,8 +146,8 @@ public class JbpmRestIntegrationTest extends RestJbpmBaseIntegrationTest {
             WebTarget clientRequest = newRequest(build(TestConfig.getKieServerHttpUrl(), PROCESS_URI + "/" + START_PROCESS_POST_URI, valuesMap));
             logger.info( "[POST] " + clientRequest.getUri());
             response = clientRequest.request(getMediaType()).post(createEntity(""));
-            Assert.assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatus());
-            Assert.assertEquals(getMediaType().toString(), response.getHeaders().getFirst("Content-Type"));
+            Assert.assertThat(response.getStatus()).isEqualTo(Response.Status.CREATED.getStatusCode());
+            Assert.assertThat(response.getHeaders().getFirst("Content-Type")).isEqualTo(getMediaType().toString());
 
             JaxbLong pId = response.readEntity(JaxbLong.class);
             valuesMap.put(PROCESS_INST_ID, pId.unwrap());
@@ -157,7 +157,7 @@ public class JbpmRestIntegrationTest extends RestJbpmBaseIntegrationTest {
             response = clientRequest.request(getMediaType()).delete();
             int noContentStatusCode = Response.Status.NO_CONTENT.getStatusCode();
             int okStatusCode = Response.Status.OK.getStatusCode();
-            assertTrue("Wrong status code returned: " + response.getStatus(),
+            assertThat("Wrong status code returned: " + response.getStatus().isTrue(),
                     response.getStatus() == noContentStatusCode || response.getStatus() == okStatusCode);
 
         } finally {
@@ -181,8 +181,8 @@ public class JbpmRestIntegrationTest extends RestJbpmBaseIntegrationTest {
             WebTarget clientRequest = newRequest(build(TestConfig.getKieServerHttpUrl(), PROCESS_URI + "/" + START_PROCESS_POST_URI, valuesMap));
             logger.info( "[POST] " + clientRequest.getUri());
             response = clientRequest.request(acceptHeadersByFormat.get(marshallingFormat)).post(createEntity(""));
-            Assert.assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatus());
-            Assert.assertEquals(getMediaType().toString(), response.getHeaders().getFirst("Content-Type"));
+            Assert.assertThat(response.getStatus()).isEqualTo(Response.Status.CREATED.getStatusCode());
+            Assert.assertThat(response.getHeaders().getFirst("Content-Type")).isEqualTo(getMediaType().toString());
 
             JaxbLong pId = response.readEntity(JaxbLong.class);
             valuesMap.put(PROCESS_INST_ID, pId.unwrap());
@@ -192,7 +192,7 @@ public class JbpmRestIntegrationTest extends RestJbpmBaseIntegrationTest {
             response = clientRequest.request(getMediaType()).delete();
             int noContentStatusCode = Response.Status.NO_CONTENT.getStatusCode();
             int okStatusCode = Response.Status.OK.getStatusCode();
-            assertTrue("Wrong status code returned: " + response.getStatus(),
+            assertThat("Wrong status code returned: " + response.getStatus().isTrue(),
                     response.getStatus() == noContentStatusCode || response.getStatus() == okStatusCode);
 
         } finally {
@@ -219,10 +219,10 @@ public class JbpmRestIntegrationTest extends RestJbpmBaseIntegrationTest {
             WebTarget clientRequest = newRequest(build(TestConfig.getKieServerHttpUrl(), DOCUMENT_URI, empty));
             logger.info( "[POST] " + clientRequest.getUri());
             response = clientRequest.request(acceptHeadersByFormat.get(marshallingFormat)).post(createEntity(documentEntity));
-            Assert.assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatus());
+            Assert.assertThat(response.getStatus()).isEqualTo(Response.Status.CREATED.getStatusCode());
 
             String documentId = response.readEntity(JaxbString.class).unwrap();
-            assertNotNull(documentId);
+            assertThat(documentId).isNotNull();
 
             // list available documents without paging info
             Map<String, Object> valuesMap = new HashMap<String, Object>();
@@ -230,18 +230,18 @@ public class JbpmRestIntegrationTest extends RestJbpmBaseIntegrationTest {
             clientRequest = newRequest(build(TestConfig.getKieServerHttpUrl(), DOCUMENT_URI, valuesMap));
             logger.info( "[GET] " + clientRequest.getUri());
             response = clientRequest.request(getMediaType()).get();
-            Assert.assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+            Assert.assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
 
             DocumentInstanceList docList = marshaller.unmarshall(response.readEntity(String.class), DocumentInstanceList.class);
-            assertNotNull(docList);
+            assertThat(docList).isNotNull();
 
             List<DocumentInstance> docs = docList.getItems();
-            assertNotNull(docs);
-            assertEquals(1, docs.size());
+            assertThat(docs).isNotNull();
+            assertThat(docs).hasSize(1);
             DocumentInstance doc = docs.get(0);
-            assertNotNull(doc);
-            assertEquals(documentInstance.getName(), doc.getName());
-            assertEquals(documentId, doc.getIdentifier());
+            assertThat(doc).isNotNull();
+            assertThat(doc.getName()).isEqualTo(documentInstance.getName());
+            assertThat(doc.getIdentifier()).isEqualTo(documentId);
 
             // download document content
             valuesMap = new HashMap<String, Object>();
@@ -249,15 +249,15 @@ public class JbpmRestIntegrationTest extends RestJbpmBaseIntegrationTest {
             clientRequest = newRequest(build(TestConfig.getKieServerHttpUrl(), DOCUMENT_URI + "/" + DOCUMENT_INSTANCE_CONTENT_GET_URI, valuesMap));
             logger.info( "[GET] " + clientRequest.getUri());
             response = clientRequest.request(getMediaType()).accept(MediaType.APPLICATION_OCTET_STREAM_TYPE).get();
-            Assert.assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+            Assert.assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
 
             String contentDisposition = response.getHeaderString("Content-Disposition");
-            assertTrue(contentDisposition.contains(documentInstance.getName()));
+            assertThat(contentDisposition.contains(documentInstance.getName())).isTrue();
 
             byte[] content = response.readEntity(byte[].class);
-            assertNotNull(content);
+            assertThat(content).isNotNull();
             String stringContent = new String(content);
-            assertEquals("test content", stringContent);
+            assertThat(stringContent).isEqualTo("test content");
             response.close();
 
             // delete document
@@ -269,7 +269,7 @@ public class JbpmRestIntegrationTest extends RestJbpmBaseIntegrationTest {
             response = clientRequest.request(getMediaType()).delete();
             int noContentStatusCode = Response.Status.NO_CONTENT.getStatusCode();
             int okStatusCode = Response.Status.OK.getStatusCode();
-            assertTrue("Wrong status code returned: " + response.getStatus(),
+            assertThat("Wrong status code returned: " + response.getStatus().isTrue(),
                     response.getStatus() == noContentStatusCode || response.getStatus() == okStatusCode);
 
         } finally {
@@ -292,11 +292,11 @@ public class JbpmRestIntegrationTest extends RestJbpmBaseIntegrationTest {
             clientRequest = newRequest(build(TestConfig.getKieServerHttpUrl(), DOCUMENT_URI +"/"+ DOCUMENT_INSTANCE_GET_URI, valuesMap));
             logger.info( "[GET] " + clientRequest.getUri());
             response = clientRequest.request(getMediaType()).get();
-            Assert.assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
-            Assert.assertEquals(MediaType.TEXT_PLAIN, response.getHeaders().getFirst("Content-Type"));
+            Assert.assertThat(response.getStatus()).isEqualTo(Response.Status.NOT_FOUND.getStatusCode());
+            Assert.assertThat(response.getHeaders().getFirst("Content-Type")).isEqualTo(MediaType.TEXT_PLAIN);
             
             String responseBody = response.readEntity(String.class);
-            Assert.assertEquals( "\"Document with id not-existing-doc not found\"", responseBody);
+            Assert.assertThat(responseBody).isEqualTo("\"Document with id not-existing-doc not found\"");
            
 
         } finally {

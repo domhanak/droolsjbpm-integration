@@ -18,6 +18,7 @@
     <module>kie-server-client</module>
     <module>kie-server-jms</module>
     <module>kie-server-rest</module>
+    <module>kie-server-graphql</module>
   </modules>
 
 </project>

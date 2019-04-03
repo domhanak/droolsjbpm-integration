@@ -22,7 +22,7 @@ public class Mutation implements GraphQLMutationResolver {
                                                          serviceProvider.getKieServerRegistry());
     }
 
-    public InstanceMutation getProcessInstances() {
+    public InstanceMutation getInstances() {
         return new InstanceMutation(instanceRepository);
     }
 }

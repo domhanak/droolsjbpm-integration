@@ -214,12 +214,8 @@ public class InstanceRepository {
 
         QueryContext queryContext = new QueryContext();
         queryContext.setCount(batchSize);
-        QueryFilter queryFilter = buildQueryFilter(1, batchSize);
+        QueryFilter queryFilter = buildQueryFilter(0, batchSize);
 
-        List<Status> taskStatusList;
-        if (filter.getStatesIn() != null) {
-            taskStatusList = getSelectedStatusList(filter.getStatesIn());
-        }
         switch (filter.getSelectedFilterCombination()) {
             case OWNER_ID:
                 logger.info("Getting summary for tasks with ownerId: {}", filter.getOwnerId());
@@ -293,105 +289,6 @@ public class InstanceRepository {
                                                          "Allowed combinations are: " + Arrays.toString(TaskInstanceFilter.AllowedCombinations.values()));
 
         }
-
-/*
-        if (filter.getStatesIn() != null) {
-            List<Status> taskStatusList = getSelectedStatusList(filter.getStatesIn());
-            logger.info("Getting summary for tasks in statuses: {}", taskStatusList);
-            // States AND PotOwner
-            if (filter.getPotentialOwnerId() != null && (filter.getBusinessAdminId() == null)) {
-                logger.info("With potential owner: {}", filter.getPotentialOwnerId());
-                // States AND PotOwner AND groupIds
-                if (filter.getGroupIds() != null) {
-                    logger.info("With groupIds: {}", filter.getGroupIds());
-                    return convertToTaskSummaryList(
-                            runtimeDataService.getTasksAssignedAsPotentialOwner(filter.getPotentialOwnerId(),
-                                                                                filter.getGroupIds(),
-                                                                                taskStatusList,
-                                                                                queryFilter)
-                    ).getItems();
-                    // States AND PotOwner AND fromDate
-                } else if (filter.getFromExpirationalDate() != null) {
-                    logger.info("Getting summary for tasks with fromDate {}", filter.getFromExpirationalDate());
-                    return convertToTaskSummaryList(
-                            runtimeDataService.getTasksAssignedAsPotentialOwnerByExpirationDateOptional(filter.getPotentialOwnerId(),
-                                                                                                        taskStatusList,
-                                                                                                        filter.getFromExpirationalDate(),
-                                                                                                        queryFilter)
-                    ).getItems();
-                    // States AND PotOwner
-                }  else  {
-                    logger.info("Getting summary for tasks with states in: {} and potentialOwner: {}", taskStatusList,
-                                filter.getPotentialOwnerId());
-                    return convertToTaskSummaryList(
-                            runtimeDataService.getTasksAssignedAsPotentialOwnerByStatus(filter.getPotentialOwnerId(),
-                                                                                        taskStatusList,
-                                                                                        queryFilter)
-                    ).getItems();
-                }
-                // States AND businessAdmin
-            } else if (filter.getBusinessAdminId() != null) {
-                logger.info("Getting summary for tasks with states in: {} and businessAdmin: {}", taskStatusList,
-                            filter.getBusinessAdminId());
-                return convertToTaskSummaryList(
-                        runtimeDataService.getTasksAssignedAsBusinessAdministratorByStatus(filter.getBusinessAdminId(),
-                                                                                           taskStatusList,
-                                                                                           queryFilter)
-                ).getItems();
-                // States AND processInstanceId
-            } else if (filter.getProcessInstanceId() != null) {
-                logger.info("Getting summary for tasks with states in: {} and processInstanceId: {}", taskStatusList,
-                            filter.getProcessInstanceId());
-                return convertToTaskSummaryList(
-                        runtimeDataService.getTasksByStatusByProcessInstanceId(filter.getProcessInstanceId(),
-                                                                               taskStatusList,
-                                                                               queryFilter)
-                ).getItems();
-                // By Owner AND variableName
-            }  else if (filter.getVariableName() != null && filter.getOwnerId() != null) {
-                // AND variableValue
-                if (filter.getVariableValue() != null) {
-                    logger.info("Getting summary for tasks with states in: {} and ownerId: {} " +
-                                        "and variableName: {} and variableValue: {}", taskStatusList,
-                                                                                      filter.getOwnerId(),
-                                                                                      filter.getVariableName(),
-                                                                                      filter.getVariableValue());
-                    return convertToTaskSummaryList(
-                            runtimeDataService.getTasksByVariableAndValue(filter.getOwnerId(),
-                                                                          filter.getVariableName(),
-                                                                          filter.getVariableValue(),
-                                                                          taskStatusList,
-                                                                          queryContext)
-                    ).getItems();
-                } else {
-                    logger.info("Getting summary for tasks with states in: {} and ownerId: {} " +
-                                        "and variableName: {}", taskStatusList,
-                                                                filter.getOwnerId(),
-                                                                filter.getVariableName());
-                    return convertToTaskSummaryList(
-                            runtimeDataService.getTasksByVariable(filter.getOwnerId(),
-                                                                  filter.getVariableName(),
-                                                                  taskStatusList,
-                                                                  queryContext)
-                    ).getItems();
-                }
-            }
-            // Only Potential Owner
-        } else if (filter.getPotentialOwnerId() != null && filter.getGroupIds() != null) {
-            logger.info("Getting summary for tasks with potentialOwnerId: {}", filter.getPotentialOwnerId());
-            return convertToTaskSummaryList(
-                    runtimeDataService.getTasksAssignedAsPotentialOwner(filter.getPotentialOwnerId(),
-                                                                        filter.getGroupIds(),
-                                                                        queryFilter)).getItems();
-        } else if (filter.getOwnerId() != null) {
-            logger.info("Getting summary for tasks with ownerId: {}", filter.getOwnerId());
-            return convertToTaskSummaryList(
-                    runtimeDataService.getTasksOwned(filter.getOwnerId(), queryFilter)
-            ).getItems();
-        }
-*/
-
-
     }
 
     /*

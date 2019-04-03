@@ -24,7 +24,7 @@ type Mutation {
   """
   Root for process instance related mutations
   """
-  processInstances: InstanceMutation
+  instances: InstanceMutation
 }
 
 """

@@ -9,6 +9,9 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
+  <name>KIE :: Execution Server :: Remote :: GraphQL :: jBPM :: Client</name>
+  <description>KIE jBPM Execution Server Client</description>
+
   <artifactId>kie-server-graphql-client</artifactId>
   <dependencies>
     <dependency>

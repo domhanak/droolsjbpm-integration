@@ -31,10 +31,10 @@ public class JBPMGraphQLClientImpl extends AbstractKieServicesClientImpl impleme
     }
 
     @Override
-    public Map<String, Object> executeQuery(String query, String operationName, String variables) {
+    public Map<String, Object> executeQuery(String query, String operationName, Map<String, Object> variables) {
             String uri = loadBalancer.getUrl()
                     + "/graphql"
-                    + "?operationName=" + operationName + "&query=" + query + "&variables=" + variables;
+                    + "?operationName=" + operationName + "&query=" + query + "&variables=" + serialize(variables);
 
             JbpmGraphQLResponseData jbpmGraphQLResponseData = makeHttpGetRequestAndCreateCustomResponse(uri, JbpmGraphQLResponseData.class);
 

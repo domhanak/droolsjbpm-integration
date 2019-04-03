@@ -1,5 +1,5 @@
 query processDefinition($processDefinitionId: String!, $containerId: String!) {
-    processDefinitions {
+    definitions {
         processDefinition(processDefinitionId: $processDefinitionId, containerId: $containerId) {
             ...DefinitionFragment
         }

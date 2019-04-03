@@ -1,5 +1,5 @@
 mutation startProcesses($id: String!, $containerId: String!, $batchSize: Int){
-  processInstances{
+  instances {
     startProcesses(id: $id, containerId: $containerId, batchSize: $batchSize) {
       ...StartedProcessInstances
     }

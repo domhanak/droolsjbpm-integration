@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import com.google.gson.Gson;
 import org.assertj.core.api.Assertions;
@@ -37,8 +38,6 @@ public class JbpmGraphQLExtensionIntegrationTest extends RestJmsSharedBaseIntegr
     private JBPMGraphQLClient graphQLClient;
     private String query;
     private String mutation;
-    private String expectedQueryResult;
-    private String expectedMutationResult;
 
     @BeforeClass
     public static void deployArtifacts() {
@@ -57,8 +56,8 @@ public class JbpmGraphQLExtensionIntegrationTest extends RestJmsSharedBaseIntegr
 
 
         ClassLoader classLoader = getClass().getClassLoader();
-        File queryFile = new File(classLoader.getResource("processDefinitionsQuery.graphql").getFile());
-        File mutationFile = new File(classLoader.getResource("processInstancesMutation.graphql").getFile());
+        File queryFile = new File(Objects.requireNonNull(classLoader.getResource("processDefinitionsQuery.graphql")).getFile());
+        File mutationFile = new File(Objects.requireNonNull(classLoader.getResource("processInstancesMutation.graphql")).getFile());
 
         query = readFile(queryFile.getAbsolutePath(), Charset.defaultCharset());
         mutation = readFile(mutationFile.getAbsolutePath(), Charset.defaultCharset());
@@ -73,7 +72,7 @@ public class JbpmGraphQLExtensionIntegrationTest extends RestJmsSharedBaseIntegr
 
     @Override
     protected void addExtraCustomClasses(Map<String, Class<?>> extraClasses) throws Exception {
-       extraClasses.put(PERSON_CLASS_NAME, Class.forName(PERSON_CLASS_NAME, true, kieContainer.getClassLoader()));
+       //extraClasses.put(PERSON_CLASS_NAME, Class.forName(PERSON_CLASS_NAME, true, kieContainer.getClassLoader()));
     }
 
     @Override

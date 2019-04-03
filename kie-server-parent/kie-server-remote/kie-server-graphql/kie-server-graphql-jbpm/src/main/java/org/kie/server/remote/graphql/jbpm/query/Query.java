@@ -34,7 +34,7 @@ public class Query implements GraphQLQueryResolver {
                                                          serviceProvider.getKieServerRegistry());
     }
 
-    public DefinitionQuery getProcessDefinitions() {
+    public DefinitionQuery getDefinitions() {
         return new DefinitionQuery(definitionRepository);
     }
 

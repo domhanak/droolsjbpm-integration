@@ -61,6 +61,8 @@
         <include>org.kie.server:kie-server-rest-case-mgmt</include>
         <include>org.kie.server:kie-server-router-client</include>
         <include>org.kie.server:kie-server-client</include>
+        <include>org.kie.server:kie-server-graphql-jbpm-services</include>
+        <include>org.kie.server:kie-server-graphql-jbpm</include>
         <include>org.kie:jbpm-process-svg</include>
         <include>org.kie:kie-security</include>
         
@@ -82,6 +84,10 @@
         <include>xerces:xercesImpl</include>
 
         <include>com.sun.xml.bind:jaxb-xjc</include>
+        <include>com.graphql-java:graphql-java</include>
+        <include>com.graphql-java-kickstart:graphql-java-tools</include>
+        <include>com.zhokhov.graphql:graphql-java-datetime</include>
+        <include>org.antlr:antlr4-runtime</include>
       </includes>
       <excludes>
         <exclude>org.jboss.resteasy:*</exclude>

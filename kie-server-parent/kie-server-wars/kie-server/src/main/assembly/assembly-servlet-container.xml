@@ -59,6 +59,8 @@
         <include>org.kie.server:kie-server-rest-prometheus</include>
         <include>org.kie.server:kie-server-router-client</include>
         <include>org.kie.server:kie-server-client</include>
+        <include>org.kie.server:kie-server-graphql-jbpm-services</include>
+        <include>org.kie.server:kie-server-graphql-jbpm</include>
         <include>org.kie:jbpm-process-svg</include>
         
         <include>org.kie.server:kie-server-controller-websocket-client</include>
@@ -78,6 +80,11 @@
         <include>org.quartz-scheduler:quartz</include>
 
         <include>com.google.inject.extensions:guice-servlet</include>
+
+        <include>com.graphql-java:graphql-java</include>
+        <include>com.graphql-java-kickstart:graphql-java-tools</include>
+        <include>com.zhokhov.graphql:graphql-java-datetime</include>
+        <include>org.antlr:antlr4-runtime</include>
       </includes>
       <outputDirectory>WEB-INF/lib</outputDirectory>
       <useTransitiveFiltering>true</useTransitiveFiltering>

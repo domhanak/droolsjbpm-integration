@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <artifactId>kie-server-graphql</artifactId>
+    <groupId>org.kie.server</groupId>
+    <version>7.18.0-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+
+  <properties>
+    <java.module.name>org.kie.server.itests.graphql.jbpm.test</java.module.name>
+    <org.drools.server.ext.disabled>false</org.drools.server.ext.disabled>
+  </properties>
+
+  <name>KIE :: Execution Server :: Remote :: GraphQL :: jBPM :: Integration Tests</name>
+  <description>KIE jBPM Execution Server Extension</description>
+
+  <artifactId>kie-server-graphql-jbpm-tests</artifactId>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.kie.server</groupId>
+      <artifactId>kie-server-integ-tests-common</artifactId>
+      <version>7.18.0-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.server</groupId>
+      <artifactId>kie-server-graphql-jbpm-services</artifactId>
+      <version>7.18.0-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.server</groupId>
+      <artifactId>kie-server-graphql-jbpm</artifactId>
+      <version>7.18.0-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.server</groupId>
+      <artifactId>kie-server-graphql-client</artifactId>
+      <version>7.18.0-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Logging -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.kie.server</groupId>
+      <artifactId>kie-server</artifactId>
+      <classifier>ee8</classifier>
+      <type>war</type>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.core</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.drools</groupId>
+      <artifactId>drools-compiler</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.kie</groupId>
+      <artifactId>kie-ci</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jbpm</groupId>
+      <artifactId>jbpm-document</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+    <groupId>org.kie.server</groupId>
+    <artifactId>kie-server-services-jbpm</artifactId>
+    <scope>test</scope>
+    <exclusions>
+      <exclusion>
+        <groupId>org.codehaus.woodstox</groupId>
+        <artifactId>woodstox-core-asl</artifactId>
+      </exclusion>
+    </exclusions>
+  </dependency>
+
+    <!-- persistence -->
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-entitymanager</artifactId>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>xml-apis</groupId>
+          <artifactId>xml-apis</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.narayana.jta</groupId>
+      <artifactId>narayana-jta</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss</groupId>
+      <artifactId>jboss-transaction-spi</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jbpm</groupId>
+      <artifactId>jbpm-test-util</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.server</groupId>
+      <artifactId>kie-server-rest-common</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.server</groupId>
+      <artifactId>kie-server-rest-jbpm</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jbpm</groupId>
+      <artifactId>jbpm-case-mgmt-impl</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.graphql-java</groupId>
+      <artifactId>graphql-java-extended-scalars</artifactId>
+      <version>1.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.antlr</groupId>
+      <artifactId>antlr4-runtime</artifactId>
+      <version>4.7.2</version>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-antrun-plugin</artifactId>
+          <executions>
+            <execution>
+              <id>prepare-kie-server</id>
+              <phase>pre-integration-test</phase>
+              <configuration>
+                <target>
+                  <unzip src="${maven.dependency.org.kie.server.kie-server.ee8.war.path}" dest="${project.build.directory}/unzipped-kie-server"/>
+                  <copy file="${maven.dependency.org.kie.server.kie-server-graphql-jbpm.jar.path}" todir="${project.build.directory}/unzipped-kie-server/WEB-INF/lib"/>
+                  <copy file="${maven.dependency.org.kie.server.kie-server-graphql-jbpm-services.jar.path}" todir="${project.build.directory}/unzipped-kie-server/WEB-INF/lib"/>
+                  <zip destfile="${project.build.directory}/kie-server.war" basedir="${project.build.directory}/unzipped-kie-server"/>
+                </target>
+              </configuration>
+              <goals>
+                <goal>run</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-failsafe-plugin</artifactId>
+          <configuration>
+            <systemPropertyVariables>
+              <!-- Values are supplied by specific profiles -->
+              <cargo.container.id>${cargo.container.id}</cargo.container.id>
+              <cargo.servlet.port>${container.port}</cargo.servlet.port>
+              <kie.server.context>${kie.server.context}</kie.server.context>
+              <kie.server.war.path>${kie.server.war.path}</kie.server.war.path>
+              <weblogic.home>${weblogic.home}</weblogic.home>
+              <kie.server.remoting.url>${kie.server.remoting.url}</kie.server.remoting.url>
+              <kie.server.base.http.url>${kie.server.base.http.url}</kie.server.base.http.url>
+              <kie.server.context.factory>${kie.server.context.factory}</kie.server.context.factory>
+              <kie.server.connection.factory>${kie.server.connection.factory}</kie.server.connection.factory>
+              <kie.server.jndi.request.queue>${kie.server.jndi.request.queue}</kie.server.jndi.request.queue>
+              <kie.server.jndi.response.queue>${kie.server.jndi.response.queue}</kie.server.jndi.response.queue>
+              <kie.server.testing.kjars.build.settings.xml>${kie.server.testing.kjars.build.settings.xml}</kie.server.testing.kjars.build.settings.xml>
+            </systemPropertyVariables>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <testResources>
+      <testResource>
+        <directory>src/test/resources</directory>
+        <filtering>false</filtering>
+      </testResource>
+      <testResource>
+        <directory>src/test/filtered-resources</directory>
+        <filtering>true</filtering>
+      </testResource>
+    </testResources>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.cargo</groupId>
+        <artifactId>cargo-maven2-plugin</artifactId>
+        <configuration>
+          <container>
+            <systemProperties>
+              <org.jbpm.ui.server.ext.disabled>true</org.jbpm.ui.server.ext.disabled>
+              <org.optaplanner.server.ext.disabled>true</org.optaplanner.server.ext.disabled>
+              <org.jbpm.case.server.ext.disabled>true</org.jbpm.case.server.ext.disabled>
+              <org.drools.server.ext.disabled>true</org.drools.server.ext.disabled>
+            </systemProperties>
+          </container>
+          <deployables>
+            <deployable>
+              <location>${project.build.directory}/kie-server.war</location>
+            </deployable>
+          </deployables>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>tomcat9</id>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-antrun-plugin</artifactId>
+              <executions>
+                <execution>
+                  <id>prepare-kie-server</id>
+                  <phase>pre-integration-test</phase>
+                  <configuration>
+                    <target>
+                      <unzip src="${maven.dependency.org.kie.server.kie-server.ee8.war.path}" dest="${project.build.directory}/unzipped-kie-server"/>
+                      <copy file="${maven.dependency.org.kie.server.kie-server-integ-tests-custom-extension-services.jar.path}" todir="${project.build.directory}/unzipped-kie-server/WEB-INF/lib"/>
+                      <copy file="${maven.dependency.org.kie.server.kie-server-integ-tests-custom-extension-rest.jar.path}" todir="${project.build.directory}/unzipped-kie-server/WEB-INF/lib"/>
+                      <zip destfile="${project.build.directory}/kie-server.war" basedir="${project.build.directory}/unzipped-kie-server"/>
+                    </target>
+                  </configuration>
+                  <goals>
+                    <goal>run</goal>
+                  </goals>
+                </execution>
+              </executions>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+      </build>
+    </profile>
+  </profiles>
+
+
+</project>

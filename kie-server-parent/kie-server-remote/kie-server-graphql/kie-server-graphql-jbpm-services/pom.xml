@@ -5,24 +5,33 @@
   <parent>
     <groupId>org.kie.server</groupId>
     <artifactId>kie-server-graphql</artifactId>
-    <version>7.18.0-SNAPSHOT</version>
+    <version>7.20.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>kie-server-graphql-jbpm-services</artifactId>
 
-  <name>KIE :: Execution Server :: Remote :: GraphQL</name>
+  <name>KIE :: Execution Server :: Remote :: GraphQL :: jBPM :: Services</name>
   <description>KIE Execution Server Remote GraphQL Services</description>
 
   <dependencies>
+    <!-- Jbpm services dependencies -->
     <dependency>
-      <groupId>org.kie.server</groupId>
-      <artifactId>kie-server-api</artifactId>
+      <groupId>org.jbpm</groupId>
+      <artifactId>jbpm-services-api</artifactId>
+    </dependency>
+
+    <!-- KIE dependencies -->
+    <dependency>
+      <groupId>org.kie</groupId>
+      <artifactId>kie-api</artifactId>
     </dependency>
     <dependency>
       <groupId>org.kie.server</groupId>
-      <artifactId>kie-server-graphql-jbpm</artifactId>
-      <version>7.18.0-SNAPSHOT</version>
-      <scope>compile</scope>
+      <artifactId>kie-server-services-common</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.server</groupId>
+      <artifactId>kie-server-services-jbpm</artifactId>
     </dependency>
   </dependencies>
 </project>

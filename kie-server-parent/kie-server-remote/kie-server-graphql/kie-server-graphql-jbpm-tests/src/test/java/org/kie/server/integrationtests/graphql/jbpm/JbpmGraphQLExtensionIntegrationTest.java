@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import com.google.gson.Gson;
 import org.assertj.core.api.Assertions;
 import org.junit.AfterClass;
 import org.junit.Assume;
@@ -93,14 +92,12 @@ public class JbpmGraphQLExtensionIntegrationTest extends RestJmsSharedBaseIntegr
         Map<String, Object> variables = new HashMap<>();
         variables.put("processDefinitionId", "definition-project.UserTaskWithSLAOnTask");
         variables.put("containerId", "definition-project");
-        Gson gson = new Gson();
-        String variablesString = gson.toJson(variables);
 
         Assertions.assertThat(graphQLClient).isNotNull();
 
         Map<String, Object> result = graphQLClient.executeQuery(query,
                                                                 operationName,
-                                                                variablesString);
+                                                                variables);
 
         Assertions.assertThat(result).isNotNull();
         Assertions.assertThat(result.get("data").toString()).contains("\"id\":\"definition-project.UserTaskWithSLAOnTask");

@@ -1,0 +1,25 @@
+query processDefinition($processDefinitionId: String!, $containerId: String!) {
+    processDefinitions {
+        processDefinition(processDefinitionId: $processDefinitionId, containerId: $containerId) {
+            ...DefinitionFragment
+        }
+    }
+}
+fragment DefinitionFragment on ProcessDefinition {
+    id
+    name
+    version
+    packageName
+    containerId
+    associatedEntities
+    serviceTasks
+    processVariables
+    reusableSubProcesses
+    nodes {
+        id
+    }
+    timers {
+        id
+    }
+    dynamic
+}

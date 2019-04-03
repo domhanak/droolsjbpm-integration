@@ -16,6 +16,8 @@
 
   <modules>
     <module>kie-server-graphql-jbpm</module>
+    <module>kie-server-graphql-jbpm-services</module>
+    <module>kie-server-graphql-client</module>
+    <module>kie-server-graphql-jbpm-tests</module>
   </modules>
-
 </project>

@@ -12,13 +12,13 @@ public class JBPMGraphQLClientBuilder implements KieServicesClientBuilder {
 
     @Override
     public String getImplementedCapability() {
-        return "jBPM GraphQL capability";
+        return "GraphQL jBPM capability";
     }
 
     @Override
     public Map<Class<?>, Object> build(KieServicesConfiguration configuration, ClassLoader classLoader) {
 
-        Map<Class<?>, Object> services = new HashMap<Class<?>, Object>();
+        Map<Class<?>, Object> services = new HashMap<>();
         services.put(JBPMGraphQLClient.class, new JBPMGraphQLClientImpl(configuration, classLoader));
         return services;
     }

@@ -34,6 +34,7 @@ public class KieServerConstants {
     public static final String KIE_JBM_SEARCH_SERVER_EXT_DISABLED = "org.jbpm.search.server.ext.disabled";
     public static final String KIE_SWAGGER_SERVER_EXT_DISABLED = "org.kie.swagger.server.ext.disabled";
     public static final String KIE_PROMETHEUS_SERVER_EXT_DISABLED = "org.kie.prometheus.server.ext.disabled";
+    public static final String KIE_JBPM_GRAPHQL_SERVER_EXT_DISABLED = "org.kie.jbpm.graphql.ext.disabled";
 
     public static final String KIE_DROOLS_FILTER_REMOTEABLE_CLASSES = "org.drools.server.filter.classes";
 

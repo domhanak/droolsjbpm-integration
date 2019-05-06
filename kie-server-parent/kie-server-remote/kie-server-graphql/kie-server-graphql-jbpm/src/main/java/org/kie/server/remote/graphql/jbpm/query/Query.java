@@ -5,7 +5,6 @@ import org.kie.server.remote.graphql.jbpm.JbpmGraphQLServiceProvider;
 import org.kie.server.remote.graphql.jbpm.repository.DefinitionRepository;
 import org.kie.server.remote.graphql.jbpm.repository.InstanceRepository;
 
-
 /**
  * Root query resolver.
  *
@@ -34,10 +33,20 @@ public class Query implements GraphQLQueryResolver {
                                                          serviceProvider.getKieServerRegistry());
     }
 
+    /**
+     * Resolver for definitions query.
+     *
+     * @return Query resolver for definitions - {@link DefinitionQuery}.
+     */
     public DefinitionQuery getDefinitions() {
         return new DefinitionQuery(definitionRepository);
     }
 
+    /**
+     * Resolver for instances query.
+     *
+     * @return Query resolver for instances - {@link InstanceQuery}.
+     */
     public InstanceQuery getInstances() {
         return new InstanceQuery(instanceRepository);
     }

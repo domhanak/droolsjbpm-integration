@@ -3,6 +3,8 @@ package org.kie.server.remote.graphql.jbpm.query;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import com.coxautodev.graphql.tools.GraphQLResolver;
 import graphql.language.SelectionSet;
 import graphql.schema.DataFetchingEnvironment;
@@ -17,7 +19,6 @@ import org.slf4j.LoggerFactory;
 
 import static org.kie.server.remote.graphql.jbpm.constants.GraphQLConstants.Fields.BATCH_SIZE;
 import static org.kie.server.remote.graphql.jbpm.constants.GraphQLConstants.Fields.VARIABLES;
-import static org.kie.server.remote.graphql.jbpm.constants.GraphQLConstants.Values.DEFAULT_ALL_PROCESS_DEFINITION_BATCH_SIZE;
 import static org.kie.server.remote.graphql.jbpm.constants.GraphQLConstants.Values.DEFAULT_ALL_TASKS_INSTANCE_BATCH_SIZE;
 
 /**
@@ -26,7 +27,7 @@ import static org.kie.server.remote.graphql.jbpm.constants.GraphQLConstants.Valu
  *
  * Groups all ProcessInstance related queries.
  */
-public class InstanceQuery implements GraphQLResolver {
+public class InstanceQuery implements GraphQLQueryResolver   {
 
     private static final Logger logger = LoggerFactory.getLogger(InstanceQuery.class);
 
@@ -53,10 +54,10 @@ public class InstanceQuery implements GraphQLResolver {
                                            String containerId,
                                            DataFetchingEnvironment environment) {
         if (environment.getSelectionSet().contains(VARIABLES)) {
-            logger.info("Fetching variables for process instance with id={} and containerId={}", id, containerId);
+            logger.debug("Fetching variables for process instance with id={} and containerId={}", id, containerId);
             return instanceRepository.getProcessInstance(id, containerId, true);
         } else {
-            logger.info("Fetching process instance with id={} and containerId={}", id, containerId);
+            logger.debug("Fetching process instance with id={} and containerId={}", id, containerId);
             return instanceRepository.getProcessInstance(id, containerId, false);
         }
     }
@@ -72,17 +73,14 @@ public class InstanceQuery implements GraphQLResolver {
     public List<ProcessInstance> allProcessInstances(int batchSize,
                                                      ProcessInstanceFilter filter,
                                                      DataFetchingEnvironment environment) {
-        if (environment.getArgument(BATCH_SIZE) == null) {
-            batchSize = DEFAULT_ALL_PROCESS_DEFINITION_BATCH_SIZE;
-        }
-
         List<ProcessInstance> processInstances = instanceRepository.getAllProcessInstances(batchSize, filter);
         if (processInstances.isEmpty()) {
-            return Collections.emptyList();
+            // if the list is empty just return it
+            return processInstances;
         }
 
         if (environment.getSelectionSet().contains(VARIABLES)) {
-            logger.info("Fetching variables for {} process instances", processInstances.size());
+            logger.debug("Fetching variables for {} process instances", processInstances.size());
             for (ProcessInstance pi : processInstances) {
                 if (pi.getState().equals(org.kie.api.runtime.process.ProcessInstance.STATE_ACTIVE))
                     pi.setVariables(instanceRepository.getProcessInstanceVariables(pi.getId(), pi.getContainerId()));
@@ -92,49 +90,47 @@ public class InstanceQuery implements GraphQLResolver {
     }
 
     /**
-     * Gets all variables for process instance as a Map
+     * Gets all variables for process instance and return the as a Map of string keys
+     * and object values.
+     *
      * @param id id of the process instance to fetch variables for
      * @param containerId if of the container of the process instance
      * @return Map of variables
      */
     public Map<String , Object> variables(Long id, String containerId) {
-        logger.info("Fetching variables for process instance with id= {}", id);
-
+        logger.debug("Fetching variables for process instance with id= {}", id);
         return instanceRepository.getProcessInstanceVariables(id, containerId);
     }
 
     /**
-     * Gets {@link TaskInstance} using either taskId or workItemId.
-     * Depends on the argument used in query.
+     * Gets {@link TaskInstance} using taskId.
      *
      * @param taskId id of the task
-     * @param workItemId workItemId of the task
-     * @param environment injected {@link DataFetchingEnvironment} used to access query arguments and fields
      * @return {@link TaskInstance}
      */
-    public TaskInstance taskInstance(Long taskId, Long workItemId, DataFetchingEnvironment environment) {
-        if (environment.getArgument("taskId") != null) {
-            return instanceRepository.getTaskInstance(taskId, null);
-        } else if (environment.getArgument("workItemId") != null) {
-            return instanceRepository.getTaskInstance(null, workItemId);
-        } else {
-            throw new IllegalArgumentException("Only one of taskId or workItemId can be selected");
-        }
+    public TaskInstance taskInstance(Long taskId, DataFetchingEnvironment environment) {
+        return instanceRepository.getTaskInstance(taskId, null);
     }
 
     /**
-     * Gets all Tasks with selected filter
+     * Gets {@link TaskInstance} using workItemId.
+     *
+     * @param workItemId workItemId of the task
+     * @return {@link TaskInstance}
+     */
+    public TaskInstance taskInstance(Long workItemId) {
+        return instanceRepository.getTaskInstance(null, workItemId);
+    }
+
+    /**
+     * Gets {@link TaskSummary} list of all tasks matching selected filter.
+     *
      * @param batchSize number of tasks to return
      * @param filter {@link TaskInstanceFilter} that is mapped by graphql
-     * @param environment injected {@link DataFetchingEnvironment} used to access query arguments and fields
      * @return List of {@link TaskSummary} instances
      */
     public List<TaskSummary> allTasks(int batchSize,
-                                      TaskInstanceFilter filter,
-                                      DataFetchingEnvironment environment) {
-        if (environment.getArgument(BATCH_SIZE) == null) {
-            batchSize = DEFAULT_ALL_TASKS_INSTANCE_BATCH_SIZE;
-        }
+                                      TaskInstanceFilter filter) {
         return instanceRepository.getAllTasks(batchSize, filter);
     }
 }

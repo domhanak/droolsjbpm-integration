@@ -7,7 +7,10 @@ import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 import graphql.language.SelectionSet;
 import graphql.schema.DataFetchingEnvironment;
 import org.kie.server.api.model.instance.ProcessInstance;
+import org.kie.server.api.model.instance.WorkItemInstance;
 import org.kie.server.remote.graphql.jbpm.repository.InstanceRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.kie.server.remote.graphql.jbpm.constants.GraphQLConstants.Arguments.CORRELATION_KEY;
 import static org.kie.server.remote.graphql.jbpm.constants.GraphQLConstants.Arguments.PROCESS_VARIABLES;
@@ -21,14 +24,24 @@ import static org.kie.server.remote.graphql.jbpm.constants.GraphQLConstants.Fiel
  */
 public class InstanceMutation implements GraphQLMutationResolver {
 
+    private static final Logger logger = LoggerFactory.getLogger(InstanceMutation.class);
+
+    /**
+     * Repository for processInstances and related data. Serves as a connector
+     * to the service layer for our GraphQL resolvers.
+     * You need to initialize this via constructor.
+     */
     private final InstanceRepository instanceRepository;
 
-    public InstanceMutation(InstanceRepository processDefinitionRepository) {
-        this.instanceRepository = processDefinitionRepository;
+    public InstanceMutation(InstanceRepository instanceRepository) {
+        this.instanceRepository = instanceRepository;
     }
 
     /**
      * Starts the process with process definition id and containerId and returns the instance of the started process.
+     * Optionally correlationKey and processVariables can be provided. Both or only one of them, method can handle all
+     * cases.
+     *
      * @param id id of the process definition fo which to create instance
      * @param containerId  id of the container holding the instance
      * @param correlationKey  correlationKey as string, can be null
@@ -71,7 +84,10 @@ public class InstanceMutation implements GraphQLMutationResolver {
     }
 
     /**
-     * Starts the process with process definition id and containerId and returns the instance of the started process.
+     * Starts a given number of process with process definition id and containerId and returns the instances of the started process.
+     * Optionally correlationKey and processVariables can be provided. Both or only one of them, method can handle all
+     * cases.
+     *
      * @param id id of the process definition fo which to create instance
      * @param containerId  id of the container holding the instance
      * @param batchSize size of the resulting list, number of instances to get
@@ -120,18 +136,16 @@ public class InstanceMutation implements GraphQLMutationResolver {
     }
 
     /**
-     * Aborts process instances with given ids and containerId. ContainerId is optional. If used
-     * we will abort instances belonging to the container.
+     * Aborts process instances with given ids and containerId (can be null).
+     * If containerId is null it will not be used when aborting process instances.
+     *
      * @param instanceIds list of ID of the process instances
-     * @param containerId containerId process instances should belong to
-     * @param environment injected {@link DataFetchingEnvironment} that is use to access arguments and fields from gql query
+     * @param containerId containerId process instances should belong tond fi
+     * @param environment injected {@link DataFetchingEnvironment} that is use to access arguments aelds from gql query
      * @return
      */
-    public List<ProcessInstance> abortProcessInstances(List<Long> instanceIds, String containerId, DataFetchingEnvironment environment) {
-        if (instanceIds.isEmpty()) {
-            throw new IllegalArgumentException("InstanceIds cannot be empty. Nothing to abort.");
-        }
-
+    public List<ProcessInstance> abortProcessInstances(List<Long> instanceIds, String containerId,
+                                                       DataFetchingEnvironment environment) {
         if (environment.getArgument(CONTAINER_ID) == null) {
             return instanceRepository.abortProcessInstances(instanceIds, null);
         } else {
@@ -140,7 +154,8 @@ public class InstanceMutation implements GraphQLMutationResolver {
     }
 
     /**
-     * Signals process instances with given ids and containerId(can be null)
+     * Signals process instances with given ids and containerId (can be null).
+     * If containerId is null it will not be used when signalling.
      *
      * @param containerId id of the container, can be null
      * @param processInstanceIds id of the process instance

@@ -7,7 +7,10 @@ import org.kie.server.remote.graphql.jbpm.repository.InstanceRepository;
 /**
  * Root mutation resolver.
  *
- * Groups other mutation reslover to increase readability, testability and structure
+ *  Takes {@link JbpmGraphQLServiceProvider} and sets up repositories
+ *  for mutation resolvers.
+ *
+ * Groups other mutation resolver to increase readability, testability and structure.
  */
 public class Mutation implements GraphQLMutationResolver {
 
@@ -22,6 +25,11 @@ public class Mutation implements GraphQLMutationResolver {
                                                          serviceProvider.getKieServerRegistry());
     }
 
+    /**
+     * Resolver for instances mutation.
+     *
+     * @return Mutation resolver for instance - {@link InstanceMutation}
+     */
     public InstanceMutation getInstances() {
         return new InstanceMutation(instanceRepository);
     }

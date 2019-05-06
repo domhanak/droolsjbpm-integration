@@ -2,9 +2,14 @@ scalar Date
 scalar Object
 
 schema {
-  # Root of Queries
+  """
+  Root of Queries
+  """
   query: Query
-  # Root of Mutations
+
+  """
+  Root of Mutations
+  """
   mutation: Mutation
 }
 
@@ -20,7 +25,6 @@ type Query {
 }
 
 type Mutation {
-
   """
   Root for process instance related mutations
   """
@@ -32,68 +36,73 @@ Collection of every query supported for ProcessDefinitions
 """
 type DefinitionQuery {
   """
-  Gets ProcessDefinition with specified processDefinitionId and containerId.
+  Gets a single ProcessDefinition with provided processDefinitionId and containerId.
   """
   processDefinition(processDefinitionId: String!, containerId: String!): ProcessDefinition!
 
   """
-  Gets list of UserTaskDefinition's for with specified processDefinitionId and containerId.
+  Gets list of UserTaskDefinition's for process definition with provided processDefinitionId and containerId.
   """
-  userTaskDefinitions(processDefinitionId: String!, containerId: String!): [UserTaskDefinition]
+  userTaskDefinitions(processDefinitionId: String!, containerId: String!): [UserTaskDefinition!]!
 
   """
-  Gets all available process definitions from runtime.
+  Gets all available process definitions from runtime from all containers.
   """
-  allProcessDefinitions(batchSize: Int): [ProcessDefinition]
+  allProcessDefinitions(batchSize: Int = 100): [ProcessDefinition!]!
 
   """
-  Gets a list of ProcessDefinition based no arguments.
+  Gets list of ProcessDefinition objects with concrete processDefinitionId OR containerId, not both.
   """
-  getProcessDefinitions(processDefinitionId: String, containerId: String): [ProcessDefinition]
+  processDefinitions(processDefinitionId: String, containerId: String): [ProcessDefinition]
 }
 
 type InstanceQuery {
   """
   Gets a ProcessInstance with id and containerId.
   """
-  processInstance(id: Long!, containerId: String): ProcessInstance
+  processInstance(id: Long!, containerId: String!): ProcessInstance!
 
   """
   Gets all available process instances from runtime based on the filter combination.
   """
-  allProcessInstances(batchSize: Int, filter: ProcessInstanceFilter): [ProcessInstance]
+  allProcessInstances(batchSize: Int = 100, filter: ProcessInstanceFilter): [ProcessInstance!]!
 
   """
   Gets list of ProcessVariable for process instance with id and containerId.
   """
-  variables(id: Long, containerId: String): Object
+  variables(id: Long!, containerId: String!): Object
 
   """
   Gets all available tasks from runtime based on the filter combination.
   """
-  allTasks(batchSize: Int, filter: TaskInstanceFilter): [TaskSummary]
+  allTasks(batchSize: Int = 100, filter: TaskInstanceFilter!): [TaskSummary!]!
 
   """
-  Gets all available tasks from runtime based on the filter combination.
+  Gets task instance with specific ID.
   """
-  taskInstance(taskId: Long, workItemId: Long): TaskInstance
+  taskInstance(taskId: Long!): TaskInstance
+
+  """
+  Gets task instance with specific workItemId.
+  """
+  taskInstance(workItemId: Long!): TaskInstance
 }
 
 type InstanceMutation {
   """
   Creates/Starts process instance for process definition with id and containerId.
   """
-  startProcess(id: String!, containerId: String!, correlationKey: String, processVariables: Object) : ProcessInstance
+  startProcess(id: String!, containerId: String!, correlationKey: String, processVariables: Object) : ProcessInstance!
 
   """
   Creates/Starts process instances for process definition with id and containerId.
   """
-  startProcesses(id: String!, containerId: String!, correlationKey: String, processVariables: Object, batchSize: Int) : [ProcessInstance]
+  startProcesses(id: String!, containerId: String!, correlationKey: String, processVariables: Object, batchSize: Int = 100) : [ProcessInstance!]!
 
   """
   Aborts process instances with specified id or if specified, also with containerId.
   """
-  abortProcessInstances(id: [Long!]!, containerId: String): [ProcessInstance]
+  abortProcessInstances(id: [Long!]!, containerId: String): [ProcessInstance]!
 
   """
   Signals process instances with specified ids or if specified also with containerId.
@@ -105,17 +114,29 @@ type InstanceMutation {
 KIE API ProcessDefinition.
 """
 type ProcessDefinition {
+  # Id of the process definition
   id: String!
+  # Name of the process definition
   name: String
+  # Versions of the process definition
   version: String
+  # Name of the package the process definition is located in
   packageName: String
+  # Id of the container the process definition belongs to
   containerId: String
+  # Entities associated with this process definition
   associatedEntities: Object
+  # Service tasks this process definition contains
   serviceTasks: Object
+  # Process variables defined in this process definition
   processVariables: Object
+  # Reusable sub processes defined in this process definition
   reusableSubProcesses: [String]
+  # Nodes defined in this process definition
   nodes: [NodeDefinition]
+  # Timers defined in this process definition
   timers: [TimerDefinition]
+  # Whether this definition is dynamic or not
   dynamic: Boolean
 }
 
@@ -123,6 +144,7 @@ type ProcessDefinition {
 KIE API TaskInputsDefinition.
 """
 type TaskInputsDefinition {
+  # Task inputs of this task inputs definition
   taskInputs: Object
 }
 
@@ -130,6 +152,7 @@ type TaskInputsDefinition {
 KIE API TaskOutputsDefinition.
 """
 type TaskOutputsDefinition {
+  # Task outputs of this task outputs definition
   taskOutputs: Object
 }
 
@@ -137,14 +160,23 @@ type TaskOutputsDefinition {
 KIE API UserTaskDefinition.
 """
 type UserTaskDefinition {
+  # Id of this user task definition
   id: String!
+  # Name of the user task definition
   name: String
+  # Priority this user task definition has
   priority: Int
+  # Creator of this user task definition
   createdBy: String
+  # Whether this user task definition is skippable or not
   skippable: Boolean
+  # Name of the form for this user task definition
   formName: String
+  # Entities associated with this user task definition
   associatedEntities: [String]
+  # Task input mappings for this user task definition
   taskInputMappings: TaskInputsDefinition
+  # Task output mapings for this user task definition
   taskOutputMappings: TaskOutputsDefinition
 }
 
@@ -152,9 +184,13 @@ type UserTaskDefinition {
 KIE API TimerDefinition.
 """
 type TimerDefinition {
+  # Id of the timer
   id: Long
+  # Node name of the timer
   nodeName: String!
+  # Unique identifier located in bpmn2 definition
   uniqueId: String
+  # Id of the node in process definition
   nodeId: Long
 }
 
@@ -162,9 +198,13 @@ type TimerDefinition {
 KIE API NodeDefinition.
 """
 type NodeDefinition {
+  # Id of the node
   id: Int
+  # Name of the node
   name: String
+  # Unique identifier located in bpmn2 definition
   uniqueId: String
+  # Type of the node
   type: String
 }
 
@@ -172,21 +212,37 @@ type NodeDefinition {
 KIE API TaskSummary.
 """
 type TaskSummary {
+  # Id of the task instance
   id: Long!
+  # Name of the task
   name: String
+  # Subject of the task
   subject: String
+  # Description of the task
   description: String
+  # Status that this task is currently in
   status: String
+  # Priority of this task
   priority: Int
+  # Whether this task is skippable or not
   skipable: Boolean
+  # Actual owner of this task instance
   actualOwner: String
+  # Creator of this task instance
   createdBy: String
+  # Date of tasks creation
   createdOn: Date
+  # Date of when this task was activated
   activationTime: Date
+  # Date of when this task expires
   expirationTime: Date
+  # Id of the process instance this task belongs to
   processInstanceId: Long
+  # Id of the process definition this task belongs to
   processId: String
+  # Id of the container this tasks belongs to
   containerId: String
+  # Id of the parent process instance
   parentId: Long
 }
 
@@ -194,6 +250,7 @@ type TaskSummary {
 KIE API TaskSummaryList.
 """
 type TaskSummaryList {
+  # List of task instance summaries
   tasks: [TaskSummary]
 }
 
@@ -201,70 +258,138 @@ type TaskSummaryList {
 KIE API TaskInstance
 """
 type TaskInstance {
+  # Id of the task instance
   id: Long!
+  # Name of the task
   name: String
+  # Subject of the task
   subject: String
+  # Description of the task
   description: String
+  # Status of the task instance
   status: String
+  # Priority of the task instance
   priority: Int
+  # Whether the task is skippable or not
   skipable: Boolean
+  # Actual owner of the task instance
   actualOwner: String
+  # User id of creator of task instance
   createdBy: String
+  # Date when this instance was created
   createdOn: Date
+  # Date when this instance was activated
   activationTime: Date
+  # Date when this instance expires
   expirationDate: Date
+  # Id of the work item of this task instance
+  workItemId: Long
+  # Id of the process instance this task belongs to
   processInstanceId: Long
-  processId: String
-  containerId: String
+  # Id of the parent process instance
   parentId: Long
+  # Id of process definition this task belongs to
+  processId: String
+  # Id of the container that this task belongs to
+  containerId: String
+  # List of users that can own this task - potential owners
+  potentialOwners: [String]
+  # List of users that cant own this task
+  excludedOwners: [String]
+  # List of users that are business admins for this task
+  businessAdmins: [String]
+  # Input data of this task
+  inputData: Object
+  # Output data of this task
+  outputData: Object
 }
 
 """
 KIE API ProcessInstance.
 """
 type ProcessInstance {
+  # Id of the process instance
   id: Long!
+  # Id of the process definition
   processId: String
+  # Name of the process
   processName: String
+  # Version of the process instance
   processVersion: String
+  # State this process instance is in
   state: Int
+  # Id of the container that this process instance belongs to
   containerId: String!
+  # Initiator of this process instance
   initiator: String!
+  # Date of this process instance
   date: Date
+  # Description of this process instance
   processInstanceDescription: String
+  # Correlation key of this process instance
   correlationKey: String
+  # Id of the parent process instance
   parentId: Long
+  # SLA compliance
   slaCompliance: Int
+  # Due date for SLA
   slaDueDate: Date
+  # User tasks that are currently active
   activeUserTasks: TaskSummaryList
+  # Variables of this process instance
   variables: Object
 }
 
 """
 Input object for ProcessInstances.
+Allows users to select subset of its fields to
+query process instances.
+Process instances are matched based on the selected
+fields. Not every combination is supported.
 """
 input ProcessInstanceFilter {
+  # List of states that process instances should be in
   statesIn: [Int]
+  # Initiator of the process instance
   initiator: String
+  # Id of container of the process instance
   containerId: String
+  # Id of process definition of the process instance
   processId: String
+  # Correlation key that process instance has
   correlationKey: String
+  # Name of the process instance's process
   processName: String
+  # Name of the variable that process instance has
   variableName: String
+  # Value of the variable that process instance has
   variableValue: Object
 }
 
 """
 Input object for Tasks
+Allows users to select subset of its fields to
+query tasks.
+Tasks are matched based on the selected
+fields. Not every combination is supported.
 """
 input TaskInstanceFilter {
+  # States that tasks should be in
   statesIn: [String]
+  # Id of business admin that tasks should have
   businessAdminId: String
+  # Id of potential owner
   potentialOwnerId: String
+  # List of groupIds that tasks belongs to
   groupIds: [String]
+  # Expirational date that task should have
   fromExpirationalDate: Date
+  # Id of the process instance that tasks should belong to
   processInstanceId: Long
+  # Name of the variable that task should have
   variableName: String
+  # Value of the variable that task should have
   variableValue: Object
+  # Id of the tasks owner
   ownerId: String
 }

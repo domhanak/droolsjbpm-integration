@@ -179,7 +179,7 @@ public class InstanceRepository {
 
     /**
      * Gets {@link TaskInstance} from database.
-     * Method queris the DB either by using taskId only OR by using workItemId only. Not both.
+     * Method queries the DB either by using taskId only OR by using workItemId only. Not both.
      *
      * @param taskId id of the task, can be null
      * @param workItemId workItemId of the task, can be null
@@ -206,12 +206,6 @@ public class InstanceRepository {
      * @return List of {@link TaskSummary} with fields matching filter selection
      */
     public List<TaskSummary> getAllTasks(int batchSize, TaskInstanceFilter filter) {
-
-        if (filter == null) {
-            throw new IllegalArgumentException("Filter for getAllTasks can't be null");
-        }
-
-
         QueryContext queryContext = new QueryContext();
         queryContext.setCount(batchSize);
         QueryFilter queryFilter = buildQueryFilter(0, batchSize);
@@ -292,15 +286,16 @@ public class InstanceRepository {
     }
 
     /*
-     * MUTATIONS
+     * MUTATION RELATED DB CONNECTOR METHODS
      */
 
     /**
-     * Start a single process instance using processId and containerId.
+     * Starts a single process instance using processId and containerId.
      *
-     * @param id processId of definition we want to start
-     * @param containerId id of container
+     * @param id processId of definition to be started
+     * @param containerId id of container that definition belong to
      * @param withVars determines if we query DB for variables or not
+     *
      * @return started process instance
      */
     public ProcessInstance startProcess(String id, String containerId, boolean withVars) {
@@ -322,12 +317,13 @@ public class InstanceRepository {
     }
 
     /**
-     * Start a single process instance using correlationKey and processVariables.
+     * Starts a single process instance using correlationKey, id and containerId.
      *
-     * @param id processId of definition we want to start
-     * @param containerId id of container
-     * @param correlationKey string representation of correlationkey
+     * @param id processId of definition to be started
+     * @param containerId id of container that definition belong to
+     * @param correlationKey string representation of correlationKey
      * @param withVars determines if we query DB for variables or not
+     *
      * @return started process instance
      */
     public ProcessInstance startProcess(String id, String containerId, String correlationKey, boolean withVars) {
@@ -354,12 +350,14 @@ public class InstanceRepository {
     /**
      * Start a single process instance using correlationKey and processVariables.
      *
-     * @param id processId of definition we want to start
-     * @param containerId id of container
-     * @param correlationKey string representation of correlation key, if null the method starts process
-     *                 with variables only
-     * @param processVariables variables to start process with
+     * @param id processId of definition to be started
+     * @param containerId id of container that definition belong to
+     * @param correlationKey string representation of correlation key, optional argument that can be null
+     *                       if null the method starts process
+     *                       with process variables only
+     * @param processVariables variables to be used when process is started
      * @param withVars determines if we query DB for variables or not
+     *
      * @return started process instance
      */
     public ProcessInstance startProcess(String id, String containerId, String correlationKey,
@@ -389,13 +387,14 @@ public class InstanceRepository {
     }
 
     /**
-     * Starts batch of processes using processId and containerI and collects started instances.
+     * Starts batch of processes using processId and containerId and collects started instances.
      *
-     * @param id processId of definition we want to start
-     * @param containerId id of container
+     * @param id processId of definition to be started
+     * @param containerId id of container that definition belong to
      * @param batchSize size of the batch
      * @param withVars determines if we query DB for variables or not
-     * @return List started processInstances
+     *
+     * @return List of started processInstances
      */
     public List<ProcessInstance> startProcesses(String id, String containerId, int batchSize, boolean withVars) {
         List<ProcessInstance> processInstances = new ArrayList<>();
@@ -419,14 +418,12 @@ public class InstanceRepository {
     }
 
     /**
-     * Starts batch of processes using correlationKey  and collects started instances.
+     * Starts batch of processes using id, containerId and correlationKey and collects started instances.
      *
      * @param id processId of definition we want to start
-     * @param containerId id of container
-     * @param correlationKey string representation of correlation key
-     * @param batchSize size of the batch
      * @param withVars determines if we query DB for variables or not
-     * @return List started processInstances
+     *
+     * @return List of started processInstances
      */
     public List<ProcessInstance> startProcesses(String id, String containerId, String correlationKey, int batchSize,
                                                 boolean withVars) {
@@ -457,13 +454,15 @@ public class InstanceRepository {
      * Starts batch of processes using correlationKey and variables and collects started instances.
      *
      * @param id processId of definition we want to start
-     * @param containerId id of container
-     * @param correlationKey string representation of correlation key, if null the method starts process
-     *          with variables only
+     * @param containerId iid of container that definition belong to
+     * @param correlationKey string representation of correlation key, optional argument that can be null
+     *                       if null the method starts process
+     *                       with process variables only
      * @param processVariables map of processVariables
      * @param batchSize size of the batch
      * @param withVars determines if we query DB for variables or not
-     * @return List started processInstances
+     *
+     * @return List of started processInstances
      */
     public List<ProcessInstance> startProcesses(String id, String containerId, String correlationKey,
                                                 Map<String, Object> processVariables, int batchSize, boolean withVars) {
@@ -526,17 +525,18 @@ public class InstanceRepository {
     }
 
     /**
-     * Signals process instances with deploymentId using signal and gets signaled instances back.
+     * Signals process instances with containerId using signal name and event and gets signaled instances back.
      *
-     * @param deploymentId
-     * @param processInstanceIds
-     * @param signalName
-     * @param event
-     * @return
+     * @param containerId if of the container that process instances belong to
+     * @param processInstanceIds list of ids of the processInstances
+     * @param signalName name of the signal
+     * @param event an Object of the event
+     *
+     * @return List of signalled process instances
      */
-    public List<ProcessInstance> signalProcessInstances(String deploymentId, List<Long> processInstanceIds,
+    public List<ProcessInstance> signalProcessInstances(String containerId, List<Long> processInstanceIds,
                                                         String signalName, Object event) {
-        processService.signalProcessInstances(deploymentId, processInstanceIds, signalName, event);
+        processService.signalProcessInstances(containerId, processInstanceIds, signalName, event);
         List<ProcessInstance> result = new ArrayList<>();
         for (Long id : processInstanceIds) {
             result.add(convertToProcessInstance(runtimeDataService.getProcessInstanceById(id)));
@@ -548,9 +548,9 @@ public class InstanceRepository {
     /**
      * Signals process instances with processInstanceIds using signal and gets signaled instances back.
      *
-     * @param processInstanceIds
-     * @param signalName
-     * @param event
+     * @param processInstanceIds list of ids of process instances
+     * @param signalName name of the signal
+     * @param event an Object of the event
      * @return
      */
     public List<ProcessInstance> signalProcessInstances(List<Long> processInstanceIds,
@@ -563,6 +563,8 @@ public class InstanceRepository {
 
         return result;
     }
+
+
 
 
     /*

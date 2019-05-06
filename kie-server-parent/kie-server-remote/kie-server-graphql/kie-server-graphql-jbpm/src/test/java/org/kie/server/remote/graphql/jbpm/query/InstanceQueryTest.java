@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kie.server.api.model.instance.ProcessInstance;
+import org.kie.server.api.model.instance.TaskInstance;
 import org.kie.server.api.model.instance.TaskSummary;
 import org.kie.server.remote.graphql.jbpm.filter.ProcessInstanceFilter;
 import org.kie.server.remote.graphql.jbpm.filter.TaskInstanceFilter;
@@ -19,6 +20,7 @@ import org.kie.server.remote.graphql.jbpm.repository.InstanceRepository;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import static org.kie.server.remote.graphql.jbpm.constants.GraphQLConstants.Fields.VARIABLES;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
@@ -43,7 +45,7 @@ public class InstanceQueryTest {
     private DataFetchingEnvironment environment;
 
     @Mock
-    DataFetchingFieldSelectionSet selectionSet;
+    private DataFetchingFieldSelectionSet selectionSet;
 
     private InstanceQuery instanceQuery;
 
@@ -69,11 +71,17 @@ public class InstanceQueryTest {
             .createdBy(DUMMY_USER_ID)
             .build();
 
+    private TaskInstance taskInstance = TaskInstance.builder()
+            .id(ID)
+            .workItemId(ID)
+            .build();
+
     @Before
     public void setUp() throws Exception {
         instanceQuery = new InstanceQuery(instanceRepository);
 
         processInstanceFilter = new ProcessInstanceFilter();
+        taskInstanceFilter = new TaskInstanceFilter();
     }
 
     @Test
@@ -129,7 +137,7 @@ public class InstanceQueryTest {
         when(instanceRepository.getAllProcessInstances(eq(1), any()))
                 .thenReturn(Collections.singletonList(processInstanceWithoutVariables));
         when(environment.getSelectionSet()).thenReturn(selectionSet);
-        when(selectionSet.contains("variables")).thenReturn(false);
+        when(selectionSet.contains(VARIABLES)).thenReturn(false);
 
         List<ProcessInstance> result = instanceQuery.allProcessInstances(DUMMY_BATCH_SIZE, processInstanceFilter, environment);
 
@@ -172,5 +180,25 @@ public class InstanceQueryTest {
         Assertions.assertThat(result.get(0).getId()).isEqualTo(ID);
         Assertions.assertThat(result.get(0).getProcessId()).isEqualTo(DUMMY_PROCESS_ID);
         Assertions.assertThat(result.get(0).getCreatedBy()).isEqualTo(DUMMY_USER_ID);
+    }
+
+    @Test
+    public void testTaskInstanceByTaskId() {
+        when(instanceRepository.getTaskInstance(ID, null))
+                .thenReturn(taskInstance);
+
+        TaskInstance result = instanceQuery.taskInstance(ID, environment);
+
+        Assertions.assertThat(result.getId()).isEqualTo(ID);
+    }
+
+    @Test
+    public void testTaskInstanceByWorkItemId() {
+        when(instanceRepository.getTaskInstance(null, ID))
+                .thenReturn(taskInstance);
+
+        TaskInstance result = instanceQuery.taskInstance(ID);
+
+        Assertions.assertThat(result.getId()).isEqualTo(ID);
     }
 }

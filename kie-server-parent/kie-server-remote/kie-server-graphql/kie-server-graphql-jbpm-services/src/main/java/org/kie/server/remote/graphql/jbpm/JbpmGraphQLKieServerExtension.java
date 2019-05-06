@@ -20,9 +20,10 @@ import org.kie.server.services.impl.KieServerImpl;
 import org.kie.server.services.jbpm.JbpmKieServerExtension;
 
 public class JbpmGraphQLKieServerExtension implements KieServerExtension {
-    public static final String EXTENSION_NAME = "JBPM GraphQL";
+    public static final String EXTENSION_NAME = "jBPM GraphQL";
 
-    private static final Boolean JBPM_DISABLED = Boolean.parseBoolean(System.getProperty(KieServerConstants.KIE_JBPM_SERVER_EXT_DISABLED, "false"));
+    private static final Boolean JBPM_GRAPHQL_DISABLED =
+            Boolean.parseBoolean(System.getProperty(KieServerConstants.KIE_JBPM_GRAPHQL_SERVER_EXT_DISABLED, "false"));
 
     private boolean initialized = false;
 
@@ -41,14 +42,14 @@ public class JbpmGraphQLKieServerExtension implements KieServerExtension {
 
     @Override
     public boolean isActive() {
-        return JBPM_DISABLED == false;
+        return JBPM_GRAPHQL_DISABLED == false;
     }
 
     @Override
     public void init(KieServerImpl kieServer, KieServerRegistry registry) {
         KieServerExtension jbpmExtension = registry.getServerExtension(JbpmKieServerExtension.EXTENSION_NAME);
         if (jbpmExtension == null) {
-            // jBPM extension not found, disabling itself
+            // jBPM extension not found, disabling GraphQL extension
             initialized = false;
             return;
         }
@@ -113,7 +114,12 @@ public class JbpmGraphQLKieServerExtension implements KieServerExtension {
 
         ServiceLoader<KieServerApplicationComponentsService> appComponentsServices = ServiceLoader.load(KieServerApplicationComponentsService.class);
 
-        Object[] services = {registry};
+        Object[] services = {
+                registry,
+                definitionService,
+                processService,
+                runtimeDataService
+        };
 
         for (KieServerApplicationComponentsService appComponentsService : appComponentsServices) {
             appComponentsList.addAll(appComponentsService.getAppComponents(EXTENSION_NAME, type, services));

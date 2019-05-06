@@ -14,16 +14,6 @@
   <name>KIE :: Execution Server :: Remote :: GraphQL</name>
   <description>KIE Execution Server Remote GraphQL Services</description>
 
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.antlr</groupId>
-        <artifactId>antlr4-runtime</artifactId>
-        <version>${version.org.antlr.antlr4-runtime.4graphql}</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-
   <modules>
     <module>kie-server-graphql-jbpm</module>
     <module>kie-server-graphql-jbpm-services</module>

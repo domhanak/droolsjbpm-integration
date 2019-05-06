@@ -30,9 +30,14 @@ public class JbpmGraphQLExtensionIntegrationTest extends RestJmsSharedBaseIntegr
     @ClassRule
     public static ExternalResource StaticResource = new DBExternalResource();
 
+    private static final String PROCESS_DEFINITION_ID = "definition-project.UserTaskWithSLAOnTask";
     private static final String CONTAINER_ID = "definition-project";
-    private static ReleaseId releaseId = new ReleaseId("org.kie.server.testing", CONTAINER_ID,
-                                                       "1.0.0.Final");
+    private static final String GROUP_ID = "org.kie.server.testing";
+    private static final String VERSION = "1.0.0.Final";
+
+    private static ReleaseId releaseId = new ReleaseId(GROUP_ID,
+                                                       CONTAINER_ID,
+                                                       VERSION);
 
     private JBPMGraphQLClient graphQLClient;
     private String query;
@@ -65,13 +70,7 @@ public class JbpmGraphQLExtensionIntegrationTest extends RestJmsSharedBaseIntegr
 
     @AfterClass
     public static void disposeContainers() {
-
         disposeAllContainers();
-    }
-
-    @Override
-    protected void addExtraCustomClasses(Map<String, Class<?>> extraClasses) throws Exception {
-       //extraClasses.put(PERSON_CLASS_NAME, Class.forName(PERSON_CLASS_NAME, true, kieContainer.getClassLoader()));
     }
 
     @Override
@@ -90,8 +89,8 @@ public class JbpmGraphQLExtensionIntegrationTest extends RestJmsSharedBaseIntegr
     public void testExecuteQuery() {
         String operationName = "";
         Map<String, Object> variables = new HashMap<>();
-        variables.put("processDefinitionId", "definition-project.UserTaskWithSLAOnTask");
-        variables.put("containerId", "definition-project");
+        variables.put("processDefinitionId", PROCESS_DEFINITION_ID);
+        variables.put("containerId", CONTAINER_ID);
 
         Assertions.assertThat(graphQLClient).isNotNull();
 
@@ -100,7 +99,7 @@ public class JbpmGraphQLExtensionIntegrationTest extends RestJmsSharedBaseIntegr
                                                                 variables);
 
         Assertions.assertThat(result).isNotNull();
-        Assertions.assertThat(result.get("data").toString()).contains("\"id\":\"definition-project.UserTaskWithSLAOnTask");
+        Assertions.assertThat(result.get("data").toString()).contains("\"id\":\"definition-project.UserTaskWithSLAOnTask\"");
     }
 
     @Test
@@ -110,7 +109,7 @@ public class JbpmGraphQLExtensionIntegrationTest extends RestJmsSharedBaseIntegr
 
         Map<String, Object> variables = new HashMap<>();
         variables.put("id", "AsyncScriptTask");
-        variables.put("containerId", "definition-project");
+        variables.put("containerId", CONTAINER_ID);
         variables.put("batchSize", 1);
 
         Assertions.assertThat(graphQLClient).isNotNull();

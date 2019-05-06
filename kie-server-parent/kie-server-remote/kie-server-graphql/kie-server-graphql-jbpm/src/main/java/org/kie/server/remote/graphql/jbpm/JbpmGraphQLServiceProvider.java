@@ -10,7 +10,7 @@ import org.kie.server.services.jbpm.DefinitionServiceBase;
  * Holds every service JBPM GraphQL extension needs
  * These services are final and once set they can't be altered.
  */
-public final class JbpmGraphQLServiceProvider {
+public class JbpmGraphQLServiceProvider {
 
     private final DefinitionServiceBase definitionServiceBase;
     private final ProcessService processService;

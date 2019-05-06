@@ -29,15 +29,34 @@ import org.kie.server.remote.graphql.jbpm.mutation.Mutation;
 import org.kie.server.remote.graphql.jbpm.query.Query;
 import org.kie.server.services.api.KieServerRegistry;
 
+/**
+ * GraphQL resource for jBPM.
+ * Resource builds the GraphQL schema from a file - jbpm-schema.graphql -
+ * at startup.
+ * It exposes two methods to handle HTTP Get methods requests and
+ * HTTP Post methods requests to follow best practices suggested by GraphQL
+ * documentation.
+ * Get method is implemented so it can handle GraphQL queries.
+ * Post method is implemented so it can handle GraphQL mutations.
+ */
 @Path("/server")
 public class JbpmGraphQLResource {
 
     private static final ObjectMapper mapper = new ObjectMapper();
+    private static final String JBPM_SCHEMA = "jbpm-schema.graphql";
 
+    /**
+     * GraphQL java implementation.
+     * Initialized in constructor.
+     */
     private GraphQL graphql;
+
+    /**
+     * Service provider that offers services needed by Query and Mutation resolvers.
+     */
     private JbpmGraphQLServiceProvider serviceProvider;
 
-    public JbpmGraphQLResource(JbpmGraphQLServiceProvider serviceProvider , KieServerRegistry context) {
+    public JbpmGraphQLResource(JbpmGraphQLServiceProvider serviceProvider) {
         Instrumentation instrumentation = new TracingInstrumentation();
 
         // Initialize ServiceProvider before we build schema
@@ -51,12 +70,15 @@ public class JbpmGraphQLResource {
     @GET
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    public Map<String, Object> graphqlGET(@Context HttpHeaders headers,
-                                          @QueryParam("query") String query,
+    public Map<String, Object> graphqlGET(@QueryParam("query") String query,
                                           @QueryParam("operationName") String operationName,
                                           @QueryParam("variables") String variablesJson) throws IOException {
         if (query == null) {
             query = "";
+        }
+
+        if (operationName == null) {
+            operationName = "";
         }
 
         Map<String, Object> variables = new LinkedHashMap<>();
@@ -94,6 +116,14 @@ public class JbpmGraphQLResource {
         return executeGraphqlQuery(operationName, query, variables);
     }
 
+    /**
+     * Executes the GraphQL query or mutation.
+     *
+     * @param operationName
+     * @param query
+     * @param variables
+     * @return
+     */
     private Map<String, Object> executeGraphqlQuery(String operationName,
                                                     String query, Map<String, Object> variables) {
 
@@ -113,17 +143,20 @@ public class JbpmGraphQLResource {
         return graphql.execute(executionInput).toSpecification();
     }
 
-
+    /**
+     * Builder for GraphQL schema for jBPM.
+     *
+     * @return graphql schema implementation {@link GraphQLSchema}
+     */
     private GraphQLSchema buildSchema() {
         return SchemaParser
                 .newParser()
                 .options(SchemaParserOptions.newOptions().preferGraphQLResolver(true).build())
-                .files("jbpm-schema.graphql")
+                .files(JBPM_SCHEMA)
                 .scalars(new GraphQLDate(),
                          ExtendedScalars.DateTime,
                          ExtendedScalars.Object)
                 .resolvers(new Query(serviceProvider),
-                           // MUTATIONS
                            new Mutation(serviceProvider))
                 .build()
                 .makeExecutableSchema();

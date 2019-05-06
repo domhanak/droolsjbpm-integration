@@ -20,23 +20,18 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import graphql.GraphQL;
-
 import org.jbpm.services.api.DefinitionService;
 import org.jbpm.services.api.ProcessService;
 import org.jbpm.services.api.RuntimeDataService;
-import org.jbpm.services.api.UserTaskService;
 
-import org.kie.api.executor.ExecutorService;
 import org.kie.server.services.api.KieServerApplicationComponentsService;
 import org.kie.server.services.api.KieServerRegistry;
 import org.kie.server.services.api.SupportedTransports;
 import org.kie.server.services.jbpm.DefinitionServiceBase;
-import org.kie.server.services.jbpm.JbpmKieServerExtension;
 
 public class JbpmGraphQLApplicationComponentsService implements KieServerApplicationComponentsService {
 
-    private static final String OWNER_EXTENSION = JbpmKieServerExtension.EXTENSION_NAME;
+    private static final String OWNER_EXTENSION = JbpmGraphQLKieServerExtension.EXTENSION_NAME;
 
     @Override
     public Collection<Object> getAppComponents(String extension, SupportedTransports type, Object... services) {
@@ -73,7 +68,7 @@ public class JbpmGraphQLApplicationComponentsService implements KieServerApplica
                                                                                     context);
 
         List<Object> components = new ArrayList<>();
-        components.add(new JbpmGraphQLResource(serviceProvider, context));
+        components.add(new JbpmGraphQLResource(serviceProvider));
         return components;
     }
 }

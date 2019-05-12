@@ -18,10 +18,9 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.kie.server.remote.graphql.jbpm.constants.GraphQLConstants.Fields.CONTAINER_ID;
-import static org.kie.server.remote.graphql.jbpm.constants.GraphQLConstants.Fields.PROCESS_DEFINITION_ID;
+import static org.kie.server.remote.graphql.jbpm.constants.GraphQLConstants.Fields.DEFINITION_ID;
 import static org.kie.server.remote.graphql.jbpm.constants.GraphQLConstants.Fields.TASK_INPUT_MAPPINGS;
 import static org.kie.server.remote.graphql.jbpm.constants.GraphQLConstants.Fields.TASK_OUTPUT_MAPPINGS;
-import static org.kie.server.remote.graphql.jbpm.constants.GraphQLConstants.Fields.VARIABLES;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.times;
@@ -109,7 +108,7 @@ public class DefinitionQueryTest {
         when(definitionRepository.getProcessDefinitions(DUMMY_CONTAINER_ID, 100))
                 .thenReturn(Collections.singletonList(processDefinition));
         when(environment.getArgument(CONTAINER_ID)).thenReturn(DUMMY_CONTAINER_ID);
-        when(environment.getArgument(PROCESS_DEFINITION_ID)).thenReturn(null);
+        when(environment.getArgument(DEFINITION_ID)).thenReturn(null);
 
         List<ProcessDefinition> result = definitionQuery.processDefinitions(DUMMY_PROCESS_ID, DUMMY_CONTAINER_ID, environment);
 
@@ -124,7 +123,7 @@ public class DefinitionQueryTest {
         when(definitionRepository.getProcessDefinitions(DUMMY_ID))
                 .thenReturn(Collections.singletonList(processDefinition));
         when(environment.getArgument(CONTAINER_ID)).thenReturn(null);
-        when(environment.getArgument(PROCESS_DEFINITION_ID)).thenReturn(DUMMY_ID);
+        when(environment.getArgument(DEFINITION_ID)).thenReturn(DUMMY_ID);
 
         List<ProcessDefinition> result = definitionQuery.processDefinitions(DUMMY_ID, DUMMY_CONTAINER_ID, environment);
 
@@ -137,7 +136,7 @@ public class DefinitionQueryTest {
     @Test
     public void testProcessDefinitionsWithProcessIdAndContainerId() {
         when(environment.getArgument(CONTAINER_ID)).thenReturn(CONTAINER_ID);
-        when(environment.getArgument(PROCESS_DEFINITION_ID)).thenReturn(DUMMY_ID);
+        when(environment.getArgument(DEFINITION_ID)).thenReturn(DUMMY_ID);
 
         Assertions.assertThatThrownBy(() -> definitionQuery.processDefinitions(DUMMY_ID, DUMMY_CONTAINER_ID, environment))
             .hasMessage("Incorrect combination of arguments. Only one of them can be specified.");

@@ -13,8 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static org.kie.server.remote.graphql.jbpm.constants.GraphQLConstants.Fields.CONTAINER_ID;
-import static org.kie.server.remote.graphql.jbpm.constants.GraphQLConstants.Fields.PROCESS_DEFINITION_ID;
-import static org.kie.server.remote.graphql.jbpm.constants.GraphQLConstants.Fields.PROCESS_INSTANCE_ID;
+import static org.kie.server.remote.graphql.jbpm.constants.GraphQLConstants.Fields.DEFINITION_ID;
 import static org.kie.server.remote.graphql.jbpm.constants.GraphQLConstants.Fields.TASK_INPUT_MAPPINGS;
 import static org.kie.server.remote.graphql.jbpm.constants.GraphQLConstants.Fields.TASK_OUTPUT_MAPPINGS;
 import static org.kie.server.remote.graphql.jbpm.constants.GraphQLConstants.Values.DEFAULT_ALL_PROCESS_DEFINITION_BATCH_SIZE;
@@ -53,19 +52,19 @@ public class DefinitionQuery implements GraphQLQueryResolver {
     /**
      * Gets list of {@link ProcessDefinition} for given processDefinitionId or containerId.
      * Only one of the parameters can be selected.
-     * @param processDefinitionId if provided in the query it is used to get results
+     * @param definitionId if provided in the query it is used to get results
      * @param containerId if provided in the query it is used to get results
      * @param environment injected {@link DataFetchingEnvironment} used to access query arguments and fields
      * @return List of {@link ProcessDefinition} for provided arguments
      */
-    public List<ProcessDefinition> processDefinitions(String processDefinitionId,
+    public List<ProcessDefinition> processDefinitions(String definitionId,
                                                       String containerId,
                                                       DataFetchingEnvironment environment) {
-        if (environment.getArgument(PROCESS_DEFINITION_ID) != null
+        if (environment.getArgument(DEFINITION_ID) != null
                 && environment.getArgument(CONTAINER_ID) == null) {
-            return definitionRepository.getProcessDefinitions(processDefinitionId);
+            return definitionRepository.getProcessDefinitions(definitionId);
         } else if (environment.getArgument(CONTAINER_ID) != null
-                && environment.getArgument(PROCESS_DEFINITION_ID) == null) {
+                && environment.getArgument(DEFINITION_ID) == null) {
             return definitionRepository.getProcessDefinitions(containerId, DEFAULT_ALL_PROCESS_DEFINITION_BATCH_SIZE);
         }
         throw new JbpmGraphQLException("Incorrect combination of arguments. Only one of them can be specified.");
@@ -73,43 +72,43 @@ public class DefinitionQuery implements GraphQLQueryResolver {
 
     /**
      * Gets single {@link ProcessDefinition} for given processDefinitionId and containerId.
-     * @param processDefinitionId ID of the process definition
+     * @param definitionId ID of the process definition
      * @param containerId Container ID of the container that ths definition is associated with
      * @return {@link ProcessDefinition} object
      */
-    public ProcessDefinition processDefinition(String processDefinitionId,
+    public ProcessDefinition processDefinition(String definitionId,
                                                String containerId) {
-        logger.info("processDefinition( {} , {} )", processDefinitionId, containerId);
-        return definitionRepository.getProcessDefinition(processDefinitionId, containerId);
+        logger.info("processDefinition( {} , {} )", definitionId, containerId);
+        return definitionRepository.getProcessDefinition(definitionId, containerId);
     }
 
     /**
      * Gets a list of {@link UserTaskDefinition} for process definition and container id.
-     * @param processDefinitionId ID of the process definition
+     * @param definitionId ID of the process definition
      * @param containerId Container ID of the container that ths definition is associated with
      * @param environment injected {@link DataFetchingEnvironment} used to access query arguments and fields
      * @return A list of {@link UserTaskDefinition} with taskInputsMapping & taskOutputMappings if they are selected
      */
-    public List<UserTaskDefinition> userTaskDefinitions(String processDefinitionId,
+    public List<UserTaskDefinition> userTaskDefinitions(String definitionId,
                                                         String containerId,
                                                         DataFetchingEnvironment environment) {
-        logger.debug("userTaskDefinitions( {} , {} )", processDefinitionId, containerId);
+        logger.debug("userTaskDefinitions( {} , {} )", definitionId, containerId);
         String taskName;
-        List<UserTaskDefinition> result = definitionRepository.getUserTaskDefinitions(processDefinitionId, containerId);
+        List<UserTaskDefinition> result = definitionRepository.getUserTaskDefinitions(definitionId, containerId);
         if (environment.getSelectionSet().contains(TASK_INPUT_MAPPINGS)) {
-            logger.debug("Getting taskInputMappings for task of process {} with container {} ", processDefinitionId, containerId);
+            logger.debug("Getting taskInputMappings for task of process {} with container {} ", definitionId, containerId);
             for (UserTaskDefinition userTaskDefinition: result) {
                 taskName = userTaskDefinition.getName();
-                userTaskDefinition.setTaskInputMappings(definitionRepository.taskInputMappings(processDefinitionId,
+                userTaskDefinition.setTaskInputMappings(definitionRepository.taskInputMappings(definitionId,
                                                                                                containerId,
                                                                                                taskName).getTaskInputs());
             }
         }
         if (environment.getSelectionSet().contains(TASK_OUTPUT_MAPPINGS)) {
-            logger.debug("Getting taskOutputMappings for task of process {} with container {} ", processDefinitionId, containerId);
+            logger.debug("Getting taskOutputMappings for task of process {} with container {} ", definitionId, containerId);
             for (UserTaskDefinition userTaskDefinition: result) {
                 taskName = userTaskDefinition.getName();
-                userTaskDefinition.setTaskOutputMappings(definitionRepository.taskOutputMappings(processDefinitionId,
+                userTaskDefinition.setTaskOutputMappings(definitionRepository.taskOutputMappings(definitionId,
                                                                                                  containerId,
                                                                                                  taskName).getTaskOutputs());
             }

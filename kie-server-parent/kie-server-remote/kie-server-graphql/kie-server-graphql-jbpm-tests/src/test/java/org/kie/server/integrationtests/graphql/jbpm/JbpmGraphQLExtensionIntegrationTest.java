@@ -90,7 +90,7 @@ public class JbpmGraphQLExtensionIntegrationTest extends RestJmsSharedBaseIntegr
     public void testExecuteQuery() {
         String operationName = "";
         Map<String, Object> variables = new HashMap<>();
-        variables.put("processDefinitionId", PROCESS_DEFINITION_ID);
+        variables.put("definitionId", PROCESS_DEFINITION_ID);
         variables.put("containerId", CONTAINER_ID);
 
         Assertions.assertThat(graphQLClient).isNotNull();

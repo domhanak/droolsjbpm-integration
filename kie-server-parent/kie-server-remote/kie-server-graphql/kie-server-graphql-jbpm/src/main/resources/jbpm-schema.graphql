@@ -2,112 +2,134 @@ scalar Date
 scalar Object
 
 schema {
-  """
-  Root of Queries
-  """
+  # Root of Queries
   query: Query
 
-  """
-  Root of Mutations
-  """
+  # Root of Mutations
   mutation: Mutation
 }
 
 type Query {
-  """
-  Root for process definition related queries
-  """
+  # Root for process definition related queries
   definitions: DefinitionQuery
-  """
-  Root for process instance related queries
-  """
+
+  # Root for process instance related queries
   instances: InstanceQuery
 }
 
 type Mutation {
-  """
-  Root for process instance related mutations
-  """
+  # Root for process instance related mutations
   instances: InstanceMutation
 }
 
-"""
-Collection of every query supported for ProcessDefinitions
-"""
+# Collection of every query supported for ProcessDefinitions
 type DefinitionQuery {
-  """
-  Gets a single ProcessDefinition with provided processDefinitionId and containerId.
-  """
-  processDefinition(processDefinitionId: String!, containerId: String!): ProcessDefinition!
+  # Gets a single ProcessDefinition with provided processDefinitionId and containerId.
+  processDefinition(
+                    # Identifier of process definition
+                    definitionId: String!,
+                    # Identifier of container the definition belongs to
+                    containerId: String!)
+                    # Returns a non-null process definition, if it exists
+                    :ProcessDefinition!
 
-  """
-  Gets list of UserTaskDefinition's for process definition with provided processDefinitionId and containerId.
-  """
-  userTaskDefinitions(processDefinitionId: String!, containerId: String!): [UserTaskDefinition!]!
+  # Gets list of UserTaskDefinition's for process definition with provided processDefinitionId and containerId.
+  userTaskDefinitions(
+                      # Identifier of process definition task definitions belong to
+                      definitionId: String!,
+                      # Identifier of container the definitions belongs to
+                      containerId: String!)
+                      # Returns a non-null list of non-null user task definitions
+                      :[UserTaskDefinition!]!
 
-  """
-  Gets all available process definitions from runtime from all containers.
-  """
-  allProcessDefinitions(batchSize: Int = 100): [ProcessDefinition!]!
+  # Gets all available process definitions from runtime from all containers.
+  allProcessDefinitions(
+                        # Size of the returned list
+                        batchSize: Int = 100)
+                        # Return non-null list of non-null process definitions
+                        :[ProcessDefinition!]!
 
-  """
-  Gets list of ProcessDefinition objects with concrete processDefinitionId OR containerId, not both.
-  """
-  processDefinitions(processDefinitionId: String, containerId: String): [ProcessDefinition]
+  # Gets list of ProcessDefinition objects with concrete processDefinitionId OR containerId, not both.
+  processDefinitions(
+                     # Identifier of process definition task definitions belong to
+                     definitionId: String,
+                     # Identifier of container the definition belongs to
+                     containerId: String)
+                     # Returns list of process definitions, or an error
+                     :[ProcessDefinition]
 }
 
+# Collection of query operation for instances
 type InstanceQuery {
-  """
-  Gets a ProcessInstance with id and containerId.
-  """
-  processInstance(id: Long!, containerId: String!): ProcessInstance!
+  # Gets a ProcessInstance with id and containerId.
+  processInstance(
+                  # Id of the process instance
+                  id: Long!,
+                  # Id of the container that this instance belongs to
+                  containerId: String!)
+                  # Non-null process instance
+                  :ProcessInstance!
 
-  """
-  Gets all available process instances from runtime based on the filter combination.
-  """
-  allProcessInstances(batchSize: Int = 100, filter: ProcessInstanceFilter!): [ProcessInstance!]!
+  # Gets all available process instances from runtime based on the filter combination.
+  allProcessInstances(
+                      # Size of the returned list
+                      batchSize: Int = 100,
+                      # Filter for returned instances. Can be used to retrieve instances with specific fields.
+                      filter: ProcessInstanceFilter!)
+                      # Non-null list of non-null process instance that match the filter combination
+                      :[ProcessInstance!]!
 
-  """
-  Gets list of ProcessVariable for process instance with id and containerId.
-  """
-  variables(id: Long!, containerId: String!): Object
+  # Gets list of ProcessVariable for process instance with id and containerId.
+  variables(
+            # Id of the process instance that variables belong to
+            id: Long!,
+            # Id of the container that process instance belong to
+            containerId: String!)
+            # JSON Object of the variables
+            :Object
 
-  """
-  Gets all available tasks from runtime based on the filter combination.
-  """
-  allTasks(batchSize: Int = 100, filter: TaskInstanceFilter!): [TaskSummary!]!
+  # Gets all available tasks from runtime based on the filter combination.
+  allTasks(
+           # Size of the returned list
+           batchSize: Int = 100,
+           # Filter for returned tasks. Can be used to retrieve tasks with specific fields.
+           filter: TaskInstanceFilter!)
+           # Returns non-null list of non-null task summaries that match the filter combination.
+           :[TaskSummary!]!
 
-  """
-  Gets task instance with specific ID.
-  """
-  taskInstance(taskId: Long!): TaskInstance
-
-  """
-  Gets task instance with specific workItemId.
-  """
-  taskInstance(workItemId: Long!): TaskInstance
+  # Gets task instance with specific ID.
+  taskInstance(
+               # Id of the task instance
+               taskId: Long!)
+               # Returns the task instance if it exists
+               :TaskInstance
 }
 
+# Collection of mutation operations for instances
 type InstanceMutation {
-  """
-  Creates/Starts process instances defined by the input. Can be also used to start one process instance, just set batchSize to 1.
-  """
-  startProcesses(input: StartProcessesInput!) :[ProcessInstance!]!
+  # Creates/Starts process instances defined by the input. Can be also used to start one process instance, just set batchSize to 1.
+  startProcesses(
+                 # Input object for startProcesses.
+                 input: StartProcessesInput!)
+                 # Returns non-null list of started process instances.
+                 :[ProcessInstance!]!
 
-  """
-  Aborts process instances with specified id or if specified, also with containerId.
-  """
-  abortProcessInstances(input: AbortProcessInstancesInput!): [ProcessInstance]!
+  # Aborts process instances with specified id or if specified, also with containerId.
+  abortProcessInstances(
+                        # Input object for abortProcessInstances
+                        input: AbortProcessInstancesInput!)
+                        # Returns non-null list of aborted process instances
+                        :[ProcessInstance]!
 
-  """
-  Signals process instances with specified ids or if specified also with containerId.
-  """
-  signalProcessInstances(input: SignalProcessInstancesInput!): [ProcessInstance]
+  # Signals process instances with specified ids or if specified also with containerId.
+  signalProcessInstances(
+                         # Input object for signalProcessInstances
+                         input: SignalProcessInstancesInput!)
+                         # Returns list of signalled process instances
+                         :[ProcessInstance]
 }
 
-"""
-KIE API ProcessDefinition.
-"""
+# KIE API ProcessDefinition.
 type ProcessDefinition {
   # Id of the process definition
   id: String!
@@ -135,25 +157,19 @@ type ProcessDefinition {
   dynamic: Boolean
 }
 
-"""
-KIE API TaskInputsDefinition.
-"""
+# KIE API TaskInputsDefinition.
 type TaskInputsDefinition {
   # Task inputs of this task inputs definition
   taskInputs: Object
 }
 
-"""
-KIE API TaskOutputsDefinition.
-"""
+# KIE API TaskOutputsDefinition.
 type TaskOutputsDefinition {
   # Task outputs of this task outputs definition
   taskOutputs: Object
 }
 
-"""
-KIE API UserTaskDefinition.
-"""
+# KIE API UserTaskDefinition.
 type UserTaskDefinition {
   # Id of this user task definition
   id: String!
@@ -175,9 +191,7 @@ type UserTaskDefinition {
   taskOutputMappings: TaskOutputsDefinition
 }
 
-"""
-KIE API TimerDefinition.
-"""
+# KIE API TimerDefinition.
 type TimerDefinition {
   # Id of the timer
   id: Long
@@ -189,9 +203,7 @@ type TimerDefinition {
   nodeId: Long
 }
 
-"""
-KIE API NodeDefinition.
-"""
+# KIE API NodeDefinition.
 type NodeDefinition {
   # Id of the node
   id: Int
@@ -203,9 +215,7 @@ type NodeDefinition {
   type: String
 }
 
-"""
-KIE API TaskSummary.
-"""
+# KIE API TaskSummary.
 type TaskSummary {
   # Id of the task instance
   id: Long!
@@ -241,17 +251,13 @@ type TaskSummary {
   parentId: Long
 }
 
-"""
-KIE API TaskSummaryList.
-"""
+# KIE API TaskSummaryList.
 type TaskSummaryList {
   # List of task instance summaries
   tasks: [TaskSummary]
 }
 
-"""
-KIE API TaskInstance
-"""
+# KIE API TaskInstance
 type TaskInstance {
   # Id of the task instance
   id: Long!
@@ -299,9 +305,7 @@ type TaskInstance {
   outputData: Object
 }
 
-"""
-KIE API ProcessInstance.
-"""
+# KIE API ProcessInstance.
 type ProcessInstance {
   # Id of the process instance
   id: Long!
@@ -335,13 +339,12 @@ type ProcessInstance {
   variables: Object
 }
 
-"""
-Input object for ProcessInstances.
-Allows users to select subset of its fields to
-query process instances.
-Process instances are matched based on the selected
-fields. Not every combination is supported.
-"""
+
+# Input object for ProcessInstances.
+# Allows users to select subset of its fields to
+# query process instances.
+# Process instances are matched based on the selected
+# fields. Not every combination is supported.
 input ProcessInstanceFilter {
   # List of states that process instances should be in
   statesIn: [Int]
@@ -361,14 +364,12 @@ input ProcessInstanceFilter {
   variableValue: Object
 }
 
-"""
-Input object for Tasks
-Allows users to select subset of its fields to
-query tasks. If more fields are selected an AND
-operation will be enforced.
-Tasks are matched based on the selected
-fields. Not every combination is supported.
-"""
+# Input object for Tasks
+# Allows users to select subset of its fields to
+# query tasks. If more fields are selected an AND
+# operation will be enforced.
+# Tasks are matched based on the selected
+# fields. Not every combination is supported.
 input TaskInstanceFilter {
   # States that tasks should be in
   statesIn: [String]
@@ -390,9 +391,7 @@ input TaskInstanceFilter {
   ownerId: String
 }
 
-"""
-Input for abortProcessInstances mutation.
-"""
+# Input for abortProcessInstances mutation.
 input AbortProcessInstancesInput {
   # List of IDs of the instances that you want to abort
   ids: [Long!]!
@@ -402,12 +401,10 @@ input AbortProcessInstancesInput {
   containerId: String
 }
 
-"""
-Input for startProcesses mutation.
-"""
+#Input for startProcesses mutation.
 input StartProcessesInput {
   # Size of the started batch.
-  batchSize: Int = 100
+  batchSize: Int=100
   # Identifier of the process
   id: String!
   # String identifier of the container of the process
@@ -419,9 +416,7 @@ input StartProcessesInput {
   variables: Object
 }
 
-"""
-Input for signalProcessInstances mutation
-"""
+# Input for signalProcessInstances mutation
 input SignalProcessInstancesInput {
   # List of IDs of the instances that you want to signal
   ids: [Long!]!

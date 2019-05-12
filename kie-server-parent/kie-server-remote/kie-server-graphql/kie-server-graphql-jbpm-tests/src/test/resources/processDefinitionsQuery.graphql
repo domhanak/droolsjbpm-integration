@@ -1,6 +1,6 @@
-query processDefinition($processDefinitionId: String!, $containerId: String!) {
+query processDefinition($definitionId: String!, $containerId: String!) {
     definitions {
-        processDefinition(processDefinitionId: $processDefinitionId, containerId: $containerId) {
+        processDefinition(definitionId: $definitionId, containerId: $containerId) {
             ...DefinitionFragment
         }
     }

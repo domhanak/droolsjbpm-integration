@@ -11,7 +11,7 @@ public class GraphQLConstants {
         public static final String BATCH_SIZE = "batchSize";
         public static final String CONTAINER_ID = "containerId";
         public static final String PROCESS_INSTANCE_ID = "processInstanceId";
-        public static final String PROCESS_DEFINITION_ID = "processDefinitionId";
+        public static final String DEFINITION_ID = "definitionId";
         public static final String TASK_INPUT_MAPPINGS = "taskInputMappings";
         public static final String TASK_OUTPUT_MAPPINGS = "taskOutputMappings";
         public static final String VARIABLES = "variables";

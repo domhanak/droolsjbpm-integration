@@ -23,7 +23,6 @@ import org.kie.internal.KieInternalServices;
 import org.kie.internal.process.CorrelationKey;
 import org.kie.internal.process.CorrelationKeyFactory;
 import org.kie.server.api.model.instance.ProcessInstance;
-import org.kie.server.api.model.instance.TaskInstance;
 import org.kie.server.api.model.instance.TaskSummary;
 import org.kie.server.remote.graphql.jbpm.filter.ProcessInstanceFilter;
 import org.kie.server.remote.graphql.jbpm.filter.TaskInstanceFilter;
@@ -339,12 +338,6 @@ public class InstanceRepositoryTest {
         Assertions.assertThatThrownBy(() -> instanceRepository.getAllProcessInstances(1, filter))
                 .hasMessageContaining("Selected filter properties do not match any know combinations.");
     }
-/*
-    @Test
-    public void getAllTasks_filterIsNull() {
-        Assertions.assertThatThrownBy(() -> instanceRepository.getAllTasks(1, null))
-                .hasMessageContaining("Filter for getAllTasks can't be null");
-    }*/
 
     @Test
     public void getAllTasks_filterStatesAndBusinessAdminId() {
@@ -762,10 +755,11 @@ public class InstanceRepositoryTest {
         doNothing().when(processService).abortProcessInstances(ids);
         when(runtimeDataService.getProcessInstanceById(1L)).thenReturn(processInstanceDesc);
 
-        List<ProcessInstance> result = instanceRepository.abortProcessInstances(ids, null);
+        List<ProcessInstance> result = instanceRepository.abortProcessInstances(ids, null, true);
         Assertions.assertThat(result).isNotNull();
 
         verify(processService, times(1)).abortProcessInstances(ids);
+        verify(processService, times(1)).getProcessInstanceVariables(ids.get(0));
     }
 
     @Test
@@ -774,10 +768,35 @@ public class InstanceRepositoryTest {
         doNothing().when(processService).abortProcessInstances(CONTAINER_ID_ONE, ids);
         when(runtimeDataService.getProcessInstanceById(1L)).thenReturn(processInstanceDesc);
 
-        List<ProcessInstance> result = instanceRepository.abortProcessInstances(ids, CONTAINER_ID_ONE);
+        List<ProcessInstance> result = instanceRepository.abortProcessInstances(ids, CONTAINER_ID_ONE, true);
         Assertions.assertThat(result).isNotNull();
 
         verify(processService, times(1)).abortProcessInstances(CONTAINER_ID_ONE, ids);
+        verify(processService, times(1)).getProcessInstanceVariables(ids.get(0));
+    }
+
+    @Test
+    public void testSignalProcessInstancesWithVars() {
+        List<Long> ids = Collections.singletonList(1L);
+        doNothing().when(processService).signalProcessInstances(ids, "name", "event");
+        when(runtimeDataService.getProcessInstanceById(1L)).thenReturn(processInstanceDesc);
+
+        List<ProcessInstance> result = instanceRepository.signalProcessInstances(ids, "name", "event", true);
+        Assertions.assertThat(result).isNotNull();
+
+        verify(processService, times(1)).getProcessInstanceVariables(ids.get(0));
+    }
+
+    @Test
+    public void testSignalProcessInstancesWithContainerIdWithVars() {
+        List<Long> ids = Collections.singletonList(1L);
+        doNothing().when(processService).signalProcessInstances(CONTAINER_ID_ONE, ids, "name", "event");
+        when(runtimeDataService.getProcessInstanceById(1L)).thenReturn(processInstanceDesc);
+
+        List<ProcessInstance> result = instanceRepository.signalProcessInstances(CONTAINER_ID_ONE, ids, "name", "event", true);
+        Assertions.assertThat(result).isNotNull();
+
+        verify(processService, times(1)).getProcessInstanceVariables(ids.get(0));
     }
 
     @After

@@ -88,11 +88,18 @@ public class InstanceMutation implements GraphQLMutationResolver {
      *              GraphQL makes sure it is non-null for us
      * @return list of aborted {@link ProcessInstance}
      */
-    public List<ProcessInstance> abortProcessInstances(AbortProcessInstancesInput input) {
+    public List<ProcessInstance> abortProcessInstances(AbortProcessInstancesInput input,
+                                                       DataFetchingEnvironment environment) {
+
+        boolean withVars = environment.getSelectionSet().contains(VARIABLES);
         if (input.getContainerId() == null) {
-            return instanceRepository.abortProcessInstances(input.getIds(), null);
+            return instanceRepository.abortProcessInstances(input.getIds(),
+                                                            null,
+                                                            withVars);
         } else {
-            return instanceRepository.abortProcessInstances(input.getIds(), input.getContainerId());
+            return instanceRepository.abortProcessInstances(input.getIds(),
+                                                            input.getContainerId(),
+                                                            withVars);
         }
     }
 
@@ -103,12 +110,18 @@ public class InstanceMutation implements GraphQLMutationResolver {
      * @param input {@link SignalProcessInstancesInput}
      * @return
      */
-    public List<ProcessInstance> signalProcessInstances(SignalProcessInstancesInput input) {
+    public List<ProcessInstance> signalProcessInstances(SignalProcessInstancesInput input,
+                                                        DataFetchingEnvironment environment) {
+        boolean withVars = environment.getSelectionSet().contains(VARIABLES);
         if (input.getContainerId() == null) {
-            return instanceRepository.signalProcessInstances(input.getIds(), input.getSignalName(), input.getEvent());
+            return instanceRepository.signalProcessInstances(input.getIds(),
+                                                             input.getSignalName(),
+                                                             input.getEvent(),
+                                                             withVars);
         } else {
             return instanceRepository.signalProcessInstances(input.getContainerId(), input.getIds(),
-                                                             input.getSignalName(), input.getEvent());
+                                                             input.getSignalName(), input.getEvent(),
+                                                             withVars);
         }
     }
 }

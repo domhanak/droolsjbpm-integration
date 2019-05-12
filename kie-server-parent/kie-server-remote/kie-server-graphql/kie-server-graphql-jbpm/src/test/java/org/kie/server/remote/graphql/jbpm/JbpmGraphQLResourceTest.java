@@ -41,7 +41,7 @@ public class JbpmGraphQLResourceTest {
         try {
             resource = new JbpmGraphQLResource(serviceProvider);
         } catch (Exception ex) {
-            Assertions.fail("JbpmGraphQLResource thrown an exception while initializing itself. Error: {}", ex);
+            Assertions.fail("JbpmGraphQLResource thrown an exception while initializing itself. Error: {}", ex.getMessage());
         }
     }
 }

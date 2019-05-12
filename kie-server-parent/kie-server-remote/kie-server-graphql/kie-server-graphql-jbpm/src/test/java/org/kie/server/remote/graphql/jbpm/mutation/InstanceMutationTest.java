@@ -169,13 +169,15 @@ public class InstanceMutationTest {
 
     @Test
     public void testAbortProcessInstancesWithContainerId() {
-        when(instanceRepository.abortProcessInstances(Collections.singletonList(ID), DUMMY_CONTAINER_ID))
+        when(instanceRepository.abortProcessInstances(Collections.singletonList(ID), DUMMY_CONTAINER_ID, true))
                 .thenReturn(Collections.singletonList(processInstanceWithoutVariables));
+        when(environment.getSelectionSet()).thenReturn(selectionSet);
+        when(selectionSet.contains(VARIABLES)).thenReturn(true);
         AbortProcessInstancesInput instancesInput = new AbortProcessInstancesInput();
         instancesInput.setContainerId(DUMMY_CONTAINER_ID);
         instancesInput.setIds(Collections.singletonList(ID));
 
-        List<ProcessInstance> result = instanceMutation.abortProcessInstances(instancesInput);
+        List<ProcessInstance> result = instanceMutation.abortProcessInstances(instancesInput, environment);
 
         SoftAssertions.assertSoftly((softAssertions -> {
             softAssertions.assertThat(result).isNotNull();
@@ -186,12 +188,14 @@ public class InstanceMutationTest {
 
     @Test
     public void testAbortProcessInstancesWithoutContainerId() {
-        when(instanceRepository.abortProcessInstances(Collections.singletonList(ID), null))
+        when(instanceRepository.abortProcessInstances(Collections.singletonList(ID), null, true))
                 .thenReturn(Collections.singletonList(processInstanceWithoutVariables));
+        when(environment.getSelectionSet()).thenReturn(selectionSet);
+        when(selectionSet.contains(VARIABLES)).thenReturn(true);
         AbortProcessInstancesInput instancesInput = new AbortProcessInstancesInput();
         instancesInput.setIds(Collections.singletonList(ID));
 
-        List<ProcessInstance> result = instanceMutation.abortProcessInstances(instancesInput);
+        List<ProcessInstance> result = instanceMutation.abortProcessInstances(instancesInput, environment);
 
         SoftAssertions.assertSoftly((softAssertions -> {
             softAssertions.assertThat(result).isNotNull();
@@ -203,12 +207,15 @@ public class InstanceMutationTest {
     public void testSignalProcessInstancesWithContainerId() {
         when(instanceRepository.signalProcessInstances(DUMMY_CONTAINER_ID,
                                                        Collections.singletonList(ID),
-                                                       DUMMY_SIGNAL_NAME, DUMMY_EVENT))
+                                                       DUMMY_SIGNAL_NAME, DUMMY_EVENT,
+                                                       true))
         .thenReturn(Collections.singletonList(processInstanceWithoutVariables));
+        when(environment.getSelectionSet()).thenReturn(selectionSet);
+        when(selectionSet.contains(VARIABLES)).thenReturn(true);
 
         SignalProcessInstancesInput input = createDummySignalProcessInstancesInput(DUMMY_CONTAINER_ID);
 
-        List<ProcessInstance> result = instanceMutation.signalProcessInstances(input);
+        List<ProcessInstance> result = instanceMutation.signalProcessInstances(input,environment);
         SoftAssertions.assertSoftly((softAssertions -> {
             softAssertions.assertThat(result).isNotNull();
             softAssertions.assertThat(result.get(0).getId()).isEqualTo(ID);
@@ -219,12 +226,14 @@ public class InstanceMutationTest {
     @Test
     public void testSignalProcessInstancesWithoutContainerId() {
         when(instanceRepository.signalProcessInstances(Collections.singletonList(ID),
-                                                       DUMMY_SIGNAL_NAME, DUMMY_EVENT))
+                                                       DUMMY_SIGNAL_NAME, DUMMY_EVENT, false))
                 .thenReturn(Collections.singletonList(processInstanceWithoutVariables));
+        when(environment.getSelectionSet()).thenReturn(selectionSet);
+        when(selectionSet.contains(VARIABLES)).thenReturn(false);
 
         SignalProcessInstancesInput input = createDummySignalProcessInstancesInput(null);
 
-        List<ProcessInstance> result = instanceMutation.signalProcessInstances(input);
+        List<ProcessInstance> result = instanceMutation.signalProcessInstances(input, environment);
         SoftAssertions.assertSoftly((softAssertions -> {
             softAssertions.assertThat(result).isNotNull();
             softAssertions.assertThat(result.get(0).getId()).isEqualTo(ID);

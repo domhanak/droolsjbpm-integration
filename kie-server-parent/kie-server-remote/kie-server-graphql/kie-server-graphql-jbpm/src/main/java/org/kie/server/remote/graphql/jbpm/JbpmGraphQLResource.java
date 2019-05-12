@@ -23,12 +23,10 @@ import graphql.ExecutionInput;
 import graphql.GraphQL;
 import graphql.execution.instrumentation.Instrumentation;
 import graphql.execution.instrumentation.SimpleInstrumentation;
-import graphql.execution.instrumentation.tracing.TracingInstrumentation;
 import graphql.scalars.ExtendedScalars;
 import graphql.schema.GraphQLSchema;
 import org.kie.server.remote.graphql.jbpm.mutation.Mutation;
 import org.kie.server.remote.graphql.jbpm.query.Query;
-import org.kie.server.services.api.KieServerRegistry;
 
 /**
  * GraphQL resource for jBPM.

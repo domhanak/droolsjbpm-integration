@@ -510,15 +510,20 @@ public class InstanceRepository {
      *          be null to abort only using ids
      * @return list of aborted process instances
      */
-    public List<ProcessInstance> abortProcessInstances(List<Long> ids, String containerId) {
+    public List<ProcessInstance> abortProcessInstances(List<Long> ids, String containerId, boolean withVars) {
         if (containerId == null) {
             processService.abortProcessInstances(ids);
         } else {
             processService.abortProcessInstances(containerId, ids);
         }
         List<ProcessInstance> result = new ArrayList<>();
+        ProcessInstance pi;
         for (Long pid : ids) {
-            result.add(convertToProcessInstance(runtimeDataService.getProcessInstanceById(pid)));
+            pi = convertToProcessInstance(runtimeDataService.getProcessInstanceById(pid));
+            if (withVars) {
+                pi.setVariables(processService.getProcessInstanceVariables(pid));
+            }
+            result.add(pi);
         }
 
         return result;
@@ -535,11 +540,16 @@ public class InstanceRepository {
      * @return List of signalled process instances
      */
     public List<ProcessInstance> signalProcessInstances(String containerId, List<Long> processInstanceIds,
-                                                        String signalName, Object event) {
+                                                        String signalName, Object event, boolean withVars) {
         processService.signalProcessInstances(containerId, processInstanceIds, signalName, event);
         List<ProcessInstance> result = new ArrayList<>();
+        ProcessInstance pi;
         for (Long id : processInstanceIds) {
-            result.add(convertToProcessInstance(runtimeDataService.getProcessInstanceById(id)));
+            pi = convertToProcessInstance(runtimeDataService.getProcessInstanceById(id));
+            if (withVars) {
+                pi.setVariables(processService.getProcessInstanceVariables(id));
+            }
+            result.add(pi);
         }
 
         return result;
@@ -551,21 +561,26 @@ public class InstanceRepository {
      * @param processInstanceIds list of ids of process instances
      * @param signalName name of the signal
      * @param event an Object of the event
-     * @return
+     * @param withVars whether to fetch variables or not
+     *
+     * @return list of signalled process instances
      */
     public List<ProcessInstance> signalProcessInstances(List<Long> processInstanceIds,
-                                                        String signalName, Object event) {
+                                                        String signalName, Object event,
+                                                        boolean withVars) {
         processService.signalProcessInstances(processInstanceIds, signalName, event);
         List<ProcessInstance> result = new ArrayList<>();
+        ProcessInstance pi;
         for (Long id : processInstanceIds) {
-            result.add(convertToProcessInstance(runtimeDataService.getProcessInstanceById(id)));
+            pi = convertToProcessInstance(runtimeDataService.getProcessInstanceById(id));
+            if (withVars) {
+                pi.setVariables(processService.getProcessInstanceVariables(id));
+            }
+            result.add(pi);
         }
 
         return result;
     }
-
-
-
 
     /*
      * Helper methods

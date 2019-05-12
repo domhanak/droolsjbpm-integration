@@ -7,7 +7,7 @@ Schema documentation is located in different file called `jbpm-schema.md`
 ## Queries
 Queries return only data that you specify. 
 To create a query, you must specify fields within fields, until you return only scalars.
-```JSON
+```
 query {
   # JSON object you want to return - this is a comment
   instances { #object
@@ -21,12 +21,12 @@ query {
 ## Mutations
 Mutations are used to modify processes.
 To create a mutation you need to do this:
-1. `Mutation name`. The type of the modification you want to perform.
-2. `Input object`. The data you want to send to server. It contains input fields. These need to be passed as argument.
-3. `Payload object`. The data that you want back from the server, this will be a bode of the mutation name.
+1. `Mutation name` The type of the modification you want to perform.
+2. `Input object` The data you want to send to server. It contains input fields. These need to be passed as argument.
+3. `Payload object` The data that you want back from the server, this will be a bode of the mutation name.
 
 Here is the final structure of mutation:
-```JSON
+```
 mutation {
   instances {
     startProcesses(input: $input) { # Mutation name and Input object
@@ -38,7 +38,7 @@ mutation {
 
 ## Authorization
 
-In order ot use the API. You need to have a user with roles registered in KIE Server - `rest-all, kie-server`.
+In order ot use the API. You need to have a user with roles - `rest-all` and `kie-server` registered in KIE Server.
 Authorization with tokens is suggested.
 
 ## Variables
@@ -58,11 +58,11 @@ In order to use variables you should:
       }
     ```
 1. Use it in a query or mutation
-    ```JSON
+    ```
     mutation StartedProcessInstance($input: StartProcessesInput!) {
     ```
 3. Use the variable within the operation
-    ```JSON
+    ```
     mutation StartedProcessInstance($input: StartProcessesInput!) {
       instances {
         startProcesses(input: $input) {
@@ -109,7 +109,7 @@ For queries use `GET` request.
 For quick browsing and familiarization we suggest you use Altair GraphQL Client - https://altair.sirmuel.design/
 It offers very nice user interface and allows you to browse the schema. All you need to do is provide
 URL to the running service. It also comes as an browser extension and auto-completion based on the implemented schema,
- which makes it a great tool to start with.
+which makes it a great tool to start with.
  
 Below you can find example commands for CLI tool [cURL](curl.haxx.se).
 These commands work best with the quickstart running on local machine.
@@ -142,7 +142,7 @@ For mutation queries, it is a best practice to use POST request where everything
 
 * Command to abort process instances instances with ids 1,2,3,4,5,6,7,8,9:
     ```
-    curl -X GET 'http://localhost:8080/kie-server/services/rest/server/graphql' -H 'Accept-Encoding: gzip, deflate, br' -H 'Content-Type: application/json' -H 'Accept: application/json' -H 'Connection: keep-alive' --data-binary '{"query":"mutation abortProcessInstances($input:AbortProcessInstancesInput!){instances{abortProcessInstances(input:$input){id}}}","variables":{"input":{"ids":[1,2,3,4,5,6,7,8,9],"containerId":"Hello_1.0.0-SNAPSHOT"}}}' --compressed
+    curl -X POST 'http://localhost:8080/kie-server/services/rest/server/graphql' -H 'Accept-Encoding: gzip, deflate, br' -H 'Content-Type: application/json' -H 'Accept: application/json' -H 'Connection: keep-alive' --data-binary '{"query":"mutation abortProcessInstances($input:AbortProcessInstancesInput!){instances{abortProcessInstances(input:$input){id}}}","variables":{"input":{"ids":[1,2,3,4,5,6,7,8,9],"containerId":"Hello_1.0.0-SNAPSHOT"}}}' --compressed
     ```
 
 ### Queries examples

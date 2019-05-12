@@ -22,6 +22,7 @@ import com.zhokhov.graphql.datetime.GraphQLDate;
 import graphql.ExecutionInput;
 import graphql.GraphQL;
 import graphql.execution.instrumentation.Instrumentation;
+import graphql.execution.instrumentation.SimpleInstrumentation;
 import graphql.execution.instrumentation.tracing.TracingInstrumentation;
 import graphql.scalars.ExtendedScalars;
 import graphql.schema.GraphQLSchema;
@@ -57,7 +58,7 @@ public class JbpmGraphQLResource {
     private JbpmGraphQLServiceProvider serviceProvider;
 
     public JbpmGraphQLResource(JbpmGraphQLServiceProvider serviceProvider) {
-        Instrumentation instrumentation = new TracingInstrumentation();
+        Instrumentation instrumentation = new SimpleInstrumentation();
 
         // Initialize ServiceProvider before we build schema
         this.serviceProvider = serviceProvider;
@@ -96,7 +97,7 @@ public class JbpmGraphQLResource {
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    public Map<String, Object> graphql(@Context HttpHeaders headers, Map<String, Object> body) {
+    public Map<String, Object> graphql(Map<String, Object> body) {
         String query = (String) body.get("query");
 
         if (query == null) {
@@ -119,10 +120,10 @@ public class JbpmGraphQLResource {
     /**
      * Executes the GraphQL query or mutation.
      *
-     * @param operationName
-     * @param query
-     * @param variables
-     * @return
+     * @param operationName name of the operation, utilized when sending multiple queries in on request
+     * @param query the query as a string
+     * @param variables variables, used with fragments and parametrized queries
+     * @return returns {@link Map} of {@link String} and {@link Object}
      */
     private Map<String, Object> executeGraphqlQuery(String operationName,
                                                     String query, Map<String, Object> variables) {
@@ -140,6 +141,7 @@ public class JbpmGraphQLResource {
                     .operationName(operationName)
                     .build();
         }
+        // Execute the input and return it as specification
         return graphql.execute(executionInput).toSpecification();
     }
 

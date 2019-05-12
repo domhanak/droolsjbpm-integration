@@ -1,6 +1,6 @@
-mutation startProcesses($id: String!, $containerId: String!, $batchSize: Int){
+mutation startProcesses($input: StartProcessesInput!){
   instances {
-    startProcesses(id: $id, containerId: $containerId, batchSize: $batchSize) {
+    startProcesses(input: $input) {
       ...StartedProcessInstances
     }
   }

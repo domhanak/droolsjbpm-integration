@@ -11,6 +11,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kie.server.api.model.instance.ProcessInstance;
+import org.kie.server.remote.graphql.jbpm.inputs.AbortProcessInstancesInput;
+import org.kie.server.remote.graphql.jbpm.inputs.SignalProcessInstancesInput;
+import org.kie.server.remote.graphql.jbpm.inputs.StartProcessesInput;
 import org.kie.server.remote.graphql.jbpm.repository.InstanceRepository;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -60,6 +63,7 @@ public class InstanceMutationTest {
 
     private ProcessInstance processInstanceWithoutVariables = ProcessInstance.builder()
             .id(ID)
+            .processId(DUMMY_ID)
             .containerId(DUMMY_CONTAINER_ID)
             .state(ACTIVE_STATE)
             .build();
@@ -71,95 +75,14 @@ public class InstanceMutationTest {
     }
 
     @Test
-    public void testStartProcess() {
-        when(instanceRepository.startProcess(DUMMY_ID, DUMMY_CONTAINER_ID, true))
-                .thenReturn(processInstanceWithVariables);
-        when(environment.getSelectionSet()).thenReturn(selectionSet);
-        when(selectionSet.contains(VARIABLES)).thenReturn(true);
-        when(environment.getArgument(CORRELATION_KEY)).thenReturn(null);
-        when(environment.getArgument(PROCESS_VARIABLES)).thenReturn(null);
-
-        ProcessInstance result = instanceMutation.startProcess(DUMMY_ID, DUMMY_CONTAINER_ID,
-                                                               null, null, environment);
-
-        SoftAssertions.assertSoftly((softAssertions -> {
-            softAssertions.assertThat(result.getProcessId()).isEqualTo(DUMMY_ID);
-            softAssertions.assertThat(result.getContainerId()).isEqualTo(DUMMY_CONTAINER_ID);
-            softAssertions.assertThat(result.getVariables()).isEqualTo(DUMMY_VARIABLES);
-        }));
-    }
-
-    @Test
-    public void testStartProcessWithCorrelationKey() {
-        when(instanceRepository.startProcess(DUMMY_ID, DUMMY_CONTAINER_ID, DUMMY_CORRELATION_KEY, true))
-                .thenReturn(processInstanceWithVariables);
-        when(environment.getSelectionSet()).thenReturn(selectionSet);
-        when(selectionSet.contains(VARIABLES)).thenReturn(true);
-        when(environment.getArgument(CORRELATION_KEY)).thenReturn(DUMMY_CORRELATION_KEY);
-        when(environment.getArgument(PROCESS_VARIABLES)).thenReturn(null);
-
-        ProcessInstance result = instanceMutation.startProcess(DUMMY_ID, DUMMY_CONTAINER_ID,
-                                                               DUMMY_CORRELATION_KEY, null, environment);
-
-        SoftAssertions.assertSoftly((softAssertions -> {
-            softAssertions.assertThat(result.getProcessId()).isEqualTo(DUMMY_ID);
-            softAssertions.assertThat(result.getContainerId()).isEqualTo(DUMMY_CONTAINER_ID);
-            softAssertions.assertThat(result.getCorrelationKey()).isEqualTo(DUMMY_CORRELATION_KEY);
-            softAssertions.assertThat(result.getVariables()).isEqualTo(DUMMY_VARIABLES);
-        }));
-    }
-
-    @Test
-    public void testStartProcessWithProcessVariables() {
-        when(instanceRepository.startProcess(DUMMY_ID, DUMMY_CONTAINER_ID, null, DUMMY_VARIABLES, true))
-                .thenReturn(processInstanceWithVariables);
-        when(environment.getSelectionSet()).thenReturn(selectionSet);
-        when(selectionSet.contains(VARIABLES)).thenReturn(true);
-        when(environment.getArgument(CORRELATION_KEY)).thenReturn(null);
-        when(environment.getArgument(PROCESS_VARIABLES)).thenReturn(DUMMY_VARIABLES);
-
-        ProcessInstance result = instanceMutation.startProcess(DUMMY_ID, DUMMY_CONTAINER_ID,
-                                                               null, DUMMY_VARIABLES , environment);
-
-        SoftAssertions.assertSoftly((softAssertions -> {
-            softAssertions.assertThat(result.getProcessId()).isEqualTo(DUMMY_ID);
-            softAssertions.assertThat(result.getContainerId()).isEqualTo(DUMMY_CONTAINER_ID);
-            softAssertions.assertThat(result.getCorrelationKey()).isEqualTo(DUMMY_CORRELATION_KEY);
-            softAssertions.assertThat(result.getVariables()).isEqualTo(DUMMY_VARIABLES);
-        }));
-    }
-
-    @Test
-    public void testStartProcessWithCorrelationKeyWithProcessVariables() {
-        when(instanceRepository.startProcess(DUMMY_ID, DUMMY_CONTAINER_ID, DUMMY_CORRELATION_KEY, DUMMY_VARIABLES, true))
-                .thenReturn(processInstanceWithVariables);
-        when(environment.getSelectionSet()).thenReturn(selectionSet);
-        when(selectionSet.contains(VARIABLES)).thenReturn(true);
-        when(environment.getArgument(CORRELATION_KEY)).thenReturn(CORRELATION_KEY);
-        when(environment.getArgument(PROCESS_VARIABLES)).thenReturn(DUMMY_VARIABLES);
-
-        ProcessInstance result = instanceMutation.startProcess(DUMMY_ID, DUMMY_CONTAINER_ID,
-                                                               DUMMY_CORRELATION_KEY, DUMMY_VARIABLES , environment);
-
-        SoftAssertions.assertSoftly((softAssertions -> {
-            softAssertions.assertThat(result.getProcessId()).isEqualTo(DUMMY_ID);
-            softAssertions.assertThat(result.getContainerId()).isEqualTo(DUMMY_CONTAINER_ID);
-            softAssertions.assertThat(result.getCorrelationKey()).isEqualTo(DUMMY_CORRELATION_KEY);
-            softAssertions.assertThat(result.getVariables()).isEqualTo(DUMMY_VARIABLES);
-        }));
-    }
-
-    @Test
     public void testStartProcesses() {
         when(instanceRepository.startProcesses(DUMMY_ID, DUMMY_CONTAINER_ID, DUMMY_BATCH_SIZE, true))
                 .thenReturn(Collections.singletonList(processInstanceWithVariables));
         when(environment.getSelectionSet()).thenReturn(selectionSet);
         when(selectionSet.contains(VARIABLES)).thenReturn(true);
-        when(environment.getArgument(CORRELATION_KEY)).thenReturn(null);
-        when(environment.getArgument(PROCESS_VARIABLES)).thenReturn(null);
+        StartProcessesInput input = createDummyStartProcessesInput(null, null);
 
-        List<ProcessInstance> result = instanceMutation.startProcesses(DUMMY_ID, DUMMY_CONTAINER_ID,
-                                                               null, null, DUMMY_BATCH_SIZE, environment);
+        List<ProcessInstance> result = instanceMutation.startProcesses(input, environment);
 
         SoftAssertions.assertSoftly((softAssertions -> {
             softAssertions.assertThat(result).hasSize(DUMMY_BATCH_SIZE);
@@ -170,16 +93,32 @@ public class InstanceMutationTest {
     }
 
     @Test
+    public void testStartProcessesWithoutVars() {
+        when(instanceRepository.startProcesses(DUMMY_ID, DUMMY_CONTAINER_ID, DUMMY_BATCH_SIZE, false))
+                .thenReturn(Collections.singletonList(processInstanceWithoutVariables));
+        when(environment.getSelectionSet()).thenReturn(selectionSet);
+        when(selectionSet.contains(VARIABLES)).thenReturn(false);
+        StartProcessesInput input = createDummyStartProcessesInput(null, null);
+
+        List<ProcessInstance> result = instanceMutation.startProcesses(input, environment);
+
+        SoftAssertions.assertSoftly((softAssertions -> {
+            softAssertions.assertThat(result).hasSize(DUMMY_BATCH_SIZE);
+            softAssertions.assertThat(result.get(0).getProcessId()).isEqualTo(DUMMY_ID);
+            softAssertions.assertThat(result.get(0).getContainerId()).isEqualTo(DUMMY_CONTAINER_ID);
+            softAssertions.assertThat(result.get(0).getVariables()).isEqualTo(null);
+        }));
+    }
+
+    @Test
     public void testStartProcessesWithCorrelationKey() {
         when(instanceRepository.startProcesses(DUMMY_ID, DUMMY_CONTAINER_ID, DUMMY_CORRELATION_KEY, DUMMY_BATCH_SIZE, true))
                 .thenReturn(Collections.singletonList(processInstanceWithVariables));
         when(environment.getSelectionSet()).thenReturn(selectionSet);
         when(selectionSet.contains(VARIABLES)).thenReturn(true);
-        when(environment.getArgument(CORRELATION_KEY)).thenReturn(DUMMY_CORRELATION_KEY);
-        when(environment.getArgument(PROCESS_VARIABLES)).thenReturn(null);
+        StartProcessesInput input = createDummyStartProcessesInput(DUMMY_CORRELATION_KEY, null);
 
-        List<ProcessInstance> result = instanceMutation.startProcesses(DUMMY_ID, DUMMY_CONTAINER_ID,
-                                                               DUMMY_CORRELATION_KEY, null, DUMMY_BATCH_SIZE, environment);
+        List<ProcessInstance> result = instanceMutation.startProcesses(input, environment);
 
         SoftAssertions.assertSoftly((softAssertions -> {
             softAssertions.assertThat(result).hasSize(DUMMY_BATCH_SIZE);
@@ -196,11 +135,9 @@ public class InstanceMutationTest {
                 .thenReturn(Collections.singletonList(processInstanceWithVariables));
         when(environment.getSelectionSet()).thenReturn(selectionSet);
         when(selectionSet.contains(VARIABLES)).thenReturn(true);
-        when(environment.getArgument(CORRELATION_KEY)).thenReturn(null);
-        when(environment.getArgument(PROCESS_VARIABLES)).thenReturn(DUMMY_VARIABLES);
+        StartProcessesInput input = createDummyStartProcessesInput(null, DUMMY_VARIABLES);
 
-        List<ProcessInstance> result = instanceMutation.startProcesses(DUMMY_ID, DUMMY_CONTAINER_ID,
-                                                               null, DUMMY_VARIABLES, DUMMY_BATCH_SIZE, environment);
+        List<ProcessInstance> result = instanceMutation.startProcesses(input, environment);
 
         SoftAssertions.assertSoftly((softAssertions -> {
             softAssertions.assertThat(result).hasSize(DUMMY_BATCH_SIZE);
@@ -217,11 +154,9 @@ public class InstanceMutationTest {
                 .thenReturn(Collections.singletonList(processInstanceWithVariables));
         when(environment.getSelectionSet()).thenReturn(selectionSet);
         when(selectionSet.contains(VARIABLES)).thenReturn(true);
-        when(environment.getArgument(CORRELATION_KEY)).thenReturn(CORRELATION_KEY);
-        when(environment.getArgument(PROCESS_VARIABLES)).thenReturn(DUMMY_VARIABLES);
+        StartProcessesInput input = createDummyStartProcessesInput(DUMMY_CORRELATION_KEY, DUMMY_VARIABLES);
 
-        List<ProcessInstance> result = instanceMutation.startProcesses(DUMMY_ID, DUMMY_CONTAINER_ID,
-                                                                       DUMMY_CORRELATION_KEY, DUMMY_VARIABLES, DUMMY_BATCH_SIZE, environment);
+        List<ProcessInstance> result = instanceMutation.startProcesses(input, environment);
 
         SoftAssertions.assertSoftly((softAssertions -> {
             softAssertions.assertThat(result).hasSize(DUMMY_BATCH_SIZE);
@@ -236,9 +171,11 @@ public class InstanceMutationTest {
     public void testAbortProcessInstancesWithContainerId() {
         when(instanceRepository.abortProcessInstances(Collections.singletonList(ID), DUMMY_CONTAINER_ID))
                 .thenReturn(Collections.singletonList(processInstanceWithoutVariables));
-        when(environment.getArgument(CONTAINER_ID)).thenReturn(DUMMY_CONTAINER_ID);
+        AbortProcessInstancesInput instancesInput = new AbortProcessInstancesInput();
+        instancesInput.setContainerId(DUMMY_CONTAINER_ID);
+        instancesInput.setIds(Collections.singletonList(ID));
 
-        List<ProcessInstance> result = instanceMutation.abortProcessInstances(Collections.singletonList(ID), DUMMY_CONTAINER_ID, environment);
+        List<ProcessInstance> result = instanceMutation.abortProcessInstances(instancesInput);
 
         SoftAssertions.assertSoftly((softAssertions -> {
             softAssertions.assertThat(result).isNotNull();
@@ -251,9 +188,10 @@ public class InstanceMutationTest {
     public void testAbortProcessInstancesWithoutContainerId() {
         when(instanceRepository.abortProcessInstances(Collections.singletonList(ID), null))
                 .thenReturn(Collections.singletonList(processInstanceWithoutVariables));
-        when(environment.getArgument(CONTAINER_ID)).thenReturn(null);
+        AbortProcessInstancesInput instancesInput = new AbortProcessInstancesInput();
+        instancesInput.setIds(Collections.singletonList(ID));
 
-        List<ProcessInstance> result = instanceMutation.abortProcessInstances(Collections.singletonList(ID), null, environment);
+        List<ProcessInstance> result = instanceMutation.abortProcessInstances(instancesInput);
 
         SoftAssertions.assertSoftly((softAssertions -> {
             softAssertions.assertThat(result).isNotNull();
@@ -268,13 +206,13 @@ public class InstanceMutationTest {
                                                        DUMMY_SIGNAL_NAME, DUMMY_EVENT))
         .thenReturn(Collections.singletonList(processInstanceWithoutVariables));
 
-        List<ProcessInstance> result = instanceMutation.signalProcessInstances(DUMMY_CONTAINER_ID,
-                                                                               Collections.singletonList(ID),
-                                                                               DUMMY_SIGNAL_NAME,
-                                                                               DUMMY_EVENT);
+        SignalProcessInstancesInput input = createDummySignalProcessInstancesInput(DUMMY_CONTAINER_ID);
+
+        List<ProcessInstance> result = instanceMutation.signalProcessInstances(input);
         SoftAssertions.assertSoftly((softAssertions -> {
             softAssertions.assertThat(result).isNotNull();
             softAssertions.assertThat(result.get(0).getId()).isEqualTo(ID);
+            softAssertions.assertThat(result.get(0).getContainerId()).isEqualTo(DUMMY_CONTAINER_ID);
         }));
     }
 
@@ -283,13 +221,34 @@ public class InstanceMutationTest {
         when(instanceRepository.signalProcessInstances(Collections.singletonList(ID),
                                                        DUMMY_SIGNAL_NAME, DUMMY_EVENT))
                 .thenReturn(Collections.singletonList(processInstanceWithoutVariables));
-        List<ProcessInstance> result = instanceMutation.signalProcessInstances(null,
-                                                                               Collections.singletonList(ID),
-                                                                               DUMMY_SIGNAL_NAME,
-                                                                               DUMMY_EVENT);
+
+        SignalProcessInstancesInput input = createDummySignalProcessInstancesInput(null);
+
+        List<ProcessInstance> result = instanceMutation.signalProcessInstances(input);
         SoftAssertions.assertSoftly((softAssertions -> {
             softAssertions.assertThat(result).isNotNull();
             softAssertions.assertThat(result.get(0).getId()).isEqualTo(ID);
         }));
+    }
+
+    private StartProcessesInput createDummyStartProcessesInput(String correlationKey, Map<String, Object> variables){
+        StartProcessesInput result = new StartProcessesInput();
+        result.setBatchSize(DUMMY_BATCH_SIZE);
+        result.setId(DUMMY_ID);
+        result.setContainerId(DUMMY_CONTAINER_ID);
+        result.setCorrelationKey(correlationKey);
+        result.setVariables(variables);
+
+        return result;
+    }
+
+    private SignalProcessInstancesInput createDummySignalProcessInstancesInput(String containerId) {
+        SignalProcessInstancesInput result = new SignalProcessInstancesInput();
+        result.setIds(Collections.singletonList(ID));
+        result.setSignalName(DUMMY_SIGNAL_NAME);
+        result.setEvent(DUMMY_EVENT);
+        result.setContainerId(containerId);
+
+        return result;
     }
 }

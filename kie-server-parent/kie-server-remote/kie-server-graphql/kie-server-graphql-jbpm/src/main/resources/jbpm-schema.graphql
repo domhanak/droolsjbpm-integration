@@ -65,7 +65,7 @@ type InstanceQuery {
   """
   Gets all available process instances from runtime based on the filter combination.
   """
-  allProcessInstances(batchSize: Int = 100, filter: ProcessInstanceFilter): [ProcessInstance!]!
+  allProcessInstances(batchSize: Int = 100, filter: ProcessInstanceFilter!): [ProcessInstance!]!
 
   """
   Gets list of ProcessVariable for process instance with id and containerId.
@@ -90,24 +90,19 @@ type InstanceQuery {
 
 type InstanceMutation {
   """
-  Creates/Starts process instance for process definition with id and containerId.
+  Creates/Starts process instances defined by the input. Can be also used to start one process instance, just set batchSize to 1.
   """
-  startProcess(id: String!, containerId: String!, correlationKey: String, processVariables: Object) : ProcessInstance!
-
-  """
-  Creates/Starts process instances for process definition with id and containerId.
-  """
-  startProcesses(id: String!, containerId: String!, correlationKey: String, processVariables: Object, batchSize: Int = 100) : [ProcessInstance!]!
+  startProcesses(input: StartProcessesInput!) :[ProcessInstance!]!
 
   """
   Aborts process instances with specified id or if specified, also with containerId.
   """
-  abortProcessInstances(id: [Long!]!, containerId: String): [ProcessInstance]!
+  abortProcessInstances(input: AbortProcessInstancesInput!): [ProcessInstance]!
 
   """
   Signals process instances with specified ids or if specified also with containerId.
   """
-  signalProcessInstances(containerId: String, processInstanceIds: [Long!]!, signalName: String!, event: Object!): [ProcessInstance]
+  signalProcessInstances(input: SignalProcessInstancesInput!): [ProcessInstance]
 }
 
 """
@@ -176,7 +171,7 @@ type UserTaskDefinition {
   associatedEntities: [String]
   # Task input mappings for this user task definition
   taskInputMappings: TaskInputsDefinition
-  # Task output mapings for this user task definition
+  # Task output mappings for this user task definition
   taskOutputMappings: TaskOutputsDefinition
 }
 
@@ -224,7 +219,7 @@ type TaskSummary {
   status: String
   # Priority of this task
   priority: Int
-  # Whether this task is skippable or not
+  # Whether this task can be skipped or not
   skipable: Boolean
   # Actual owner of this task instance
   actualOwner: String
@@ -270,7 +265,7 @@ type TaskInstance {
   status: String
   # Priority of the task instance
   priority: Int
-  # Whether the task is skippable or not
+  # Whether the task is skipable or not
   skipable: Boolean
   # Actual owner of the task instance
   actualOwner: String
@@ -369,7 +364,8 @@ input ProcessInstanceFilter {
 """
 Input object for Tasks
 Allows users to select subset of its fields to
-query tasks.
+query tasks. If more fields are selected an AND
+operation will be enforced.
 Tasks are matched based on the selected
 fields. Not every combination is supported.
 """
@@ -392,4 +388,48 @@ input TaskInstanceFilter {
   variableValue: Object
   # Id of the tasks owner
   ownerId: String
+}
+
+"""
+Input for abortProcessInstances mutation.
+"""
+input AbortProcessInstancesInput {
+  # List of IDs of the instances that you want to abort
+  ids: [Long!]!
+  # Id of a container that instances should belong to, optional argument,
+  # in case there is Id that does not belong to it returned list is going to
+  # contain null on its position
+  containerId: String
+}
+
+"""
+Input for startProcesses mutation.
+"""
+input StartProcessesInput {
+  # Size of the started batch.
+  batchSize: Int = 100
+  # Identifier of the process
+  id: String!
+  # String identifier of the container of the process
+  containerId: String!
+  # A correlationKey that should be assigned to a started process instances
+  # optional, must be unique
+  correlationKey: String
+  # Variables of the process
+  variables: Object
+}
+
+"""
+Input for signalProcessInstances mutation
+"""
+input SignalProcessInstancesInput {
+  # List of IDs of the instances that you want to signal
+  ids: [Long!]!
+  # Name of the signal
+  signalName: String!
+  # An event object to be passed in
+  event: Object!
+  # String identified of the container of the process instances
+  # optional, if not set it won't be used
+  containerId: String
 }

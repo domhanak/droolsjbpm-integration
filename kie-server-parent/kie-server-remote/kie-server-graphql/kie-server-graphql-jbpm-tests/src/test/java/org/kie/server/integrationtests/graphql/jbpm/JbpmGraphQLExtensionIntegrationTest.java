@@ -24,6 +24,7 @@ import org.kie.server.client.KieServicesClient;
 import org.kie.server.integrationtests.shared.KieServerDeployer;
 import org.kie.server.integrationtests.shared.basetests.RestJmsSharedBaseIntegrationTest;
 import org.kie.server.remote.graphql.client.JBPMGraphQLClient;
+import org.kie.server.remote.graphql.jbpm.inputs.StartProcessesInput;
 
 public class JbpmGraphQLExtensionIntegrationTest extends RestJmsSharedBaseIntegrationTest {
 
@@ -40,8 +41,6 @@ public class JbpmGraphQLExtensionIntegrationTest extends RestJmsSharedBaseIntegr
                                                        VERSION);
 
     private JBPMGraphQLClient graphQLClient;
-    private String query;
-    private String mutation;
 
     @BeforeClass
     public static void deployArtifacts() {
@@ -54,18 +53,16 @@ public class JbpmGraphQLExtensionIntegrationTest extends RestJmsSharedBaseIntegr
     }
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         Assume.assumeTrue(configuration.isRest());
         Assume.assumeTrue(configuration.getMarshallingFormat().equals(MarshallingFormat.JSON));
+    }
 
-
+    private String getStringFromFile(String fileName) {
         ClassLoader classLoader = getClass().getClassLoader();
-        File queryFile = new File(Objects.requireNonNull(classLoader.getResource("processDefinitionsQuery.graphql")).getFile());
-        File mutationFile = new File(Objects.requireNonNull(classLoader.getResource("processInstancesMutation.graphql")).getFile());
+        File file = new File(Objects.requireNonNull(classLoader.getResource(fileName)).getFile());
 
-        query = readFile(queryFile.getAbsolutePath(), Charset.defaultCharset());
-        mutation = readFile(mutationFile.getAbsolutePath(), Charset.defaultCharset());
-
+        return readFile(file.getAbsolutePath(), Charset.defaultCharset());
     }
 
     @AfterClass
@@ -78,10 +75,14 @@ public class JbpmGraphQLExtensionIntegrationTest extends RestJmsSharedBaseIntegr
         graphQLClient = client.getServicesClient(JBPMGraphQLClient.class);
     }
 
-    static String readFile(String path, Charset encoding)
-            throws IOException
+    private static String readFile(String path, Charset encoding)
     {
-        byte[] encoded = Files.readAllBytes(Paths.get(path));
+        byte[] encoded = new byte[0];
+        try {
+            encoded = Files.readAllBytes(Paths.get(path));
+        } catch (IOException e) {
+            Assertions.fail("Error while reading query file - [%s].", path);
+        }
         return new String(encoded, encoding);
     }
 
@@ -94,7 +95,7 @@ public class JbpmGraphQLExtensionIntegrationTest extends RestJmsSharedBaseIntegr
 
         Assertions.assertThat(graphQLClient).isNotNull();
 
-        Map<String, Object> result = graphQLClient.executeQuery(query,
+        Map<String, Object> result = graphQLClient.executeQuery(getStringFromFile("processDefinitionsQuery.graphql"),
                                                                 operationName,
                                                                 variables);
 
@@ -103,18 +104,21 @@ public class JbpmGraphQLExtensionIntegrationTest extends RestJmsSharedBaseIntegr
     }
 
     @Test
-    public void testExecuteMutation() {
+    public void testExecuteStartProcessMutation() {
         String operationName = "";
-        Map<String, Object> body = new HashMap<>();
+
+        StartProcessesInput input = new StartProcessesInput();
+        input.setId("AsyncScriptTask");
+        input.setContainerId(CONTAINER_ID);
+        input.setBatchSize(1);
 
         Map<String, Object> variables = new HashMap<>();
-        variables.put("id", "AsyncScriptTask");
-        variables.put("containerId", CONTAINER_ID);
-        variables.put("batchSize", 1);
+        variables.put("input", input);
 
         Assertions.assertThat(graphQLClient).isNotNull();
 
-        Map<String, Object> result = graphQLClient.executeMutation(mutation, operationName, variables);
+        Map<String, Object> result = graphQLClient.executeMutation(getStringFromFile("processInstancesMutation.graphql"),
+                                                                   operationName, variables);
 
         Assertions.assertThat(result).isNotNull();
         Assertions.assertThat(result.get("data").toString()).contains("\"processId\":\"AsyncScriptTask");

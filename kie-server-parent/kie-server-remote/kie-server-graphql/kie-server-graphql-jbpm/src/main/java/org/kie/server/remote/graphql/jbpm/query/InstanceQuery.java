@@ -1,6 +1,5 @@
 package org.kie.server.remote.graphql.jbpm.query;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -17,9 +16,7 @@ import org.kie.server.remote.graphql.jbpm.repository.InstanceRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.kie.server.remote.graphql.jbpm.constants.GraphQLConstants.Fields.BATCH_SIZE;
 import static org.kie.server.remote.graphql.jbpm.constants.GraphQLConstants.Fields.VARIABLES;
-import static org.kie.server.remote.graphql.jbpm.constants.GraphQLConstants.Values.DEFAULT_ALL_TASKS_INSTANCE_BATCH_SIZE;
 
 /**
  * {@link GraphQLResolver} for JBPM Instances and related data-objects.
@@ -75,7 +72,7 @@ public class InstanceQuery implements GraphQLQueryResolver   {
                                                      DataFetchingEnvironment environment) {
         List<ProcessInstance> processInstances = instanceRepository.getAllProcessInstances(batchSize, filter);
         if (processInstances.isEmpty()) {
-            // if the list is empty just return it
+            // if the list is empty just return it, no need to fetch variables
             return processInstances;
         }
 

@@ -122,48 +122,48 @@ public class InstanceRepository {
         CorrelationKey actualCorrelationKey;
         switch (filter.getSelectedFilterCombination()) {
             case PROCESS_ID:
-                logger.info("Getting instances with processId:{}", processId);
+                logger.debug("Getting instances with processId:{}", processId);
                 return convertToProcessInstanceList(
                         runtimeDataService.getProcessInstancesByProcessDefinition(processId, queryContext)).getItems();
             case CORRELATION_KEY:
-                logger.info("Getting instances  with correlationKey: {}", correlationKey);
+                logger.debug("Getting instances  with correlationKey:{}", correlationKey);
                 correlationProperties = filter.getCorrelationKey().split(":");
                 actualCorrelationKey = correlationKeyFactory.newCorrelationKey(Arrays.asList(correlationProperties));
                 return convertToProcessInstanceList(
                         runtimeDataService.getProcessInstancesByCorrelationKey(actualCorrelationKey, queryContext)).getItems();
             case STATES_AND_INITIATOR:
-                logger.info("Getting instances with states:{} with initiator: {}", states, initiator);
+                logger.debug("Getting instances with states:{} with initiator: {}", states, initiator);
                 return convertToProcessInstanceList(
                         runtimeDataService.getProcessInstances(states, initiator, queryContext)).getItems();
             case STATES_AND_CONTAINER_ID:
-                logger.info("Getting instances in states:{} and with containerId equal: {}",
+                logger.debug("Getting instances in states:{} and with containerId equal: {}",
                             states, containerId);
                 return convertToProcessInstanceList(
                         runtimeDataService.getProcessInstancesByDeploymentId(containerId, states, queryContext)).getItems();
             case STATES_AND_CORRELATION_KEY:
-                logger.info("Getting instances in states:{} and with correlationKey: {}",
+                logger.debug("Getting instances in states:{} and with correlationKey: {}",
                             states, correlationKey);
                 correlationProperties = correlationKey.split(":");
                 actualCorrelationKey = correlationKeyFactory.newCorrelationKey(Arrays.asList(correlationProperties));
                 return convertToProcessInstanceList(
                         runtimeDataService.getProcessInstancesByCorrelationKeyAndStatus(actualCorrelationKey, states, queryContext)).getItems();
             case STATES_AND_VARIABLE_NAME:
-                logger.info("Getting instances in states:{} and with variable equal: {}",
+                logger.debug("Getting instances in states:{} and with variable equal: {}",
                             states, variableName);
                 return convertToProcessInstanceList(
                         runtimeDataService.getProcessInstancesByVariable(variableName, states, queryContext)).getItems();
             case STATES_AND_VARIABLE_NAME_AND_VARIABLE_VALUE:
-                logger.info("Getting instances in states:{} and with variableName: {} and variableValue: {}",
+                logger.debug("Getting instances in states:{} and with variableName: {} and variableValue: {}",
                             states, variableName, variableValue);
                 return convertToProcessInstanceList(
                         runtimeDataService.getProcessInstancesByVariableAndValue(variableName, variableValue, states, queryContext)).getItems();
             case STATES_AND_INITIATOR_AND_PROCESS_ID:
-                logger.info("Getting instances in states:{} with initiator: {} and with processId equal: {}",
+                logger.debug("Getting instances in states:{} with initiator: {} and with processId equal: {}",
                             states, initiator, processId);
                 return convertToProcessInstanceList(
                         runtimeDataService.getProcessInstancesByProcessId(states, processId, initiator, queryContext)).getItems();
             case STATES_AND_INITIATOR_AND_PROCESS_NAME:
-                logger.info("Getting instances in states:{} with initiator: {} and with processName equal: {}",
+                logger.debug("Getting instances in states:{} with initiator: {} and with processName equal: {}",
                             states, initiator, processName);
                 return convertToProcessInstanceList(
                         runtimeDataService.getProcessInstancesByProcessName(states, processName, initiator, queryContext)).getItems();

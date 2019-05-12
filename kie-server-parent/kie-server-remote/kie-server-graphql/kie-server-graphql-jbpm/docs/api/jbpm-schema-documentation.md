@@ -94,7 +94,7 @@ Root for process instance related mutations
 
 ### DefinitionQuery
 
-Collection of every query supported for ProcessDefinitions
+Collection of every operations for ProcessDefinitions
 
 <table>
 <thead>
@@ -111,7 +111,7 @@ Collection of every query supported for ProcessDefinitions
 <td valign="top"><a href="#processdefinition">ProcessDefinition</a>!</td>
 <td>
 
-Gets a single ProcessDefinition with provided processDefinitionId and containerId.
+Gets a single ProcessDefinition with provided processDefinitionId and containerId
 
 </td>
 </tr>
@@ -138,7 +138,7 @@ Identifier of process definition
 <td valign="top">[<a href="#usertaskdefinition">UserTaskDefinition</a>!]!</td>
 <td>
 
-Gets list of UserTaskDefinition's for process definition with provided processDefinitionId and containerId.
+Gets list of UserTaskDefinition's for process definition with provided processDefinitionId and containerId
 
 </td>
 </tr>
@@ -165,7 +165,7 @@ Identifier of process definition task definitions belong to
 <td valign="top">[<a href="#processdefinition">ProcessDefinition</a>!]!</td>
 <td>
 
-Gets all available process definitions from runtime from all containers.
+Gets all available process definitions from runtime from all containers
 
 </td>
 </tr>
@@ -183,7 +183,7 @@ Size of the returned list
 <td valign="top">[<a href="#processdefinition">ProcessDefinition</a>]</td>
 <td>
 
-Gets list of ProcessDefinition objects with concrete processDefinitionId OR containerId, not both.
+Gets list of ProcessDefinition objects with concrete processDefinitionId OR containerId, not both
 
 </td>
 </tr>
@@ -227,7 +227,7 @@ Collection of mutation operations for instances
 <td valign="top">[<a href="#processinstance">ProcessInstance</a>!]!</td>
 <td>
 
-Creates/Starts process instances defined by the input. Can be also used to start one process instance, just set batchSize to 1.
+Creates/Starts process instances defined by the input. Can be also used to start one process instance, just set batchSize to 1
 
 </td>
 </tr>
@@ -236,7 +236,7 @@ Creates/Starts process instances defined by the input. Can be also used to start
 <td valign="top"><a href="#startprocessesinput">StartProcessesInput</a>!</td>
 <td>
 
-Input object for startProcesses.
+Input object for startProcesses
 
 </td>
 </tr>
@@ -245,7 +245,7 @@ Input object for startProcesses.
 <td valign="top">[<a href="#processinstance">ProcessInstance</a>]!</td>
 <td>
 
-Aborts process instances with specified id or if specified, also with containerId.
+Aborts process instances with specified id or if specified, also with containerId
 
 </td>
 </tr>
@@ -254,7 +254,7 @@ Aborts process instances with specified id or if specified, also with containerI
 <td valign="top"><a href="#abortprocessinstancesinput">AbortProcessInstancesInput</a>!</td>
 <td>
 
-Input object for abortProcessInstances
+Input object for abortProcessInstances.
 
 </td>
 </tr>
@@ -263,7 +263,7 @@ Input object for abortProcessInstances
 <td valign="top">[<a href="#processinstance">ProcessInstance</a>]</td>
 <td>
 
-Signals process instances with specified ids or if specified also with containerId.
+Signals process instances with specified ids or if specified also with containerId
 
 </td>
 </tr>
@@ -281,7 +281,7 @@ Input object for signalProcessInstances
 
 ### InstanceQuery
 
-Collection of query operation for instances
+Collection of query operations for instances
 
 <table>
 <thead>
@@ -298,7 +298,7 @@ Collection of query operation for instances
 <td valign="top"><a href="#processinstance">ProcessInstance</a>!</td>
 <td>
 
-Gets a ProcessInstance with id and containerId.
+Gets a ProcessInstance with id and containerId
 
 </td>
 </tr>
@@ -325,7 +325,7 @@ Id of the container that this instance belongs to
 <td valign="top">[<a href="#processinstance">ProcessInstance</a>!]!</td>
 <td>
 
-Gets all available process instances from runtime based on the filter combination.
+Gets all available process instances from runtime based on the filter combination
 
 </td>
 </tr>
@@ -379,7 +379,7 @@ Id of the container that process instance belong to
 <td valign="top">[<a href="#tasksummary">TaskSummary</a>!]!</td>
 <td>
 
-Gets all available tasks from runtime based on the filter combination.
+Gets all available tasks from runtime based on the filter combination
 
 </td>
 </tr>
@@ -388,7 +388,7 @@ Gets all available tasks from runtime based on the filter combination.
 <td valign="top"><a href="#taskinstancefilter">TaskInstanceFilter</a>!</td>
 <td>
 
-Filter for returned tasks. Can be used to retrieve tasks with specific fields.
+Filter for returned tasks. Can be used to retrieve tasks with specific fields
 
 </td>
 </tr>
@@ -1725,4 +1725,3 @@ Long type
 ### String
 
 Built-in String
-

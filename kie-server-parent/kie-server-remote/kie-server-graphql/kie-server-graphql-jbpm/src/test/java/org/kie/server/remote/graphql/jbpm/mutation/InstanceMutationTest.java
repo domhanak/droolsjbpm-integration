@@ -240,6 +240,10 @@ public class InstanceMutationTest {
         }));
     }
 
+    /*
+     * HELPER METHODS
+     */
+
     private StartProcessesInput createDummyStartProcessesInput(String correlationKey, Map<String, Object> variables){
         StartProcessesInput result = new StartProcessesInput();
         result.setBatchSize(DUMMY_BATCH_SIZE);

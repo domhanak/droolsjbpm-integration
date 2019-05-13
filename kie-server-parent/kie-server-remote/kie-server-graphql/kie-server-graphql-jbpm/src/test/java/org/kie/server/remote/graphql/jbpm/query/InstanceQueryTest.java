@@ -184,17 +184,7 @@ public class InstanceQueryTest {
 
     @Test
     public void testTaskInstanceByTaskId() {
-        when(instanceRepository.getTaskInstance(ID, null))
-                .thenReturn(taskInstance);
-
-        TaskInstance result = instanceQuery.taskInstance(ID, environment);
-
-        Assertions.assertThat(result.getId()).isEqualTo(ID);
-    }
-
-    @Test
-    public void testTaskInstanceByWorkItemId() {
-        when(instanceRepository.getTaskInstance(null, ID))
+        when(instanceRepository.getTaskInstance(ID))
                 .thenReturn(taskInstance);
 
         TaskInstance result = instanceQuery.taskInstance(ID);

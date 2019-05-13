@@ -182,17 +182,10 @@ public class InstanceRepository {
      * Method queries the DB either by using taskId only OR by using workItemId only. Not both.
      *
      * @param taskId id of the task, can be null
-     * @param workItemId workItemId of the task, can be null
-     * @return {@link TaskInstance} with taskId OR workItemId
+     * @return {@link TaskInstance} with taskId
      */
-    public TaskInstance getTaskInstance(Long taskId, Long workItemId) {
-        if (taskId != null && workItemId == null) {
-            return convertToTask(runtimeDataService.getTaskById(taskId));
-        } else if (workItemId != null && taskId == null) {
-            return convertToTask(runtimeDataService.getTaskByWorkItemId(workItemId));
-        } else {
-            throw new IllegalArgumentException("Only one of taskId or workItemId can be selected.");
-        }
+    public TaskInstance getTaskInstance(Long taskId) {
+        return convertToTask(runtimeDataService.getTaskById(taskId));
     }
 
     /**

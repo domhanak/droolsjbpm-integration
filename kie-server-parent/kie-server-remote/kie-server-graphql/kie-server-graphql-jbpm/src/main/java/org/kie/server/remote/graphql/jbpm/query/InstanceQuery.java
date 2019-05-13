@@ -105,18 +105,8 @@ public class InstanceQuery implements GraphQLQueryResolver   {
      * @param taskId id of the task
      * @return {@link TaskInstance}
      */
-    public TaskInstance taskInstance(Long taskId, DataFetchingEnvironment environment) {
-        return instanceRepository.getTaskInstance(taskId, null);
-    }
-
-    /**
-     * Gets {@link TaskInstance} using workItemId.
-     *
-     * @param workItemId workItemId of the task
-     * @return {@link TaskInstance}
-     */
-    public TaskInstance taskInstance(Long workItemId) {
-        return instanceRepository.getTaskInstance(null, workItemId);
+    public TaskInstance taskInstance(Long taskId) {
+        return instanceRepository.getTaskInstance(taskId);
     }
 
     /**

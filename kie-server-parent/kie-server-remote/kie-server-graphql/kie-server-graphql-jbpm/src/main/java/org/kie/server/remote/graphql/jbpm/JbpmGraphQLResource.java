@@ -10,8 +10,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
 import com.coxautodev.graphql.tools.SchemaParser;
@@ -22,7 +20,7 @@ import com.zhokhov.graphql.datetime.GraphQLDate;
 import graphql.ExecutionInput;
 import graphql.GraphQL;
 import graphql.execution.instrumentation.Instrumentation;
-import graphql.execution.instrumentation.SimpleInstrumentation;
+import graphql.execution.instrumentation.tracing.TracingInstrumentation;
 import graphql.scalars.ExtendedScalars;
 import graphql.schema.GraphQLSchema;
 import org.kie.server.remote.graphql.jbpm.mutation.Mutation;
@@ -56,7 +54,7 @@ public class JbpmGraphQLResource {
     private JbpmGraphQLServiceProvider serviceProvider;
 
     public JbpmGraphQLResource(JbpmGraphQLServiceProvider serviceProvider) {
-        Instrumentation instrumentation = new SimpleInstrumentation();
+        Instrumentation instrumentation = new TracingInstrumentation();
 
         // Initialize ServiceProvider before we build schema
         this.serviceProvider = serviceProvider;
